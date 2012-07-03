@@ -1,0 +1,2 @@
+select BODY.gid,BODY.item,HEAD.item from SalesOri as BODY, SalesOri as HEAD where BODY.gid=HEAD.gid and BODY.price > 0 and HEAD.price > 0 order by gid, BODY.item, HEAD.item
+

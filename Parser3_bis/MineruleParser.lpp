@@ -1,0 +1,168 @@
+%{
+
+#include "ParsedPredicate.h"
+#include "HeaderQuery.h"
+#include "SupportMeasure.h"
+#include "MineruleParser.tab.hpp"
+#include <string.h>
+#include <Utils/Converter.h>
+#include <sstream>
+#include <map>
+#include <iostream>
+
+using namespace minerule;
+
+
+int mrlex();  
+
+#define PARSER_BUF_SIZE 4096
+
+char linebuf[PARSER_BUF_SIZE];
+int tokenpos=0;
+int lastC=0;
+char* stringUpperCase(char*);
+std::map<std::string,int> keywords_to_token;
+ 
+%}
+
+KEYWORDS ("MINE"|"RULE"|"AS"|"SELECT"|"DISTINCT"|"BODY"|"HEAD"|"AND"|"OR"|"NOT"|"FROM"|"GROUP"|"BY"|"HAVING"|"EXTRACTING"|"RULES"|"WITH"|"WHERE"|"CLUSTER"|"ITEMSET"|"SUPPORT"|"CONFIDENCE"|"SEQUENCE"|"SEQUENCES"|"ORDER"|"ITEMSETS"|"GAP")
+AGGR ("MAX"|"MIN"|"AVG"|"STD"|"SUM")
+ATTRNAME  ([a-zA-Z][a-zA-Z0-9_]*)
+QUOTED_STRING  (['][^']*['])
+
+%%
+
+[ ]+		      {	tokenpos=tokenpos+mrleng;
+			strncat(linebuf,mrtext,PARSER_BUF_SIZE);
+			
+		      }
+
+[,"():]               { tokenpos=tokenpos+mrleng;
+			strncat(linebuf,mrtext,PARSER_BUF_SIZE);
+			return mrtext[0];
+		      }
+
+(<)|(>)|(<=)|(>=)|(<>)|(=)			 {
+							tokenpos=tokenpos+mrleng;
+							strncat(linebuf,mrtext,PARSER_BUF_SIZE);
+							mrlval.TString=strndup(mrtext,PARSER_BUF_SIZE);
+							return(COMPARISON);
+						 }
+
+
+{KEYWORDS}		{
+				char* stringUpperCase(char*);
+				tokenpos=tokenpos+mrleng;
+                                strncat(linebuf,mrtext,PARSER_BUF_SIZE);
+				return keywords_to_token[stringUpperCase(mrtext)];
+			}
+
+(-?[1-9][0-9]*|0)		{
+			 		tokenpos=tokenpos+mrleng; 
+			 		strncat(linebuf,mrtext,PARSER_BUF_SIZE); 
+					mrlval.TString=strndup(mrtext,PARSER_BUF_SIZE);
+			 		return(INT_NUMBER);
+ 			}
+
+\.\.                    {
+				tokenpos=tokenpos+mrleng; 
+				strncat(linebuf,mrtext,PARSER_BUF_SIZE); 
+				return(DOTS);
+			 }
+
+
+BODY\.{ATTRNAME}              {
+				tokenpos=tokenpos+mrleng;
+                                strncat(linebuf,mrtext,PARSER_BUF_SIZE);
+				mrlval.TString=strndup(mrtext,PARSER_BUF_SIZE);
+				return(PARTBODY);
+			}
+
+HEAD\.{ATTRNAME}              {
+				tokenpos=tokenpos+mrleng;
+                                strncat(linebuf,mrtext,PARSER_BUF_SIZE);
+				mrlval.TString=strndup(mrtext,PARSER_BUF_SIZE);
+				return(PARTHEAD);
+			}
+
+{AGGR}			 {
+                          tokenpos=tokenpos+mrleng;
+                          strncat(linebuf,stringUpperCase(mrtext),PARSER_BUF_SIZE);
+                          mrlval.TString=strndup(stringUpperCase(mrtext),PARSER_BUF_SIZE);
+                          return(AGGREGATE);
+			}
+
+
+{ATTRNAME}		{	
+			  tokenpos=tokenpos+mrleng;
+			  
+			  strncat(linebuf,mrtext,PARSER_BUF_SIZE);
+			  mrlval.TString=strndup(mrtext,PARSER_BUF_SIZE);
+			  return(ATTR);
+		        }
+
+{QUOTED_STRING}		{	
+			 if(!lastC) {
+				tokenpos=0;
+				linebuf[0]='\0';
+			 }
+			 tokenpos=tokenpos+mrleng;
+			 strncat(linebuf,mrtext,PARSER_BUF_SIZE);
+			 mrlval.TString=strndup(mrtext,PARSER_BUF_SIZE);
+ 			 return(QUOTED_VALUE);
+			}
+		
+
+(-?[0-9]+"."[0-9]+)    {	tokenpos=tokenpos+mrleng;
+				strncat(linebuf,mrtext,PARSER_BUF_SIZE);				
+				mrlval.TString=strndup(mrtext,PARSER_BUF_SIZE);
+				return(DBL_NUMBER);
+			     }
+
+\n  			{
+				if (lastC)
+					{
+						tokenpos=tokenpos+mrleng;
+						strncat(linebuf,mrtext,PARSER_BUF_SIZE);
+						lastC=0;
+						return 0;
+					}
+					{	
+					 	tokenpos=0;
+					 	linebuf[0]='\0';
+					}
+				}
+
+%%
+
+void mrerror(char *s){
+	char buf[4096];
+	std::stringstream ss;
+	ss << s << " at column: " << tokenpos << std::endl << linebuf << std::endl;
+	cout << s << " at column: " << tokenpos << std::endl << linebuf << std::endl;
+	for(int i=0; i<tokenpos+1; ++i)
+	   buf[i]=' ';		
+	buf[tokenpos+1]='\0';
+	ss << buf << "^" << std::endl;
+	throw MineruleException(MR_ERROR_MINERULETEXT_PARSING, ss.str() );
+}
+
+int mrwrap() {
+	return 1;
+}
+
+//This function converts from very small to capital one world
+//received from the lexer
+char*
+stringUpperCase(char* mrtext) {
+  int len=strlen(mrtext);
+  for(int i=0;i<len;++i) {
+    mrtext[i]=toupper(mrtext[i]);
+  }
+  return mrtext;
+}
+
+
+
+
+

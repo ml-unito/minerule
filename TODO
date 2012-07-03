@@ -1,0 +1,226 @@
+BUG-FIXES:
+	* Bug IDIncrementalAlgorithm does not filter out rules having
+	  small confidence/support values.
+	* Bug that occurs when processing queries which imply null
+	  constraints (for instance if I ask A>'z' and there is no
+	  A satisfying such a constraint, we remove the constraint).
+	  Unfortunately, it seems that we do not update the list properly
+	  (we obtain something as A>'').
+	* Bug in the MRDATABASE library (reported by Careggio via email).
+	Support evaluation bug... (it is likely to be related to the
+	sql types in the table. For instance, columns of type varchar
+	(instead of char) type may cause this problem.	
+
+HIGH PRIORITY TO-DO:
+	OPTIMIZER:
+		Implement the complete dominance recognition functionality.
+		(Up to now, it implements the dominances due to logic
+		 implications, but not the ones due to the constants in
+		 the predicates).
+
+		Implement a ``greedy covering'' based optimization step.
+		This should become the "core" of the optimizer, it should
+		try to recover new results from past ones by means of
+		intersections (xor unions) of past result sets.
+	INCREMENTAL ALGORITHMS:
+		Implement non-item-dependent incremental algorithms
+		  (Partially done: the CDIncrementalAlgorithm written
+		   by gallo@di.unito.it)
+		Subtasks: Integrate Marco's Mining Indexes into the Minerule
+			  and implement bitmap based ones.
+	NEW ALGORITHMS:
+		New mining algorithms which exploit item dependent 
+		properties? They may exploit, for instance, pre-built
+		aggregate functions.
+
+TO-DO plan for version 1.0.3(final):
+	OPTION HANDLING:
+		In v1.0.3 has been added the possibility of using modifiers
+		 in the form "%m" inside logfile expressions. The modifiers
+		 are substituted with the filename from which the minerule
+		 is read or with "mr" if no filename have been specified at
+		 the time the option is parsed. In order to
+		 support better this feature the parsing of the options
+		 should be improved. In particular all options involving
+		 the text of the minerule (i.e., -i and -m), should be
+		 processed before any other, and the parsing of the minerule
+		 should be anticipated. In this way the parameter substitution
+		 would work regardless the ordering of the options (which
+		 is otherwise important since it defines the ordering of
+		 option overriding). 
+		 DONE[
+		 Moreover a new option which support
+		 the substitution of the name of the minerule instead of
+		 the name of the file in which it is containted may be
+		 easily introduced (in this case may be it should be
+		 better to use "%i" for the modifiers which refers to the
+		 filename and "%m" for the one which refers to the minerule
+		 name)].
+
+TO-DO plan for version 1.2
+	BUG-FIXES: (relax-predicate-bug)
+		It seems that the optimizer does not relax the predicates
+		 correctly when the predicate is of the form 'A<x' and
+		 there are no values in the db less than 'x' (it's likely
+		 that something similar happens for predicate '>').At this
+		 time it seems that the optimizer substite the predicate
+		 with 'A<=' which is clearly wrong. One possible fix is
+		 to find the min(y) in the DB and substite the predicate with
+		 'A<y'. Another fix is to substite the whole predicate with
+		 '1=0' (may be this last hint is best since it works also
+		 when the DB is empty).
+		
+	OPTIMIZER CATALOG:
+		Split mr_query in two tables. The idea is to keep separate
+		 the list of queries which have been really executed, since
+		 it is not useful to run the optimizer on queries which
+		 have been found to be equivalent to some previous query.
+		 We could have two tables:
+			mr_all_queries
+			mr_opt_queries
+		 In mr_all_queries will be stored the original text of 
+		 all queries which have been issued by the user , while
+		 in mr_opt_queries will be stored the normalized text of
+		 queries which have been really executed. 
+		 As a side effect we have that we can rebuild the query
+		 database by deleting mr_opt_queries and rerun all queries
+		 in mr_all_queries (this is useful when the underlying
+		 database changes, but the user wants to use an update 
+		 version of all past results).
+
+	OPTIMIZER:
+		Extends the predicate relaxation function in order to
+		 work with EVERY predicates, not only with < and >.
+		 For instance if the user write a condition like A<=100,
+		 but 100 CANNOT be found in the db, the value should
+		 be substituted with the maximal value which satisfies
+		 A<=100.
+	ALGORITHMS:
+		Gestire parametri head/body cadinality.
+		        partitionWithClusters   - DONE
+		        partitionBase           - DONE (*)
+		        fpGrowth                - DONE (*)
+
+	        (*) - In questo momento e' gestito tramite un filtro in fase di
+        	      scrittura delle regole. Sarebbe probabilmente MOLTO piu'
+              	      efficiente fare qualcosa sullo stile di quanto fatto per
+	              partitionWithClusters.
+        	      In particolare: in partitionBase, si puo' smettere di 
+		      andare in profondita' non appena levelIn (vedi codice in 
+		      partitionBaseLauncher) e' maggiore o uguale al massimo
+                      tra bodyCardinalities().getMax() e 
+			  headCardinalities().getMax().
+              	In aggiunta, nella procedura che genera effettivamente le 
+		regole si puo' evitare di procedere oltre ogni volta che si 
+		genera una regola che non soddisfa le condizioni.
+              	Qualcosa di simile si puo' fare anche per fpGrowth.
+	LOGS:
+		This is a low low low low priority task... it would
+		 be nice to add colors to the log output. Ansy colors
+		 can be displayed using the escape sequence \e[x;ym
+		 where x and y are foreground and background colors.
+		 For instance printf("\e[33;40mprova\e[0m") 
+		 prints the string
+		  "prova" in brown on black and then reset the colors
+		 to their default values.
+		 Note that one should be aware of terminal support for
+		 colors before trying anything like this.
+		 In order to implement the color support the following
+		 has to be done:
+			update MRLogger in order to support colors
+			update MineruleOptions with an options which 
+				stop/enable the use of colors
+			everywhere check if the terminal support colors.
+		Here it follows a table containing the ANSI codes 
+		which may be helpful:			
+
+		Code  	Effect
+		--------------------------------------------------
+		0 	Reset to default, as set in Terminal Preferences.
+		1	Bold
+		4	Underline
+		5	Blink
+		7	Reverse video, swaps the foreground (text) and 
+			background colors.
+
+		Color	Text	Background
+		--------------------------------------------------
+		Black	30	40
+		Red	31	41
+		Green	32	42
+		Yellow	33	43
+		Blue	34	44
+		Magenta	35	45
+		Cyan	36	46
+		White	37	47
+		
+		Prefix a color with 1; in order to obtain its highlighted
+		version (for instance \e[33;40m actually display brown on
+		black, this is becaus brown is the not-highlighted version
+		of yellow, \e[1;33;40m displays yellow on black).
+
+		To check for terminal capabilities seems to be hard, maybe
+		it is better to use a user pref (setting it to false by
+		default... which is the safest setting).
+
+TO-DO plan for version 1.4
+	MRDATABASE:
+		Add support for smart pointers:
+ 		 Rationale: the HEAD BODY GROUP CID etc. etc. are
+		 read only values -> they can be shared by all object
+		 which refers to them. Using smart pointers should 
+		 improve very much the memory footprint of the program
+		 (actually this is true for string values and composite
+		  attributes).
+		Add support for on-the-fly coding.
+		 If we add support for smart pointers we could 
+		 wrap those object within a new one which can hold
+		 an integer value which informs about the mutual ordering
+		 of values. The idea is: After a first db read has been
+		 done we sort the values and assigns an integer to each
+		 of them accordingly to their position in the sorted 
+		 structure. Once this is done we can compare the values
+		 using this integer value instead of doing time-consuming
+		 comparison among string or structures.
+
+	PREPROCESSING:
+		Merge the preprocessor (i.e., classes in PreProcessor)
+		in the project (???) (note that if support for on-the-fly 
+		coding is added preprocessing should become rarely useful!)
+				
+		 
+	ALGORITHMS:
+		Implement a better version of partition and FpGrowth 
+
+		Implement the incremental algorithms (partially done 
+		since v1.0.6 which adds the ID and CD incremental 
+		algorithms)
+
+	OPTIMIZER:
+		Recognize Dominance relations
+
+		DONE since v1.0.1! Substitute A<x with A<=y 	
+		 This is needed in order to complete the 'canonization'
+		 of minerules. The y value is the first value in the db	
+		 which satisfies A<x. Not sure about this: we 
+		 introduce another access to the db each time we start
+		 a new minerule. Note that we do need to do that only
+		 for the current minerule (not for the ones in the 
+		 catalog since we can assume that they are already
+		 in canonical form).
+
+	LOGS: 
+		Implement log onto a database table (???)
+
+	MAKEFILES: 
+		Switch to autoconf/automake (???)
+
+
+	
+
+TO-DO plan for version 2.0
+	Clean the source code. In particular get rids of 
+	old c structures which has been inherited by Ortale's
+	predicate parser. This may be hard since those structures
+	are nowadays used by many algorithms (most notably: parts
+	of the optimizer)

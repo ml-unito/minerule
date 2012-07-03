@@ -1,0 +1,9 @@
+1 (Partition generalizzato) - Inserire calcolo confidenza
+2 (Preprocessing) - gestire mining e cluster condition
+3 (Ottimizzatore) - riconoscere ed eseguire equivalenze
+4 (Ottimizzatore) - riconoscere dominanza
+5 (Ottimizzatore) - algoritmo incrementale (su dominanza)
+6 (Ottimizzatore) - riconoscere inclusione 
+	(come equivalenze ma con supp minore o card. body,head <> )
+7 (Preprocessing) - gestire funzioni aggregate
+8 (Interfaccia grafica) - Seguire integrazione

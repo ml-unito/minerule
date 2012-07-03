@@ -1,0 +1,399 @@
+----------------------------------------------------------------------
+System Description: The Web (textual) Interface
+----------------------------------------------------------------------
+
+Author: Roberto Esposito
+Date: September 6th, 2004
+
+----------------------------------------------------------------------
+
+Abstract:
+---------
+This document aims at describing in small details the
+textual web interface architecture. The goal of the description are:
+- to provide a reference for programmers who need to be acquainted
+  with the system before touching the code.
+- to provide an howto like document explaining how to interact with
+  the "hidden" part of the system, i.e., how to create new users, how
+  to specify the user preferences and so on.
+
+
+----------------------------------------------------------------------
+Introduction
+------------
+
+The web interface to the minerule system is a bunch of
+php4 scripts designed to run on the tomcat catalina webserver and providing
+basic access to the minerule system by means of a simplified interface. The
+main purposes of the interface are:
+- to support basic user authentication
+- to allow the execution of a new minerule
+- to allow basic catalog management operations
+On the other hands the interface do NOT support:
+- to manage the user database
+- to add/remove databases and to configure the minerule for a new dataset.
+- to allow the extension of the interface
+The latter operations, in fact, are demanded to the site master 
+and require a deeper knowledge of the system and its developing
+tools as well as a privileged access to the server on which the tool
+is installed.
+
+This document is meant mainly to describe in low details what is needed
+to know to accomplish those latter tasks.
+
+Please notice that the php script we implemented should run without
+modification on the apache webserver with the notably exception of the
+code used to call external programs. However, when such modifications
+are needed the code usually specify the differences using php4
+comments (so that to port the system to apache should be a matter of
+findings those comments and making the needed changes).
+
+Architecture: three important directories
+-----------------------------------------
+
+The system is better described by distinguish the main component which form it:
+- the minerule kernel and other executables which provide the basic
+  functionalities
+- the web interface
+- the database to which the system connects.
+
+Those three components resides in three different directories in the
+server which hosts the system. Those directories are:
+
+/home/minerule/mrweb - which contains the executable directory, the
+                       configuration files and the log directories
+/home/esposito/public_html - which contains the php scripts that
+                             build the web interface
+/usr/local/mysql/data - which holds the database repository
+
+
+The interaction of those components is as follows: The web interface
+contained in the public_html directory is accessed by the web server
+in order to satisfy user requests. Occasionally the user need to
+access to the minerule system in order to get catalogue informations
+or to execute a new minerule. In those cases the scripts call the
+programs contained in /home/minerule/mrweb/bin in order to accomplish
+those tasks.  Moreover, the user is authenticated using the
+information stored in /home/minerule/mrweb/mrpasswords and the logs of
+the minerule executions is stored in /home/minerule/mrweb/logs.
+
+Architecture: source (php) files, what they are and how to modify them
+----------------------------------------------------------------------
+
+The directory /home/esposito/public_html contains the source files of
+the php script which implement the user interface. The file contained
+(at the moment of this writing) in this directory are:
+
+WEB-INF/        -- needed by the catalina server it only contains a link
+	       	   to the previous directory (it MUST contain this link, 
+	       	   if it is not present the system WILL NOT WORK). More
+		   precisely, it contains the: 
+		   	      php4 -> ../ 
+		   link.
+pics/ 		-- Contains the pictures needed by the interface (currently
+	       	   they are the w3c pictures which certifies the adherence
+	       	   of the web pages to the html and css standards.
+mrkernel.php4   -- probably the most complex as well as most important file.
+		   it contains most of the code needed to invoke the minerule
+		   and interpret its results
+mrmain.php4     -- the entry point of the web interface, it does not really
+		   contain any significant php4 code. It only points to the
+		   relevant pages.
+cinq.css    	-- the cinq style sheet
+mkmrpwd.c      	-- a small program needed to create account info
+mrquerycatalogue.php4  -- the code needed to display info about the catalogue
+query.php4  	--  the code used to generate the form used to input a new
+		    query. A little bit of javascript code is used to validate
+		    user inputs before calling the server.
+doSync.sh	-- A very important script, it updates the public_html 
+		   directory with the latest updates of the sources (see
+		   the following section about how the sources are modified)
+mrlibrary.php4  -- A set of useful library functions
+mrsyntax.html   -- A file describing the syntax of the minerule language (to
+		   be completed)
+shellexec.tsh	-- A simple script which allows to turn around a bug in the
+		   catalina web server which prevent us to call executable
+		   files directly.
+index.html	-- not used
+mr.css     	-- the minerule style sheets (completes the style informations
+		   in cinq.css)
+mrlogin.php4    -- the login form
+mrvars.php4     -- definition of useful global vars
+sidebar.php4	-- the code needed to generate the sidebar displayed in all
+		   the interface page.
+
+The sources are managed by the arch revision control system and as
+such they must not be modified in place (otherwise the changes will be
+overwritten by those of other coders). This is not the place for a
+tutorial on arch (which you can find at
+http://www.gnu.org/software/gnu-arch/tutorial/arch.html), but I will try
+here to give a brief account about how the development of a new feature
+of the system looks like.
+
+First you should install arch and configure your archive repository in
+order to add the minerule repository (you will need an account on the
+development server). At the present time: the place where the arch
+repository is kept is the following one (i.e., this is the main minerule
+archive):
+
+esposito@di.unito.it--2004-software
+    sftp://kdd.di.unito.it/home/esposito/archives/2004-software
+
+It contains, among other the category "mrweb" along with its main
+branch "mainline". On my machine the command tla abrowse gives the
+following result:
+
+mrweb
+    mrweb--mainline
+      mrweb--mainline--0.1
+        base-0 .. patch-5
+
+Once you have configure your machine in order to access the archive (look
+at the tutorial for this), get the archive issuing the command:
+
+tla get -A esposito@di.unito.it--2004-sofware mrweb-mainline
+
+the command will access the archive and recreate locally the directory
+structure I described previously. Since we did not specified a revision,
+it will import the latest one.
+
+Now you can access the directory it created and modify the files you
+want. Once you are done you should create a log file which describe what
+you have done using
+
+tla make-log
+
+and editing the file it generates and then you should commit your changes
+to the tla system using
+
+tla commit
+
+After that you can update the server interface using the doSync.sh
+command that is present in the directory that tla created. Be careful
+to do this step only when you are sure of your changes and you know
+that they will not interfere with the work of other users/developers.
+In most cases is much better to develop and test on another machine
+and update the changes later (on about how to do this I will not say
+since to configure a machine to support the system is a long matter).
+
+Architecture: source (php) files, main design points
+----------------------------------------------------
+
+In this section I will briefly describe the non-obvious part of the
+interface architecture, i.e., those that you may need to understand
+well before touching the code. There are two main things you need to
+understand about the system: how the main engine works, and how the
+login information is managed.
+
+The interaction with the interface mainly works thru the mrkernel.php4
+script. The script consists of a bunch of function definitions and a
+set of commands appended to its end. The core of the working of the
+system is contained in those commands. In fact, they interpret which
+is the command to be executed and calls the appropriate functions
+accordingly.  The command to be executed along with the necessary data
+are passed to the script thru POST messages, that is, the forms
+displayed to the user packs those information in the following variables
+before calling mrkernel.php4:
+
+       $_POST['cmd']      -- the command to be executed
+       $_POST['mrname']   -- the name of the minerule (if any)
+       $_POST['orderBy']  -- the orderBy info (if any)
+
+mrkernel.php4 will interpret the contents of those variables and
+invoke a the necessary code. The invoked code will provide the user
+with an interface exposing the result of the commands or to acquire
+further data. The interface can possibly call back the mrkernel.php4
+script using the appropriate parameters until the user need to make
+further operations.
+
+The login management works by maintaining the name and the password of
+the user in session variables. The first time the user tries to access
+to the system its session variables will be empty. All pages in the
+system contains as their very first lines the call to the login
+management function.  This function checks the session variables and
+redirect the browser to the login page if they are empty or
+corresponds to an invalid user. 
+
+The login page simply tries to validate the user login information (in
+this case it redirects the user to mrmain.php4) and presents the login
+form in case they are not valid. Once the user inserts the data in the
+form, the script call itself using the new data.
+
+
+Architecture: binaries and configuration files
+----------------------------------------------
+
+The directory /home/minerule/mrweb contains the binaries and the
+configuration files needed by the interface to work. They are:
+
+bin/   -- binaries
+log/   -- log files
+mrpasswords  -- the user account info
+
+
+textdemo.opt         -- opts for the database textdemo
+textdemo.opt_cat     -- opts for the database textdemo
+[...]		     -- other option files
+
+Most of those entries should be self explanatory, however it may be
+useful to describe how the management of the options and the login works.
+
+The scripts we described in the previous section access to the
+mrpasswords file in order to validate the user. In order be logged in,
+the user needs to specify three pieces of information:
+- the dataset on which it needs to work on
+- the user name
+- the password.
+
+The dataset is not directly connected to a database, it is instead
+used to identify an option file in which the actual dataset is
+specified along with the options needed to work correctly on it. In
+the above example, the user will propose, among the others, the
+dataset "textdemo" as a valid choice. If the user is entitled to work
+on this dataset (this info is specified in the mrpasswords file) and
+it requests to do so, the textdemo.opt and the textdemo.opt_cat are
+selected by the interface. The former is used along with the minerule
+kernel every time a new query is submitted, while the latter is used
+along with the catalogue management system. There is the need of two
+different files (even though they provide similar information) since, it
+is usually convenient to not allow the user to have delete privileges on
+previous queries (otherwise it may delete one of them by incidentally
+inserting its name as the name of a new query), while we usually want
+to allow such kind of information when the catalogue is accessed (since
+one common operation is the explicit deletion of a past query).
+
+Architecture: the database repository
+-------------------------------------
+
+The database repository is contained in the directory
+/usr/local/mysql/data. There is not much to say about it except for
+the connection between the parameters in the option files and the user
+information of the DBMS. Before going into the details, however, we must
+introduce a novel actor: the odbc connection. The user who access to the
+system (in the case of the web interface it is usually the root user) needs
+to have an odbc connection set up for the databases it access to.
+The odbc connection is specified in the option file by means of the
+odbc::name option. The connection is usually set up by means of the
+ODBCConfig program.
+
+The DBMS also requires a username and a password, those pieces of
+information are specified in the option file. Then, the web interface
+user information are not related by any means with the DBMS passwords.
+This on one side allows a simpler management of the passwords, on the
+other side reflects the idea that the DBMS passwords are an
+implementation detail which should not be of any interest for the user
+(or better the user should not be aware of them since he may use it to 
+broke the system).
+
+We can summarize schematically the interaction between the option file,
+the dbms, the odbc component, and the web interface as follows:
+
++--------------+
+| web interface|
+|  login form  |
++--------------+                           +-------------+
+|  dataset   --+-------+---identifies----> | option file |
+|  username  --+---.   |	      	   +-------------+
+|  password  --+---+   |	   	.--+-- name      |
++--------------+   |   |	   	|  |   username -+---.
+		   |   |	   	|  |   password -+--.|
+		 login check   	   	|  +-------------+  ||
+             	   |   |		|		    ||
+   	     +-------------+	    identifies		    ||
+	     | mrpasswords |		|		    ||
+	     +-------------+	+-----------------+	    ||
+				| ODBC Datasource |	    ||
+				+-----------------+	    ||
+				| DB name       --+--.	    ||
+				+-----------------+  |	    ||
+						     |	    ||
+						     |	    ||
+    +----------+  <------ Specify the target DB -----'	    ||
+    |   DBMS   |  <------ Account information  -------------+.
+    +----------+
+      
+(an omnigraffle source file and a pdf file of the above picture
+should be present in the same dir of this file with the name 
+sysdes-web-interface-graph1).
+
+
+HOWTO: add a new user to the web interface
+--------------------------------------------- 
+
+In order to add a new user you must make sure that the dataset you
+want the user to be attached to has been already created. In this
+case the creation of a new user amount to add an entry to the mrpasswords
+file. The problem here is that the mrpasswords file contains an encrypted
+version of the user passwords as a way to provide a primitive form of
+security. For this reason you need the mkmrpwd program to add the user.
+Look in /home/esposito/public_html and search for the program, if it does
+not exists you can build it using the command:
+    gcc -o mkmrpwd mkmrpwd -lcrypt
+The program needs three inputs on the command line, they are (in order):
+    the name of the dataset the user is allowed to access
+    the name of the user
+    the user password
+When invoked the program output on the stdout the line that should be
+added to mrpasswords in order to allow the user to access the system, hence
+the fastest way to add the user to the system is:
+    mkmrpwd datasetX bobo pwdbobo >> /home/minerule/mrweb/mrpasswords
+Notice: the mkmrpwd program will NOT check for the existence of the dataset
+you specified, it is up to you to make the check and to create it in case
+it does not already exists.
+
+HOWTO: Allow a user to access an additional dataset
+------------------------------------------------------
+
+This amount to create a new line in mrpasswords. The procedure is
+exactly the same as the one specified in "HOWTO: adding a new user to
+the web interface". And yes, you must specify again the user password
+and the user may have different password to access different datasets.
+
+HOWTO: add a new dataset
+------------------------
+
+Before adding a new dataset, you must be sure that the corresponding
+odbc datasource exists. When it is so, it is just a matter of creating
+a couple of option files in /home/minerule/mrweb. You need:
+   a kernel option file (with extension .opt)
+   a catalogue option file (with extension .opt_cat)
+The easiest way of doing that is to copy one of those already in the
+directory and update it accordingly to your needs (probably you will
+want to modify the target odbc datasource and the log directory).
+Another way is to use the mrdefault program you find in
+/home/minerule/mrweb/bin directory. When launched, the program writes
+on the stdout a well formed option file along with comments explaining
+what each option means. Again you need to update it accordingly to
+your needs. 
+
+Notice: in order to fill the option files correctly you will need to
+know the user name and the password of a valid user on the DBMS system
+
+HOWTO: add a new datasource
+---------------------------
+
+You need to perform the following steps:
+1) Build the target database
+2) Create and update the catalogue tables
+3) Add the odbc datasource
+
+To build the target database consists in creating the database and to
+adding to it the tables that will be used for the mining process.
+In order to create the catalogue tables you can use the mysql scripts 
+you can find in any minerule source tree under the Docs folder.
+Usually it is a matter of issuing the following command:
+	cat README_OPTIMIZER_CATALOGUE.txt | mysql -Dtest
+where "test" is the name of the database you just created. Then you need
+to update the tables:
+   mr_eq_keys                          |
+   mr_eq_keys_col                      |
+   mr_eq_keys_domains
+in order to specify your domain knowledge about the data you need to mine.
+
+Finally, the datasource is added by means of the ODBCConfig program.
+
+HOWTO: delete a user
+--------------------
+
+Simply edit the file /home/minerule/mrweb/mroptions and delete the
+corresponding line.

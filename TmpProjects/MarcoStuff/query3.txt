@@ -1,0 +1,3 @@
+select item,gid from SalesOri as BODY where BODY.price > 0 order by item, gid
+select item,gid from SalesOri as HEAD where HEAD.price > 0 order by item, gid
+

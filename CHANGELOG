@@ -1,0 +1,169 @@
+v1.0.7: 
+	- (30/06/2004) Removed a couple of bugs:
+		- a memory leak caused by sqlCoreConn 
+		- an update of the optimizer normalize function (which, after
+	  	  recent changes, look at the predicates in the wrong order)
+		- a bug in the cal of getMRQueryResultIterator in 
+		  ConstrTree which causes the iterator to get only the
+		  rules satisfying the confidence constraint.
+	- (23/06/2004) Added the support for minerule deletion. The deleting
+	  function is in the OptimizerCatalogue class. The system supports
+	  two new options that have been put inside a new option class.
+	  The option class is "safety", the options are: 
+	   * overwriteHomonymMinerules: it allows one to select whether the
+	  	system should allow the user to specify a minerule name
+		which is already present in the catalogue, or not. In case
+		it is set to "True", the minerule is delete as soon as
+		the system checks the catalogue.
+	   * allowCascadeDeletes: when equivalences are detected, the
+		result set of a newly posed minerule may be set to be
+		equal to the result set of another minerule. When we
+		delete a minerule, we must check whether its result
+		have been used by another minerule or not. This option
+		allows one to change the system behavior when the 
+		user request the deletion of a past minerule whose result
+		has been used by other ones. If it is set to True, all
+		the minerules that use the result are removed, otherwise
+		the system refuses to delete the minerule.
+	  The program mrcatalogue has been updated in order to support
+	  minerule deletion.	   
+	- (23/06/2004) Integrated the BFSWithGidsNoCross mining algorithm.
+	  it is a partition like algorithm (even though at the present time
+	  it is limited to a single partition) which maintain two separate
+	  lists of valid items instead of building the cross product.
+	  
+	- (21/06/2004) Integrated the Destructive Incremental Algorithm
+	  into the system. The minerule options supports now the option
+	  Optimizations::incrementalAlgorithm (valid values are 
+	  Constructive, Destructive, Auto) which allows the user to set
+	  her preferences about which incremental algorithm should be
+	  launched.
+	- (16/06/2004) Fully implemented the recognition of dominance
+	  relationships.
+	  (See ExpressionNFCoder, Interval, IntervalChecker). It does
+	  not support (up to now) cross predicates (in the case that
+	  cross predicates are present the analysis ignores them, the
+	  effect is that some dominances are not recognized, e.g.
+	   'A>B and B>=2000' 'A>2000' are reported to be unrelated.
+
+v1.0.6: 18/05/2004
+	- Few bug fixes
+	- Implemented and integrated the constructive incremental algorithm.
+	  Limitations: it does work with predicates having a single disjunct
+	  that does not contain any cross condition.
+v1.0.5: 11/05/2004
+	- Augmented the Minerule Catalogue with the functional dependencies
+	  catalogue.
+	- Implemented the incremental algorithm for item dependent constraints
+	  (in Algorithms/IDIncrementalAlgorithm.h)
+	- Partially implemented dominance recognition. In fact, the most
+	  demanding part is almost done. The optimizer is now able to 
+	  recognize whether two predicates are equivalent, or whether
+	  one of them implies the other. What else must be done?
+	  It must transform the predicates read from the minerule
+	  from the form A<5 to the form A<?x?. The it should apply
+	  the above implication recognition, and conclude that  predicate P1
+	  dominate P2 iff:
+		- the first predicate dominates or is equivalent to
+	  	  the second one AND
+		- Substituting the correct values in the first predicate
+		  lead to more general or equal clauses (for instance
+		  P1 contains A<5 and P2 contains A<7).
+	  Another way to proceed is to perform the above checking ahead of
+	  time w.r.t. the implication recognition. It may save some computation
+	  and coding time since if I'm not wrong, there is already a place
+	  in which we compute the intersection of the two predicate lists...
+
+v1.0.4: 03/03/2004
+	- Augmented the Catalogue capabilities. It is now possible to retrieve
+	  the result of a query using a simple call the the catalogue.
+	  In order to provide this new functionality the class
+	  QueryResultIterator has been introduced. Notice that this is 
+	  the preferred way to access the results. In fact, the iterator
+	  takes care of "postprocess" the results in case this is necessary.
+	- Updated the output format of the rules. It now correctly supports
+	  the SourceRowElement objects. The database schema is kept the
+	  same, with the exception that the string which contains each
+	  item is now the "serialized" version of the conresponding 
+	  SourceRowElement. TmpProjects/PrintRules has been updated
+	  accordingly (it now handles both the old format and the new one).
+	- Updated TmpProject/PrintRules. The executable is now 'mrprintrules'
+	  instead of 'pr' (which is a standard unix executable). Moreover
+	  the executable now handles a '-s <order>' option which allows
+	  to specify the ordering of the returned rules.
+	- Created TmpProject/MRLockManager. It is a simple class which
+	  will be useful to avoid concurrency problems... to be finished,
+	  polished and used in the system (it will probably go under Utils).
+	- Created TmpProject/MRCatalogue. It contains a simple utility
+	  which allows to pose queries to the catalogue. The supported
+	  queries are (by now) 
+	    *`list all query names' (with the possibility
+	      of listing result set sizes, result set names, and query text
+	      as well.
+	    *`check for the presence of minerule named "xyz"'
+	    *`check result set size of minerule named "xyz"'
+        20/11/2003
+	- Modified MRLogger in order to support queries about the 
+	  elapsed or cpu timings (before this update the logger wrote
+	  those values on the log, but did not offer any way to get
+	  those values by the program who used the logger).
+	- Added option '-O' which allows to give some MROption to the
+	  kernel via command line. Now the user may write something
+	  like "kernel.exe -f mroption -O 'odbc::name=bbdemo'" in order
+	  to read the default options form file mroption and override their
+	  contents using the string given by the -O option. As many -f
+	  and -O options can be given (successive options override previous
+	  ones).
+	- Updated TODO file with a bug of the optimizer which should 
+	  be fixed as soon as possible.
+	- Created OptimizerTestSuite project under TmpProjects. It contains
+	  a simple utility to test the performance of the optimizer on
+	  queries of increasing length.
+	- Augmented the flexibility of the logging system. Now the user
+	  may specify the filename to be used for each log using the
+	  string "%m" inside the name. The string is replaced at runtime
+	  by the filename from which the minerule is read (provided that
+	  the latter comes first in the command  line).
+
+v1.0.2: 6/10/2003
+	- BUGFIX: Modified the script which creates the catalogue 
+		  in order to use simple index instead of a primary
+		  key on tables reporting column lists.
+	- In order to improve data preparation when more than one
+	  attribute is involved in the gid list, we do not sort the
+	  source table accordingly to the gid attributes when partition
+	  (which does not use this information) is used.
+	- Improved configure script. Now it deduce the program version
+	  from the current path and sets the makefile accordingly (it
+	  assumes that the path is in the form /somthing/vX.Y.Z and 
+	  sets the version to X.Y.Z).
+ 
+
+v1.0.1: 4/10/2003
+	- Cleaned and improved Makefiles (no unuseful warning
+	  will be displayed for known old files)
+	- Added a simple configure script which sets MRHOME to point
+	  to the current dir in Makefile.vars
+	- Added a -v option in kernel.cpp
+	- Added support for predicate relaxation, that is, the query
+	  normalizer substitute A<x with A<=y where y is the max value
+	  which satisfies A<x. This allows more inclusions/equivalences
+	  to be found (since without it we could not find that A<x and
+	  A<=y were equivalent predicates)
+
+v1.0:   3/10/2003
+	First Release 
+	-------------
+	Implemented features:
+	Algorithms:
+		partition
+		generalized partition
+		fpgrowth
+	Optimizer:
+		recognition and exploitation of:
+			equivalences
+			inclusions
+	4 Hierarchic logs: log,err,warn,debug
+	Hierarchic Option file
+	Started a CHANGELOG file ;-)
+	

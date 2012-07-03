@@ -1,0 +1,9 @@
+MINE RULE mrBlackCandlestick_VARP_SCRATCH
+     AS SELECT DISTINCT 1..2 ticker AS BODY,1..1 ticker AS HEAD,
+SUPPORT, CONFIDENCE
+    WHERE (BODY.tf_code>=0 AND BODY.tf_code<=3) AND (HEAD.tf_code>=0 AND
+HEAD.tf_code<=3)
+    AND BODY.varp<5 AND HEAD.varp<5
+    FROM dj30_2002
+    GROUP BY doy
+    EXTRACTING RULES WITH SUPPORT: 0.005, CONFIDENCE: 0.01

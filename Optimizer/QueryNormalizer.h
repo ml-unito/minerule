@@ -1,0 +1,181 @@
+#ifndef __QUERYNORMALIZER_H__
+#define __QUERYNORMALIZER_H__
+
+#include <vector>
+#include <Parsers/ParsedMinerule.h>
+#include <Optimizer/OptimizerCatalogue.h>
+#include "Utils/SQLUtils.h"
+
+namespace minerule { 
+
+  /* 
+   * Allows to normalize ParsedMinerules so that they are more easily
+   * checked for equivalence,dominance and inclusion relationships.
+   * Look at the implementation file for more comments about how it
+   * actually works.
+   */
+
+  class QueryNormalizer {
+  public:
+    /* ---------- Public Types ---------- */
+    /* ---------- (needed for query normalization) ---------- */
+    class SubstEntryBody {
+    public:
+      // pred is the ptr to the 'next' field of the node preceding
+      // the node from which this struct were built
+      // (note that it can be used to unlink the current
+      // node).
+      list_AND_node** pred;
+      size_t pos;
+
+      SubstEntryBody() {
+	pred=NULL;
+	pos=0;
+      }
+
+      SubstEntryBody(const SubstEntryBody& seb) :
+	pred( seb.pred ),
+	pos( seb.pos ) { }
+
+      bool operator<(const SubstEntryBody& s2) const {
+	return this->pos < s2.pos;
+      } 
+    };
+    
+    class SubstEntryHead {
+    public:
+
+      class Elem {
+      public:
+	OptimizerCatalogue::OrderType  order;
+      
+	string colName;        // the column name
+	string value;          // the adjoint value
+	string op;             // the operator involved
+
+	Elem() {
+	}
+	
+	Elem(const Elem& elem) : 
+	  order(elem.order),
+	  colName(elem.colName),
+	  value(elem.value),
+	  op(elem.op)  {}
+      }; // class Elem
+
+      OptimizerCatalogue::KeyCols        refKey;
+      vector<Elem>   elems;
+      
+      SubstEntryHead() {
+      }
+
+      SubstEntryHead(const SubstEntryHead& seh) :
+	refKey( seh.refKey ),
+	elems( seh.elems ) {}
+
+      bool operator<(const SubstEntryHead& s2) const {
+	return this->refKey<s2.refKey;
+      }
+    };
+  
+    typedef set<SubstEntryHead> HeadInfo;
+    typedef set<SubstEntryBody> BodyInfo;
+  private:
+       /* ---------- Member Fields ---------- */
+    const OptimizerCatalogue& optimizerCatalogue;
+    const OptimizerCatalogue::Catalogue& catalogue;
+    ParsedMinerule* mr;
+
+
+    /* ---------- Private Methods ---------- */
+    string reverseOperator( string op, bool doReverse=true ) const;
+
+    void substituteInPredicate( 
+		list_OR_node* cond,
+		const OptimizerCatalogue::CatalogueEntry& catEntry ) const;
+
+    void substituteInAndList(
+		list_AND_node*& andlist,
+		const OptimizerCatalogue::CatalogueEntry& catEntry,
+		const std::string& prefix) const;
+
+    void performSubstitutionInAndList( 
+		list_AND_node*& andList,
+		const OptimizerCatalogue::KeyCols& Ai,
+		const OptimizerCatalogue::KeyCols& ai,
+		OptimizerCatalogue::OrderType order,
+		const std::string& prefix) const;
+
+    bool findSubstitutions( list_AND_node*& andList,
+			    const OptimizerCatalogue::KeyCols& Ai,
+			    const OptimizerCatalogue::KeyCols& ai,
+			    const OptimizerCatalogue::OrderType order,
+			    BodyInfo& bodies,
+			    HeadInfo& heads,
+			    const string& prefix) const;
+
+
+    void setSimplePred(simple_pred* pred,
+		       string colName,
+		       string op,
+		       SQLUtils::Type,
+		       const string& ) const;
+
+    void removeAndNodes( BodyInfo& sInfo ) const;
+    void addAndNode(list_AND_node*& andList,
+		    simple_pred* pred) const;
+
+    void addNewConditions( list_AND_node*& andList,
+			   const HeadInfo& heads,
+			   const std::string& prefix) const;
+
+    void addNewCondition( list_AND_node*& andList,
+			  const string& aiVal,
+			  const vector<SubstEntryHead::Elem>& elems,
+			  const string& prefix) const;
+
+    void substituteInAttrList( 
+                ParsedMinerule::ListType& l,
+		const OptimizerCatalogue::CatalogueEntry& catEntry
+		) const;
+
+    void compactPredicates( list_AND_node*& l ) const;
+    
+    void relaxOperatorsInAndList(list_AND_node* andlist) 
+      throw(MineruleException,odbc::SQLException);
+
+    void relaxOperatorInPred(simple_pred* pred) 
+      throw(MineruleException,odbc::SQLException);
+
+    string getRelaxedValue(const string& tabSource,
+			   const string& attr,
+			   const string& op,
+			   const string& value) 
+      throw(MineruleException,odbc::SQLException);
+
+    void relaxOperators(list_OR_node* cond) 
+      throw(MineruleException,odbc::SQLException);
+
+    void cleanPredicate(list_OR_node*& cur) const;
+  public:
+    /* ---------- Public Methods ---------- */
+
+    QueryNormalizer( const OptimizerCatalogue& oc, 
+		     ParsedMinerule& mrule ) : optimizerCatalogue(oc), 
+                                               catalogue( oc.getCatalogue() ),
+					       mr(&mrule) {
+    };
+
+    
+
+    void setMinerule( ParsedMinerule& mrule ) {
+      mr = &mrule;
+    }
+
+    // As a side effect it normalizes the minerule mr
+    void normalize() throw(MineruleException,odbc::SQLException);
+  };
+
+} // namespace
+
+#endif

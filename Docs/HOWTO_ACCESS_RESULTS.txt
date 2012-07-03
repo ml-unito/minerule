@@ -1,0 +1,50 @@
+Informazioni rilevanti per accedere ai risultati di una minerule:
+
+La tavola "mr_query" contiene una riga per ogni minerule completata con successo. Il suo schema e':
+
++------------------+--------------+------+-----+---------+-------+
+| Field            | Type         | Null | Key | Default | Extra |
++------------------+--------------+------+-----+---------+-------+
+| query_id         | int(10)      |      | PRI | 0       |       |
+| query_text       | text         |      |     |         |       |
+| query_name       | varchar(128) |      | MUL |         |       |
+| tab_results_name | varchar(128) |      | MUL |         |       |
+| source_tab_name  | varchar(128) |      | MUL |         |       |
+| gal              | int(10)      |      |     | 0       |       |
+| ral              | int(10)      |      |     | 0       |       |
+| cal              | int(10)      |      |     | 0       |       |
++------------------+--------------+------+-----+---------+-------+
+
+In particolare:
+   query_name - e' il nome della minerule come specificato nel testo della minerule stessa (i.e., nel caso della minerule "MINE RULE m1 AS SELECT ..." query_name sara' posto a "m1").
+   tab_results_name - si riferisce al nome della tavola contenente i risultati.
+
+Percio' se tab_results_name="exp1" dovrebbe esserci una tavola nel database usato dal sistema chiamata "exp1". Ogni tavola risultato, indipendentemente dalle opzioni date al sistema, avra' il seguente schema:
+
++----------+---------+------+-----+---------+-------+
+| Field    | Type    | Null | Key | Default | Extra |
++----------+---------+------+-----+---------+-------+
+| bodyId   | int(11) | YES  |     | NULL    |       |
+| headId   | int(11) | YES  |     | NULL    |       |
+| supp     | float   | YES  |     | NULL    |       |
+| con      | float   | YES  |     | NULL    |       |
+| cardBody | int(11) | YES  |     | NULL    |       |
+| cardHead | int(11) | YES  |     | NULL    |       |
++----------+---------+------+-----+---------+-------+
+
+I campi supp e con fanno riferimento al supporto e alla confidenza della regola. Il campo cardBody e' il numero di elementi nel body della regola, mentre cardHead e' il numero di elementi nella testa della regola. I campi bodyId e headId sono identificatori di liste di valori appartenenti alla tavala 'exp1_elems' (assumendo che exp1 fosse il nome della tavola precedente).  
+
+Lo schema di tale tavola e':
+
++-------+--------------+------+-----+---------+-------+
+| Field | Type         | Null | Key | Default | Extra |
++-------+--------------+------+-----+---------+-------+
+| id    | int(11)      | YES  | MUL | NULL    |       |
+| elem  | varchar(255) | YES  |     | NULL    |       |
++-------+--------------+------+-----+---------+-------+
+
+Per "costruire" il result set e' quindi necessario:
+1) andare a pescare il nome della tavola risultato in mr_query
+2) per ogni regola in mr_query, bisogna accedere due volte alla tavola contenente gli elementi per reperire i valori appartenenti al body e alla head. 
+
+.../minerule/new/TmpProjects/PrintRules.cpp e' un programmino che mostra a video i risultati di una minerule dato il nome della minerule stessa e puo' essere utilizzato per farsi un'idea dell'intero processo.

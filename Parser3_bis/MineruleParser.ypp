@@ -1,0 +1,602 @@
+%{
+#include <list>
+#include <set>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+  
+#include "Utils/MinMaxPair.h"
+#include "ParsedMinerule.h" 
+#include "Utils/Converter.h"
+#include "ParserLibrary.h"
+#include "ParsedPredicate.h"
+#include "Utils/MineruleOptions.h"
+#include "SupportMeasure.h"
+
+#define PARSER_BUF_SIZE 4096
+extern int mrlex();
+extern void mrerror(char* s);
+bool check_body_coincident_head(minerule::ParsedMinerule::ListType& , minerule::ParsedMinerule::ListType&);
+using namespace std;
+using namespace minerule;
+
+extern std::map<std::string,int> keywords_to_token;
+/* extern std::vector<ParsedSimplePredicate*>* CrossCond; */
+extern minerule::ParsedPredicate* hc_mining;
+%}
+   
+%union {
+	minerule::ParsedSimplePredicate *TParsedSimplePredicate;   
+	minerule::ParsedPredConjunction* TParsedPredConjunction; 
+	minerule::ParsedPredicate* TParsedPredicate;
+        minerule::ParsedMinerule::ListType* TListType;
+	char* TString;
+	minerule::MinMaxPair* TMinMaxPair;
+	minerule::SupportMeasure* ev_m;
+	}
+
+%token MINE RULE AS SEQUENCES SELECT DISTINCT BODY HEAD CLUSTER FROM ITEM ORDER GROUP BY HAVING OR AND NOT WHERE EXTRACTING RULES WITH DOTS ITEMSET SUPPORT CONFIDENCE SEQUENCE ITEMSETS GAP
+
+%token <TString> ATTR CARD PARTBODY QUOTED_VALUE PARTHEAD COMPARISON ID AGGREGATE
+%token <TString> INT_NUMBER DBL_NUMBER 
+%type <TString>  value
+%type <TListType> attr_list
+%type <TString> qualified_attribute
+%type <TParsedSimplePredicate> predicate
+%type <TParsedPredConjunction> and_cond
+%type <TParsedPredicate> or_cond
+%type <TMinMaxPair> card gaps_clause
+%type <TString> from_clause aggr_member
+%type <TParsedPredicate> mining_cond cluster_cond seq_clause
+%type <TParsedPredicate> having_clause having_m_cond
+%type <TListType> group_clause cluster_clause order_clause
+%type <ev_m> ev_measures
+%left OR
+%left AND        
+
+%nonassoc NOT
+%%
+
+query: MINE RULE ATTR AS SELECT 
+       DISTINCT card attr_list AS BODY ',' card attr_list AS HEAD ',' SUPPORT ',' CONFIDENCE  
+       mining_cond 
+       having_m_cond
+       from_clause
+       group_clause 
+       having_clause
+       cluster_clause
+       cluster_cond
+       EXTRACTING RULES WITH SUPPORT ':' value ',' CONFIDENCE ':' value
+		   {
+					    			    
+		/*	if ($25!=NULL){
+			switch ($25->getMeasureType()){
+		        				case EvaluationMeasure::MONOTONE:
+		          					cout<<"LA MISURA SUL SUPP E MONOTONA"<<endl;
+		            			break;
+		        				case EvaluationMeasure::ANTIMONOTONE:
+		          					cout<<"LA MISURA SUL SUPP E ANTIMONOTONA"<<endl;
+		            			break;
+		        				default: break;
+    		        }
+		    } else cout<<"SUPPORTO NON ESPRESSO"<<endl;
+		*/    
+		   #warning GESTIRE HC_MINING
+  		   /* hc_mining=$17; */
+		    
+		    ParsedMinerule& mr = getParserOutputObj();
+		    mr.miningTask = MTMineRules;
+		    mr.bodyCardinalities = *$7;
+		    mr.headCardinalities = *$12;
+	
+ 		    if( !MineruleOptions::getSharedOptions().getParsers().getBodyCardinalities().contains(mr.bodyCardinalities) )
+			yyerror("\nTHE CARDINALITY OF THE BODY IS INCORRECT REGARDING THE OPTION\n");
+
+ 		    if( !MineruleOptions::getSharedOptions().getParsers().getHeadCardinalities().contains(mr.headCardinalities) )
+			yyerror("\nTHE CARDINALITY OF THE HEAD IS NOT CORRECTED REGARDING THE OPTION\n");
+
+		    mr.ba = *$8;
+		    mr.ha = *$13;
+
+		    /* MANAGE RULE ATTRIBUTES in way to don't have duplicate attributes*/		    
+		    minerule::ParsedMinerule::ListType::iterator it;
+		    minerule::ParsedMinerule::ListType* list_ra= new minerule::ParsedMinerule::ListType(*$8);
+		    for (it=$13->begin();it!=$13->end();++it){
+		    		if (find(list_ra->begin(),list_ra->end(), *it)==list_ra->end())
+					list_ra->push_back(*it);
+
+			}
+		    
+		    mr.ra=*list_ra;
+		    /*FINISH TO CREATE THE LIST OR RULE ATTRIBUTE, IN THIS LIST THRE ISN'T ITEM DUPLICATES*/	
+		    
+		    mr.tab_source=$22;
+		    mr.tab_result=$3;
+                    mr.body_coincident_head=check_body_coincident_head(mr.ba,mr.ha);
+		    mr.mc = $20==NULL?NULL:$20->convert();
+		    mr.ga = *$23;
+		    mr.gc = $24==NULL?NULL:$24->convert();
+		
+		    if ($25!=NULL) 
+				mr.ca=*$25;
+		
+		    mr.cc = $26==NULL?NULL:$26->convert();
+		    mr.sup = Converter($32).toDouble();
+		    mr.conf= Converter($36).toDouble();
+
+                    //ev measure e il token $25
+
+		    delete $7;
+		    delete $12;
+		    delete $8;
+		    delete $13;
+		    delete $23;
+		    if ($24!=NULL) delete $24;
+		    //if ($21!=NULL)  delete $21;
+		    //if ($22!=NULL)  delete $22;
+		    free($3);
+		    free($22);
+		    
+		   }
+		   |
+		   MINE ITEMSET ATTR AS SELECT 
+		          DISTINCT card attr_list AS BODY ',' SUPPORT  
+		          mining_cond 
+		          having_m_cond
+		          from_clause
+		          group_clause 
+		          having_clause
+		          EXTRACTING ITEMSETS WITH SUPPORT ':' value
+		   {
+		   	cout<<"EFFETTUATA UNA MINE ITEMSET"<<endl<<endl<<endl;
+			/*
+			if ($16!=NULL){
+                        switch ($16->getMeasureType()){
+                                                        case EvaluationMeasure::MONOTONE:
+                                                                cout<<"LA MISURA SUL SUPP E MONOTONA"<<endl;
+                                                break;
+                                                        case EvaluationMeasure::ANTIMONOTONE:
+                                                                cout<<"LA MISURA SUL SUPP E ANTIMONOTONA"<<endl;
+                                                break;
+                                                        default: break;
+                        }
+                    } else cout<<"SUPPORTO NON ESPRESSO"<<endl;
+			*/
+		    #warning GESTIRE HC_MINING
+			/* hc_mining=$10;  */
+		    ParsedMinerule& mr = getParserOutputObj();
+
+		    mr.miningTask = MTMineItemsets;
+		    mr.bodyCardinalities = *$7;
+		  
+		   cout << mr.bodyCardinalities << endl;
+
+		    if( !MineruleOptions::getSharedOptions().getParsers().getBodyCardinalities().contains(mr.bodyCardinalities) )
+			yyerror("\nTHE CARDINALITY IS INCORRECT REGARDING THE OPTION\n");
+		    mr.ba = *$8;		    
+		    mr.ra=*$8;
+		    /*FINISH TO CREATE THE LIST OR RULE ATTRIBUTE, IN THIS LIST THRE ISN'T ITEM DUPLICATES*/	
+
+		    mr.tab_source=$15;
+		    mr.tab_result=$3;
+		       mr.body_coincident_head=0;
+		    mr.mc = $13==NULL?NULL:$13->convert();
+		    mr.ga = *$16;
+		    mr.gc = $17==NULL?NULL:$17->convert();
+		    mr.sup = Converter($23).toDouble();
+		    /*
+		    delete $7;
+		    
+		    delete $8;
+		   
+		    delete $16;
+		    if ($13!=NULL) delete $13;
+		
+		    free($3);
+		    free($15);
+		    */
+		   }
+		  |
+		   MINE SEQUENCE ATTR AS SELECT attr_list ',' SUPPORT  
+			seq_clause
+			gaps_clause
+			from_clause 
+			group_clause 
+			order_clause
+			 EXTRACTING SEQUENCES WITH SUPPORT ':' value
+		 {
+		    ParsedMinerule& mr = getParserOutputObj();
+		    mr.miningTask = MTMineSequences;
+		    mr.tab_source=$11;
+                    mr.tab_result=$3;
+		    mr.oa=*$13;
+		    mr.ba=*$6;
+		    if ($10 != NULL){
+			   mr.sequenceAllowedGaps = *$10;
+		    }
+		    //mr.bodyCardinalities = $9 == NULL?NULL:*$9;
+		    mr.ga=*$12;  
+		    mr.sup = Converter($19).toDouble();
+		    delete $13;
+		    delete $6;
+		    delete $12; 	
+		 };
+		   
+		   
+ev_measures:    {$$=NULL;}		
+		|
+		SUPPORT COMPARISON value
+		{
+		string comp=$2;
+		if (comp=="="||comp=="<>")
+			mrerror("THE RELATIONAL OPERATOR USED FOR THE SUPPORT IS INCORRECT = or <>");
+		if (comp==">")
+			$$=new SupportMeasure(EvaluationMeasure::Greater, Converter($3).toDouble());
+		else if (comp==">=")
+                        $$=new SupportMeasure(EvaluationMeasure::GreaterEqual, Converter($3).toDouble());
+		else if (comp=="<")
+                        $$=new SupportMeasure(EvaluationMeasure::Less, Converter($3).toDouble());
+		else if (comp=="<=")
+                        $$=new SupportMeasure(EvaluationMeasure::LessEqual, Converter($3).toDouble());
+		else mrerror("AN INTERNAL ERROR OCCURS");
+		};
+		
+
+from_clause: FROM ATTR{
+			$$=$2;
+			};
+
+group_clause: GROUP BY attr_list { $$=$3; } ;
+
+order_clause: ORDER BY attr_list { $$=$3; } ;
+
+cluster_clause: {$$=NULL;}
+		|
+		CLUSTER BY attr_list { $$=$3; };
+
+cluster_cond:    {$$=NULL;}
+            |
+                HAVING or_cond {
+				$2->stamp();	
+				if	(!$2->areAllBorH())
+                               			 mrerror("\nTHE CLUSTER CONDITION IS INCORRECT, LACK ONE OR MORE DECLARATION OF BODY|HEAD ATTRIBUTE\n"); 
+
+                                        $$=$2;
+                };
+
+having_m_cond: {$$=NULL;}
+	      |
+	      	HAVING or_cond { if (!$2->areAllAggr_f())
+					mrerror("\nTHE HAVING CONDITION OF MINING PREDICATE IS INCORRECT, COULD IS A MISTAKEN DECLARATION OF ATTRIBUTE\n");
+				 $$=$2;
+				};
+
+
+mining_cond: 	{$$=NULL;}
+	    |
+		WHERE or_cond {  if (!$2->areAllBorH())
+					mrerror("\nTHE MINING CONDITION IS INCORRECT, LACK ONE OR MORE DECLARATION OF BODY|HEAD ATTRIBUTE\n");			
+				$$=$2;
+		};
+
+having_clause:  { $$=NULL; } 
+		| HAVING or_cond { if ($2->atLeastOneBorH())
+					mrerror("\nTHE HAVING CONDITION IS INCORRECT, COULD IS A MISTAKEN DECLARATION OF ATTRIBUTE\n");
+				$$=$2;
+				};
+		
+
+qualified_attribute: PARTBODY {  
+				/*
+                                 * text_tUp serve per convertire il prefisso dell'attributo della mining condition
+                                 * in maiuscolo in modo che dentro il MineRule la scritta BODY (HEAD) antecendente al vero
+                                 * attributo sia maiuscola, mrtext+5 si riferisce alla parola contenuta in mrtext senza le prime 5
+                                 * lettere (BODY. o HEAD.) in modo tale da poterlo ricopiare in con strcat in text_tUp
+                                 * l'ultima istruzione serve per dire alla strcat di far ripartire il buffer dalla prima posizione
+                                 */
+
+
+				char text_Up[4096];
+				strcpy(text_Up,"BODY.");
+				strncat(text_Up,strdup($1+5),PARSER_BUF_SIZE);
+				$$=strndup(text_Up,PARSER_BUF_SIZE);
+				//$$=$1;
+			} 
+		    | PARTHEAD {
+				/*
+                                 * text_tUp serve per convertire il prefisso dell'attributo della mining condition
+                                 * in maiuscolo in modo che dentro il MineRule la scritta BODY (HEAD) antecendente al vero
+                                 * attributo sia maiuscola, mrtext+5 si riferisce alla parola contenuta in mrtext senza le prime 5
+                                 * lettere (BODY. o HEAD.) in modo tale da poterlo ricopiare in con strcat in text_tUp
+                                 * l'ultima istruzione serve per dire alla strcat di far ripartire il buffer dalla prima posizione
+                                 */
+
+				char text_Up[4096];
+				strcpy(text_Up,"HEAD.");
+				strncat(text_Up,strdup($1+5),PARSER_BUF_SIZE);
+				$$=strndup(text_Up,PARSER_BUF_SIZE);
+				}	;  
+
+attr_list: attr_list ',' ATTR {
+				$1->push_back($3);
+	   			$$ = $1;
+				free($3);
+				}
+			| ATTR {
+				$$ = new ParsedMinerule::ListType();
+				$$->push_back($1);
+				free($1);
+				};
+
+
+
+card: INT_NUMBER DOTS INT_NUMBER  
+			{
+			 int n_min =Converter($1).toLong(); 
+			 int n_max = Converter($3).toLong();
+			 if (n_min>n_max) // se la cardinalita massima e maggiore di quella minima
+			     mrerror("\nTHE MIN CARDINALITY IS GREATER THAN MAX CARDINALITY\n");
+			 else 
+			     $$=new MinMaxPair(n_min,n_max);
+			};
+card: INT_NUMBER DOTS ATTR {
+			int n_min = Converter($1).toLong();
+			
+			if( strlen($3)!=1 || toupper($3[0])!='N' ) {
+			    mrerror("Max cardinality must be either a number or a character in [n|N]\n");
+			}
+			    
+			$$ = new MinMaxPair(n_min, n_min);
+			$$->setDefaultMax();
+		    };
+
+gaps_clause: WITH GAP INT_NUMBER DOTS INT_NUMBER
+                        {
+                         int n_min =Converter($3).toLong();
+                         int n_max = Converter($5).toLong();
+                         if (n_min>n_max) // se la cardinalita massima e maggiore di quella minima
+                             mrerror("\nTHE MIN CARDINALITY IS GREATER THAN MAX CARDINALITY\n");
+                         else
+                             $$=new MinMaxPair(n_min,n_max);
+                        }
+			|{$$= NULL;}
+			;
+
+seq_clause: WHERE
+		{$$= NULL;}
+	    |{$$= NULL;}
+	    ;
+
+
+value: INT_NUMBER {$$=$1;}
+	|
+	DBL_NUMBER {$$=$1;};
+
+
+
+aggr_member: AGGREGATE '(' qualified_attribute ')'
+		{
+		  string temp= $1;
+		  temp=temp+"("+$3+")";
+		  $$=strndup(temp.c_str(),PARSER_BUF_SIZE);
+		};
+
+or_cond: and_cond 
+		{ $$ = new ParsedPredicate();
+		  $$->push_back($1);
+		}
+	| 
+	or_cond OR or_cond
+		{
+		  *$1 |= *$3;
+		  $$ = $1;
+		  delete $3;
+		}
+	| 
+	or_cond AND or_cond
+		{     
+		      *$1 &= *$3;
+		      $$ = $1;
+		      delete $3;
+		}
+	|  
+	NOT '(' or_cond ')'
+		{
+			 
+			 $$=&dynamic_cast<ParsedPredicate&>(!(*$3));
+			 delete $3;
+		}
+	| '(' or_cond ')'
+		{ 
+		  $$=$2;
+		};
+
+
+and_cond: 
+	predicate 
+		{ 
+		$$ = new ParsedPredConjunction();
+		$$->push_back($1);
+		}
+	| 
+	and_cond AND predicate
+		{
+			  
+			  $1->push_back($3);
+			  $$=$1;
+			  
+		}
+	;
+
+    predicate:
+	ATTR COMPARISON value
+			{ 
+			/*ParsedSimplePredicate:
+				firt param: first term
+				second param: relational operator
+				third param: secondo term
+				fourth param: true if at least one of the two term was evaluated on body or head false otherwise
+				fifth param: true if at least one of the two term was an aggregation function false otherwise
+			*/
+
+			  	$$=new ParsedSimplePredicate($1,$2,$3,false,false);
+			  	free($1);
+			  	free($2);
+			  	free($3); 
+                        }
+			|
+	ATTR COMPARISON QUOTED_VALUE
+			{ 
+				$$=new ParsedSimplePredicate($1,$2,$3,false,false);
+				free($1);
+			  	free($2);
+			  	free($3);
+				
+			}
+			|
+	ATTR COMPARISON ATTR
+			{
+				$$=new ParsedSimplePredicate($1,$2,$3,false,false);
+			  	free($1);
+			  	free($2);
+			  	free($3);
+			 }
+			 |
+	value COMPARISON value {
+			  	$$=new ParsedSimplePredicate($1,$2,$3,false,false);
+			  	free($1);
+			  	free($2);
+			  	free($3);
+			 }
+			|
+	value COMPARISON ATTR
+			{ 
+				string op=$2,nop;
+				if (op.compare("")==0) { nop="<";}
+				else if (op==">=") { nop="<=";}
+				else if (op=="<") { nop=">";}
+				else if (op=="<=") { nop=">=";}  
+				$$=new ParsedSimplePredicate($3,nop,$1,false,false);
+			  	free($1);
+			  	free($2);
+			  	free($3);
+			 }
+			 |
+	qualified_attribute COMPARISON  QUOTED_VALUE
+			 { 
+				$$=new ParsedSimplePredicate($1,$2,$3,true,false);
+			  	free($1);
+			  	free($2);
+			  	free($3);
+			 }
+			 |
+	qualified_attribute COMPARISON value
+			{ 
+				$$=new ParsedSimplePredicate($1,$2,$3,true,false);
+			  	free($1);
+			  	free($2);
+			  	free($3);
+                        }
+			|
+	qualified_attribute COMPARISON qualified_attribute
+			{ 	
+				$$=new ParsedSimplePredicate($1,$2,$3,true,false);
+			  /*	ParsedSimplePredicate *p = new ParsedSimplePredicate($1,$2,$3,true,false);
+								CrossCond->push_back(p); */
+				free($1);
+			  	free($2);
+			  	free($3);
+			 }
+			|
+	value COMPARISON qualified_attribute
+			{ 	
+				string op=$2, nop;
+				if (op.compare(">")==0) { nop="<";}
+				else if (op==">=") { nop="<=";}
+				else if (op=="<") { nop=">";}
+				else if (op=="<=") { nop=">=";}  			
+				$$=new ParsedSimplePredicate($3,nop,$1,true,false);
+				free($1);
+			  	free($2);
+			  	free($3);
+			 }
+			 |
+	aggr_member COMPARISON  value
+			 { 
+				$$=new ParsedSimplePredicate($1,$2,$3,false,true);
+			  	free($1);
+			  	free($2);
+			  	free($3);
+			 }
+			 |
+	aggr_member COMPARISON  aggr_member
+			 { 
+				$$=new ParsedSimplePredicate($1,$2,$3,false,true);
+			  	free($1);
+			  	free($2);
+			  	free($3);
+			 }
+			 |
+	aggr_member COMPARISON  qualified_attribute
+			 { 
+				$$=new ParsedSimplePredicate($1,$2,$3,false,true);
+			  	free($1);
+			  	free($2);
+			  	free($3);
+			 }
+			 ;
+
+	
+%% 
+
+
+namespace minerule{
+void init_mrparser() {
+	/* initialization of keywords_to_token table */
+	keywords_to_token["MINE"]=MINE;
+	keywords_to_token["RULE"]=RULE;
+	keywords_to_token["AS"]=AS;
+	keywords_to_token["FROM"]=FROM;
+	keywords_to_token["WHERE"]=WHERE;
+	keywords_to_token["GROUP"]=GROUP;
+        keywords_to_token["BY"]=BY;
+	keywords_to_token["HAVING"]=HAVING;
+	keywords_to_token["EXTRACTING"]=EXTRACTING;
+	keywords_to_token["RULES"]=RULES;
+	keywords_to_token["WITH"]=WITH;
+	keywords_to_token["DISTINCT"]=DISTINCT;
+	keywords_to_token["SELECT"]=SELECT;
+	keywords_to_token["BODY"]=BODY;
+	keywords_to_token["HEAD"]=HEAD;
+	keywords_to_token["NOT"]=NOT;
+	keywords_to_token["AND"]=AND;
+	keywords_to_token["OR"]=OR;
+	keywords_to_token["CLUSTER"]=CLUSTER;
+	keywords_to_token["ITEMSET"]=ITEMSET;
+	keywords_to_token["ITEMSETS"]=ITEMSETS;
+	keywords_to_token["SUPPORT"]=SUPPORT;
+	keywords_to_token["CONFIDENCE"]=CONFIDENCE;
+	keywords_to_token["SEQUENCE"]=SEQUENCE;
+	keywords_to_token["SEQUENCES"]=SEQUENCES;
+	keywords_to_token["ORDER"]=ORDER;
+	keywords_to_token["GAP"]=GAP;
+
+}
+}
+
+
+bool check_body_coincident_head(minerule::ParsedMinerule::ListType& a, minerule::ParsedMinerule::ListType& b){
+	minerule::ParsedMinerule::ListType* a1 = new minerule::ParsedMinerule::ListType(a);
+	minerule::ParsedMinerule::ListType* b1	= new minerule::ParsedMinerule::ListType(b);
+sort(a1->begin(), a1->end());
+sort(b1->begin(), b1->end());
+if (a1->size()!=b1->size())
+	return false;
+minerule::ParsedMinerule::ListType::iterator it1,it2;
+for (it1=a1->begin(),it2=b1->begin(); (it1!=a1->end())&&(*it1==*it2);++it1, ++it2);//notare il punto e virgola
+
+      return (it1==a1->end());
+
+}
+
+

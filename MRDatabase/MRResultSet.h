@@ -42,7 +42,7 @@ class MRResultSetIterator {
 			 setParameters(*(mi->current()));
 			 rs = query->executeQuery();
 			 (*mi)++;
-			 if (ok = rs->next()) break;
+			 if( (ok = rs->next()) ) break;
 		 } 
     }
 	 return ok;

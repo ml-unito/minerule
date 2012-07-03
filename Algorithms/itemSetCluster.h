@@ -400,7 +400,7 @@ void itemSetCluster< NODETYPE >::setItemSetIfExist(
     else {
     //cout<<"Elemento body esiste "<<valueB<<" g"<<gidB<<" c"<<cidB<<endl;
     //cout<<"controllo head e se ok inserisco"<<endl;
-    if ((i->second.getHead())->setItemSetIfExistHead(valueH,gidB,cidH));
+    if ((i->second.getHead())->setItemSetIfExistHead(valueH,gidB,cidH))
         i->second.getGidCidList().insertValue(gidB,cidB);
    // cout<<"inserisco valore nella gidLsit"<<endl;
     }

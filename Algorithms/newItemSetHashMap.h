@@ -2,12 +2,13 @@
 #define ITEMSETHASHMAP_H
 
 //#include <ext/hash_set>
-#include <unordered_set>
+// #include <unordered_set>
+#include <tr1/unordered_set>
 #include <vector>
 #include "utils.h"
 #include <iterator>
 
-#define hash_set unordered_set
+#define hash_set std::tr1::unordered_set
 
 using namespace std;
 using namespace __gnu_cxx;
@@ -42,16 +43,19 @@ class HashingHelper {
   typedef typename newItemSetHashMap<NODETYPE>::HASHTYPE HASHTYPE;
 
   size_t operator()(const HASHTYPE&  h1) const {
-    std::string s1="";
-    
-    hash<const char*> stringHash;
-    typename HASHTYPE::const_iterator it = h1.begin();
-    
-    for(;it!=h1.end();it++) {
-      s1+=(*it).asString();
-  }
-
-  return stringHash(s1.c_str());
+	  // unimplemented
+	  throw	new std::exception();
+	  return 0;
+  //   std::string s1="";
+  //   
+  //   hash_map<const char*> stringHash;
+  //   typename HASHTYPE::const_iterator it = h1.begin();
+  //   
+  //   for(;it!=h1.end();it++) {
+  //     s1+=(*it).asString();
+  // }
+  // 
+  // return stringHash[s1.c_str()];
   }
 
   bool operator()(const HASHTYPE& h1, const HASHTYPE& h2) const {

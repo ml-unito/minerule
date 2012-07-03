@@ -333,7 +333,7 @@ namespace minerule {
 				//				in.close();
 				//	cout<<"size "<<singleton.size()<<endl;
 				time(&end);
-				double ttt = difftime(end,init);
+				// double ttt = difftime(end,init);
 				//			cout<<"tempo finora "<<ttt<<endl;
 				//	cout<<"tempo medio per riga"<<ttt/number<<endl;
 				time_tot=time_tot+difftime(end,init);

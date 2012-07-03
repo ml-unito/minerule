@@ -16,6 +16,8 @@ class MiningAlgorithm {
   const OptimizedMinerule& minerule;
  public:
   MiningAlgorithm( const OptimizedMinerule& mr ) : minerule(mr) {}
+  virtual ~MiningAlgorithm() {}
+  
   virtual void execute() {
     throw MineruleException( MR_ERROR_INTERNAL, "This method should never be executed!");
   }

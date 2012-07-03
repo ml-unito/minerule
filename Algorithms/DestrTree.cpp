@@ -132,7 +132,7 @@ namespace minerule {
 
         while(b1notend && ItemType(curRowb1.getGroupBody())==gb){
 	  b1->push_back(curRowb1.getBody());
-	  if(b1notend=rb1->next()) {
+	  if((b1notend=rb1->next())) {
 	    curRowb1.init(rb1, bodyDes);
 	  }
         }
@@ -140,7 +140,7 @@ namespace minerule {
          HeadBodySourceRow curRowb12(rb1nb2, bodyDes);
          while(b1nb2notend && ItemType(curRowb12.getGroupBody())==gb){
 	   b1nb2->push_back(curRowb12.getBody());
-	   if(b1nb2notend=rb1nb2->next()) {
+	   if((b1nb2notend=rb1nb2->next())) {
 	     curRowb12.init(rb1nb2, bodyDes);
 	   }
          }
@@ -158,7 +158,7 @@ namespace minerule {
 
 	  while(h1notend && ItemType(curRowh1.getGroupBody())==gh ){
 	    h1->push_back(curRowh1.getHead());
-	    if (h1notend=rh1->next()) {
+	    if ((h1notend=rh1->next())) {
 	      curRowh1.init(rh1, headDes);
 	    }
 	  }
@@ -166,7 +166,7 @@ namespace minerule {
            HeadBodySourceRow curRowh12(rh1nh2, headDes);
 	   while(h1nh2notend && ItemType(curRowh12.getGroupBody())==gh ){
 	     h1nh2->push_back(curRowh12.getHead());
-	     if (h1nh2notend=rh1nh2->next()) {
+	     if ((h1nh2notend=rh1nh2->next())) {
 	       curRowh12.init(rh1nh2, headDes);
 	     }
 	   }

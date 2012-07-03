@@ -25,6 +25,8 @@ namespace minerule {
 					   odbc::ResultSetMetaData* rsmd,
 					   odbc::ResultSet* rs,
 					   const std::vector<int>& srd);
+	
+	virtual ~SourceRowElement() { }
 			
 
     virtual SourceRowElement* copy() const=0;
@@ -86,6 +88,8 @@ namespace minerule {
   class SourceRowEmptyElement : public SourceRowElement {
   
   public:
+	  SourceRowEmptyElement() { }
+	  
     virtual ~SourceRowEmptyElement() {
     }
   

@@ -207,7 +207,7 @@ string gidCidList< NODETYPELIST >::getListToDesign()
   typename MapType::iterator i;
   typename map<NODETYPELIST,int/*, NODETYPELIST*/>::iterator j;
   string result;
-  char numgid[20],numcid[20];
+  // char numgid[20],numcid[20];
 
   //cout<<"itno ";
   result="";

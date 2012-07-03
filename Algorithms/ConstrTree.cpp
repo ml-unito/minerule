@@ -78,7 +78,7 @@ namespace minerule {
 
       while(bodynotend && ItemType(curRowb.getGroupBody())==gidb){
 	body->push_back(curRowb.getBody());
-	if(bodynotend=rb2->next()) {
+	if((bodynotend=rb2->next())) {
 	  curRowb.init(rb2, bodyDes);
 	}
       }
@@ -91,7 +91,7 @@ namespace minerule {
 	  ItemSetType* head=new ItemSetType();
 	  while(headnotend && ItemType(curRowh.getGroupBody())==gidb ){
 	    head->push_back(curRowh.getHead());
-	    if (headnotend=rh2->next()) {
+	    if ((headnotend=rh2->next())) {
 	      curRowh.init(rh2, headDes);
 	    }
 	  }

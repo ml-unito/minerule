@@ -2,3 +2,15 @@ DeveloperUtils/ElectricFence-2.2.2.tar.gz
 DeveloperUtils/cpp-beautifier/bcpp.tar.gz
 Kernel/kernel.exe.64bit
 Kernel/*.txt
+*.o
+*.d
+*.a
+TAGS
+.DS_Store
+lib/objects/__.SYMDEF
+Kernel/kernel.exe
+TmpProjects/MRCatalogue/mrcatalogue
+TmpProjects/MRDefaultOptions/mrdefaults
+TmpProjects/MRShowLog/mrshowlog
+TmpProjects/PrintRules/RuleFormatter.d.24042
+TmpProjects/PrintRules/mrprintrules

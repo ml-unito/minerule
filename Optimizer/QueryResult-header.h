@@ -53,20 +53,15 @@ namespace minerule {
       }
 
       bool operator<(const Rule& rhs) const {
-	return *this->body < *rhs.body ||
-	  *this->body == *rhs.body &&
-	  *this->head < *rhs.head;
+		return *this->body < *rhs.body || ( *this->body == *rhs.body && *this->head < *rhs.head );
       }
 
       bool operator<=(const Rule& rhs) const {
-	return *this->body <= *rhs.body ||
-	  *this->body == *rhs.body &&
-	  *this->head <= *rhs.head;
+	return *this->body <= *rhs.body || (*this->body == *rhs.body && *this->head <= *rhs.head);
       }
 
       bool operator==(const Rule& rhs) const {
-	return *this->body == *rhs.body &&
-	  *this->head == *rhs.head;
+	return *this->body == *rhs.body && *this->head == *rhs.head;
       }
 
       bool operator>(const Rule& rhs) const {

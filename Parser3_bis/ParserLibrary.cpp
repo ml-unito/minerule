@@ -16,7 +16,6 @@ namespace minerule {
     ParsedMinerule * outputObj;
   
 void pars_minerule(std::string minerule_text, ParsedMinerule& output) {
-  std::cout<<"dentro parse_minerule"<<std::endl;
     outputObj = &output;
 
     const FILE* logfile = 

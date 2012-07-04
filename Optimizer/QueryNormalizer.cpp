@@ -907,9 +907,9 @@ namespace minerule {
 	  char buf[2];
 	  buf[0]=opRel;
 	  buf[1]='\0';
-	  if((*Xptr)->sp->op=="<>")
+	  if(!strcmp((*Xptr)->sp->op,"<>"))
 	    (*Xptr)->sp->op[0]=reverseOperator(buf,YreverseOp)[0];
-	  else if((*Yptr)->sp->op=="<>")
+	  else if(!strcmp((*Yptr)->sp->op,"<>"))
 	    (*Xptr)->sp->op[0]=reverseOperator(buf,XreverseOp)[0];
 	  else throw MineruleException( MR_ERROR_INTERNAL, "The optimizer found a strange operators configuration..."
 					"this is a bug!");

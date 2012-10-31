@@ -1,4 +1,15 @@
+
+
+[2012-10-29]
 BUG-FIXES:
+        ** Fix a bad_cast error arising when mining rule with different
+           head/body types. See /home/minerule/selex/minerules for an example.
+	** Insert statements are not compatible with postgres syntax. It should
+           be fixed so that the code can run on both postgres and mysql.
+[older]
+BUG-FIXES:
+        * Fix a bad_cast error arising when mining rule with different
+           head/body types. See /home/minerule/selex/minerules for an example.
 	* Bug IDIncrementalAlgorithm does not filter out rules having
 	  small confidence/support values.
 	* Bug that occurs when processing queries which imply null

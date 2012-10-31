@@ -233,9 +233,15 @@ string
     if( miningAlgo.needsGidSortedSourceTable() )
       queryText += " ORDER BY "+buildAttrListDescription(mr.getParsedMinerule().ga, aliasA,false);
     
-    
+    // FIXME - on postgres the create table syntax is like:
+	// 		create table <table name> as select ...
+	// on mysql is
+	// 		create table <table name> select ... (i.e., without the 'as' keyword)
+	// momentarily we use the postgres syntax, but one fix that accomodates both
+	// should be implemented.
     string clusteredTable = mr.getParsedMinerule().tab_result+"_tmpSource";
-    string createQuery = "CREATE TABLE  "+clusteredTable+" (INDEX ("+buildAttrListAlias(mr.getParsedMinerule().ga,aliasA,true)+")) "+queryText;
+    string createQuery = "CREATE TABLE  "+clusteredTable+ " AS "+queryText + "; "
+		"CREATE INDEX "+clusteredTable+"_index " + " ON " + clusteredTable + " ("+buildAttrListAlias(mr.getParsedMinerule().ga,aliasA,true)+");";
     odbc::Connection* conn = 
       MineruleOptions::getSharedOptions().getOdbc_db().getConnection();
 

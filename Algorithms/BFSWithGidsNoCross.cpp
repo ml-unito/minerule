@@ -308,10 +308,11 @@ namespace minerule {
     coreConn.init();
 
     MRDebug() << "BFSWithGids: body queries:" << bodyQry.c_str() << endl;
-    MRDebug() << "BFSWithGids: head queries:" << headQry.c_str() << endl;
-
     statement = coreConn.getConnection()->prepareStatement(bodyQry.c_str());
+
+    MRDebug() << "BFSWithGids: head queries:" << headQry.c_str() << endl;
     stmt1 = coreConn.getConnection()->prepareStatement(headQry.c_str());
+    MRDebug() << "BFSWithGids: queries exceuted ccorrecctly" << endl;
   }
 
 

@@ -46,7 +46,7 @@ Algorithms::getBestRulesMiningAlgorithm(const OptimizedMinerule& mr) {
 
   if( BFSWithGidsAndCross(mr).canHandleMinerule() ) {
     MRDebug() << "Selected BFSWithGidsAndCross" << endl;
-    return new BFSWithGidsNoCross(mr);
+    return new BFSWithGidsAndCross(mr);
   }
 
   MRDebug() << "BFSWithGidsAndCross cannot handle it." << endl;

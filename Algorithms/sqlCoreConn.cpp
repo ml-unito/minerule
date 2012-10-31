@@ -175,7 +175,8 @@ void sqlCoreConn::create_db_rule(int sintax)
     statement->execute(create);
 
     create=string("CREATE TABLE ")+ getElemsOutTableName() +
-	    " (id int, elem varchar(255), INDEX (id))";
+	    " (id int, elem varchar(255));\n" +
+		" CREATE INDEX "+getElemsOutTableName()+"_index ON " + getElemsOutTableName() + "(id);";
 
     statement->execute(create);
     delete statement;

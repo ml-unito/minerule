@@ -149,7 +149,7 @@ Algorithms::newAlgorithm(const OptimizedMinerule& mr) {
 }
 
 bool
-Algorithms::executeIncrementalAlgorithm(OptimizedMinerule& mr) throw(MineruleException,odbc::SQLException){
+Algorithms::executeIncrementalAlgorithm(OptimizedMinerule& mr) throw(MineruleException,odbc::SQLException, std::exception){
  
   IncrementalAlgorithm* incrAlgo = IncrementalAlgorithm::newIncrementalAlgorithm(mr);
   
@@ -169,7 +169,7 @@ Algorithms::executeIncrementalAlgorithm(OptimizedMinerule& mr) throw(MineruleExc
 
 
 void
-Algorithms::executeExtractionAlgorithm(OptimizedMinerule& mr) throw(MineruleException,odbc::SQLException) {
+Algorithms::executeExtractionAlgorithm(OptimizedMinerule& mr) throw(MineruleException,odbc::SQLException, std::exception) {
   MiningAlgorithm* algo;
 
   algo =  Algorithms::newAlgorithm(mr);
@@ -179,7 +179,7 @@ Algorithms::executeExtractionAlgorithm(OptimizedMinerule& mr) throw(MineruleExce
 }
 
 void
-Algorithms::executeMinerule(OptimizedMinerule& mr) throw(MineruleException,odbc::SQLException) {
+Algorithms::executeMinerule(OptimizedMinerule& mr) throw(MineruleException,odbc::SQLException, std::exception) {
    if( OptimizerCatalogue::existsMinerule(mr.getParsedMinerule().tab_result) ) {
       if( MineruleOptions::getSharedOptions().getSafety().getOverwriteHomonymMinerules() ) {
 	MRLog() << "The optimizer Catalogue reports that a minerule " << endl;

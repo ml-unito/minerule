@@ -16,6 +16,7 @@ namespace minerule {
 #include "Algorithms/MiningAlgorithmBase.h"
 #include "Optimizer/OptimizedMinerule.h"
 #include "Utils/AlgorithmTypes.h"
+#include <exception>
 
 namespace minerule {
 
@@ -30,10 +31,10 @@ class Algorithms {
     newAlgorithm(const OptimizedMinerule& mr);
 
   // It execute the provided minerule and stores the results in the database
-  static void executeMinerule(OptimizedMinerule& mr) throw(MineruleException,odbc::SQLException);
+  static void executeMinerule(OptimizedMinerule& mr) throw(MineruleException,odbc::SQLException,std::exception);
 
-  static void executeExtractionAlgorithm(OptimizedMinerule& mr) throw(MineruleException,odbc::SQLException);
-  static bool executeIncrementalAlgorithm(OptimizedMinerule& mr) throw(MineruleException,odbc::SQLException);
+  static void executeExtractionAlgorithm(OptimizedMinerule& mr) throw(MineruleException,odbc::SQLException,std::exception);
+  static bool executeIncrementalAlgorithm(OptimizedMinerule& mr) throw(MineruleException,odbc::SQLException,std::exception);
 
   static MiningAlgorithm*
     getBestRulesMiningAlgorithm(const OptimizedMinerule& mr);

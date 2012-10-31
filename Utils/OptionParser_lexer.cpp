@@ -493,8 +493,8 @@ using namespace minerule;
 #define YYSTYPE string	
 #include "OptionParser_parser.hpp"
 
-#define LEXDBG(a) a
-//#define LEXDBG(a)
+// #define LEXDBG(a) a
+#define LEXDBG(a)
 #line 499 "OptionParser_lexer.cpp"
 
 #define INITIAL 0

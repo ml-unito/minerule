@@ -34,20 +34,20 @@ using namespace odbc;
 namespace minerule {
 
   void OptimizedMinerule::attributesInPredicate( const list_OR_node* l, set<std::string>& result ) {
-    while( l!=NULL ) {
-      list_AND_node* l_and = l->l_and;
-      while( l_and!=NULL ) {
-	if( !Converter(l_and->sp->val1).isNumber() )
-	  result.insert(l_and->sp->val1);
-	  
-	if( !Converter(l_and->sp->val2).isNumber() )
-	  result.insert(l_and->sp->val2);
-
-	l_and=l_and->next;
-      }
-      
-      l=l->next;
-    }
+  	while( l!=NULL ) {
+  		list_AND_node* l_and = l->l_and;
+  		while( l_and!=NULL ) {
+  			if( !Converter(l_and->sp->val1).isNumber() )
+  				result.insert(l_and->sp->val1);
+    
+  			if( !Converter(l_and->sp->val2).isNumber() )
+  				result.insert(l_and->sp->val2);
+    			
+			l_and=l_and->next;
+  		}
+       
+  		l=l->next;
+  	}
   }
 
   bool OptimizedMinerule::predicateAttributesAreIncluded( const ParsedMinerule& mr1,
@@ -62,9 +62,8 @@ namespace minerule {
 
   }
 
-  bool OptimizedMinerule::isACandidateQuery( const ParsedMinerule& mr1, // candidate
-					     const ParsedMinerule& mr2  // target
-					     ) {
+  bool OptimizedMinerule::isACandidateQuery( const ParsedMinerule& mr1, //candidate
+					     					 const ParsedMinerule& mr2  ) { // target 
     return mr1.ga==mr2.ga &&
       mr1.ca==mr2.ca &&
       mr1.ra==mr2.ra &&
@@ -95,20 +94,14 @@ namespace minerule {
     // the user.
     MineruleOptions::getSharedOptions().getLogStreamObj().disable();
 
-    ostream& log=
-      MRLog() << "Candidates are: ";
-
+    ostream& log = MRLog() << "Candidates are: ";
     
-    for(it=optInfo.minerulesToCombine.begin(); 
-	it!=optInfo.minerulesToCombine.end();
-	it++) {
-      if(it!=optInfo.minerulesToCombine.begin())
-	log<<", ";
+    for(it=optInfo.minerulesToCombine.begin(); it!=optInfo.minerulesToCombine.end(); it++) {
+      if(it!=optInfo.minerulesToCombine.begin()) log<<", ";
 
       log << it->tab_result;
       candidates.push_back(Predicate(it->mc));
     }
-
     log << endl;
 
     // re-enabling the log 
@@ -116,9 +109,11 @@ namespace minerule {
 
     Predicate target(minerule.mc);
     
+	// FIXME: The third parameters ("Sales") seems to be obsoleted and not used any more
     GAQueryCombinator qCombinator(target, candidates, "Sales");
     MineruleOptions::Optimizations::Combinator& combopt =
       MineruleOptions::getSharedOptions().getOptimizations().getCombinator();
+	
     qCombinator.setMaxDisjuncts(combopt.getMaxDisjuncts());
     qCombinator.setMaxQueries(combopt.getMaxQueries());
     qCombinator.setMaxDistinctPredicates(combopt.getMaxDistinctPredicates());
@@ -131,31 +126,30 @@ namespace minerule {
     }
     
 
+	// FIXME: all of the following is about output. It should be moved into an appropriate method
     if( qCombinator.getResult().empty() ) {
       MRLog() << "No valid combination found!" << endl;
     } else { 
       std::string qryString;
 
       GAQueryCombinator::QueryOrList::const_iterator itOr;
-      for(itOr=qCombinator.getResult().begin(); 
-	  itOr!=qCombinator.getResult().end(); 
-	  itOr++) {
-	if(itOr!=qCombinator.getResult().begin())
-	  qryString += " OR ";
+      for(itOr=qCombinator.getResult().begin(); itOr!=qCombinator.getResult().end();  itOr++) {
+		if(itOr!=qCombinator.getResult().begin())
+		  qryString += " OR ";
       
-	GAQueryCombinator::QueryAndList::const_iterator itAnd;
-	for(itAnd=itOr->begin(); itAnd!=itOr->end(); itAnd++) {
-	  if( itAnd!=itOr->begin() )
-	    qryString += " AND ";
+		GAQueryCombinator::QueryAndList::const_iterator itAnd;
+		for(itAnd=itOr->begin(); itAnd!=itOr->end(); itAnd++) {
+		  if( itAnd!=itOr->begin() )
+		    qryString += " AND ";
 
-	  qryString += optInfo.minerulesToCombine[*itAnd].tab_result;
-	}
+		  qryString += optInfo.minerulesToCombine[*itAnd].tab_result;
+		}
       }
     
 
-      MRLog() << "A combination of queries equivalent to the given one"
-	      << " has been found. The found query follows:" << endl;
-      MRLog() << qryString << endl;
+      MRLog() 	<< "A combination of queries equivalent to the given one"
+	      		<< " has been found. The found query follows:" << endl;
+      MRLog() 	<< qryString << endl;
 
       optInfo.combinationFormula = qCombinator.getResult();
       optInfo.relationship = Combination;
@@ -310,8 +304,7 @@ namespace minerule {
 				 const ParsedMinerule& mr1,
 				 const ParsedMinerule& mr2) {
 #ifdef MRUSERWARNING
-#warning Bisognerebbe controllare anche body==head, ma in questo \
-momento body e head sono "fusi" in ra.
+#warning Bisognerebbe controllare anche body==head, ma in questo momento body e head sono "fusi" in ra.
 #endif
 
     

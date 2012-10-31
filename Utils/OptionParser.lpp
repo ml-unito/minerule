@@ -8,8 +8,8 @@ using namespace minerule;
 #define YYSTYPE string	
 #include "OptionParser_parser.hpp"
 
-#define LEXDBG(a) a
-//#define LEXDBG(a)
+// #define LEXDBG(a) a
+#define LEXDBG(a)
 %}
 
 %option noyywrap

@@ -20,7 +20,7 @@ namespace minerule {
       ic(t) {}
 
     /** returns true if the vset configuration must be 
-     *filtered out
+     *		filtered out
      */
     bool operator()(const VarSet& vset) {
       return ic.impossibleVariableSetting( vset, preds );

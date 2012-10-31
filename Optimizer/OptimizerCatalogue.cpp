@@ -88,7 +88,7 @@ namespace minerule {
 	!MineruleOptions::getSharedOptions().getSafety().getAllowCascadeDeletes() ) {
       throw MineruleException( MR_ERROR_SAFETY_PROBLEM, "Requested the delete of" 
 			     " a minerule having dependent minerules, but option"
-			     " safety::allowsCascadeDeletes is not setted");
+			     " safety::allowsCascadeDeletes is not set");
     }
 
     vector<string>::const_iterator it;

@@ -44,25 +44,25 @@ namespace minerule {
 
 //  int BFSWithGidsNoCross::BodyMap::add(ItemType& gid, Transaction& t1, Transaction& t2, bool secondPass) {
   int BFSWithGidsNoCross::BodyMap::add(int gid, Transaction& t1, Transaction& t2, bool secondPass) {
-    int howMany = 0;
-    MapElement me;
-    me.insert(gid);
-    for (Transaction::iterator i = t1.begin(); i != t1.end(); i++) {
-      map<ItemType, BodyMapElement>::iterator found = find(*i);
-      if (found == end()) {
-	if (secondPass) continue;
-	BodyMapElement bme;
-	(*this)[*i] = bme;
-	found = find(*i);
-      }
-      found->second.insert(gid);
-      for (Transaction::iterator j = t2.begin(); j != t2.end(); j++)
-	if (*i != *j /*&& i->price < j->price*/) {
-	  howMany++;
-	  found->second.insert(*j,me,secondPass);
-	}
-    }
-    return howMany;
+	  int howMany = 0;
+	  MapElement me;
+	  me.insert(gid);
+	  for (Transaction::iterator i = t1.begin(); i != t1.end(); i++) {
+		  map<ItemType, BodyMapElement>::iterator found = find(*i);
+		  if (found == end()) {
+			  if (secondPass) continue;
+			  BodyMapElement bme;
+			  (*this)[*i] = bme;
+			  found = find(*i);
+		  }
+		  found->second.insert(gid);
+		  for (Transaction::iterator j = t2.begin(); j != t2.end(); j++)
+			  if (*i != *j /*&& i->price < j->price*/) {
+				  howMany++;
+				  found->second.insert(*j,me,secondPass);
+			  }
+	  }
+	  return howMany;
   }
 
   /*void BodyMap::saveMap (ostream& out, bool withGids) {
@@ -184,22 +184,22 @@ namespace minerule {
       map<ItemType, MapElement>::iterator lh = rc.lastHead;
       map<ItemType, MapElement>::iterator eh = rc.lastBody->second.heads.end();
       for (map<ItemType, MapElement>::iterator j = lh; j != eh; j++) {
-	GidList newGidList;
-	if (std::find(rc.body.begin(), rc.body.end(), j->first) == rc.body.end()/* &&
-										   rc.head.find(j->first) == rc.head.end()*/) {
-	  set_intersection(rc.gids.begin(),rc.gids.end(),
-			   j->second.begin(), j->second.end(),
-			   inserter(newGidList,newGidList.begin()));
-	  if (newGidList.size() >= threshold) {
-	    NewRule r(rc,j,newGidList);
-	    r.lastHead++;
-	    r.conf = newGidList.size() / (double)suppBody;
-	    rs.insert(rs.end(),r);
-	    addHead(rs,threshold,maxHead,suppBody,r);
-	  }
-	}
-      }
-    }
+		GidList newGidList;
+		if (std::find(rc.body.begin(), rc.body.end(), j->first) == rc.body.end()/* &&
+											   rc.head.find(j->first) == rc.head.end()*/) {
+		  set_intersection(rc.gids.begin(),rc.gids.end(),
+				   j->second.begin(), j->second.end(),
+				   inserter(newGidList,newGidList.begin()));
+		  if (newGidList.size() >= threshold) {
+		    NewRule r(rc,j,newGidList);
+		    r.lastHead++;
+		    r.conf = newGidList.size() / (double)suppBody;
+		    rs.insert(rs.end(),r);
+		    addHead(rs,threshold,maxHead,suppBody,r);						
+		  }
+		} // if (std::find
+      } // for( map...
+    } // if (rc.head.size...
   }
 
   void BFSWithGidsNoCross::BodyMap::insertRules( const NewRuleSet& rs, 
@@ -310,8 +310,8 @@ namespace minerule {
     MRDebug() << "BFSWithGids: body queries:" << bodyQry.c_str() << endl;
     MRDebug() << "BFSWithGids: head queries:" << headQry.c_str() << endl;
 
-    statement = coreConn.getConnection()->prepareStatement(bodyQry.c_str());
-    stmt1 = coreConn.getConnection()->prepareStatement(headQry.c_str());
+    statementBody = coreConn.getConnection()->prepareStatement(bodyQry.c_str());
+    statementHead = coreConn.getConnection()->prepareStatement(headQry.c_str());
   }
 
 
@@ -321,32 +321,55 @@ namespace minerule {
     MRLog() << "Preparing data sources..." << endl;
     prepareData();
 
-    odbc::ResultSet* result, *result1;
+    odbc::ResultSet* resultBody, *resultHead;
 
     float support = options.getSupport();
     int maxBody = options.getBodyCardinalities().getMax();
     int maxHead = options.getHeadCardinalities().getMax();
 
-    result = statement->executeQuery();
-    result1 = stmt1->executeQuery();
+    resultBody = statementBody->executeQuery();
+    resultHead = statementHead->executeQuery();
 
     ItemType gid1;
-    bool found = Transaction::findGid(gid1,result1, rowDes, true);
-    found = found && Transaction::findGid(gid1,result,rowDes,true);
+	
+    if(!Transaction::findGid(gid1,resultHead, rowDes, true))
+		throw new MineruleException(MR_ERROR_INTERNAL,"Cannot find initial GID for body elements");
+    if(!Transaction::findGid(gid1,resultBody,rowDes,true))
+		throw new MineruleException(MR_ERROR_INTERNAL,"Cannot find initial GID for head elements");
+		
     BodyMap bodyMap(coreConn);
 
     int totalGroups = options.getTotGroups();
     int howManyRows = 0;
     int howManyGroups = 0;
 
-    while (!result->isAfterLast()) {
-      HeadBodySourceRow hbsr(result, rowDes);
+	// MRDebug() << "rsb(2)a" << resultBody->getString(2) << endl;
+	// MRDebug() << "rsb(2)a*" << resultBody->getString(2) << endl;
+	// MRDebug() << "rsh(2)a" << resultHead->getString(2) << endl;
+
+	// MRDebug() << "rsb(2)a'" << resultBody->getString(2) << endl;
+	// MRDebug() << "rsh(2)a'" << resultHead->getString(2) << endl;
+
+    while (!resultBody->isAfterLast()) {
+
+  	// MRDebug() << "rsb(2)b" << resultBody->getString(2) << endl;
+  	// MRDebug() << "rsh(2)b" << resultHead->getString(2) << endl;
+		
+      HeadBodySourceRow hbsr(resultBody, rowDes);
       ItemType gid = hbsr.getGroupBody();
-      Transaction t1(rowDes), t2(rowDes);
-      t1.loadBody(gid,result);
-      bool found2 = t2.findGid(gid,result1,rowDes);
+      
+  	// MRDebug() << "rsb(2)c" << resultBody->getString(2) << endl;
+  	// MRDebug() << "rsh(2)c" << resultHead->getString(2) << endl;
+
+	  Transaction t1(rowDes), t2(rowDes);
+
+	// MRDebug() << "rsb(2)d" << resultBody->getString(2) << endl;
+	// MRDebug() << "rsh(2)d" << resultHead->getString(2) << endl;
+      t1.loadBody(gid,resultBody);
+
+      bool found2 = t2.findGid(gid,resultHead,rowDes);
       if (found2) {
-	t2.loadHead(gid,result1);
+		  t2.loadHead(gid,resultHead);
       }
       //howManyRows += bodyMap.add(gid,t1,t2);
       howManyRows += bodyMap.add(howManyGroups,t1,t2);
@@ -370,8 +393,8 @@ namespace minerule {
     MRLogPop();
     coreConn.finalize();
 
-    delete statement;
-    delete stmt1;
+    delete statementBody;
+    delete statementHead;
   }
 
 

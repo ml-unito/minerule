@@ -1,5 +1,5 @@
 #include "sourcerow.h"
-
+#include "Utils/MineruleLogs.h"
 
 namespace minerule {
 
@@ -18,7 +18,7 @@ namespace minerule {
     clusterBody =  SourceRowElement::createElement(rsmd,resultSet,srd.clusterBodyElems);
     body =         SourceRowElement::createElement(rsmd,resultSet,srd.bodyElems);
     clusterHead =  SourceRowElement::createElement(rsmd,resultSet,srd.clusterHeadElems);
-    head =         SourceRowElement::createElement(rsmd,resultSet,srd.headElems);
+    head =         SourceRowElement::createElement(rsmd,resultSet,srd.headElems);	
   }
 
   HeadBodySourceRow::HeadBodySourceRow(const HeadBodySourceRow& rhs) {
@@ -72,39 +72,9 @@ HeadBodySourceRow::init(odbc::ResultSet* resultSet,
 
 
 
-  /* ***************** *
-   * printing routines *
-   * ***************** */
-
-  /*
-void
-printAttrCollection(ostream& os, const SourceRowAttributeCollection& attrColl) {
-  if(attrColl.getConstAttributes().size()==0) {
-    os << "(attr_collection_empty)";
-    return;
-  }
-
-  SourceRowAttributeCollection::CollectionType::const_iterator it;
-  it = attrColl.getConstAttributes().begin();
-  os << "attr_collection:(";
-
-  os << **it;
-  it++;
-  
-  while(it!=attrColl.getConstAttributes().end()) {
-    os << "," << **it;
-    it++;
-  }
-
-  os <<")";
-}
-
-ostream& operator<<(ostream& os, const SourceRowAttributeCollection& attrColl) {
-  printAttrCollection(os, attrColl);
-  return os;
-}
-  */
-
+/* ***************** *
+ * printing routines *
+ * ***************** */
 
 ostream& 
 operator<<(ostream& os, const HeadBodySourceRow& sr) {

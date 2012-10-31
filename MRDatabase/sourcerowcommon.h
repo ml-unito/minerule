@@ -4,6 +4,7 @@
 #include <cstdio>
 #include <vector>
 #include <string>
+#include <iterator>
 
 namespace minerule {
 
@@ -72,6 +73,13 @@ class HeadBodySourceRowDescription {
   unsigned int setHeadElems(unsigned int start, unsigned int numCols);
 
 };
+
+inline std::ostream& operator<<(std::ostream& o, const HeadBodySourceRowDescription& rowDes) {
+	o << "head:"; copy( rowDes.headElems.begin(), rowDes.headElems.end(), std::ostream_iterator<int>(o, " ") ); 
+	o << " - ";
+	o << "body:"; copy( rowDes.bodyElems.begin(), rowDes.bodyElems.end(), std::ostream_iterator<int>(o, " ") ); 
+	return o;
+}
 
 } // namespace
 

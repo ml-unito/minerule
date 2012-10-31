@@ -88,8 +88,8 @@ namespace minerule {
 
 
     // Returns None || Dominance || Inclusion || Equivalence
-    // the relation is to intended as: "the first RELATION the second"
-    // i.e. if Dominance is returned it is meant: "the first dominates the second".
+    // the relation is to be intended as: "the first RELATION the second"
+    // i.e. if Dominance is returned it means: "the first dominates the second".
     static MineruleRelationship
       getMineruleRelationship(const ParsedMinerule&, const ParsedMinerule&);
   };

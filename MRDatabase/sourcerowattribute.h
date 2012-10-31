@@ -87,8 +87,7 @@ namespace minerule {
     }
 
     virtual bool operator==(const SourceRowElement& s1) const {
-       const SourceRowAttribute& attr1 = 
-	dynamic_cast<const SourceRowAttribute&>(s1);
+       const SourceRowAttribute& attr1 = dynamic_cast<const SourceRowAttribute&>(s1);
 
        return this->compareTo(attr1)==0;
     }

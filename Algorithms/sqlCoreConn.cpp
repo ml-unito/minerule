@@ -165,7 +165,7 @@ void sqlCoreConn::deleteTable(const char * tableName)
 void sqlCoreConn::create_db_rule(int sintax)
  {
     odbc::Statement* statement=connection->createStatement();
-    string create;
+    string create, create_index;
 
     // nb sintax is a deprecated parameter...
 
@@ -174,11 +174,11 @@ void sqlCoreConn::create_db_rule(int sintax)
 	
     statement->execute(create);
 
-    create=string("CREATE TABLE ")+ getElemsOutTableName() +
-	    " (id int, elem varchar(255));\n" +
-		" CREATE INDEX "+getElemsOutTableName()+"_index ON " + getElemsOutTableName() + "(id);";
+    create=string("CREATE TABLE ")+ getElemsOutTableName() + " (id int, elem varchar(255));";
+	create_index = " CREATE INDEX "+getElemsOutTableName()+"_index ON " + getElemsOutTableName() + " (id);";
 
     statement->execute(create);
+	statement->execute(create_index);
     delete statement;
  }
 

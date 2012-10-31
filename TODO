@@ -4,6 +4,10 @@
 BUG-FIXES:
         ** Fix a bad_cast error arising when mining rule with different
            head/body types. See /home/minerule/selex/minerules for an example.
+		   -- IMPLEMENTARE UNA FUNZIONE SAME_TYPE (o CHECK_TYPE) per verificare
+		   		se due itemtype puntano allo stesso tipo di elementi. Usare questa
+				funzione in BodyMap::add prima di confrontare head e body items.
+		   
 	** Insert statements are not compatible with postgres syntax. It should
            be fixed so that the code can run on both postgres and mysql.
 [older]

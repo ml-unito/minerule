@@ -1,7 +1,15 @@
+
+
+[2012-10-29]
 BUG-FIXES:
-	* (2012-09-18) Bug fix: check comparison operators when using
-		mixed attribute types (problem arose with a minerule having
-		body:integer and head:char(10))
+        ** Fix a bad_cast error arising when mining rule with different
+           head/body types. See /home/minerule/selex/minerules for an example.
+	** Insert statements are not compatible with postgres syntax. It should
+           be fixed so that the code can run on both postgres and mysql.
+[older]
+BUG-FIXES:
+        * Fix a bad_cast error arising when mining rule with different
+           head/body types. See /home/minerule/selex/minerules for an example.
 	* Bug IDIncrementalAlgorithm does not filter out rules having
 	  small confidence/support values.
 	* Bug that occurs when processing queries which imply null

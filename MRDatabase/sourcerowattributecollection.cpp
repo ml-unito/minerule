@@ -97,7 +97,7 @@ namespace minerule {
   }
   
 
-
+	
 
   std::string 
   SourceRowAttributeCollection::getSQLData() const {
@@ -116,6 +116,23 @@ namespace minerule {
 
     return result;
   }
+  
+  std::string SourceRowAttributeCollection::getFullElementType() const {
+	  char chstr[2] = { getElementType(), '\0' };
+	  std::string result( chstr );
+	  
+	  CollectionType::const_iterator it = attributes.begin();
+	  for(; it!=attributes.end(); ++it ) {
+		  // nested attributes collections cannot be created, it suffices
+		  // to iterate over the attributes and collect types with getElementType
+		  // (instead of getFullElementType).
+	  	  result+=(*it)->getElementType(); 
+	  }
+	  
+	  return result;
+  }
+  
+  // operators
 
   bool 
   SourceRowAttributeCollection::operator==(const SourceRowElement& e2) const {

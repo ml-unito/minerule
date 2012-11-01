@@ -76,6 +76,9 @@ namespace minerule {
     virtual ElementType getElementType() const {
       return 'A';
     }
+	
+	virtual std::string getFullElementType() const;
+	
     virtual void 
     serialize(std::ostream& os) const throw(MineruleException);
   

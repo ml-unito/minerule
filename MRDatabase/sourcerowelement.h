@@ -69,6 +69,14 @@ namespace minerule {
     virtual ElementType getElementType() const {
       throw MineruleException(MR_ERROR_INTERNAL, "getElementType() not implemented!");
     }
+	
+	// Returns a string description of the type of this element and, in case it applies,
+	// of inner elments. Defaults to a string representation of getElementType() except
+	// when the element is composed.
+	virtual std::string getFullElementType() const {
+		char chstr[2] = { getElementType(), '\0' };
+		return std::string(chstr);
+	}
 
     virtual void serialize(std::ostream& os) const throw(MineruleException)  = 0;
     virtual void deserialize(std::istream& is) throw(MineruleException) = 0 ;

@@ -8,7 +8,7 @@ namespace minerule {
   /**
 	* The ItemType object is needed in order to make the algorithms to
 	* work with ItemType instead of with pointers. The memory is handled
-	* by this class in a very simple manner. It would be of much use to
+	* by this class in a very simplistic manner. It would be of much use to
 	* reimplement the class so that it uses smart pointers instead of copying
 	* again and again the actual objects.
    */
@@ -17,9 +17,9 @@ namespace minerule {
 	class ItemType; // forward declaration
   
   /**
-	* this type is the one used by procedure which deal with itemsets and rules
+	* this type is the one used by procedures which deal with itemsets and rules
    */
-		typedef std::vector<ItemType> ItemSetType;
+	typedef std::vector<ItemType> ItemSetType;
   
 
 	class ItemType {
@@ -44,6 +44,8 @@ namespace minerule {
 		ItemType( const SourceRowElement& srel ) {
 			el = srel.copy();
 		}
+		
+		std::string getFullElementType() const { return el->getFullElementType(); }
     
 
     // Notice the srel given as argument to this function

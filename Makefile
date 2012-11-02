@@ -1,33 +1,54 @@
-TARGETS =  ExtLibs.t Utils.t MRDatabase.t PredicateUtils.t Parser3_bis.t Algorithms.t DeveloperUtils.t  Optimizer.t    Utils.t lib.t TmpProjects.t Kernel.t
+# 
+#  DIRECTORIES
+# 
+MRHOME=$(PWD)
+INCLUDEDIR=$(PWD)/include/minerule
+OBJDIR=$(PWD)/obj
+SRCDIR=$(PWD)/src
+EXTLIBSDIR=$(PWD)/ExtLibs
+#
+# ENVIRONMENT CONFIGURATION
+#
+CXX=g++
+AR=ar
+RM=rm -f
+CXXFLAGS = -g3 -O0 $(INCLUDES) -Wall $(MR_VERSION_FLAG)
+#CXXOPT = -O6 $(INCLUDES) -Wall $(MR_VERSION_FLAG)
 
-CLEANTARGETS =  ExtLibs.clean Utils.clean MRDatabase.clean PreProcessor.clean PredicateUtils.clean Parser3_bis.clean Algorithms.clean DeveloperUtils.clean  Optimizer.clean    Utils.clean lib.clean  TmpProjects.clean Kernel.clean
+#
+# VERSION DEFINITION
+#
+MR_VERSION=2.0a
+MR_VERSION_FLAG=-DMR_VERSION=\"$(MR_VERSION)\"
 
-.PHONY:TAGS
+#
+# COMPILATION FLAGS DEFINITION
+#
 
-all: $(TARGETS) TAGS
-	echo "All Made!"
+LIBGISTHOME=$(PWD)/ExtLibs/libgist
+LIBGAHOME=$(PWD)/ExtLibs/galib245
+INCLUDES=-I. -I.. -I$(INCLUDEDIR) -I$(LIBGISTHOME)/include -I$(LIBGAHOME)
+# N.B.: Adding -DMRUSERWARNING to CXXOPT a number of project
+# related warning will show up
 
-clean: allclean postclean
-	echo "Clean Done!"
+export INCLUDEDIR CXX AR RM CXXFLAGS MR_VERSION MR_VERSION_FLAG LIBGISTHOME OBJDIR MRHOME EXTLIBSDIR
 
+all: build_ext_libs build_lib build_programs
 
-postclean:
-	find . \( -name "*.d" -o -name "*.exe" -o -name "*.o" -o -name "lib*.a" -o -name "*~" -o -name "TAGS" -o -name "*.bak" \) -exec $(RM) {} \;
+clean:
+	$(RM) $(OBJDIR)/*.o
+	make -C $(EXTLIBSDIR) clean
 
-depclean:		
-	find . -name "*.d" -exec $(RM) {} \;
+$(OBJDIR):
+	mkdir $(OBJDIR)
 
-allclean: $(CLEANTARGETS)
-	echo "Clean Done!"
-TAGS:
-	rm -f TAGS
-	find . \( -name "*.cpp" -o -name "*.h" -o -name "*.ypp" -o -name "*.lpp" \) -print | xargs etags --append
+$(INCLUDEDIR):
+	mkdir $(INCLUDEDIR)
 
-%.t:
-	sh -c "cd $*; make"
+build_ext_libs: $(EXTLIBSDIR)
+	make -C $(EXTLIBSDIR)
 
+build_lib: $(OBJDIR) $(INCLUDEDIR) $(SRCDIR)
+	make -C $(SRCDIR)
 
-%.clean:
-	sh -c "cd $*; make clean"
-
-
+build_programs: 

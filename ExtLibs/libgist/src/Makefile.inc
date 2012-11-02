@@ -6,7 +6,7 @@ SYSTEM = $(shell uname -s)
 ARCH = $(shell uname -m | sed 's/ /-/g')
 
 
-include $(LIBGISTHOME)/src/Makefile.paths.$(SYSTEM).$(ARCH)
+include $(MRHOME)/ExtLibs/libgist/src/Makefile.paths.$(SYSTEM).$(ARCH)
 
 #
 # we build for amdb

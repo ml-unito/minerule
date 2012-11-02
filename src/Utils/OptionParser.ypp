@@ -1,0 +1,43 @@
+%{
+#define YYSTYPE string
+
+#include <iostream>
+#include "Utils/OptionParserLib.h"
+
+using namespace std;
+using namespace minerule;
+
+extern int yylex();
+extern int yyerror(char*);
+
+
+%}
+
+%token STRING
+%token QUOTEDSTRING
+%token EQSIM
+%token NSSEP
+%token LEFTBRACE
+%token RIGHTBRACE
+
+%%
+
+option_list: option option_list
+	|option
+	;
+option: STRING EQSIM  STRING  { 
+	       setOption($1,$3); 
+	   }
+	|STRING NSSEP STRING EQSIM  STRING  {
+		pushOptionClassIntoContext($1);
+		setOption($3,$5);
+		popOptionClassFromContext();
+	   }
+	|nsdecl LEFTBRACE option_list RIGHTBRACE { 
+		popOptionClassFromContext();
+	   }
+	;
+nsdecl: STRING NSSEP { 
+	       pushOptionClassIntoContext($1);
+	   }
+	;

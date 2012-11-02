@@ -2,7 +2,6 @@
 # Copyright (c) 1997, 1998, Regents of the University of California
 # $Header: /usr/local/devel/GiST/libgist/src/Makefile,v 1.19 1999/09/27 01:09:01 marcel Exp $
 
-include $(MRHOME)/Makefile.vars
 include Makefile.inc
 
 

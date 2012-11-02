@@ -295,7 +295,7 @@ namespace minerule {
       MineruleOptions::getSharedOptions().getOdbc_db().getConnection();
 
     string query =
-      "INSERT mr_att_lists (att_list_id, col_name) VALUES ";
+      "INSERT INTO mr_att_lists (att_list_id, col_name) VALUES ";
     
     ParsedMinerule::ListType::const_iterator it;
     for(it=l.begin(); it!=l.end(); it++) {

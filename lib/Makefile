@@ -1,7 +1,8 @@
-all:
-	sh armerge.sh
+all: libmr.a
+
+libmr.a: $(OBJDIR)/*.o
+	$(AR) rcs libmr.a $(OBJDIR)/*.o
 
 clean:
-	$(RM) *.a
-	cd objects; $(RM) *.o
+	$(RM) libmr.a
 

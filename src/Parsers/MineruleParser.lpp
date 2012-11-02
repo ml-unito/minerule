@@ -1,9 +1,9 @@
 %{
 
-#include "ParsedPredicate.h"
-#include "HeaderQuery.h"
-#include "SupportMeasure.h"
-#include "MineruleParser.tab.hpp"
+#include "Parsers/ParsedPredicate.h"
+#include "Parsers/HeaderQuery.h"
+#include "Parsers/SupportMeasure.h"
+#include "Parsers/MineruleParser.tab.hpp"
 #include <string.h>
 #include <Utils/Converter.h>
 #include <sstream>

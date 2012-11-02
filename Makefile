@@ -4,8 +4,10 @@
 MRHOME=$(PWD)
 INCLUDEDIR=$(PWD)/include/minerule
 OBJDIR=$(PWD)/obj
+LIBDIR=$(PWD)/lib
 SRCDIR=$(PWD)/src
 EXTLIBSDIR=$(PWD)/ExtLibs
+PGMDIR=$(PWD)/Programs
 #
 # ENVIRONMENT CONFIGURATION
 #
@@ -33,7 +35,7 @@ INCLUDES=-I. -I.. -I$(INCLUDEDIR) -I$(LIBGISTHOME)/include -I$(LIBGAHOME)
 
 export INCLUDEDIR CXX AR RM CXXFLAGS MR_VERSION MR_VERSION_FLAG LIBGISTHOME OBJDIR MRHOME EXTLIBSDIR
 
-all: build_ext_libs build_lib build_programs
+all: build_ext_libs build_obj build_lib build_programs
 
 clean:
 	$(RM) $(OBJDIR)/*.o
@@ -44,11 +46,15 @@ $(OBJDIR):
 
 $(INCLUDEDIR):
 	mkdir $(INCLUDEDIR)
-
+	
 build_ext_libs: $(EXTLIBSDIR)
 	make -C $(EXTLIBSDIR)
 
-build_lib: $(OBJDIR) $(INCLUDEDIR) $(SRCDIR)
+build_obj: $(OBJDIR) $(INCLUDEDIR) $(SRCDIR)
 	make -C $(SRCDIR)
 
-build_programs: 
+build_lib:
+	make -C $(LIBDIR)
+
+build_programs: $(PGMDIR)
+	make -C $(PGMDIR)

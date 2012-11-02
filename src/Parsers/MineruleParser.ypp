@@ -6,12 +6,12 @@
 #include <algorithm>
   
 #include "Utils/MinMaxPair.h"
-#include "ParsedMinerule.h" 
+#include "Parsers/ParsedMinerule.h" 
 #include "Utils/Converter.h"
-#include "ParserLibrary.h"
-#include "ParsedPredicate.h"
+#include "Parsers/ParserLibrary.h"
+#include "Parsers/ParsedPredicate.h"
 #include "Utils/MineruleOptions.h"
-#include "SupportMeasure.h"
+#include "Parsers/SupportMeasure.h"
 
 #define PARSER_BUF_SIZE 4096
 extern int mrlex();

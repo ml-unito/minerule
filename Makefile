@@ -5,6 +5,7 @@ MRHOME=$(PWD)
 INCLUDEDIR=$(PWD)/include/minerule
 OBJDIR=$(PWD)/obj
 LIBDIR=$(PWD)/lib
+BINDIR=$(PWD)/bin
 SRCDIR=$(PWD)/src
 EXTLIBSDIR=$(PWD)/ExtLibs
 PGMDIR=$(PWD)/Programs
@@ -33,7 +34,7 @@ INCLUDES=-I. -I.. -I$(INCLUDEDIR) -I$(LIBGISTHOME)/include -I$(LIBGAHOME)
 # N.B.: Adding -DMRUSERWARNING to CXXOPT a number of project
 # related warning will show up
 
-export INCLUDEDIR CXX AR RM CXXFLAGS MR_VERSION MR_VERSION_FLAG LIBGISTHOME OBJDIR MRHOME EXTLIBSDIR
+export INCLUDEDIR CXX AR RM CXXFLAGS MR_VERSION MR_VERSION_FLAG LIBGISTHOME OBJDIR MRHOME EXTLIBSDIR BINDIR
 
 all: build_ext_libs build_obj build_lib build_programs
 
@@ -46,6 +47,10 @@ $(OBJDIR):
 
 $(INCLUDEDIR):
 	mkdir $(INCLUDEDIR)
+
+$(BINDIR):
+	mkdir $(BINDIR)
+
 	
 build_ext_libs: $(EXTLIBSDIR)
 	make -C $(EXTLIBSDIR)
@@ -56,5 +61,5 @@ build_obj: $(OBJDIR) $(INCLUDEDIR) $(SRCDIR)
 build_lib:
 	make -C $(LIBDIR)
 
-build_programs: $(PGMDIR)
+build_programs: $(BINDIR)
 	make -C $(PGMDIR)

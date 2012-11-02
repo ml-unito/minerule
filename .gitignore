@@ -26,3 +26,13 @@ Utils/lex.yy.c
 Parser3_bis/MineruleParser.tab.cpp
 Parser3_bis/MineruleParser.tab.hpp
 Parser3_bis/lex.mr.c
+Programs/minerule
+bin/minerule
+*.dSYM
+src/Parsers/MineruleParser.tab.cpp
+src/Parsers/MineruleParser.tab.hpp
+src/Parsers/lex.mr.c
+src/Utils/OptionParser_lexer.cpp
+src/Utils/OptionParser_parser.cpp
+src/Utils/OptionParser_parser.hpp
+src/Utils/lex.yy.c

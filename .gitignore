@@ -14,3 +14,15 @@ TmpProjects/MRDefaultOptions/mrdefaults
 TmpProjects/MRShowLog/mrshowlog
 TmpProjects/PrintRules/RuleFormatter.d.24042
 TmpProjects/PrintRules/mrprintrules
+ExtLibs/libgist/bin/*
+ExtLibs/libgist/doc/*
+*.dep
+*.dsp
+*.dsw
+Utils/OptionParser_lexer.cpp
+Utils/OptionParser_parser.cpp
+Utils/OptionParser_parser.hpp
+Utils/lex.yy.c
+Parser3_bis/MineruleParser.tab.cpp
+Parser3_bis/MineruleParser.tab.hpp
+Parser3_bis/lex.mr.c

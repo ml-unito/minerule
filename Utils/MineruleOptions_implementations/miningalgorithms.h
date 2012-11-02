@@ -2,7 +2,6 @@ class MiningAlgorithms : public OptionBase {
 public:
   /* ========= RULE MINING ALGORITHMS ======== */
   	#include "Utils/MineruleOptions_implementations/miningalgorithms/rulemining.h"
-
   /* ========= ITEMSET MINING ALGORITHMS ======== */
 	#include "Utils/MineruleOptions_implementations/miningalgorithms/itemsetmining.h"
   /* ========= SEQUENCE MINING ALGORITHMS ======= */

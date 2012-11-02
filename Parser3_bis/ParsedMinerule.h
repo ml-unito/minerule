@@ -175,7 +175,7 @@ class ParsedMinerule
   
 
   /**
-   * The method return true if the constraints in the query
+   * The method returns true if the constraints in the query
    * are item dependent. Notice that, cross predicates are
    * implicitly context dependent, even if the attributes depends
    * on the item.
@@ -195,6 +195,10 @@ class ParsedMinerule
 
   bool hasDisjuctionsInMC() const {
     return mc!=NULL && mc->next!=NULL;
+  }
+  
+  bool hasSameBodyHead() const {
+	  return ba == ha;
   }
 
   std::string getMinesequenceText() const;

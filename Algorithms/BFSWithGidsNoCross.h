@@ -150,6 +150,7 @@ namespace minerule {
 			HeadBodySourceRowDescription rowDes;
 			odbc::PreparedStatement* statementBody;
 			odbc::PreparedStatement* statementHead;
+			static bool mineruleHasSameBodyHead;
 
 
 
@@ -167,11 +168,17 @@ namespace minerule {
     
 		public:
 			BFSWithGidsNoCross(const OptimizedMinerule& mr) : 
-			MiningAlgorithm(mr), statementBody(NULL), statementHead(NULL) {}
+			MiningAlgorithm(mr), statementBody(NULL), statementHead(NULL) {
+				mineruleHasSameBodyHead = mr.getParsedMinerule().hasSameBodyHead();				
+			}
 
 			virtual ~BFSWithGidsNoCross() {}
 
 			virtual void execute();
+			
+			static bool getMineruleHasSameBodyHead() { 
+				return mineruleHasSameBodyHead;
+			  }
 
 			virtual bool canHandleMinerule() const {
 				return 

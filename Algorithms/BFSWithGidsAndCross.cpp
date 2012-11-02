@@ -20,6 +20,8 @@
 
 namespace minerule {
 
+  bool BFSWithGidsAndCross::mineruleHasSameBodyHead = false;	
+
   void BFSWithGidsAndCross::BodyMapElement::insert(const ItemType& item, MapElement& gidList, bool secondPass) {
     map<ItemType, MapElement>::iterator found = heads.find(item);
     if (found == heads.end()) {
@@ -201,7 +203,7 @@ namespace minerule {
       map<ItemType, MapElement>::iterator eh = rc.lastBody->second.heads.end();
       for (map<ItemType, MapElement>::iterator j = lh; j != eh; j++) {
 	GidList newGidList;
-	if (std::find(rc.body.begin(), rc.body.end(), j->first) == rc.body.end()/* &&
+	if (!BFSWithGidsAndCross::getMineruleHasSameBodyHead() || std::find(rc.body.begin(), rc.body.end(), j->first) == rc.body.end()/* &&
 										   rc.head.find(j->first) == rc.head.end()*/) {
 	  set_intersection(rc.gids.begin(),rc.gids.end(),
 			   j->second.begin(), j->second.end(),

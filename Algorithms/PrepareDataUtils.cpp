@@ -240,8 +240,9 @@ string
 	// momentarily we use the postgres syntax, but one fix that accomodates both
 	// should be implemented.
     string clusteredTable = mr.getParsedMinerule().tab_result+"_tmpSource";
-    string createQuery = "CREATE TABLE  "+clusteredTable+ " AS "+queryText + "; " +
-		"CREATE INDEX "+clusteredTable+"_index " + " ON " + clusteredTable + " ("+buildAttrListAlias(mr.getParsedMinerule().ga,aliasA,true)+");";
+    string createQuery = "CREATE TABLE  "+clusteredTable+ " AS "+queryText + "; ";
+	string createIndexQuery = "CREATE INDEX "+clusteredTable+"_index " + " ON " + clusteredTable + " ("+buildAttrListAlias(mr.getParsedMinerule().ga,aliasA,true)+");";
+
     odbc::Connection* conn = 
       MineruleOptions::getSharedOptions().getOdbc_db().getConnection();
 
@@ -254,6 +255,8 @@ string
     MRDebug() << "Creating mining table, the query is:" 
 	      << createQuery << endl;
     state->execute(createQuery);
+	state->execute(createIndexQuery);
+	
     MRLog() << "DONE..." << endl;
     delete state;
 

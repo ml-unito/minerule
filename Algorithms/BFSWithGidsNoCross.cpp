@@ -19,6 +19,7 @@
 #include "Algorithms/PrepareDataUtils.h"
 
 namespace minerule {
+  bool BFSWithGidsNoCross::mineruleHasSameBodyHead = false;	
 
   void BFSWithGidsNoCross::BodyMapElement::insert(const ItemType& item, MapElement& gidList, bool secondPass) {
     map<ItemType, MapElement>::iterator found = heads.find(item);
@@ -44,12 +45,6 @@ namespace minerule {
 
 //  int BFSWithGidsNoCross::BodyMap::add(ItemType& gid, Transaction& t1, Transaction& t2, bool secondPass) {
   int BFSWithGidsNoCross::BodyMap::add(int gid, Transaction& t1, Transaction& t2, bool secondPass) {	  	  
-	  bool body_head_have_same_type;
-	  if( t1.size() != 0 && t2.size() != 0 ) {
-		  body_head_have_same_type = t1.begin()->getFullElementType() == t2.begin()->getFullElementType();
-	  }
-	  
-		  
 	  int howMany = 0;
 	  MapElement me;
 	  me.insert(gid);
@@ -63,7 +58,7 @@ namespace minerule {
 		  }
 		  found->second.insert(gid);
 		  for (Transaction::iterator j = t2.begin(); j != t2.end(); j++)
-			  if (!body_head_have_same_type || *i != *j /*&& i->price < j->price*/) {
+			  if (!BFSWithGidsNoCross::getMineruleHasSameBodyHead() || *i != *j /*&& i->price < j->price*/) {
 				  howMany++;
 				  found->second.insert(*j,me,secondPass);
 			  }
@@ -136,7 +131,7 @@ namespace minerule {
 
 	for (map<ItemType, MapElement>::iterator j = lh; j != eh; j++) {
 	  GidList newGidList;
-	  if (std::find(rc.body.begin(), rc.body.end(), j->first) == rc.body.end()/* &&
+	  if (!BFSWithGidsNoCross::getMineruleHasSameBodyHead() || std::find(rc.body.begin(), rc.body.end(), j->first) == rc.body.end()/* &&
 										     rc.head.find(j->first) == rc.head.end()*/) {
 	    set_intersection(rc.gids.begin(),rc.gids.end(),
 			     j->second.begin(), j->second.end(),
@@ -196,7 +191,7 @@ namespace minerule {
 		// Bisogna usare la funzione ItemType::getFullElementType() per verificare che
 		// gli element abbiano lo stesso tipo
 
-		if (std::find(rc.body.begin(), rc.body.end(), j->first) == rc.body.end()/* &&
+		if (!BFSWithGidsNoCross::getMineruleHasSameBodyHead() || std::find(rc.body.begin(), rc.body.end(), j->first) == rc.body.end()/* &&
 											   rc.head.find(j->first) == rc.head.end()*/) {
 		  set_intersection(rc.gids.begin(),rc.gids.end(),
 				   j->second.begin(), j->second.end(),

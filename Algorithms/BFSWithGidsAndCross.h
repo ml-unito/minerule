@@ -136,7 +136,7 @@ namespace minerule {
     HeadBodySourceRowDescription rowDes;
     odbc::PreparedStatement* statement;
     odbc::PreparedStatement* stmt1;
-
+	static bool mineruleHasSameBodyHead;
 
 
     void insertRules( const NewRuleSet& rs, double totGroups );
@@ -164,6 +164,10 @@ namespace minerule {
     virtual bool needsGidSortedSourceTable() const {
       return true;
     }
+	
+	static bool getMineruleHasSameBodyHead() { 
+		return mineruleHasSameBodyHead;
+	}
 
     virtual void execute();
 

@@ -36,3 +36,4 @@ src/Utils/OptionParser_lexer.cpp
 src/Utils/OptionParser_parser.cpp
 src/Utils/OptionParser_parser.hpp
 src/Utils/lex.yy.c
+bin/mrcatalogue

@@ -1,6 +1,6 @@
 #libs needed to build specific targets in this directory
 # LIBS= -L../lib -L$(LIBGAHOME)/ga -lmr -lga -lodbc++
-LIBS= -L$(LIBDIR) -lga -lmr -lodbc++
+LIBS= -L$(LIBDIR) -L$(LIBGADIR) -lga -lmr -lodbc++
 
 all: $(BINDIR)/minerule $(BINDIR)/mrcatalogue $(BINDIR)/mrprintrules $(BINDIR)/mrdefaults
 

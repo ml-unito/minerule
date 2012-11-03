@@ -1,4 +1,4 @@
-SUBDIRS=Algorithms MRDatabase Optimizer Parsers PredicateUtils PreProcessor  Utils
+SUBDIRS=Algorithms MRDatabase Optimizer Parsers PredicateUtils  Utils
 
 .PHONY: all $(SUBDIRS)
 

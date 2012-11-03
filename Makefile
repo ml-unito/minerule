@@ -42,6 +42,9 @@ all: build_ext_libs build_obj build_lib build_programs
 clean:
 	$(RM) $(OBJDIR)/*.o
 	make -C $(EXTLIBSDIR) clean
+	$(RM) -r $(BINDIR)/*
+	$(RM) $(LIBDIR)/*.a
+
 
 $(OBJDIR):
 	mkdir $(OBJDIR)

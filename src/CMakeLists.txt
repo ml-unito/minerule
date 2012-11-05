@@ -31,10 +31,10 @@ add_executable(minerule Programs/minerule.cpp)
 target_link_libraries(minerule ${LIBS})
 
 add_executable(mrcatalogue Programs/mrcatalogue.cpp)
-target_link_libraries(mrcatalogue mrutils mroptimizer mrparsers mrdatabase ${LIBODBC++_LIBRARIES})
+target_link_libraries(mrdatabase mroptimizer mrpredicateutils mrutils mrparsers ${LIBODBC++_LIBRARIES})
 
 add_executable(mrprintrules Programs/PrintRules.cpp Programs/RuleFormatter.cpp)
-target_link_libraries(mrprintrules mrutils mroptimizer mrparsers mrdatabase ${LIBODBC++_LIBRARIES})
+target_link_libraries(mrdatabase mroptimizer mrpredicateutils mrutils mrparsers ${LIBODBC++_LIBRARIES})
 
 add_executable(mrdefaultoptions Programs/MRDefaultOptions.cpp)
 target_link_libraries(mrdefaultoptions mrutils ${LIBODBC++_LIBRARIES})

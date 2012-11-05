@@ -3,7 +3,7 @@
 #include "Parsers/ParsedPredicate.h"
 #include "Parsers/HeaderQuery.h"
 #include "Parsers/SupportMeasure.h"
-#include "Parsers/MineruleParser.tab.hpp"
+#include "MineruleParser_parser.hpp"
 #include <string.h>
 #include <Utils/Converter.h>
 #include <sstream>

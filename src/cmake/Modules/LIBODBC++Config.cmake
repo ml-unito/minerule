@@ -7,16 +7,10 @@
 
 include(LibFindMacros)
 
-find_path(LIBODBC++_INCLUDE_DIR
-  NAMES odbc++/drivermanager.h
-  PATHS /usr/local/include/
-)
+find_path(LIBODBC++_INCLUDE_DIR NAMES odbc++/drivermanager.h)
 
 # Finally the library itself
-find_library(LIBODBC++_LIBRARY
-  NAMES odbc++
-  PATHS /usr/local/lib
-)
+find_library(LIBODBC++_LIBRARY NAMES odbc++ PATHS /usr/local/lib)
 
 # Set the include dir variables and the libraries and let libfind_process do the rest.
 # NOTE: Singular variables for this library, plural for libraries this this lib depends on.

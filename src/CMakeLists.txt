@@ -7,11 +7,9 @@ LIST(APPEND CMAKE_PREFIX_PATH ${CMAKE_SOURCE_DIR}/cmake/Modules)
 # Dependencies
 find_package(LIBODBC++ REQUIRED)
 include_directories(${LIBODBC++_INCLUDE_DIRS})
-LIST(APPEND LIBS ${LIBODBC++_LIBRARIES})
 
 find_package(LIBGA REQUIRED)
 include_directories(${LIBGA_INCLUDE_DIRS})
-LIST(APPEND LIBS ${LIBGA_LIBRARIES})
 
 
 
@@ -25,7 +23,9 @@ add_subdirectory(PredicateUtils)
 add_subdirectory(Utils)
 add_subdirectory(Parsers)
 
-set(LIBS ${LIBS} mralgorithms mrdatabase mroptimizer mrpredicateutils mrutils mrparsers)
+LIST(APPEND LIBS mralgorithms mrdatabase mroptimizer mrpredicateutils mrutils mrparsers)
+LIST(APPEND LIBS ${LIBGA_LIBRARIES})
+LIST(APPEND LIBS ${LIBODBC++_LIBRARIES})
 
 add_executable(minerule Programs/minerule.cpp)
 target_link_libraries(minerule ${LIBS})

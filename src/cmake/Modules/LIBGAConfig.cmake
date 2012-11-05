@@ -7,16 +7,10 @@
 
 include(LibFindMacros)
 
-find_path(LIBGA_INCLUDE_DIR
-  NAMES ga/ga.h
-  PATHS /usr/local/include/
-)
+find_path(LIBGA_INCLUDE_DIR NAMES ga/ga.h)
 
 # Finally the library itself
-find_library(LIBGA_LIBRARY
-  NAMES ga
-  PATHS /usr/local/lib
-)
+find_library(LIBGA_LIBRARY NAMES ga)
 
 # Set the include dir variables and the libraries and let libfind_process do the rest.
 # NOTE: Singular variables for this library, plural for libraries this this lib depends on.

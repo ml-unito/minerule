@@ -1,0 +1,28 @@
+MINERULE INSTALLATION INSTRUCTIONS
+----------------------------------
+
+1. Get the sources:
+   git clone ssh://mluser@kdd.di.unito.it/usr/local/GIT/minerule
+2. cd into the directory created by git
+   cd minerule
+3. install dependencies
+   install cmake
+   install libodbc++
+   cd into ExtLibs
+      - uncompact build and install galib245 (be sure to verify that the include files in /usr/local/include/ga have read permissions for your user)
+      - uncompact libgist (there is no need to install it since only few headers are needed)
+4. build the system
+   create a build directory just below the minerule directory
+      mkdir build
+   configure and make the project from within this directory
+      cd build
+      cmake ../src
+      make
+5. enjoy!
+
+After step 4, if everything is fine, you will find the minerule executables in the directory 'build'.
+You still have to configure your odbc datasources, create an option file for the minerule and configure the database you will use to support it (see directory Docs for more information).
+
+---
+Copyright: Roberto Esposito (esposito@di.unito.it)
+Last updated: 5/11/2012

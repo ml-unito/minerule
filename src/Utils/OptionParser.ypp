@@ -8,7 +8,7 @@ using namespace std;
 using namespace minerule;
 
 extern int yylex();
-extern int yyerror(char*);
+extern int yyerror(char const*);
 
 
 %}

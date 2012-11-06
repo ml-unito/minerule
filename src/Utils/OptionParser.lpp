@@ -55,7 +55,7 @@ COMMSTR .*
 
 extern int OPparse();
 
-int OPerror(char* error) {
+int OPerror(char const* error) {
 	throw MineruleException(MR_ERROR_OPTION_PARSING,error);
 }
 

@@ -15,7 +15,7 @@
 
 #define PARSER_BUF_SIZE 4096
 extern int mrlex();
-extern void mrerror(char* s);
+extern void mrerror(char const* s);
 bool check_body_coincident_head(minerule::ParsedMinerule::ListType& , minerule::ParsedMinerule::ListType&);
 using namespace std;
 using namespace minerule;

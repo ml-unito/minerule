@@ -80,7 +80,7 @@ print_OR_list(ostream& os, list_OR_node* ornode) {
   }
 }
 
-extern void mrerror(char*);
+extern void mrerror(char const*);
 
 list_AND_node* clone_l_AND(list_AND_node* l)
 {

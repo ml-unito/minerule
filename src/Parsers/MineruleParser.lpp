@@ -135,7 +135,7 @@ HEAD\.{ATTRNAME}              {
 
 %%
 
-void mrerror(char *s){
+void mrerror(char const *s){
 	char buf[4096];
 	std::stringstream ss;
 	ss << s << " at column: " << tokenpos << std::endl << linebuf << std::endl;

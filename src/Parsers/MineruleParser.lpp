@@ -25,6 +25,9 @@ std::map<std::string,int> keywords_to_token;
  
 %}
 
+%option noinput
+%option nounput
+
 KEYWORDS ("MINE"|"RULE"|"AS"|"SELECT"|"DISTINCT"|"BODY"|"HEAD"|"AND"|"OR"|"NOT"|"FROM"|"GROUP"|"BY"|"HAVING"|"EXTRACTING"|"RULES"|"WITH"|"WHERE"|"CLUSTER"|"ITEMSET"|"SUPPORT"|"CONFIDENCE"|"SEQUENCE"|"SEQUENCES"|"ORDER"|"ITEMSETS"|"GAP")
 AGGR ("MAX"|"MIN"|"AVG"|"STD"|"SUM")
 ATTRNAME  ([a-zA-Z][a-zA-Z0-9_]*)

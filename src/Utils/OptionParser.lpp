@@ -13,6 +13,8 @@ using namespace minerule;
 %}
 
 %option noyywrap
+%option noinput
+%option nounput
 
 STR [a-zA-Z0-9\.\/\-]*
 COMMSTR .*

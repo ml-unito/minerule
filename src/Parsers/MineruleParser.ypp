@@ -50,7 +50,7 @@ extern minerule::ParsedPredicate* hc_mining;
 %type <TParsedPredicate> mining_cond cluster_cond seq_clause
 %type <TParsedPredicate> having_clause having_m_cond
 %type <TListType> group_clause cluster_clause order_clause
-%type <ev_m> ev_measures
+//%type <ev_m> ev_measures
 %left OR
 %left AND        
 
@@ -223,23 +223,23 @@ query: MINE RULE ATTR AS SELECT
 		 };
 		   
 		   
-ev_measures:    {$$=NULL;}		
-		|
-		SUPPORT COMPARISON value
-		{
-		string comp=$2;
-		if (comp=="="||comp=="<>")
-			mrerror("THE RELATIONAL OPERATOR USED FOR THE SUPPORT IS INCORRECT = or <>");
-		if (comp==">")
-			$$=new SupportMeasure(EvaluationMeasure::Greater, Converter($3).toDouble());
-		else if (comp==">=")
-                        $$=new SupportMeasure(EvaluationMeasure::GreaterEqual, Converter($3).toDouble());
-		else if (comp=="<")
-                        $$=new SupportMeasure(EvaluationMeasure::Less, Converter($3).toDouble());
-		else if (comp=="<=")
-                        $$=new SupportMeasure(EvaluationMeasure::LessEqual, Converter($3).toDouble());
-		else mrerror("AN INTERNAL ERROR OCCURS");
-		};
+// ev_measures:    {$$=NULL;}		
+// 		|
+// 		SUPPORT COMPARISON value
+// 		{
+// 		string comp=$2;
+// 		if (comp=="="||comp=="<>")
+// 			mrerror("THE RELATIONAL OPERATOR USED FOR THE SUPPORT IS INCORRECT = or <>");
+// 		if (comp==">")
+// 			$$=new SupportMeasure(EvaluationMeasure::Greater, Converter($3).toDouble());
+// 		else if (comp==">=")
+//                         $$=new SupportMeasure(EvaluationMeasure::GreaterEqual, Converter($3).toDouble());
+// 		else if (comp=="<")
+//                         $$=new SupportMeasure(EvaluationMeasure::Less, Converter($3).toDouble());
+// 		else if (comp=="<=")
+//                         $$=new SupportMeasure(EvaluationMeasure::LessEqual, Converter($3).toDouble());
+// 		else mrerror("AN INTERNAL ERROR OCCURS");
+// 		};
 		
 
 from_clause: FROM ATTR{

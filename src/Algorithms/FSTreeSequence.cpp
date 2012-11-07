@@ -5,7 +5,7 @@
 #include "MRDatabase/sourcerow.h"
 #include "Utils/MineruleLogs.h"
 
-using namespace std;
+
 
 namespace minerule {
 
@@ -40,7 +40,7 @@ namespace minerule {
   void FSTreeSequence::stampa(){
     ListType::const_iterator it;
     for(it=seq->begin(); it!=seq->end(); ++it) {
-      MRLog() << *it << endl;
+      MRLog() << *it << std::endl;
     }
   } 
   
@@ -58,13 +58,13 @@ namespace minerule {
     seq->insert(seq->begin(),s);
   }
 
-  string FSTreeSequence::toStdString(){
+ std::string FSTreeSequence::toStdString(){
     ListType::const_iterator it;
-    string ris="";
+   std::string ris="";
     for (it=seq->begin();it!=seq->end();it++)
       ris = ris+" "+(*it).getSQLData();
     
-    /*    string ris="";
+    /*   std::string ris="";
     if (seq->size()>0)
       ris=(*seq)[0];
     for (size_t i=1;i<seq->size();i++)

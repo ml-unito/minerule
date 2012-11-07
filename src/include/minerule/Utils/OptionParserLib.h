@@ -6,12 +6,12 @@
 
 namespace minerule {
   void initializeOptionsFromFile(MineruleOptions& mr, FILE* file);
-  void initializeOptionsFromString(MineruleOptions& mr, string);
+  void initializeOptionsFromString(MineruleOptions& mr, std::string);
 
   /* the following functions are used by the option parser */
-  void pushOptionClassIntoContext(const string& oclass) throw(MineruleException);
+  void pushOptionClassIntoContext(const std::string& oclass) throw(MineruleException);
   void popOptionClassFromContext();
-  void setOption(const string& name, const string& value);
+  void setOption(const std::string& name, const std::string& value);
 } // namespace
 
 #endif

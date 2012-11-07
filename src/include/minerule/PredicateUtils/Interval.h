@@ -31,7 +31,7 @@ namespace minerule {
    */
 
   class Interval {
-    friend ostream& operator<<(ostream&, const Interval&);
+    friend std::ostream& operator<<(std::ostream&, const Interval&);
   public:
     /**
      * An enumerated type corresponding to the operators <,<=,>,>=,=,<>
@@ -47,13 +47,13 @@ namespace minerule {
 
   protected:
     /**
-     * The string used to represent positive infty. Notice that its
+     * Thestd::string used to represent positive infty. Notice that its
      * content are not really important since, all the comparison will
      * be made using the address of the string.
      */
     static const char* POSINFTY;
     /**
-     * The string used to represent negative infty. Notice that its
+     * Thestd::string used to represent negative infty. Notice that its
      * content are not really important since, all the comparison will
      * be made using the address of the string.
      */
@@ -61,12 +61,12 @@ namespace minerule {
 
     /**
      * The lower part of the interval (e.g., if the object is used to
-     * represent (10,4], then lwr will contain the string "10").
+     * represent (10,4], then lwr will contain thestd::string "10").
      */
     const char* lwr; // lower limit
     /**
      * The upper part of the interval (e.g., if the object is used to
-     * represent (10,4], then upp will contain the string "4").
+     * represent (10,4], then upp will contain thestd::string "4").
      */
     const char* upp; // upper limit
     /**
@@ -101,7 +101,7 @@ namespace minerule {
 
 
     /**
-     * @param op A string representing a supported operator (that is,
+     * @param op Astd::string representing a supported operator (that is,
      * one of "<,<=,>,>=,=,<>") 
      *
      * @param negateIt If true, the function returns the symbolic
@@ -218,7 +218,7 @@ namespace minerule {
     static const char* getAttribute(const char* val1, const char* val2 );
   };
 
-  ostream& operator<<(ostream&, const Interval&);
+  std::ostream& operator<<(std::ostream&, const Interval&);
   
   /* ======================================================================
    * IntervalChecker

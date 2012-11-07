@@ -24,14 +24,14 @@ namespace minerule{
   
 	
   /*
-	void CCSMSequence::read(const string& s){	
-		string empty("");
+	void CCSMSequence::read(const std::string& s){	
+	std::string empty("");
 		size_t i=0;
 		while (s[i]==' ')
 			i++;
 		if (i==s.size())
 			return;
-		string temp("");
+	std::string temp("");
 		for (;i<s.size();i++){
 			if (s[i]==' '){
 				if (temp!=empty){
@@ -76,8 +76,8 @@ namespace minerule{
 		
 		CCSMSequence* ris= new CCSMSequence(*first);//=first;
 		ris->setLastItem(second);
-		//cout<<"ecco il LAST ITEM"<<endl;
-		//cout<<ris->getLastItem()->toStdString()<<endl;
+		//cout<<"ecco il LAST ITEM"<<std::endl;
+		//cout<<ris->getLastItem()->toStdString()<<std::endl;
 		//List_Type::iterator it;
 		/*
 		for (it = second->seq->begin();it!=second->seq->end();it++)	 
@@ -98,7 +98,7 @@ namespace minerule{
 				ris->count++;
 		}
 		if (ris->count<threshold){
-			//	cout<<"ESCO 1"<<endl;
+			//	std::cout<<"ESCO 1"<<std::endl;
 				return ris;
 		}
 		/////////////////////////////////
@@ -120,7 +120,7 @@ namespace minerule{
 		}
 		
 		if (ris->count<threshold){
-			//	cout<<"ESCO 2"<<endl;
+			//	std::cout<<"ESCO 2"<<std::endl;
 				return ris;
 		}
 
@@ -148,7 +148,7 @@ namespace minerule{
 			}
 			ris->eid_vector.push_back(event_id);
 		}
-		//cout<<"fusioni di event list "<<cc<<endl;
+		//cout<<"fusioni di event list "<<cc<<std::endl;
 		return ris;
 
 	};	
@@ -159,7 +159,7 @@ namespace minerule{
 
 	//in questo caso il second è il singleton che cerchiamo di aggiungere alla sequenza
 	//stiamo estendendo la sequenza da sinistra verso destra, aggiungendo al fondo un elemento
-vector<pair<int,int> >* CCSMSequence::mergeEidRtoLeft(const Eid_List& first, const Eid_List& second, int min_gap  , int max_gap){	
+	std::vector<std::pair<int,int> >* CCSMSequence::mergeEidRtoLeft(const Eid_List& first, const Eid_List& second, int min_gap  , int max_gap){	
 	Eid_List* ris= new Eid_List();
 	//ris->reserve(10000);
 	int last_eid_seq;
@@ -168,7 +168,7 @@ vector<pair<int,int> >* CCSMSequence::mergeEidRtoLeft(const Eid_List& first, con
 	Eid_List::const_iterator it_first, it_second;
 	it_first = first.begin();
 	if (second[second.size()-1].first<=(*it_first).second){
-		//cout<<"escamotage"<<endl;
+		//cout<<"escamotage"<<std::endl;
 		return ris;
 	}	
 	bool continue_f=true;
@@ -199,9 +199,9 @@ vector<pair<int,int> >* CCSMSequence::mergeEidRtoLeft(const Eid_List& first, con
 				if( eid_singleton > last_eid_seq && 
 				    eid_singleton-max_gap-1<=last_eid_seq && 
 		 		    eid_singleton-last_eid_seq-1>=min_gap){
-						//cout<<"inserisco coppia "<<first_eid_seq<<","<<eid_singleton<<endl;	
-						//cout<<"inserito"<<endl;
-						ris->push_back(pair<int,int>(first_eid_seq,eid_singleton));	
+						//cout<<"inserisco coppia "<<first_eid_seq<<","<<eid_singleton<<std::endl;	
+						//cout<<"inserito"<<std::endl;
+						ris->push_back(std::pair<int,int>(first_eid_seq,eid_singleton));	
 				}			
 			}
 		}else 	

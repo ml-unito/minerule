@@ -27,7 +27,7 @@ namespace minerule {
    * created by copying this object will share the same reference).
    */
 
-  class CountingIterator : public iterator<output_iterator_tag, void, void, void, void> {
+  class CountingIterator : public std::iterator<std::output_iterator_tag, void, void, void, void> {
     size_t& curNum;
     list_AND_node*& l_and;
   public:
@@ -81,11 +81,11 @@ namespace minerule {
 
     static bool predicatesAreEquivalent(Predicate& p1,
 					Predicate& p2,
-					const string& tab_source);
+					const std::string& tab_source);
     static PredicateRelationship 
       getPredicateRelationship( Predicate& p1,
 				Predicate& p2,
-				const string& tab_source);
+				const std::string& tab_source);
 
 
     

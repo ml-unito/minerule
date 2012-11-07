@@ -25,7 +25,7 @@
 
 
 
-using namespace std;
+
 using namespace minerule;
 
 
@@ -40,9 +40,9 @@ readSourceTable(
 		int& gid,
 		double& totGroups
 		) {
-  //  cout << endl 
-  //       <<"LEGGO IL DB ED INSERISCO NELLE STRUTTURE DATI... (" << conditionalInsert << ")" << endl
-  //       <<"Rows per partitions (at least):" << options.getPartitionOptions().getRowsPerPartition() << endl;
+  //  std::cout << std::endl 
+  //       <<"LEGGO IL DB ED INSERISCO NELLE STRUTTURE DATI... (" << conditionalInsert << ")" << std::endl
+  //       <<"Rows per partitions (at least):" << options.getPartitionOptions().getRowsPerPartition() << std::endl;
   /*****************
    * result contiene TUTTO il DB. L'algoritmo lavora partizionando
    * il result set. 
@@ -103,10 +103,10 @@ readSourceTable(
 
       if(rowCount>=allowedRowRead ) {
 	readMoreGroupsForThisPartition= false;
-	//	cout << "NON INSERISCO" << gidB.c_str() << " - " << itemBody.c_str() << endl;
+	//	std::cout << "NON INSERISCO" << gidB.c_str() << " - " << itemBody.c_str() << std::endl;
       } else {
 	totGroups++;
-	//	cout << "Inserisco:" << gidB.c_str() << " - " << itemBody.c_str() << endl;
+	//	std::cout << "Inserisco:" << gidB.c_str() << " - " << itemBody.c_str() << std::endl;
         if(!conditionalInsert)
 	  //kItem.setItemSet(itemBody,gidB);
 	  kItem.setItemSet(itemBody,gid);
@@ -119,7 +119,7 @@ readSourceTable(
 
     } else {
       // Inserisco a livello 1 la bid con liste e nella head hid con liste
-      //      cout << "Inserisco:" << gidB.c_str() << " - " << itemBody.c_str() << endl;
+      //      std::cout << "Inserisco:" << gidB.c_str() << " - " << itemBody.c_str() << std::endl;
       if(!conditionalInsert)
 	//kItem.setItemSet(itemBody,gidB);
 	kItem.setItemSet(itemBody,gid);
@@ -137,14 +137,14 @@ readSourceTable(
 
 #if 1 // DEBUG
     if(rowCount % (allowedRowRead/10)==0) {
-      cout << "rowcount:" << rowCount << "\r";
-      cout.flush();
+      std::cout << "rowcount:" << rowCount << "\r";
+      std::cout.flush();
     }
 #endif
     
   } while(readMoreGroupsForThisPartition && moreRecords  );
 
-  //  cout << endl << "final row count:" << rowCount << endl;
+  //  std::cout << std::endl << "final row count:" << rowCount << std::endl;
    
   return moreRecords;
 }
@@ -194,7 +194,7 @@ void partitionWithoutClusters( const minerule::AlgorithmsOptions& options  )
 // parametri da passare.
   support= options.getSupport()*100;
   conf=    options.getConfidence()*100;
-  //  cout <<endl<<"+ Supporto: "<<support<<"% Confidenza: "<< conf<<"%"<<endl;
+  //  std::cout <<std::endl<<"+ Supporto: "<<support<<"% Confidenza: "<< conf<<"%"<<std::endl;
 
   // Apertura della connessione e cancellazione db_temporanei
   coreConn.useConnection(connection);
@@ -225,15 +225,15 @@ void partitionWithoutClusters( const minerule::AlgorithmsOptions& options  )
     prtList.init();
     
     MRLog() << "  Reading partition number:" << isPart
-		     << endl;
+		     << std::endl;
     readMorePartitions = readSourceTable(kItem,result,rowDes,options,false,gid,totGroups);
     MRLog() << "  Done! (Reading partition number:" << isPart <<")"
-		     << endl;
+		     << std::endl;
     
     nSup=ceil(totGroups*(support/100));
 
     MRLog() << "  Generating Large Itemset of current partition"
-		     << endl;
+		     << std::endl;
     kItem.gen_Large_ItemSet_Base(nSup);
     
     levelIn=1;
@@ -246,7 +246,7 @@ void partitionWithoutClusters( const minerule::AlgorithmsOptions& options  )
 					   levelIn);
       }
 
-    MRLog() << "  Saving large itmeset of current partition" << endl;
+    MRLog() << "  Saving large itmeset of current partition" << std::endl;
     kItem.save_Large_ItemSet(1,isPart,coreConn);
   
     // Svuoto la lista dei livelli per il ciclo successivo.
@@ -260,7 +260,7 @@ void partitionWithoutClusters( const minerule::AlgorithmsOptions& options  )
 
  prtList.init();
 
- MRLog() << "Merge phase" << endl;
+ MRLog() << "Merge phase" << std::endl;
  kItem.mergeItemSet(coreConn,prtList, srDescriptor);
  totGroups=0;
 
@@ -272,25 +272,25 @@ void partitionWithoutClusters( const minerule::AlgorithmsOptions& options  )
  gid = 1;
  while( readMorePartitions ) {
    MRLog() << "  Reading partition number:" << isPart
-		    << endl;
+		    << std::endl;
 
    double tmpTotGroups=1;
    readMorePartitions = readSourceTable(kItem,result,rowDes,options,true,gid,tmpTotGroups);
    totGroups+=tmpTotGroups;
 
    MRLog() << "  Done! (Reading partition number:" << isPart <<")"
-		    << endl;
+		    << std::endl;
  }
- MRLogPop();// << "Done (reading database - second phase)"<<endl;
+ MRLogPop();// << "Done (reading database - second phase)"<<std::endl;
 
 
  delete result;
 
  // Old nSup definition: nSup=ceil(totGroups*(support/100));
  nSup=ceil(options.getTotGroups()*support/100);
- MRDebug() << "Support threshold:" << nSup << endl;
+ MRDebug() << "Support threshold:" << nSup << std::endl;
 
- MRLog() << "Pruning..." << endl;
+ MRLog() << "Pruning..." << std::endl;
  kItem.checkSupportBaseDef(nSup,pHashMap,prtList);
 
  toContinue=true;

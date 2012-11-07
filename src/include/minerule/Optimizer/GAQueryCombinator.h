@@ -7,7 +7,7 @@
    * This module provides an algorithm that searches for a combination
    * of queries which yelds a result equivalent to a fixed one. The
    * search algorithm is a genetic one having the following
-   * characteristics: GENOMA: bitstring of n*m bits. It is interpreted
+   * characteristics: GENOMA: bistd::string of n*m bits. It is interpreted
    * as a boolean formula having m disjunctions, each disjunct has n
    * conjuncts. If a disjunct does not have any bit set to one, then
    * it is empty and is not considered.  For instance, let us consider
@@ -61,11 +61,11 @@ namespace minerule {
     /**
      * And of queries. 
      */
-    typedef vector<size_t> QueryAndList;
+    typedef std::vector<size_t> QueryAndList;
     /**
      * Or of queries. It is the type used to return the result to the user.
      */
-    typedef vector<QueryAndList> QueryOrList;
+    typedef std::vector<QueryAndList> QueryOrList;
   private:
     /**
      * Target minerule.
@@ -74,7 +74,7 @@ namespace minerule {
     /**
      * Set of query candidates (the ones that should be combined).
      */
-    vector<Predicate>& mr_candidates;
+    std::vector<Predicate>& mr_candidates;
     
     /**
      * The result of the GA algorithm will be stored in this vector
@@ -83,7 +83,7 @@ namespace minerule {
     QueryOrList result;
 
     /**
-     * This string is needed by the PredicateFilter class that is used
+     * Thisstd::string is needed by the PredicateFilter class that is used
      * in order to compute the Hamming distance.
      */
     std::string tab_source;
@@ -164,7 +164,7 @@ namespace minerule {
      */
 
     GAQueryCombinator(Predicate& _mr_target,
-		      vector<Predicate>& _mr_candidates,
+		      std::vector<Predicate>& _mr_candidates,
 		      const std::string& _tab_source)
       : mr_target(_mr_target), 
         mr_candidates(_mr_candidates),

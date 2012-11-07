@@ -55,7 +55,7 @@ int main(int argc, char *argv[]) {
       howMany++;
     }
   } catch (std::exception& e) {
-    cerr<<e.what()<<endl;
+    std::cerr<<e.what()<<std::endl;
   }
 }
 

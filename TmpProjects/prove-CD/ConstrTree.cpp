@@ -35,11 +35,11 @@ namespace minerule {
     while( mb2->current() != mb2->end() ) {
       string g=mb2->getCurrentGID();
       ItemSetType* body=new ItemSetType();
-      //cout<<"in adjustSupp:"<<endl;
+      //cout<<"in adjustSupp:"<<std::endl;
       for(; mb2->current() != mb2->end() && mb2->getCurrentGID()==g;(*mb2)++){
 	ItemType gid(*SourceRowElement::deserializeElementFromString("n "+mb2->getCurrentGID()));
 	ItemType item(*SourceRowElement::deserializeElementFromString("n "+mb2->getCurrentItem()));
-	//cout<<item.asString()<<" "<<gid.asString()<<endl;
+	//cout<<item.asString()<<" "<<gid.asString()<<std::endl;
 	body->push_back(item);
       }
     
@@ -73,7 +73,7 @@ namespace minerule {
       gidb=curRowb.getGroupBody();
     
       ItemSetType* body=new ItemSetType();
-      //cout<<"in adjustSupp:"<<endl;
+      //cout<<"in adjustSupp:"<<std::endl;
 
       while(bodynotend && ItemType(curRowb.getGroupBody())==gidb){
 	body->push_back(curRowb.getBody());
@@ -188,7 +188,7 @@ namespace minerule {
     MRLogPush("This is the Context Dependent Constructive Mining Algorithm...");
     MRLogPush("Building source information");
 
-    MRLog() << "Separating the constraints in the HEAD and BODY parts..."<<endl;
+    MRLog() << "Separating the constraints in the HEAD and BODY parts..."<<std::endl;
     string bodyConstraints;
     string headConstraints;
     HeadBodyPredicatesSeparator::separate(minerule->getParsedMinerule().mc->l_and,
@@ -236,16 +236,16 @@ namespace minerule {
     // Debugging code starts 
     /*
     MRDebugPush("Body description");
-    ostream& dbg = MRDebug();
+    std::ostream& dbg = MRDebug();
     dbg << "Group ids:";
     copy( bodyDes.groupBodyElems.begin(),
 	  bodyDes.groupBodyElems.end(),
-	  ostream_iterator<int>(dbg, ",") );
+	  std::ostream_iterator<int>(dbg, ",") );
     dbg << endl;
     MRDebug() << "Body ids:";
     copy( bodyDes.bodyElems.begin(),
 	  bodyDes.bodyElems.end(),
-	  ostream_iterator<int>(dbg, ",") );
+	  std::ostream_iterator<int>(dbg, ",") );
     dbg<< endl;
     MRDebug() << "Body query:" << bodyQry << endl;
     MRDebugPop();
@@ -262,12 +262,12 @@ namespace minerule {
     MRDebug() << "Group ids:";
     copy( headDes.groupBodyElems.begin(),
 	  headDes.groupBodyElems.end(),
-	  ostream_iterator<int>(dbg, ",") );
+	  std::ostream_iterator<int>(dbg, ",") );
     dbg << endl;
     MRDebug() << "Head ids:";
     copy( headDes.headElems.begin(),
 	  headDes.headElems.end(),
-	  ostream_iterator<int>(dbg, ",") );
+	  std::ostream_iterator<int>(dbg, ",") );
     dbg<< endl;
     MRDebug() << "Head query:" << headQry << endl;
     MRDebugPop();

@@ -8,7 +8,7 @@ int main(int argc, char *argv[]) {
   //  go();
 #if 1
   if (argc != 4) {
-	cerr << "Usage: extractItemset minsupp maxCard minprice" << endl;
+	std::cerr << "Usage: extractItemset minsupp maxCard minprice" << endl;
 	exit(1);
   }
   odbc::Connection* connection;
@@ -62,7 +62,7 @@ int main(int argc, char *argv[]) {
 	stmt1 = connection->prepareStatement(queryStr1.c_str());
   	result1 = stmt1->executeQuery();
 	
-	cout << queryStr << endl;
+	std::cout << queryStr << endl;
 	statement = connection->prepareStatement(queryStr.c_str());
   
   //MRResultSetIterator mr(statement,(!strcmp(argv[1],"true")) ? mi : NULL);

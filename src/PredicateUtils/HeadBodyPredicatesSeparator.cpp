@@ -16,8 +16,8 @@ void HeadBodyPredicatesSeparator::setState( ConstraintClass& current, Constraint
 } 
 
 HeadBodyPredicatesSeparator::ConstraintClass
-HeadBodyPredicatesSeparator::setStateAccordinglyToString(string& str, ConstraintClass state) throw(MineruleException)  {
-  string substr = str.substr(0,5);
+HeadBodyPredicatesSeparator::setStateAccordinglyToString(std::string& str, ConstraintClass state) throw(MineruleException)  {
+ std::string substr = str.substr(0,5);
   if(substr=="BODY.")
     setState(state, BODY_CONSTR);
   else if(substr=="HEAD.")
@@ -33,7 +33,7 @@ HeadBodyPredicatesSeparator::setStateAccordinglyToString(string& str, Constraint
 }
 
 void
-HeadBodyPredicatesSeparator::updateConstraint( string& str, const string& v1, const string& op, const string& v2) {
+HeadBodyPredicatesSeparator::updateConstraint( std::string& str, const std::string& v1, const std::string& op, const std::string& v2) {
   if(str!="")
     str+=" AND ";
 
@@ -42,8 +42,8 @@ HeadBodyPredicatesSeparator::updateConstraint( string& str, const string& v1, co
 
 void
 HeadBodyPredicatesSeparator::separate(list_AND_node* l_and, 
-			 string& bodyConstraints,
-			 string& headConstraints) throw(MineruleException) {
+			 std::string& bodyConstraints,
+			 std::string& headConstraints) throw(MineruleException) {
   if( l_and == NULL ) {
     bodyConstraints = "1=1";
     headConstraints = "1=1";
@@ -52,8 +52,8 @@ HeadBodyPredicatesSeparator::separate(list_AND_node* l_and,
 
   while(l_and!=NULL) {
     ConstraintClass state = NO_INFO;
-    string v1 = l_and->sp->val1;
-    string v2 = l_and->sp->val2;
+   std::string v1 = l_and->sp->val1;
+   std::string v2 = l_and->sp->val2;
     
     state = setStateAccordinglyToString(v1, state);
     state = setStateAccordinglyToString(v2, state);

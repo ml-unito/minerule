@@ -22,11 +22,11 @@ buildHeads(const vector<int>& body, const vector<int>& heads) {
     it.getCurrentSet(curHead);
 
     copy(body.begin(), body.end(),
-	 ostream_iterator<int>(cout, " "));
+	 std::ostream_iterator<int>(cout, " "));
     cout << " -> ";
 
     copy(curHead.begin(), curHead.end(),
-	 ostream_iterator<int>(cout, " "));
+	 std::ostream_iterator<int>(cout, " "));
 
     cout << endl;
   }

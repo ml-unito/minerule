@@ -6,7 +6,7 @@
 #include <vector>
 #include "utils.h"
 
-using namespace std;
+
 
 template< class NODETYPE > class itemSet;  // dichiarazione succ.
 
@@ -14,9 +14,9 @@ template <class NODETYPE>
 class itemSetList {
  public:
  itemSetList();
- list<itemSet<NODETYPE>* >* getList(int pos) {return vect[pos];}
+ std::list<itemSet<NODETYPE>* >* getList(int pos) {return vect[pos];}
  void init();
- vector<list<itemSet<NODETYPE>* >* > vect;
+ std::vector<std::list<itemSet<NODETYPE>* >* > vect;
 
  void print();
  void printAddrItemSet();
@@ -28,7 +28,7 @@ class itemSetList {
 template< class NODETYPE >
 itemSetList< NODETYPE >::itemSetList()
  {
-  //cout<<"costruttore pList"<<endl;
+  //cout<<"costruttore pList"<<std::endl;
  }
 
 
@@ -36,12 +36,12 @@ itemSetList< NODETYPE >::itemSetList()
 template< class NODETYPE >
 void itemSetList< NODETYPE >::init()
  {
-  //cout<<"Init"<<endl;
-  list<itemSet<NODETYPE>* >* temp=NULL;
+  //cout<<"Init"<<std::endl;
+  std::list<itemSet<NODETYPE>* >* temp=NULL;
 
   vect.push_back(temp);
   vect.push_back(temp);
-  //cout<<"size vect"<<vect.size()<<endl;
+  //cout<<"size vect"<<vect.size()<<std::endl;
 
  }
 
@@ -49,69 +49,69 @@ void itemSetList< NODETYPE >::init()
 template< class NODETYPE >
 void itemSetList< NODETYPE >::print()
  {
-  cout<<"PRINT Lista ItemSet"<<endl;
+  std::cout<<"PRINT Lista ItemSet"<<std::endl;
   //list<itemSet<NODETYPE>* >* temp;
-  typename vector<list<itemSet<NODETYPE>* >* >::iterator i;
+  typename std::vector<std::list<itemSet<NODETYPE>* >* >::iterator i;
 
    for ( i=vect.begin(); i!=vect.end(); i++)
      {
-          cout<<"*i -"<<*i<<endl;
+          std::cout<<"*i -"<<*i<<std::endl;
      }
-    cout<<"Fine PRINT itemSet"<<endl;
+    std::cout<<"Fine PRINT itemSet"<<std::endl;
  }
 
 
 template< class NODETYPE >
 void itemSetList< NODETYPE >::printAddrItemSet()
  {
-  cout<<"PRINT Lista itemset"<<endl;
-  list<itemSet<NODETYPE>* >* temp;
-  typename vector<list<itemSet<NODETYPE>* >* >::iterator i;
-  typename list<itemSet<NODETYPE>* >::iterator j;
+  std::cout<<"PRINT Lista itemset"<<std::endl;
+  std::list<itemSet<NODETYPE>* >* temp;
+  typename std::vector<std::list<itemSet<NODETYPE>* >* >::iterator i;
+  typename std::list<itemSet<NODETYPE>* >::iterator j;
   int lev;
 
   lev=0;
    for ( i=vect.begin(); i!=vect.end(); i++)
      {
-          cout<<lev<<") Indirizzo Lista "<<*i<<endl;
+          std::cout<<lev<<") Indirizzo Lista "<<*i<<std::endl;
           lev++;
           if ((*i)!=NULL)
           {
            for ( j=(*i)->begin(); j!=(*i)->end(); j++)
             {
-          	cout<<"\t"<<"ISet : "<<*j<<endl;
-		//cout<<"FOOT"<<*i<<endl;
+          	std::cout<<"\t"<<"ISet : "<<*j<<std::endl;
+		//cout<<"FOOT"<<*i<<std::endl;
 
             }
           }
      }
-    cout<<"Fine PRINT Lista itemset"<<endl;
+    std::cout<<"Fine PRINT Lista itemset"<<std::endl;
  }
 
 template< class NODETYPE >
 void itemSetList< NODETYPE >::removeAll()
  {
-  //cout<<"Remove All"<<endl;
-   //  list<itemSet<NODETYPE>* >* temp;
-  typename vector<list<itemSet<NODETYPE>* >* >::iterator i;
-  //  cout<<"dentro remove ALL"<<endl;
+  //cout<<"Remove All"<<std::endl;
+   //  std::list<itemSet<NODETYPE>* >* temp;
+  typename std::vector<std::list<itemSet<NODETYPE>* >* >::iterator i;
+  //  std::cout<<"dentro remove ALL"<<std::endl;
    for ( i=vect.begin(); i!=vect.end(); i++)
      {
-       //          cout<<"*i -"<<*i<<endl;
+       //          std::cout<<"*i -"<<*i<<std::endl;
           delete (*i);
      }
-     cout<<"a"<<endl;
+     std::cout<<"a"<<std::endl;
    vect.clear();
-   //  cout<<"finitoremove"<<endl;
+   //  std::cout<<"finitoremove"<<std::endl;
  }
 
 template< class NODETYPE >
 void itemSetList< NODETYPE >::remove(int lev,itemSet<NODETYPE>* p)
  {
-  cout<<"Remove P in level"<<lev<<endl;
-  cout<<"Address puntatore "<<p<<endl;
-  list<itemSet<NODETYPE>* >* temp;
-  typename list<itemSet<NODETYPE>* >::iterator i;
+  std::cout<<"Remove P in level"<<lev<<std::endl;
+  std::cout<<"Address puntatore "<<p<<std::endl;
+  std::list<itemSet<NODETYPE>* >* temp;
+  typename std::list<itemSet<NODETYPE>* >::iterator i;
   bool trovato;
 
   temp=getList(lev);
@@ -120,10 +120,10 @@ void itemSetList< NODETYPE >::remove(int lev,itemSet<NODETYPE>* p)
 
   while ( (i!=temp->end()) && (!trovato))
      {
-        cout<<"*i -"<<*i<<" puntatore "<<p<<endl;
+        std::cout<<"*i -"<<*i<<" puntatore "<<p<<std::endl;
         if ((*i)==p)
         {
-          cout<<"cancello"<<endl;
+          std::cout<<"cancello"<<std::endl;
           //temp->erase(i);
           trovato=true;
         }

@@ -3,7 +3,7 @@
 #include <vector>
 
 
-class PairEid_vector: public std::vector<pair<int,int>> {
+class PairEid_vector: public std::vector<std::pair<int,int>> {
 
 
 public:

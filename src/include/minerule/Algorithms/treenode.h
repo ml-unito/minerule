@@ -14,7 +14,7 @@ Vedi file treenode.doc per esempi e immagini di spiegazioni.
 #include <vector>
 
 #include "Counter.h"
-using namespace std;
+
 
 
 template< class NODETYPE > class Tree;            // dichiarazione succ.
@@ -45,7 +45,7 @@ class TreeNode
 {
   friend class Tree< NODETYPE >;
   public:
-    typedef map <NODETYPE,TreeNode< NODETYPE >*, TreeNodeSorter<NODETYPE> >   MapType;
+    typedef std::map <NODETYPE,TreeNode< NODETYPE >*, TreeNodeSorter<NODETYPE> >   MapType;
 
 // Costruttore
     TreeNode( const Counter<NODETYPE>& counter, const NODETYPE &d, int val);

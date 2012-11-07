@@ -55,7 +55,7 @@ class PrepareDataUtils {
   
 
    static void
-     dropTableIfExists(odbc::Connection* conn, const string& tname);
+     dropTableIfExists(odbc::Connection* conn, const std::string& tname);
 
     /** 
      * Query the DBMS in order to get the total number of groups

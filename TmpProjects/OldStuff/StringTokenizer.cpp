@@ -82,7 +82,7 @@ String StringTokenizer::nextToken()
 	skipDelimiters();
 
 	if (currentPosition >= maxPosition) {
-	    cerr << "No such element " << currentPosition << endl;
+	    std::cerr << "No such element " << currentPosition << endl;
 	    exit(1);
 	}
 

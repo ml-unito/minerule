@@ -1,17 +1,15 @@
 #include "RuleFormatter.h"
 
-using namespace std;
+
 
 namespace minerule {
-
-string 
-RuleFormatter::quote(const string& elem) {
+std::string 
+RuleFormatter::quote(const std::string& elem) {
   return "["+elem+"]";
 }
-
-string 
+std::string 
 RuleFormatter::quoteElems(const ItemSetType& elems) {
-  string result;
+ std::string result;
 
   ItemSetType::const_iterator it=elems.begin();
   
@@ -30,15 +28,15 @@ RuleFormatter::quoteElems(const ItemSetType& elems) {
 
 void
 SimpleRuleFormatter::printRule(const QueryResult::Rule& rule) {
-  string bhSep = " => ";   // separates body from head 
-  string rsSep = "\t";   // separates rule from support
-  string scSep = "\t\t"; // separates support from confidence
+ std::string bhSep = " => ";   // separates body from head 
+ std::string rsSep = "\t";   // separates rule from support
+ std::string scSep = "\t\t"; // separates support from confidence
 
   if(fieldSeparationString!="")
     bhSep=rsSep=scSep=fieldSeparationString;
 
   os << quoteElems(*rule.body) << bhSep << quoteElems(*rule.head) 
-     << rsSep << rule.support << scSep << rule.confidence << endl;
+     << rsSep << rule.support << scSep << rule.confidence << std::endl;
 }
 
 } // namespace

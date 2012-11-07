@@ -5,7 +5,7 @@
 #include <algorithm>
 
 #ifndef bit_vector
-	#define bit_vector vector<bool>
+	#define bit_vector std::vector<bool>
 #endif
 
 namespace minerule {
@@ -92,9 +92,9 @@ namespace minerule {
     list_AND_node* allPreds=NULL;
 
     CountingIterator ci(counter,allPreds);
-    set<SimplePredicate*, PtrSimplePredComp>& sp1 = 
+    std::set<SimplePredicate*, PtrSimplePredComp>& sp1 = 
       p1.getPredicateList();
-    set<SimplePredicate*, PtrSimplePredComp>& sp2 = 
+    std::set<SimplePredicate*, PtrSimplePredComp>& sp2 = 
       p2.getPredicateList();
 
     std::set_union( sp1.begin(), sp1.end(), 

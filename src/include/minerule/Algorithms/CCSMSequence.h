@@ -7,7 +7,7 @@
 #include <iostream>
 #include "MRDatabase/itemtype.h"
 #include "MRDatabase/sourcerowcommon.h"
-using namespace std;
+
 #define PRESENT 1
 #define ABSENT 0
 
@@ -18,11 +18,11 @@ class CCSMSequence {
 	
 	
 public:
-	typedef vector<pair<int,int> > Eid_List;
+	typedef std::vector<std::pair<int,int> > Eid_List;
 	
 private:
 	bool singleton;
-	//typedef vector<pair<int,int> > Eid_List;
+	//typedef std::vector<std::pair<int,int> > Eid_List;
 	Bit_vector listSid;
 	typedef std::vector<ItemType> List_Type;
 	List_Type* seq;
@@ -34,14 +34,14 @@ private:
 	// a-b-c e b-c-d condividono b-c e da queste due genererò a-b-c-d come intersezione di a-b-c e d, L(a-b-c) intersect L(d)
 	//appunto d è l'ultimo singleton di b-c-d
 	CCSMSequence* last;
-	list<CCSMSequence*> prefix;
-	list<CCSMSequence*> suffix;
+	std::list<CCSMSequence*> prefix;
+	std::list<CCSMSequence*> suffix;
 	
-	static vector<pair<int,int> >* mergeEidRtoLeft(const Eid_List& first, const Eid_List& second, int min_gap ,int max_gap);
+	static std::vector<std::pair<int,int> >* mergeEidRtoLeft(const Eid_List& first, const Eid_List& second, int min_gap ,int max_gap);
 
 public:
 		
-	typedef pair<vector<ItemType>,int> ResultItems;
+	typedef std::pair<std::vector<ItemType>,int> ResultItems;
 
 	CCSMSequence(CCSMSequence* l=NULL) {
 		singleton=false;
@@ -50,10 +50,10 @@ public:
 		last=l;
 		listSid.reserve(1000000);
 		eid_vector.reserve(1000000);
-		/*cout<<"bit_vector.capacity "<<listSid.capacity()<<endl;
-		cout<<"bit_vector.max_size "<<listSid.max_size()<<endl;
-				cout<<"eid_vector.capacity "<<eid_vector.capacity()<<endl;
-		cout<<"eid_vector.max_size "<<eid_vector.max_size()<<endl;
+		/*cout<<"bit_vector.capacity "<<listSid.capacity()<<std::endl;
+		std::cout<<"bit_vector.max_size "<<listSid.max_size()<<std::endl;
+				std::cout<<"eid_vector.capacity "<<eid_vector.capacity()<<std::endl;
+		std::cout<<"eid_vector.max_size "<<eid_vector.max_size()<<std::endl;
 		getchar();*/
 	};
 		
@@ -91,19 +91,19 @@ public:
 		count=in.count;
 	}
 
-	void reduction(vector<size_t>& k){
+	void reduction(std::vector<size_t>& k){
 		//elimino dalla lista degli Eventi gli eventi corrispondenti alle transazioni che non sono utili al fine del conteggio
 		//delle frequenze del livello a cui siamo arrivati in modo da migliorare
 		//le performance dell'algoritmo e l'occupazione di memoria
 
 		//time_t init,end;
 		//time(&init);
-		vector<Eid_List*>::iterator it;
+	 std::vector<Eid_List*>::iterator it;
 		size_t i =0;
 		size_t j=0;
 		it = eid_vector.begin();
 		//size_t s=eid_vector.size();
-		vector<Eid_List*> eid_temp;
+	 std::vector<Eid_List*> eid_temp;
 		
 		for (it=eid_vector.begin();it!=eid_vector.end();++it,i++){
 			if (k[j]!=i)
@@ -131,13 +131,13 @@ public:
 			else i++;
 		}
 		//time(&end);
-		//cout<<"ridotta listSid in tempo "<<difftime(end,init)<<endl;
+		//cout<<"ridotta listSid in tempo "<<difftime(end,init)<<std::endl;
 		listSid=ris;
 
 	}
 	
 
-	//	void read(const string& s);
+	//	void read(const std::string& s);
 
 	size_t size() {
 		return seq->size();
@@ -192,22 +192,22 @@ public:
 	}
 
 	void stampaEid(size_t sid){
-		string ris="";
+	std::string ris="";
 		Eid_List* temp = eid_vector[sid];
 		int a, b;
 		for (size_t i=0;i<temp->size();++i){
 			a=(*temp)[i].first;
 			b=(*temp)[i].second;
-			cout<<"  ("<<a<<","<<b<<")";
+			std::cout<<"  ("<<a<<","<<b<<")";
 		}
-		cout<<endl;
+		std::cout<<std::endl;
 		
 	}
 
 	void bitMaptoString(){
-		string ris ="";
+	std::string ris ="";
 		for (size_t i=0;i<listSid.size();++i){
-			cout<<listSid[i]<<endl;
+			std::cout<<listSid[i]<<std::endl;
 			stampaEid(i);
 		}
 	}
@@ -219,7 +219,7 @@ public:
 
 	~CCSMSequence() {
 		delete seq;
-		vector<Eid_List*>::iterator it_list;
+	 std::vector<Eid_List*>::iterator it_list;
 		for (it_list=eid_vector.begin();it_list!=eid_vector.end();++it_list)
 			delete (*it_list);
 
@@ -239,26 +239,26 @@ public:
 	static CCSMSequence* merge(CCSMSequence* first, CCSMSequence* second, int min_gap,int max_gap, double threshold);
 
 	static std::vector<size_t> reduce_tr(std::vector<CCSMSequence*>* vec){
-		//cout<<"ENTRO NELLA REDUCE_TR"<<endl;
+		//cout<<"ENTRO NELLA REDUCE_TR"<<std::endl;
 		time_t init,end;
-		vector<size_t> k;
-		vector<CCSMSequence*>::iterator it;
+	 std::vector<size_t> k;
+	 std::vector<CCSMSequence*>::iterator it;
 		Bit_vector ris;
 		if (vec->size()==0)
 			return k;
 		it=vec->begin();
-		//cout<<"ecco le sequenze su cui applico la reduce"<<endl;
-		//cout<<(*it)->toStdString()<<endl;
+		//cout<<"ecco le sequenze su cui applico la reduce"<<std::endl;
+		//cout<<(*it)->toStdString()<<std::endl;
 		ris=(*it)->listSid;
 		
 		++it;
 		time(&init);
 		for (;it!=vec->end();++it){
-			//cout<<(*it)->toStdString()<<endl;
+			//cout<<(*it)->toStdString()<<std::endl;
 			ris=ris|(*it)->listSid;
 		}
 		time(&end);
-		//cout<<"----------"<<vec->size()<<"------"<<difftime(end,init)<<"----------------------"<<endl;
+		//cout<<"----------"<<vec->size()<<"------"<<difftime(end,init)<<"----------------------"<<std::endl;
 		Bit_vector::iterator b_it;
 		b_it=ris.begin();
 		size_t i =0;
@@ -269,7 +269,7 @@ public:
 				k.push_back(i);
 		}
 		time(&end);
-		//cout<<"----------secondo ciclo interno------"<<difftime(end,init)<<"----------------------"<<endl;
+		//cout<<"----------secondo ciclo interno------"<<difftime(end,init)<<"----------------------"<<std::endl;
 		return k;
 
 	}
@@ -298,7 +298,7 @@ public:
 		prefix.push_back(in);
 	}
 
-	list<CCSMSequence*> getPrefixSequence(){
+	std::list<CCSMSequence*> getPrefixSequence(){
 		return prefix;
 	}
 
@@ -308,7 +308,7 @@ public:
 		suffix.push_back(in);
 	}
 
-	list<CCSMSequence*> getSuffixSequence(){
+	std::list<CCSMSequence*> getSuffixSequence(){
 		return suffix;
 	}
 

@@ -19,7 +19,7 @@ namespace minerule {
     VarSetEnumerator vse(nvars);
 
     if( nvars > 31 ) {
-      string error = 
+     std::string error = 
 	"ExpressionNFCoder::encode - the current implementation "
 	"does not support expression with more than 31 variables";
 
@@ -207,7 +207,7 @@ namespace minerule {
 #endif
   
 
-  ostream& operator<<(ostream& os, const EncodedNF& nf) {
+  std::ostream& operator<<(std::ostream& os, const EncodedNF& nf) {
     EncodedNFIterator it(nf);
     it++;
     while(it.ok()) {
@@ -292,7 +292,7 @@ namespace minerule {
    *
    * 1. write down the sequence s1 of the ones and zeros of the truth
    *    table of the predicate that nf1 represents. 
-   * 2. Do the same with nf2 and call the resulting string s2. 
+   * 2. Do the same with nf2 and call the resultingstd::string s2. 
    * 3. Return the Hamming distance of s1 w.r.t. s2
    * in other words the function count the number of variable configurations
    * for which the two predicates return different answers.

@@ -61,7 +61,7 @@ namespace minerule {
    (*NRB)[*ite]=new NodeRowB();
    itr=NRB->find(*ite);
    assert(itr!=NRB->end());
-   //cout<<"body "<<itr->first<<endl;
+   //cout<<"body "<<itr->first<<std::endl;
 
    ite++;
    if(ite!=itend){
@@ -73,7 +73,7 @@ namespace minerule {
   }
   //se l'ho trovato
   else{
-   //cout<<"body "<<itr->first<<endl;
+   //cout<<"body "<<itr->first<<std::endl;
    ite++;
    //se ci sono ancora figli da inserire
    if(ite!=itend){
@@ -121,7 +121,7 @@ namespace minerule {
    (*NR)[*ite]=new NodeRow();
    itr=NR->find(*ite);
    itr->second->setSupp(supp);
-   //cout<<"                head "<<itr->first<<endl;
+   //cout<<"                head "<<itr->first<<std::endl;
    //se ci sono ancora elementi nel vettore, vuol dire che devo inserire i figli
    ite++;
    if(ite!=itend){
@@ -133,7 +133,7 @@ namespace minerule {
 
   //se l'ho trovato
   else{
-   //cout<<"                head "<<itr->first<<endl;
+   //cout<<"                head "<<itr->first<<std::endl;
    //se ci sono ancora figli da inserire
    ite++;
    if(ite!=itend){
@@ -169,7 +169,7 @@ namespace minerule {
     //se l'ho trovato
     if (itfind!=body->end()) {
       ite->second->incremSupp();
-      //cout<<"ho increm supp di body"<<endl;
+      //cout<<"ho increm supp di body"<<std::endl;
       Body* c=ite->second->getChild();
       //se ha figli
       if (c!=NULL) c->findBodiesInTree(body);
@@ -184,25 +184,25 @@ namespace minerule {
   RowContainer::iterator ite=NR->begin();
   ItemSetType::iterator itfind;
   //  ItemSetType::iterator prova=head->begin();
-  /*  cout<<"elementi in cui faccio ricerca:"<<endl;
+  /*  std::cout<<"elementi in cui faccio ricerca:"<<std::endl;
   while(prova!=head->end()){
-  cout<<(*prova)<<", ";
+  std::cout<<(*prova)<<", ";
   prova++;
   }
-  cout<<endl;*/
+  std::cout<<std::endl;*/
 
   while(ite!=NR->end()){
-    //    cout<<"ora cerco "<<ite->first<<endl;
+    //    std::cout<<"ora cerco "<<ite->first<<std::endl;
     itfind=find(head->begin(),head->end(),ite->first);
     if(itfind!=head->end()) {//se l'ho trovato
       ite->second->incremSupp();
-      //cout<<"ho increm supp di rule"<<endl;
+      //cout<<"ho increm supp di rule"<<std::endl;
       Head* c=ite->second->getChild();
       //se ha figli
       if (c!=NULL) {
 	c->findHead(head);
       }
-    }//else cout<<"non trovato"<<endl;
+    }//else std::cout<<"non trovato"<<std::endl;
   ite++;
   }
  }
@@ -214,17 +214,17 @@ namespace minerule {
   RowContainer::iterator ite=NR->begin();
   ItemSetType::iterator itfind;
   while(ite!=NR->end()){
-    //cout<<"esamino head "<<ite->first<<endl;
+    //cout<<"esamino head "<<ite->first<<std::endl;
     itfind=find(h1->begin(),h1->end(),ite->first);
     if(itfind!=h1->end()) {//se l'ho trovato
       ite->second->decremSupp();
-      //cout<<"decremento head "<<ite->first<<endl;
+      //cout<<"decremento head "<<ite->first<<std::endl;
       Head* c=ite->second->getChild();
       //se ha figli
       if (c!=NULL) {
 	c->findHead2(h1);
       }
-    }//else cout<<"non trovato"<<endl;
+    }//else std::cout<<"non trovato"<<std::endl;
   ite++;
   }
  }
@@ -235,11 +235,11 @@ namespace minerule {
   RowContainer::iterator ite=NR->begin();
   ItemSetType::iterator itfind;
   while(ite!=NR->end()){
-    //cout<<"esamino head "<<ite->first<<endl;
+    //cout<<"esamino head "<<ite->first<<std::endl;
     itfind=find(h1nh2->begin(),h1nh2->end(),ite->first);
     if(itfind!=h1nh2->end()) {//se l'ho trovato
       ite->second->decremSupp();
-      //cout<<"decremento head "<<ite->first<<endl;
+      //cout<<"decremento head "<<ite->first<<std::endl;
       Head* c=ite->second->getChild();
       //se ha figli
       if (c!=NULL) {
@@ -267,14 +267,14 @@ namespace minerule {
 
   RowBContainer::iterator ite=NRB->begin();
   ItemSetType::iterator itfind;
-  //cout<<"esamino body "<<ite->first<<endl;
+  //cout<<"esamino body "<<ite->first<<std::endl;
   while(ite!=NRB->end()){
     itfind=find(b1->begin(),b1->end(),ite->first);
     //se l'ho trovato
     if (itfind!=b1->end()) {
       ite->second->decremSupp();
-      //cout<<"                      decremento body "<<ite->first<<endl;
-      //cout<<"ho decrem supp di body"<<endl;
+      //cout<<"                      decremento body "<<ite->first<<std::endl;
+      //cout<<"ho decrem supp di body"<<std::endl;
       Head* h=ite->second->getHead();
       if (h!=NULL) {
 	h->findHead2(h1);
@@ -303,17 +303,17 @@ namespace minerule {
     itfind=find(body->begin(),body->end(),ite->first);
     if(itfind!=body->end()) {//se l'ho trovato
       ite->second->incremSupp();
-      //cout<<"ho decrem suppb da findRules.."<<endl;
+      //cout<<"ho decrem suppb da findRules.."<<std::endl;
       Head* h=ite->second->getHead();
 
-      /*      cout << "heads:";
+      /*      std::cout << "heads:";
       copy( head->begin(),
 	    head->end(),
-	    ostream_iterator<ItemType>(cout, " "));
-	    cout << "end";*/
+	    std::ostream_iterator<ItemType>(cout, " "));
+	    std::cout << "end";*/
 
 
-      //cout<<h<<endl;
+      //cout<<h<<std::endl;
       if (h!=NULL) {
 	h->findHead(head);
       }
@@ -334,12 +334,12 @@ namespace minerule {
   RowBContainer::iterator ite=NRB->begin();
   ItemSetType::iterator itfind;
   while(ite!=NRB->end()){
-    //cout<<"esamino body "<<ite->first<<endl;
+    //cout<<"esamino body "<<ite->first<<std::endl;
     itfind=find(b1nb2->begin(),b1nb2->end(),ite->first);
 
     if(itfind!=b1nb2->end()) {//se l'ho trovato
       ite->second->decremSupp();
-      //cout<<"                      decremento body "<<ite->first<<endl;
+      //cout<<"                      decremento body "<<ite->first<<std::endl;
       Head* h=ite->second->getHead();
       if (h!=NULL) {
 	h->findHead2(h1);
@@ -372,8 +372,8 @@ namespace minerule {
 
 
 
-void Head::extractRules(const vector<ItemType>& body,
-			vector<ItemType>& head,
+void Head::extractRules(const std::vector<ItemType>& body,
+		 std::vector<ItemType>& head,
 			double thrR, double thrB, double suppB, int ngroups, 
 			sqlCoreConn* pcoreConn){
  typedef std::map<ItemType,NodeRow*> RowContainer;
@@ -393,20 +393,20 @@ void Head::extractRules(const vector<ItemType>& body,
       double sup=s/ngroups;
       tmp=(s/suppB);
       if((sup>=thrR)/*&&(tmp>=thrB)*/){
-	/*        cout<<"body: "<<endl;
-        vector<ItemType>::const_iterator itv=body.begin();
+	/*        std::cout<<"body: "<<std::endl;
+        std::vector<ItemType>::const_iterator itv=body.begin();
         while (itv!=body.end()){
-          cout<<" "<<(*itv)<<endl;
+          std::cout<<" "<<(*itv)<<std::endl;
 	  itv++;
 	  }
-        cout<<"suppb: "<<tmp<<endl;
-        cout<<"       head: "<<endl;
+        std::cout<<"suppb: "<<tmp<<std::endl;
+        std::cout<<"       head: "<<std::endl;
         itv=head.begin();
         while (itv!=head.end()){
-          cout<<"               "<<(*itv)<<endl;
+          std::cout<<"               "<<(*itv)<<std::endl;
 	  itv++;
 	  }
-        cout<<"suppr: "<<sup<<endl;
+        std::cout<<"suppr: "<<sup<<std::endl;
 	*/
 	pcoreConn->insert_DB(body,head,sup,tmp);
       }
@@ -416,20 +416,20 @@ void Head::extractRules(const vector<ItemType>& body,
      double sup=s/ngroups;
      tmp=(s/suppB);
      if((sup>=thrR)/*&&(tmp>thrB)*/){
-       // cout<<"body: "<<endl;
-       //vector<ItemType>::const_iterator itv=body.begin();
+       // std::cout<<"body: "<<std::endl;
+       // std::vector<ItemType>::const_iterator itv=body.begin();
        //while (itv!=body.end()){
-	// cout<<" "<<(*itv)<<endl;
+	// std::cout<<" "<<(*itv)<<std::endl;
 	// itv++;
       // }
-      // cout<<"suppb: "<<tmp<<endl;
-      // cout<<"       head: "<<endl;
+      // std::cout<<"suppb: "<<tmp<<std::endl;
+      // std::cout<<"       head: "<<std::endl;
       // itv=head.begin();
      //  while (itv!=head.end()){
-	// cout<<"               "<<(*itv)<<endl;
+	// std::cout<<"               "<<(*itv)<<std::endl;
 	// itv++;
       // }
-      // cout<<"suppr: "<<sup<<endl;
+      // std::cout<<"suppr: "<<sup<<std::endl;
        pcoreConn->insert_DB(body,head,sup,tmp);
      }
    }
@@ -441,7 +441,7 @@ void Head::extractRules(const vector<ItemType>& body,
 
 
 
-void Body::extractRules(vector<ItemType>& body,
+void Body::extractRules(std::vector<ItemType>& body,
 			double thrR, double thrB, int ngroups,
 			sqlCoreConn* pcoreConn){
  typedef std::map<ItemType,NodeRowB*> RowBContainer;
@@ -449,7 +449,7 @@ void Body::extractRules(vector<ItemType>& body,
  RowBContainer::iterator itB;
  Body* btmp;
  itB=this->NRB->begin();
- vector<ItemType> head;
+ std::vector<ItemType> head;
  while (itB!=this->NRB->end()){
    double suppb=itB->second->getSupp();
    body.push_back(itB->first);
@@ -469,9 +469,9 @@ void Body::extractRules(vector<ItemType>& body,
 void Body::provaStampaLiv1(){
  RowBContainer::iterator it=NRB->begin();
  while(it!=NRB->end()){
-   cout<<"elemento "<<it->first<<" "<<endl;
-   cout<<"child: "<<it->second->getChild()<<endl;
-   cout<<"head: "<<it->second->getHead()<<endl;
+   std::cout<<"elemento "<<it->first<<" "<<std::endl;
+   std::cout<<"child: "<<it->second->getChild()<<std::endl;
+   std::cout<<"head: "<<it->second->getHead()<<std::endl;
    it++;
  }
 

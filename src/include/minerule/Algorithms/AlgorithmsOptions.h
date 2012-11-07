@@ -26,7 +26,7 @@ class AlgorithmsOptions {
   MRResultSetIterator* mriterator;
 
   HeadBodySourceRowDescription sourceRowDescription;
-  string outTableName;
+ std::string outTableName;
 
   MineruleOptions::MiningAlgorithms miningAlgorithmsOptions;
  public:
@@ -49,7 +49,7 @@ class AlgorithmsOptions {
   void setConnection(odbc::Connection*);
   void setStatement(odbc::PreparedStatement*);
   void setSourceRowDescription(const HeadBodySourceRowDescription& srdes);
-  void setOutTableName(const string& fname) {
+  void setOutTableName(const std::string& fname) {
     outTableName=fname;
   }
   
@@ -59,7 +59,7 @@ class AlgorithmsOptions {
 
   double getSupport() const;
   double getConfidence() const;
-  const string& getOutTableName() const {
+  const std::string& getOutTableName() const {
     return outTableName;
   }
 

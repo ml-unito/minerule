@@ -10,17 +10,17 @@ namespace minerule {
 	IncrementalAlgorithm::newIncrementalAlgorithm(const OptimizedMinerule& mr) {
     // if mr has only ItemDependent constraints
 		MRLog() << "Checking if the current minerule " 
-			<< "is item dependent..." << endl;
+			<< "is item dependent..." << std::endl;
     
 		if( mr.getParsedMinerule().hasIDConstraints() ) {
-			MRLog() << "The minerule is item dependent!" << endl;
+			MRLog() << "The minerule is item dependent!" << std::endl;
 			if( mr.getOptimizationInfo().relationship==OptimizedMinerule::Combination ) 
 				return new ResultCombinator(mr);
 			else 
 				return new IDIncrementalAlgorithm(mr);
 		}
     
-		MRLog() << "The minerule is NOT item dependent!" << endl;
+		MRLog() << "The minerule is NOT item dependent!" << std::endl;
     
 		if( mr.getParsedMinerule().mc!=NULL && mr.getParsedMinerule().mc->next==NULL ) {
       
@@ -40,8 +40,8 @@ namespace minerule {
       
 			return incrAlgo;
 		} else {
-			MRLog() << "The needed incremental algorithms has not been integrated" << endl
-				<< " to the system yet." << endl;
+			MRLog() << "The needed incremental algorithms has not been integrated" << std::endl
+				<< " to the system yet." << std::endl;
 			return NULL;
 		}
 	}

@@ -19,7 +19,7 @@ namespace minerule {
       QueryResult::Rule r;
       qit.getRule(r);
 
-      set<Rule,Sorter>::insert(r);
+      std::set<Rule,Sorter>::insert(r);
     }
   }
 
@@ -56,7 +56,7 @@ namespace minerule {
 		      this->end(),
 		      rhs.begin(),
 		      rhs.end(),
-		      insert_iterator<ResultSet<Sorter> >( tmp, tmp.begin() ),
+		      std::insert_iterator<ResultSet<Sorter> >( tmp, tmp.begin() ),
 		      Sorter());
 
     *this = tmp;
@@ -68,7 +68,7 @@ namespace minerule {
     QueryResult::ResultSet<Sorter>::inplace_union(const ResultSet<Sorter>& rhs) {
 
     copy( rhs.begin(), rhs.end(), 
-	  insert_iterator<ResultSet<Sorter> >(*this, this->begin()));
+	  std::insert_iterator<ResultSet<Sorter> >(*this, this->begin()));
     return *this;
   }
 

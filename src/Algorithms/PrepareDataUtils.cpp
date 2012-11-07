@@ -3,18 +3,18 @@
 #include <string>
 #include <memory>
 
-using namespace std;
+
 
 namespace minerule {
 
 string
   PrepareDataUtils::buildAttrListDescription( const ParsedMinerule::ListType& attrs,
-					      const string& alias, 
+					      const std::string& alias, 
 					      bool addColAlias)  {
 #define ADDCOLALIAS (addColAlias?(" AS " + alias+*it):"")
 
     ParsedMinerule::ListType::const_iterator it;
-    string result;
+   std::string result;
     it=attrs.begin();
 
     // the first element should not have a leading ","
@@ -40,12 +40,12 @@ string
 
 string
   PrepareDataUtils::buildAttrListAlias( const ParsedMinerule::ListType& attrs,
-					      const string& alias, 
+					      const std::string& alias, 
 					      bool addColAlias)  {
 #define ADDCOLALIAS (addColAlias?(alias+*it):"")
 
     ParsedMinerule::ListType::const_iterator it;
-    string result;
+   std::string result;
     it=attrs.begin();
 
     // the first element should not have a leading ","
@@ -70,11 +70,11 @@ string
   }
 
   string
-  PrepareDataUtils::buildAttrListEquiJoin( const string& alias1,
-					    const string& alias2) const {
+  PrepareDataUtils::buildAttrListEquiJoin( const std::string& alias1,
+					    const std::string& alias2) const {
   
     ParsedMinerule::ListType::const_iterator it;
-    string result;
+   std::string result;
     it=mr.getParsedMinerule().ga.begin();
 
     // *** Filtering out rows not having the same gid ***
@@ -92,7 +92,7 @@ string
     // *** if body!=head there will be no tautologies and hence we
     // *** cannot actually filter out anything
     if( !mr.getParsedMinerule().body_coincident_head ) {
-      MRLog() << "filtering query:" << result << endl;
+      MRLog() << "filtering query:" << result << std::endl;
       return result;
     }
 
@@ -147,17 +147,17 @@ string
   string
   PrepareDataUtils::buildAndList(const list_AND_node* l) const {
     const list_AND_node* current = l;
-    string result;
+   std::string result;
 
     assert( current!=NULL );
     assert( current->sp!=NULL );
 
-    result = string(current->sp->val1) + string(current->sp->op) + string(current->sp->val2);
+    result = std::string(current->sp->val1) + std::string(current->sp->op) + std::string(current->sp->val2);
     current = current->next;
 
     while( current!=NULL ) {
       assert(current->sp!=NULL );
-      result += " AND "+ string(current->sp->val1) + string(current->sp->op) + string(current->sp->val2);
+      result += " AND "+ std::string(current->sp->val1) + std::string(current->sp->op) + std::string(current->sp->val2);
       current = current->next;
     }
 
@@ -166,7 +166,7 @@ string
 
   string
   PrepareDataUtils::buildConditionFilter(const list_OR_node* current) const {
-    string result;
+   std::string result;
 
     if( current==NULL ) 
       return "";
@@ -183,7 +183,7 @@ string
   }
 
   void
-  PrepareDataUtils::dropTableIfExists(odbc::Connection* conn, const string& tname)  {
+  PrepareDataUtils::dropTableIfExists(odbc::Connection* conn, const std::string& tname)  {
     std::auto_ptr<odbc::Statement> state(conn->createStatement());
     try {
       state->executeQuery("DROP TABLE "+tname);
@@ -195,13 +195,13 @@ string
 
   string
   PrepareDataUtils::createSourceTable() const {
-    string aliasA, aliasB;
-    string queryText;
+   std::string aliasA, aliasB;
+   std::string queryText;
     assert( !(mr.getParsedMinerule().ga.empty() || mr.getParsedMinerule().ba.empty() || mr.getParsedMinerule().ha.empty()) );
     aliasA = "BODY";
     aliasB = "HEAD";
 
-    string groupAttrList =  buildAttrListDescription(mr.getParsedMinerule().ga, aliasA,true);
+   std::string groupAttrList =  buildAttrListDescription(mr.getParsedMinerule().ga, aliasA,true);
 
     queryText = "SELECT ";
     queryText += groupAttrList;
@@ -217,12 +217,12 @@ string
 
     queryText += " WHERE " + buildAttrListEquiJoin( aliasA, aliasB);
   
-    string miningCond = buildConditionFilter(mr.getParsedMinerule().mc);
+   std::string miningCond = buildConditionFilter(mr.getParsedMinerule().mc);
     if(miningCond!="") {
       queryText += " AND (" + miningCond +")";
     }
 
-    string clusterCond = buildConditionFilter(mr.getParsedMinerule().cc);
+   std::string clusterCond = buildConditionFilter(mr.getParsedMinerule().cc);
     if(clusterCond!="") {
       queryText += " AND (" + clusterCond +")";
     }
@@ -239,9 +239,9 @@ string
 	// 		create table <table name> select ... (i.e., without the 'as' keyword)
 	// momentarily we use the postgres syntax, but one fix that accomodates both
 	// should be implemented.
-    string clusteredTable = mr.getParsedMinerule().tab_result+"_tmpSource";
-    string createQuery = "CREATE TABLE  "+clusteredTable+ " AS "+queryText + "; ";
-	string createIndexQuery = "CREATE INDEX "+clusteredTable+"_index " + " ON " + clusteredTable + " ("+buildAttrListAlias(mr.getParsedMinerule().ga,aliasA,true)+");";
+   std::string clusteredTable = mr.getParsedMinerule().tab_result+"_tmpSource";
+   std::string createQuery = "CREATE TABLE  "+clusteredTable+ " AS "+queryText + "; ";
+std::string createIndexQuery = "CREATE INDEX "+clusteredTable+"_index " + " ON " + clusteredTable + " ("+buildAttrListAlias(mr.getParsedMinerule().ga,aliasA,true)+");";
 
     odbc::Connection* conn = 
       MineruleOptions::getSharedOptions().getOdbc_db().getConnection();
@@ -251,13 +251,13 @@ string
     //std::auto_ptr<odbc::Statement> state(conn->createStatement());
     odbc::Statement* state = conn->createStatement();
 
-    MRLog() << "Creating clustered table... " << endl;
+    MRLog() << "Creating clustered table... " << std::endl;
     MRDebug() << "Creating mining table, the query is:" 
-	      << createQuery << endl;
+	      << createQuery << std::endl;
     state->execute(createQuery);
 	state->execute(createIndexQuery);
 	
-    MRLog() << "DONE..." << endl;
+    MRLog() << "DONE..." << std::endl;
     delete state;
 
     return  clusteredTable;
@@ -266,9 +266,9 @@ string
 
   void
   PrepareDataUtils::buildExtendedSourceTableQuery(
-						  string& queryText,
+						  std::string& queryText,
 						  HeadBodySourceRowDescription& rowDes) const  {
-    string tableName = createSourceTable();
+   std::string tableName = createSourceTable();
 
     queryText = "SELECT * FROM "+tableName;
 					      
@@ -283,7 +283,7 @@ string
 
   void
   PrepareDataUtils::buildSourceTableQuery(
-					   string& queryText,
+					   std::string& queryText,
 					   HeadBodySourceRowDescription& rowDes) const {
     if(miningAlgo.needsCrossProductOfSourceTable() ) {
       buildExtendedSourceTableQuery(queryText,rowDes);
@@ -295,7 +295,7 @@ string
 
   size_t PrepareDataUtils::evaluateTotGroups(const ParsedMinerule& pmr) throw(MineruleException, odbc::SQLException) {
     MRLogPush("Evaluating Number of groups...");
-    string qry=
+   std::string qry=
       "SELECT count(distinct " + buildAttrListDescription(pmr.ga) +") "
       "FROM " + pmr.tab_source;
     

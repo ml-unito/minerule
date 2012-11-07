@@ -72,7 +72,7 @@ class MIndex {
 	void showIndex();
 	void removeIndex();
 	//bool check(int gid);
-	bool fetchInit(set<std::string>& groups, void * query);
+	bool fetchInit(std::set<std::string>& groups, void * query);
 	//bool fetchNext(int * data);
 
 };
@@ -87,8 +87,8 @@ class MIndex {
   *****************************************************************/
 
 class MIndexIterator {
-	set<std::string> groups;
-	set<std::string>::iterator cur;
+	std::set<std::string> groups;
+	std::set<std::string>::iterator cur;
 	public:
 	MIndexIterator() { cur = groups.begin(); }
 	MIndexIterator(MIndex& mi, bt_query_t * query);
@@ -96,11 +96,11 @@ class MIndexIterator {
 	void unify(MIndex& mi, bt_query_t * query);
 	void unify(MIndexIterator& mii);
 	//std::string& operator*() { return *cur; }
-	set<std::string>::iterator operator++(int) { return cur++; }
-	set<std::string>::iterator operator++() { return ++cur; }
-	set<std::string>::iterator current() { return cur; }
-	set<std::string>::iterator begin() { return groups.begin(); }
-	set<std::string>::iterator end() { return groups.end(); }
+	std::set<std::string>::iterator operator++(int) { return cur++; }
+	std::set<std::string>::iterator operator++() { return ++cur; }
+	std::set<std::string>::iterator current() { return cur; }
+	std::set<std::string>::iterator begin() { return groups.begin(); }
+	std::set<std::string>::iterator end() { return groups.end(); }
 	bool next(std::string& value) { value = *cur; cur++; return (cur == groups.end()); }
 	void reset() {
 	  cur=groups.begin();

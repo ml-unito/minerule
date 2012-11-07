@@ -1,18 +1,18 @@
 #include "Utils/MRLogger.h"
 
-using namespace std;
+
 
 #include <cassert>
 namespace minerule {
 
-  const string MRLogger::START_SEPARATOR="+";
-  const string MRLogger::CONT_SEPARATOR="|";
-  const string MRLogger::END_SEPARATOR="`--";
-  ofstream MRLogger::nullLog("/dev/null");
+  const std::string MRLogger::START_SEPARATOR="+";
+  const std::string MRLogger::CONT_SEPARATOR="|";
+  const std::string MRLogger::END_SEPARATOR="`--";
+  std::ofstream MRLogger::nullLog("/dev/null");
 
 
-  string MRLogger::evalTimeMemInfo(const LogInfo& li) const {
-    stringstream ss;
+ std::string MRLogger::evalTimeMemInfo(const LogInfo& li) const {
+    std::stringstream ss;
     ss<<"[cpu:"
       << getCpuSecs(li,logStack.front())
       <<" d-cpu:"
@@ -49,12 +49,12 @@ namespace minerule {
     updateIndentString();
   }
 
-  MRLogger::MRLogger(ostream& ostr) : indentInset("  "), os(NULL), logLevel(100), curLogLevel(0) {
+  MRLogger::MRLogger(std::ostream& ostr) : indentInset("  "), os(NULL), logLevel(100), curLogLevel(0) {
     setStream(ostr);
     updateIndentString();
   }
 
-  void MRLogger::setStream(ostream& ostr)  {
+  void MRLogger::setStream(std::ostream& ostr)  {
     os=&ostr;
   };
 
@@ -72,16 +72,16 @@ namespace minerule {
     }
   }
 
-  void MRLogger::push(const string& descr) {
+  void MRLogger::push(const std::string& descr) {
     curLogLevel++;
     if(curLogLevel>logLevel)
       return; 
 
     assert(os!=NULL);
     indent();
-    *os<<endl;
+    *os<<std::endl;
 
-    string insetSep;
+   std::string insetSep;
     if(logStack.empty())
       insetSep="";
     else
@@ -91,7 +91,7 @@ namespace minerule {
     logStack.push_back(li);
 
     indent();
-    *os<<insetSep<<"+"<<descr<<endl;
+    *os<<insetSep<<"+"<<descr<<std::endl;
     updateIndentString();
   }
 
@@ -107,19 +107,19 @@ namespace minerule {
     assert(os!=NULL);
     assert(!logStack.empty());
     LogInfo curInfo("");
-    string timeMemInfo=evalTimeMemInfo(curInfo);
+   std::string timeMemInfo=evalTimeMemInfo(curInfo);
 
     logStack.pop_back();
     updateIndentString();
     indent();
 
     if(!logStack.empty())
-      *os<<indentInset<<END_SEPARATOR<<timeMemInfo<<endl;
+      *os<<indentInset<<END_SEPARATOR<<timeMemInfo<<std::endl;
     else
-      *os<<END_SEPARATOR<<timeMemInfo<<endl;
+      *os<<END_SEPARATOR<<timeMemInfo<<std::endl;
 
     indent();
-    *os<<endl;
+    *os<<std::endl;
   }
 
 

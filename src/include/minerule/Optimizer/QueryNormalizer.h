@@ -49,9 +49,9 @@ namespace minerule {
       public:
 	OptimizerCatalogue::OrderType  order;
       
-	string colName;        // the column name
-	string value;          // the adjoint value
-	string op;             // the operator involved
+std::string colName;        // the column name
+std::string value;          // the adjoint value
+std::string op;             // the operator involved
 
 	Elem() {
 	}
@@ -64,7 +64,7 @@ namespace minerule {
       }; // class Elem
 
       OptimizerCatalogue::KeyCols        refKey;
-      vector<Elem>   elems;
+      std::vector<Elem>   elems;
       
       SubstEntryHead() {
       }
@@ -78,8 +78,8 @@ namespace minerule {
       }
     };
   
-    typedef set<SubstEntryHead> HeadInfo;
-    typedef set<SubstEntryBody> BodyInfo;
+    typedef std::set<SubstEntryHead> HeadInfo;
+    typedef std::set<SubstEntryBody> BodyInfo;
   private:
        /* ---------- Member Fields ---------- */
     const OptimizerCatalogue& optimizerCatalogue;
@@ -88,7 +88,7 @@ namespace minerule {
 
 
     /* ---------- Private Methods ---------- */
-    string reverseOperator( string op, bool doReverse=true ) const;
+   std::string reverseOperator(std::string op, bool doReverse=true ) const;
 
     void substituteInPredicate( 
 		list_OR_node* cond,
@@ -112,14 +112,14 @@ namespace minerule {
 			    const OptimizerCatalogue::OrderType order,
 			    BodyInfo& bodies,
 			    HeadInfo& heads,
-			    const string& prefix) const;
+			    const std::string& prefix) const;
 
 
     void setSimplePred(simple_pred* pred,
-		       string colName,
-		       string op,
+		      std::string colName,
+		      std::string op,
 		       SQLUtils::Type,
-		       const string& ) const;
+		       const std::string& ) const;
 
     void removeAndNodes( BodyInfo& sInfo ) const;
     void addAndNode(list_AND_node*& andList,
@@ -130,9 +130,9 @@ namespace minerule {
 			   const std::string& prefix) const;
 
     void addNewCondition( list_AND_node*& andList,
-			  const string& aiVal,
-			  const vector<SubstEntryHead::Elem>& elems,
-			  const string& prefix) const;
+			  const std::string& aiVal,
+			  const std::vector<SubstEntryHead::Elem>& elems,
+			  const std::string& prefix) const;
 
     void substituteInAttrList( 
                 ParsedMinerule::ListType& l,
@@ -147,10 +147,10 @@ namespace minerule {
     void relaxOperatorInPred(simple_pred* pred) 
       throw(MineruleException,odbc::SQLException);
 
-    string getRelaxedValue(const string& tabSource,
-			   const string& attr,
-			   const string& op,
-			   const string& value) 
+   std::string getRelaxedValue(const std::string& tabSource,
+			   const std::string& attr,
+			   const std::string& op,
+			   const std::string& value) 
       throw(MineruleException,odbc::SQLException);
 
     void relaxOperators(list_OR_node* cond) 

@@ -9,7 +9,7 @@
 namespace minerule {
   
   class InvalidConfigurationFilter {
-    const string& tab_source;
+    const std::string& tab_source;
     list_AND_node* preds;
     IntervalChecker ic;
   public:

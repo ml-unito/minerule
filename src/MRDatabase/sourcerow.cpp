@@ -76,13 +76,13 @@ HeadBodySourceRow::init(odbc::ResultSet* resultSet,
  * printing routines *
  * ***************** */
 
-ostream& 
-operator<<(ostream& os, const HeadBodySourceRow& sr) {
-  os << "groupBody:" << sr.getGroupBody() << endl;
-  os << " clusterBody:" << sr.getClusterBody() << endl;
-  os << " body:" << sr.getBody() << endl;
-  os << " clusterHead:" << sr.getClusterHead() << endl;
-  os << " head:" << sr.getHead() << endl;
+std::ostream& 
+operator<<(std::ostream& os, const HeadBodySourceRow& sr) {
+  os << "groupBody:" << sr.getGroupBody() << std::endl;
+  os << " clusterBody:" << sr.getClusterBody() << std::endl;
+  os << " body:" << sr.getBody() << std::endl;
+  os << " clusterHead:" << sr.getClusterHead() << std::endl;
+  os << " head:" << sr.getHead() << std::endl;
 
   return os;
 }  

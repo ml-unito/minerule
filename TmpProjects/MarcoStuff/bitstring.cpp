@@ -252,7 +252,7 @@ return !operator==(bs);
 **************************************************************************/
 void BitString::_Xran(int i)
 {
-//cerr << "BitString index out of range: " << i << endl;
+//std::cerr << "BitString index out of range: " << i << endl;
 int newNw = i/Nb;
 for (int j=Nw+1; j<=newNw; j++) bits.insert(bits.end(),(Bits)0);
 n = i+1; Nw = newNw;
@@ -293,7 +293,7 @@ return k<0;
 }
 
 /*************************************************************************
-  ostream BitString::operator<<
+  std::ostream BitString::operator<<
 
 **************************************************************************/
 ostream& operator<<(ostream& out, const BitString& bs)
@@ -334,7 +334,7 @@ void BitString::serialize(char* serialized,int* start)
 {int i;
 
  memcpy(&(serialized[(*start)]),&Nw,sizeof(int));
-	//cout<<int(serialized[(*start)])<<" "<<endl;
+	//cout<<int(serialized[(*start)])<<" "<<std::endl;
  //cout<<"\"";
  (*start) += sizeof(int);
  memcpy(&(serialized[(*start)]),&n,sizeof(int));
@@ -352,7 +352,7 @@ void BitString::unserialize(char* serialized,int* start)
  char tmpchar;
 
  memcpy(&Nw,&(serialized[(*start)]),sizeof(int));
-	//cout<<int(serialized[(*start)])<<" "<<endl;
+	//cout<<int(serialized[(*start)])<<" "<<std::endl;
  //cout<<"\"";
  (*start) += sizeof(int);
  memcpy(&n,&(serialized[(*start)]),sizeof(int));

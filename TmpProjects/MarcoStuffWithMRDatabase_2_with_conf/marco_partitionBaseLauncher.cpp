@@ -100,10 +100,10 @@ readSourceTable(
 
       if(rowCount>=allowedRowRead ) {
 	readMoreGroupsForThisPartition= false;
-	//	cout << "NON INSERISCO" << gidB.c_str() << " - " << itemBody.c_str() << endl;
+	//	std::cout << "NON INSERISCO" << gidB.c_str() << " - " << itemBody.c_str() << endl;
       } else {
 	totGroups++;
-	//	cout << "Inserisco:" << gidB.c_str() << " - " << itemBody.c_str() << endl;
+	//	std::cout << "Inserisco:" << gidB.c_str() << " - " << itemBody.c_str() << endl;
         if(!conditionalInsert)
 	  kItem.setItemSet(itemBody,gidB);
 	else
@@ -177,7 +177,7 @@ void partitionWithoutClusters( const minerule::AlgorithmsOptions& options  )
 // parametri da passare.
   support= options.getSupport()*100;
   conf=    options.getConfidence()*100;
-  //  cout <<endl<<"+ Supporto: "<<support<<"% Confidenza: "<< conf<<"%"<<endl;
+  //  cout <<std::endl<<"+ Supporto: "<<support<<"% Confidenza: "<< conf<<"%"<<std::endl;
 
   // Apertura della connessione e cancellazione db_temporanei
   coreConn.useConnection(connection);
@@ -274,7 +274,7 @@ void partitionWithoutClusters( const minerule::AlgorithmsOptions& options  )
 		    << endl;
 	isPart++;
  }
- MRLog(logId) << "Done (reading database - second phase)"<<endl;
+ MRLog(logId) << "Done (reading database - second phase)"<<std::endl;
 
 
  // delete result;
@@ -298,5 +298,5 @@ void partitionWithoutClusters( const minerule::AlgorithmsOptions& options  )
  
  MRLog(logId) << "Extracting rules..." << endl;
  kItem.extractRule(coreConn, totGroups, kItem);
- MRLog(logId) << "Done! (extracting rules)"<<endl;
+ MRLog(logId) << "Done! (extracting rules)"<<std::endl;
 }

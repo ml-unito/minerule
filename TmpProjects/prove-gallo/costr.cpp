@@ -53,7 +53,7 @@ void ProvaHead(Head* h){
  Head::RowContainer::iterator it;
  it=h->NR->begin();
  while (it!=h->NR->end()){
- cout<<it->first<<endl;
+ cout<<it->first<<std::endl;
  it++;
  }
 }
@@ -113,8 +113,8 @@ main(int argc, char** argv) {
     delete b2;
     delete r;
     
-    cout<<"c'e ancora qualche body allocato? "<<Body::countb<<endl;
-    cout<<"c'e ancora qualche head allocata? "<<Head::counth<<endl;
+    cout<<"c'e ancora qualche body allocato? "<<Body::countb<<std::endl;
+    cout<<"c'e ancora qualche head allocata? "<<Head::counth<<std::endl;
 
     MRErr() << "Done!" << endl;
     MRLogPop();

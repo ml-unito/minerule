@@ -12,7 +12,7 @@ namespace minerule {
 			      "ResultCombinator::execute called, but the "
 			      "optimized minerule is NULL");
 
-    const vector<ParsedMinerule>& minerules=
+    const std::vector<ParsedMinerule>& minerules=
       minerule->getOptimizationInfo().minerulesToCombine;
     const GAQueryCombinator::QueryOrList& formula = 
       minerule->getOptimizationInfo().combinationFormula;
@@ -25,7 +25,7 @@ namespace minerule {
 	 OrIt++) {
       MRLogPusher log2("Analyzing disjunct");
       if(OrIt!=formula.begin()) {
-	MRLog()<<"Analyzing next conjunct"<<endl;
+	MRLog()<<"Analyzing next conjunct"<<std::endl;
       }
 
       GAQueryCombinator::QueryAndList::const_iterator AndIt =
@@ -41,9 +41,9 @@ namespace minerule {
       MRLogPop();
 
       MRLog() << "Current conjunct current result set size:" 
-	      << curConj.size() << endl;
+	      << curConj.size() << std::endl;
 
-      MRLog() << "Intersecting with other queries:" << endl;
+      MRLog() << "Intersecting with other queries:" << std::endl;
       for( ;  AndIt!=OrIt->end();  AndIt++) {
 	MRLogPusher log3("Analyzing conjunct");
 
@@ -57,14 +57,14 @@ namespace minerule {
 	MRLogPop();
 
 	MRLog() << "Current conjunct current result set size:" 
-		<< curConj.size() << endl;
+		<< curConj.size() << std::endl;
       }
 
       MRLogPush("Merging...");
       result.inplace_union(curConj);
       MRLogPop();
 
-      MRLog() << "Current result set size:"  << result.size() << endl;
+      MRLog() << "Current result set size:"  << result.size() << std::endl;
     }
     
     result.save(minerule->getParsedMinerule());

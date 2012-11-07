@@ -14,7 +14,7 @@
 #include "Utils/MineruleOptions.h"
 #include "Optimizer/OptimizerCatalogue.h"
 
-using namespace std;
+
 using namespace minerule;
 
 typedef enum {
@@ -27,12 +27,12 @@ typedef enum {
   ERROR_EXCEPTION_THROWN
 } MRCResults;
 
-class MRCException : public exception {
+class MRCException : public std::exception {
   MRCResults result;
-  string errmsg;
+ std::string errmsg;
 public:
   MRCException(MRCResults res,
-	       const string& msg) :  result(res),errmsg(msg) { }
+	       const std::string& msg) :  result(res),errmsg(msg) { }
 
   virtual ~MRCException() throw() {};
 
@@ -74,9 +74,9 @@ public:
 protected:
   Command command;
 
-  string searchParam[LastParam];
+ std::string searchParam[LastParam];
   ListFormat listFormat;
-  string sepString; // the string that should be used to separate output elements
+ std::string sepString; // thestd::string that should be used to separate output elements
 public:
 
   ProgramOptions(): 
@@ -100,7 +100,7 @@ public:
 	break;
       default:
 	throw MRCException(ERROR_OPTION_PARSING,
-			   string("Unknown flag:")+format[i]);
+			   std::string("Unknown flag:")+format[i]);
       }
     }
   }
@@ -132,19 +132,19 @@ public:
     command = DeleteQry;
   }
 
-  void setSearchParam(QryParams qryParam, const string& param) {
+  void setSearchParam(QryParams qryParam, const std::string& param) {
     searchParam[qryParam]=param;
   }
 
-  const string& getSearchParam(QryParams qryParam) const {
+  const std::string& getSearchParam(QryParams qryParam) const {
     return searchParam[qryParam];
   }
 
-  void setSepString(const string& s) {
+  void setSepString(const std::string& s) {
     sepString=s;
   }
 
-  const string& getSepString() const {
+  const std::string& getSepString() const {
     return sepString;
   }
 
@@ -162,7 +162,7 @@ public:
 
 
 bool
-fileExists(const string& filename) {
+fileExists(const std::string& filename) {
   struct stat st;
   if( stat(filename.c_str(),&st)==0 && S_ISREG(st.st_mode) ) {
     return true;
@@ -173,34 +173,34 @@ fileExists(const string& filename) {
 
 void
 printHelp(int argc, char** argv) {
-  cout << "Usage:" << endl
-       << "   " << argv[0] << " [-h] [-s <sepstring>] [-f <optionfile>] " << endl
+  std::cout << "Usage:" << std::endl
+       << "   " << argv[0] << " [-h] [-s <sepstring>] [-f <optionfile>] " << std::endl
        << "           [-n <queryname>] [-l] [-F formatSpecs] [-d <queryname>]"
-       << endl
-       << "The program allow to inspect the MR catalogue" << endl
-       << "-h - Output this message and returns NOTHING_TO_DO" << endl
-       << "-s - Change the string used to separate different elements in" << endl
-       << "     the output. The default is ' '" << endl
-       << "-n - Look in the catalogue for the specified query" << endl
-       << "     it returns QUERY_NAME_FOUND, or QUERY_NAME_NOT_FOUND" << endl
-       << "     accordingly to whether the query could be found."<<endl 
-       << "-l - Print the list of already executed queries, returns" << endl
-       << "     SUCCESS upon completion" << endl
-       << "-d - Delete the given minerule from the system (notice that" << endl
-       << "     the safety options in the option file must be setted" << endl
-       << "     in such a way to allow the deletion. " << endl
-       << "-F - Format specifiers for printing the list of queries (-l)" <<endl
-       << "     Valid specifiers: s - Print the size of the result set" << endl
-       << "                       t - Print the text of the original mr" <<endl
-       << "                       r - Print the name of the result set" << endl
-       << "     the default is '', i.e.: print onlty the qry name" << endl
-       << "Return values:" << endl
-       << "      SUCCESS = " << SUCCESS << endl
-       << "      NOTHING_TO_DO = " << NOTHING_TO_DO << endl
-       << "      QUERY_NAME_FOUND = " << QUERY_NAME_FOUND << endl
-       << "      QUERY_NAME_NOT_FOUND = " << QUERY_NAME_NOT_FOUND << endl
-       << "      ERROR_OPTION_PARSING = " << ERROR_OPTION_PARSING << endl
-       << "      ERROR_CANNOT_OPEN_OPTION_FILE = " << ERROR_CANNOT_OPEN_OPTION_FILE <<endl;
+       << std::endl
+       << "The program allow to inspect the MR catalogue" << std::endl
+       << "-h - Output this message and returns NOTHING_TO_DO" << std::endl
+       << "-s - Change thestd::string used to separate different elements in" << std::endl
+       << "     the output. The default is ' '" << std::endl
+       << "-n - Look in the catalogue for the specified query" << std::endl
+       << "     it returns QUERY_NAME_FOUND, or QUERY_NAME_NOT_FOUND" << std::endl
+       << "     accordingly to whether the query could be found."<<std::endl 
+       << "-l - Print the list of already executed queries, returns" << std::endl
+       << "     SUCCESS upon completion" << std::endl
+       << "-d - Delete the given minerule from the system (notice that" << std::endl
+       << "     the safety options in the option file must be setted" << std::endl
+       << "     in such a way to allow the deletion. " << std::endl
+       << "-F - Format specifiers for printing the list of queries (-l)" <<std::endl
+       << "     Valid specifiers: s - Print the size of the result set" << std::endl
+       << "                       t - Print the text of the original mr" <<std::endl
+       << "                       r - Print the name of the result set" << std::endl
+       << "     the default is '', i.e.: print onlty the qry name" << std::endl
+       << "Return values:" << std::endl
+       << "      SUCCESS = " << SUCCESS << std::endl
+       << "      NOTHING_TO_DO = " << NOTHING_TO_DO << std::endl
+       << "      QUERY_NAME_FOUND = " << QUERY_NAME_FOUND << std::endl
+       << "      QUERY_NAME_NOT_FOUND = " << QUERY_NAME_NOT_FOUND << std::endl
+       << "      ERROR_OPTION_PARSING = " << ERROR_OPTION_PARSING << std::endl
+       << "      ERROR_CANNOT_OPEN_OPTION_FILE = " << ERROR_CANNOT_OPEN_OPTION_FILE <<std::endl;
 }
 
 void 
@@ -209,7 +209,7 @@ doLoadOptions(const char* fname, MineruleOptions& opt) {
   if( fileExists(fname) ) {
     opt.readFromFile(fname);
   } else {
-    string errstr;
+   std::string errstr;
     if(errno==0) {
       errstr = "Not a regular file!";
     } else {
@@ -217,13 +217,13 @@ doLoadOptions(const char* fname, MineruleOptions& opt) {
     }
     
     throw MRCException(ERROR_CANNOT_OPEN_OPTION_FILE,
-		       string("Could not open file:") + fname +
+		       std::string("Could not open file:") + fname +
 		       ". The reason is:" + errstr);
   }
 }
 
 void printVersion() {
-  cout << "MRCatalogue v:" << MR_VERSION << endl;
+  std::cout << "MRCatalogue v:" << MR_VERSION << std::endl;
 }
 
 void
@@ -275,7 +275,7 @@ parseOptions(int argc, char** argv,
   }
 }
 
-void printQueryInfo(ostream& out, 
+void printQueryInfo(std::ostream& out, 
 		    const CatalogueInfo& info,
 		    const ProgramOptions& options) {
   out << info.qryName;
@@ -291,20 +291,20 @@ void printQueryInfo(ostream& out,
     out << options.getSepString() << info.qryText;
   }
   
-  out << endl;
+  out << std::endl;
 }
 
 
 int checkQueryName(const ProgramOptions& options) {
-  const string& tablename = 
+  const std::string& tablename = 
     options.getSearchParam(ProgramOptions::QryName);
 
   try {
     CatalogueInfo info;
     OptimizerCatalogue::getMRQueryInfo(tablename,info);
-    printQueryInfo(cout, info, options);
+    printQueryInfo(std::cout, info, options);
   } catch (MineruleException& mr) {
-    cout << "The query you specified is NOT present in the catalogue." << endl;
+    std::cout << "The query you specified is NOT present in the catalogue." << std::endl;
     return QUERY_NAME_NOT_FOUND;
   }
 
@@ -314,11 +314,11 @@ int checkQueryName(const ProgramOptions& options) {
 
 
 void printMRQueryList(const ProgramOptions& options) {
-  vector<CatalogueInfo> mrqlist;
+  std::vector<CatalogueInfo> mrqlist;
   OptimizerCatalogue::getMRQueryInfos(mrqlist);
-  vector<CatalogueInfo>::const_iterator it;
+  std::vector<CatalogueInfo>::const_iterator it;
   for(it=mrqlist.begin(); it!=mrqlist.end(); it++) {
-    printQueryInfo(cout, *it, options);
+    printQueryInfo(std::cout, *it, options);
   }
 }
 
@@ -366,10 +366,10 @@ main(int argc, char** argv) {
   } catch (MRCException& e) {
     resultVal = e.getResultID();
     if(resultVal!=NOTHING_TO_DO)
-      cout << e.what() << endl;
+      std::cout << e.what() << std::endl;
   } catch (std::exception& e) {
-    cout << "An error occurred, the error msg is:" << endl;
-    cout << e.what() << endl;
+    std::cout << "An error occurred, the error msg is:" << std::endl;
+    std::cout << e.what() << std::endl;
     resultVal=ERROR_EXCEPTION_THROWN;
   }
 

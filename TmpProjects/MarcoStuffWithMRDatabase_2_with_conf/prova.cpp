@@ -76,13 +76,13 @@ bool createIndex(char * filename) {
 	 if (typeIsNum) {
     if (gindex->insert((void* )&intItem, sizeof(intItem),
         (void *) &ie, sizeof(ie)) != RCOK) {
-      cerr << "can't insert" << endl;
+      std::cerr << "can't insert" << endl;
     }
 	 }
 	 else {
     //if (gindex->insert((void* )item.c_str(), item.length()+1,
         //(void *) &ie, sizeof(ie)) != RCOK) {
-      //cerr << "can't insert" << endl;
+      //std::cerr << "can't insert" << endl;
   //  }
 	 }
 	 howMany++;
@@ -100,7 +100,7 @@ bool createIndex(char * filename) {
 
 /************************************************/
 
-bool fetchInit(char * idxFileName, set<IndexElem>& groups, void *query){
+bool fetchInit(char * idxFileName, std::set<IndexElem>& groups, void *query){
 
   gist *gindex = new gist;
 
@@ -115,7 +115,7 @@ bool fetchInit(char * idxFileName, set<IndexElem>& groups, void *query){
   gist_cursor_t cursor;
 
   if (gindex->fetch_init(cursor, (const gist_query_t*) query) != RCOK) {
-      cerr << "can't initialize cursor" << endl;
+      std::cerr << "can't initialize cursor" << endl;
       return false;
   }
  // groups.erase(groups.begin(),groups.end());
@@ -132,7 +132,7 @@ bool fetchInit(char * idxFileName, set<IndexElem>& groups, void *query){
       klen = gist_p::max_tup_sz;
       dlen = gist_p::max_tup_sz;
       if (gindex->fetch(cursor, (void *) key, klen, (void *) data, dlen, eof) != RCOK) {
-          cerr << "Can't fetch from cursor" << endl;
+          std::cerr << "Can't fetch from cursor" << endl;
           gindex->close();
 	       return false;
       }
@@ -140,14 +140,14 @@ bool fetchInit(char * idxFileName, set<IndexElem>& groups, void *query){
 			//groups[*(int*)data] = *(int*) data;
 			IndexElem ie((char*)data);
 			groups.insert(ie);
-//		  	cout << *(int*)key << " : " << *(int*)data << endl;
+//		  	std::cout << *(int*)key << " : " << *(int*)data << endl;
 		   howMany++;
 		}
 		} while (!eof);
 
   gindex->close();
   
-		cout << "Size: " << groups.size() << " su " << howMany << endl;
+		std::cout << "Size: " << groups.size() << " su " << howMany << endl;
 //		current = groups.begin();
   return true;
 }
@@ -194,11 +194,11 @@ int main(int argc, char *argv[]) {
   bt_query_t::bt_oper oper = bt_query_t::bt_nooper;
 
   if (argc > 5 || argc < 2) {
-      cerr << "Usage: marcocore {true|false} [[bt_operator] key]" << endl;
-      cerr << "Usage example: marcocore true" << endl;
-      cerr << "Usage example: marcocore true nooper" << endl;
-      cerr << "Usage example: marcocore false lt 1000" << endl;
-      cerr << "Usage example: marcocore true betw 200 500" << endl;
+      std::cerr << "Usage: marcocore {true|false} [[bt_operator] key]" << endl;
+      std::cerr << "Usage example: marcocore true" << endl;
+      std::cerr << "Usage example: marcocore true nooper" << endl;
+      std::cerr << "Usage example: marcocore false lt 1000" << endl;
+      std::cerr << "Usage example: marcocore true betw 200 500" << endl;
      return -1;
   }
 
@@ -273,10 +273,10 @@ int main(int argc, char *argv[]) {
   try {    
     partitionWithClusters( options );
   } catch (odbc::SQLException e) {
-    cerr << e.getMessage() << endl;
+    std::cerr << e.getMessage() << endl;
     throw;
   } catch (std::exception e) {
-    cerr << e.what() << endl;
+    std::cerr << e.what() << endl;
     throw;
   }
   long elapsed = time(NULL)-start;
@@ -297,7 +297,7 @@ int main(int argc, char *argv[]) {
 */
 //  createIndex("Sales.db");
 
-  set<IndexElem> groups;
+  std::set<IndexElem> groups;
 
   ifstream in("Sales.db");
   SalesRow row;
@@ -308,7 +308,7 @@ int main(int argc, char *argv[]) {
   if (!strcmp(argv[1],"true")) {
 	MRLog(logId) << "Starting using index" << endl;
 	fetchInit("Sales.db.PriceIdx",groups,query1);
-	for (set<IndexElem>::iterator i = groups.begin(); i != groups.end(); i++) {
+	for (std::set<IndexElem>::iterator i = groups.begin(); i != groups.end(); i++) {
 //		in.seekg((*i).rowPos);
 //		in >> row;
 		howMany ++;
@@ -317,7 +317,7 @@ int main(int argc, char *argv[]) {
   } else {
 	MRLog(logId) << "Starting without index" << endl;
 	fetchInit("Sales.db.gidIdx",groups,query);
-	for (set<IndexElem>::iterator i = groups.begin(); i != groups.end(); i++) {
+	for (std::set<IndexElem>::iterator i = groups.begin(); i != groups.end(); i++) {
 		in.seekg((*i).rowPos);
 		in >> row;
 		if (cf->compare(row.price)) howMany ++;

@@ -7,7 +7,7 @@
 #include "Algorithms/FSTree.h"
 
 
-using namespace std;
+
 
 namespace minerule {
 
@@ -32,7 +32,7 @@ void FSTree::insertTree(FSTreeNode* r, FSTreeSequence* t){
 void FSTree::createLinkNSTable(){
   //COSTRUISCO MAPPA DEI LINK FREQUENTI E DEI LINK NON FREQUENTI RISPETTO ALLA THRESHOLD
   //std::vector<sequence*>::iterator it;
-  map<FSTreeSequence,int,FSTreeSequence::less_sequence>::iterator it;
+  std::map<FSTreeSequence,int,FSTreeSequence::less_sequence>::iterator it;
   int count;	
   for (it=link_S->begin();it!=link_S->end();it++){
 			
@@ -58,8 +58,8 @@ void FSTree::createLinkSTable(odbc::ResultSet* rs, const HeadBodySourceRowDescri
     //canRead=rs->next();
   }
 		
-  MRLog() << link_S->size() <<" bigrams have been read." << endl;
-  std::cout<< link_S->size()<<" bigrams have been read." << endl;
+  MRLog() << link_S->size() <<" bigrams have been read." << std::endl;
+  std::cout<< link_S->size()<<" bigrams have been read." << std::endl;
   delete input;
 }
 
@@ -73,7 +73,7 @@ void FSTree::insertLink(FSTreeSequence* s){
 }
 
 void FSTree::construct_Tree(odbc::ResultSet* rs, const HeadBodySourceRowDescription& rowDes){
-  vector<FSTreeSequence*>* collezione;
+  std::vector<FSTreeSequence*>* collezione;
   FSTreeSequence* seq;
   size_t num=0;
   rs->next();
@@ -96,10 +96,9 @@ void FSTree::construct_Tree(odbc::ResultSet* rs, const HeadBodySourceRowDescript
     delete seq;
   }
 }
-
-vector<FSTreeSequence* >* FSTree::fraziona(FSTreeSequence *s){
-  vector<int> vec;
-  vector<FSTreeSequence*>* res = new vector<FSTreeSequence*>();
+ std::vector<FSTreeSequence* >* FSTree::fraziona(FSTreeSequence *s){
+  std::vector<int> vec;
+  std::vector<FSTreeSequence*>* res = new std::vector<FSTreeSequence*>();
 		
 		
   //creo un vector con i riferimenti alla posizione in cui ho trovato l'inizio delle
@@ -205,7 +204,7 @@ void FSTree::addResult(FSTreeNode* n){
 void FSTree::stampa(FSTreeNode* n){
   if (n!=root)
     std::cout<<n->getLabel()<<":"<<n->getCount()<<" ";
-  vector<FSTreeNode*>* temp= n->getChild();
+  std::vector<FSTreeNode*>* temp= n->getChild();
   if (temp->size()==0)//se non ha figli stampo un \n e poi esco dal metodo
     std::cout<<std::endl;
   else {  
@@ -226,13 +225,13 @@ void FSTree::addResults(std::vector<FSTreeNode*>* vec){
 void FSTree::mine(){
   //threshold=tsl*num/100;
 		
-  //vector<sequence*>::iterator m_it;
-  map<FSTreeSequence, vector<FSTreeNode*>*, FSTreeSequence::less_sequence>::iterator m_it;
+  // std::vector<sequence*>::iterator m_it;
+  std::map<FSTreeSequence, std::vector<FSTreeNode*>*, FSTreeSequence::less_sequence>::iterator m_it;
   //itero sulla mappa che contiene le sequenze lunghe 2 e i puntatori alle sequenze
-  cout<<"prima del ciclo di mine"<<endl;
-  cout<<"nella m_list ci sono "<<m_list.size()<<" sequenze"<<endl;
-  //cout<<"nella link_NS ci sono "<<link_NS->size()<<" sequenze"<<endl;
-  cout<<"nella link_S ci sono "<<link_S->size()<<" sequenze"<<endl;
+  std::cout<<"prima del ciclo di mine"<<std::endl;
+  std::cout<<"nella m_list ci sono "<<m_list.size()<<" sequenze"<<std::endl;
+  //cout<<"nella link_NS ci sono "<<link_NS->size()<<" sequenze"<<std::endl;
+  std::cout<<"nella link_S ci sono "<<link_S->size()<<" sequenze"<<std::endl;
 		
   for (m_it=m_list.begin();m_it!=m_list.end();m_it++){			
     //addResults(m_list->getList(*(*m_it)));
@@ -247,17 +246,17 @@ void FSTree::mine(){
 		
   //sequenceCount* t= new sequenceCount(*result);
   /*
-    map<sequence,int,sequence::less_sequence>* t = new map<sequence,int,sequence::less_sequence>(*result); 
+    std::map<sequence,int,sequence::less_sequence>* t = new std::map<sequence,int,sequence::less_sequence>(*result); 
     for (res_it=t->begin();res_it!=t->end();res_it++){
     count=(*res_it).second;
     if (count>=threshold){
     sequence temp=(*res_it).first;
     temp.stampa();
-    cout<<": "<<count<<std::endl;
+    std::cout<<": "<<count<<std::endl;
     }
     }
     delete t;*/
-  std::cout<<"threshold: "<<threshold<<endl;
+  std::cout<<"threshold: "<<threshold<<std::endl;
 }
 
 //aggiungo la sequenza alla lista delle sequenze lunghe 2
@@ -275,7 +274,7 @@ void FSTree::addList(FSTreeNode* father, FSTreeNode* children){
   // inserendo il riferimento al dodo
   //m_list->add(m_string,children);
   if (m_list[*m_string]==0)
-    m_list[*m_string]=new vector<FSTreeNode*>();
+    m_list[*m_string]=new std::vector<FSTreeNode*>();
   (m_list[*m_string])->push_back(children);
   delete m_string;
 }
@@ -302,12 +301,12 @@ FSTreeNode* FSTree::appendChild(FSTreeNode* r, const ItemType& t){
     n_nodi++;
     children->setParent(r);
     //aggiungo children ai figli di r
-    vector<FSTreeNode*>* temp=r->getChild();
+    std::vector<FSTreeNode*>* temp=r->getChild();
     temp->push_back(children);
 				
     children->setCount(children->getCount()+1);
     /*formo una sequenza e aggiungo la sequenza
-      alla lista che attraversa l'albero e che ha come riferimento iniziale la mappa
+      alla lista che attraversa l'albero e che ha come riferimento iniziale la std::mappa
       il metodo addList controlla che non si formino sequenze lunghe uno e controlla anche
       quando si arriva alla radice
     */
@@ -328,9 +327,9 @@ FSTreeNode* FSTree::appendChild(FSTreeNode* r, const ItemType& t){
 	
 		
 FSTree::~FSTree(){
-  //cout<<"sono nel distruttore di FSTree"<<endl;
+  //cout<<"sono nel distruttore di FSTree"<<std::endl;
   delete root;
-  //	cout<<"esco dal distruttore di FSTree"<<endl;
+  //	std::cout<<"esco dal distruttore di FSTree"<<std::endl;
   delete link_NS;
   delete link_S;
 		
@@ -348,9 +347,9 @@ double FSTree::getThreshold(){
 
 	 
 map<FSTreeSequence,int,FSTreeSequence::less_sequence>* FSTree::getResult(){
-  map<FSTreeSequence,int,FSTreeSequence::less_sequence>::iterator res_it;
-  map<FSTreeSequence,int,FSTreeSequence::less_sequence> t(*result);
-  map<FSTreeSequence,int,FSTreeSequence::less_sequence>* t2 = new  map<FSTreeSequence,int,FSTreeSequence::less_sequence>(); 
+  std::map<FSTreeSequence,int,FSTreeSequence::less_sequence>::iterator res_it;
+  std::map<FSTreeSequence,int,FSTreeSequence::less_sequence> t(*result);
+  std::map<FSTreeSequence,int,FSTreeSequence::less_sequence>* t2 = new  std::map<FSTreeSequence,int,FSTreeSequence::less_sequence>(); 
   int count;
   for (res_it=t.begin();res_it!=t.end();res_it++){
     count=(*res_it).second;

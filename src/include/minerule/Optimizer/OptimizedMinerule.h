@@ -4,7 +4,7 @@
 #include "Parsers/ParsedMinerule.h"
 #include "MRDatabase/sourcerow.h"
 #include "Optimizer/GAQueryCombinator.h"
-using namespace std;
+
 
 namespace minerule {
 
@@ -26,7 +26,7 @@ namespace minerule {
 
       // used only in case relationship==Combination, it contains the set of queries
       // which need to be combined in order to form the equivalent one
-      vector<ParsedMinerule> minerulesToCombine; 
+      std::vector<ParsedMinerule> minerulesToCombine; 
       // Specifies how the queries have to be combined
       GAQueryCombinator::QueryOrList combinationFormula;
     };
@@ -52,7 +52,7 @@ namespace minerule {
     void checkForCombinedQueries(  );
 
   public:
-    OptimizedMinerule(const string& minerule_text) {
+    OptimizedMinerule(const std::string& minerule_text) {
       minerule.init(minerule_text);
       optInfo.relationship = None;
     }

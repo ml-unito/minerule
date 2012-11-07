@@ -1,10 +1,10 @@
 %{
-#define YYSTYPE string
+#define YYSTYPE std::string
 
 #include <iostream>
 #include "Utils/OptionParserLib.h"
 
-using namespace std;
+
 using namespace minerule;
 
 extern int yylex();

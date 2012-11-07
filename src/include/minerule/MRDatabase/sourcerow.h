@@ -10,7 +10,7 @@
 #include "sourcerowcommon.h"
 #include "sourcerowattributecollection.h"
 
-using namespace std;
+
 
 namespace minerule {
 
@@ -21,7 +21,7 @@ namespace minerule {
    */
 
 	class HeadBodySourceRow {
-		friend  ostream& operator<<(ostream& os, const HeadBodySourceRow& item);
+		friend  std::ostream& operator<<(std::ostream& os, const HeadBodySourceRow& item);
 	private:
 		SourceRowElement* groupBody;
 		SourceRowElement* clusterBody;
@@ -75,7 +75,7 @@ namespace minerule {
 	};
 
 
-	ostream& operator<<(ostream& os, const HeadBodySourceRow& sr);
+	std::ostream& operator<<(std::ostream& os, const HeadBodySourceRow& sr);
 
 
 }; // END NAMESPACE MINERULE

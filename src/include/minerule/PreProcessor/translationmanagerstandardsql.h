@@ -41,18 +41,18 @@ class TranslationManagerStandardSQL : public TranslationManager {
    * The prefix used to distinguish TranslationManager tables from
    * user ones
    */
-  static const string TM_PREFIX;
+  static conststd::string TM_PREFIX;
   /**
    * The name of the table in the DB that will hold the mappings
    * between original tables and translated ones
    */
-  static const string TABLEDICTIONARY_NAME;
+  static conststd::string TABLEDICTIONARY_NAME;
 
   /**
    * Name of the column of table TABLEDICTIONARY_NAME that holds
    * the orginal table names
    */
-  static const string TABLEDICTIONARY_ORIGINAL_TABLE;
+  static conststd::string TABLEDICTIONARY_ORIGINAL_TABLE;
   /**
    * Max length of a orignal table name
    */
@@ -61,7 +61,7 @@ class TranslationManagerStandardSQL : public TranslationManager {
    * Name of the column of table TABLEDICTIONARY_NAME that holds
    * the translated table names
    */
-  static const string TABLEDICTIONARY_TRANSLATED_TABLE;
+  static conststd::string TABLEDICTIONARY_TRANSLATED_TABLE;
   /**
    * Max length of a translated table name
    */
@@ -90,7 +90,7 @@ class TranslationManagerStandardSQL : public TranslationManager {
    * original state of the DB, the exception will describe the reason
    * of the latter failure.
    */
-  void doTranslateTable(const string& tableName) 
+  void doTranslateTable(const std::string& tableName) 
     const throw(odbc::SQLException);
   
 
@@ -105,10 +105,10 @@ class TranslationManagerStandardSQL : public TranslationManager {
   
 
   /**
-   * Quote the string in input using the sintax prescribed by standard 
+   * Quote thestd::string in input using the sintax prescribed by standard 
    * SQL
    */
-  virtual string quote(const string&) const; 
+  virtualstd::string quote(const std::string&) const; 
 
   /**
    * returns a valid quoted attribute name. Since it
@@ -117,18 +117,18 @@ class TranslationManagerStandardSQL : public TranslationManager {
    * this means that you cannot have column names containing spaces or
    * other special characters.
    */
-  virtual string quoteAttribute(const string&) const;
+  virtualstd::string quoteAttribute(const std::string&) const;
 
   /**
    * Returns the name of the SQL integer type (since dimensions of 
    * integers are not standard, it may be sometime useful to change this
    * value to match some desiderata.
    */
-  virtual string getIntTypeName() const {
-    return string("INTEGER"); 
+  virtualstd::string getIntTypeName() const {
+    return std::string("INTEGER"); 
   }
 
-  void updateTManagerDictionary(const string& table) const throw(odbc::SQLException);
+  void updateTManagerDictionary(const std::string& table) const throw(odbc::SQLException);
 
   /**
    * Builds the translation table for column named rsmd->getColumnName(colPos).
@@ -137,7 +137,7 @@ class TranslationManagerStandardSQL : public TranslationManager {
    */
 
   virtual void createTranslationTableForColumn(
-		 const string& table,
+		 const std::string& table,
 		 int colPos,
 		 odbc::ResultSetMetaData& ) const throw (odbc::SQLException);
 
@@ -147,7 +147,7 @@ class TranslationManagerStandardSQL : public TranslationManager {
    * means of createTranslationTableForColumn()) and popultate it.
    */
   virtual void doTranslateColumn(
-		     const string& tableName,
+		     const std::string& tableName,
 		     int colPos,
 		     odbc::ResultSetMetaData&
 		     ) const throw(odbc::SQLException);
@@ -156,7 +156,7 @@ class TranslationManagerStandardSQL : public TranslationManager {
    * Drop the table containing the translations for the given column.
    */
   virtual void dropTranslationForColumn(
-		      const string& tableName,
+		      const std::string& tableName,
 		     int colPos,
 		     odbc::ResultSetMetaData&
 		     ) const throw(odbc::SQLException);
@@ -180,22 +180,22 @@ class TranslationManagerStandardSQL : public TranslationManager {
 		       odbc::ResultSetMetaData* rsmd) const;
 
 virtual void buildLists(
-	    const string& table,
+	    const std::string& table,
 	    odbc::ResultSetMetaData* rsmd,
-	    string& newTable,
-	    string& selectList,
-	    string& tableList,
-	    string& conditionList ) const throw (odbc::SQLException);
+	    std::string& newTable,
+	    std::string& selectList,
+	    std::string& tableList,
+	    std::string& conditionList ) const throw (odbc::SQLException);
 
 
 void finalizeTranslationOfTable(
-				const string& table,
+				const std::string& table,
 				odbc::ResultSetMetaData* rsmd
 				) const throw (odbc::SQLException);
 
 
 TranslatedTable* 
-  newAccessPointForTable(const string& tableName) const throw (odbc::SQLException);
+  newAccessPointForTable(const std::string& tableName) const throw (odbc::SQLException);
   // public methods ==========================================================
  public:
   /**
@@ -215,14 +215,14 @@ TranslatedTable*
    * SQL primitives.
    */
   TranslatedTable* 
-    translateTable(const string& tableName) const throw(odbc::SQLException);
+    translateTable(const std::string& tableName) const throw(odbc::SQLException);
 
   /**
    * Implements TranslationTable::alreadyTranslated using only
    * standard SQL primitives.
    */
   pair<bool,string> 
-    alreadyTranslated(const string& tableName) const throw(odbc::SQLException);
+    alreadyTranslated(const std::string& tableName) const throw(odbc::SQLException);
 };
 
 } // namespace minerule

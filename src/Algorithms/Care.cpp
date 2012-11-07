@@ -31,11 +31,11 @@ namespace minerule {
     return startIndex;
   }
 
-  string CARE::buildQry( const std::string& groupAttrStr,
+ std::string CARE::buildQry( const std::string& groupAttrStr,
                          const std::string& attrStr,
                          const std::string& constraints) const {
 
-    return string("SELECT "+groupAttrStr+","+attrStr+" "
+    return std::string("SELECT "+groupAttrStr+","+attrStr+" "
                   "FROM "+minerule.getParsedMinerule().tab_source+" "+
                   (constraints.size()>0 ?
                    "WHERE "+constraints+" " :
@@ -56,18 +56,18 @@ namespace minerule {
     PrepareDataUtils pdu(minerule, *this);
     options.setTotGroups(pdu.evaluateTotGroups());
 
-    MRLog() << "Building db queries" << endl;
-    string bodyConstraints;
-    string headConstraints;
+    MRLog() << "Building db queries" << std::endl;
+   std::string bodyConstraints;
+   std::string headConstraints;
     HeadBodyPredicatesSeparator::separate((minerule.getParsedMinerule().mc!=NULL?
                                            minerule.getParsedMinerule().mc->l_and:
                                            NULL),
                                           bodyConstraints,
                                           headConstraints);
     size_t index;
-    string groupAttr;
-    string bodyAttr;
-    string headAttr;
+   std::string groupAttr;
+   std::string bodyAttr;
+   std::string headAttr;
     index=buildAttrStr(minerule.getParsedMinerule().ga,
                        0,
                        groupAttr,
@@ -82,17 +82,17 @@ namespace minerule {
                  headAttr,
                  rowDes.headElems);
 
-    string bodyQry =
+   std::string bodyQry =
       buildQry( groupAttr,
                 bodyAttr,
                 bodyConstraints);
 
-    string headQry =
+   std::string headQry =
       buildQry( groupAttr,
                 headAttr,
                 headConstraints);
 
-    MRLog() << "Executing queries" << endl;
+    MRLog() << "Executing queries" << std::endl;
 
     coreConn.useConnection(MineruleOptions::getSharedOptions().getOdbc_db().getConnection());
     coreConn.setOutTableName(minerule.getParsedMinerule().tab_result);
@@ -101,8 +101,8 @@ namespace minerule {
     coreConn.create_db_rule(0);
     coreConn.init();
 
-    MRDebug() << "CARE: body queries:" << bodyQry.c_str() << endl;
-    MRDebug() << "CARE: head queries:" << headQry.c_str() << endl;
+    MRDebug() << "CARE: body queries:" << bodyQry.c_str() << std::endl;
+    MRDebug() << "CARE: head queries:" << headQry.c_str() << std::endl;
     statement = coreConn.getConnection()->prepareStatement(bodyQry.c_str());
     stmt1 = coreConn.getConnection()->prepareStatement(headQry.c_str());
   }
@@ -110,7 +110,7 @@ namespace minerule {
   void CARE::execute() {
     MRLogPush("Starting CARE mining algorithm...");
 
-    MRLog() << "Preparing data sources..." << endl;
+    MRLog() << "Preparing data sources..." << std::endl;
     prepareData();
 
     odbc::ResultSet* result, *result1;
@@ -125,7 +125,7 @@ namespace minerule {
     ItemType gid1;
     bool found = Transaction::findGid(gid1,result,rowDes,true);
     found = found && Transaction::findGid(gid1,result1,rowDes,true);
-    //string resultfile = tmpnam(NULL);
+    // std::string resultfile = tmpnam(NULL);
     //BodyMap bodyMap(resultfile.c_str(),1);
     //BodyMap headMap(resultfile.c_str(),1);
     BodyMap bodyMap(coreConn,1);
@@ -150,15 +150,15 @@ namespace minerule {
 		howManyRows += headMap.add(t2,howManyGroups);
 		howManyGroups++;
     }
-    MRLog() << "Total rows: " << howManyRows << endl;
-    MRLog() << "Total groups: " << totalGroups << endl;
+    MRLog() << "Total rows: " << howManyRows << std::endl;
+    MRLog() << "Total groups: " << totalGroups << std::endl;
     MRLogPop();
 
     MRLogPush("Starting rule extraction...");
 
     bodyMap.updateCount();
     headMap.updateCount();
-    MRLog() << "Total bodies before pruning: " << bodyMap.size() << endl;
+    MRLog() << "Total bodies before pruning: " << bodyMap.size() << std::endl;
   //  MRLogPop();
 //    MRLogPush("Starting pruning ...");
     bodyMap.pruneMap(support*totalGroups,true);
@@ -166,8 +166,8 @@ namespace minerule {
 //    MRLogPop();
     bodyMap.setTotalGroups(totalGroups);
 //  MRLogPush("Starting rule extraction ...");
-    vector<BodyMap::iterator> v;
-    vector<BodyMap::iterator> v1;
+    std::vector<BodyMap::iterator> v;
+    std::vector<BodyMap::iterator> v1;
     multimap<int, BodyMap::iterator> temp;
     for (BodyMap::iterator i = bodyMap.begin(); i!=bodyMap.end(); i++)
        	if (!i->second.done) temp.insert(pair<int, BodyMap::iterator>(i->second.count(),i));
@@ -175,22 +175,22 @@ namespace minerule {
         v.insert(v.end(),i->second);
     for (BodyMap::iterator i = headMap.begin(); i!=headMap.end(); i++)
         v1.insert(v1.end(),i);
-    MRLog() << "Total bodies after pruning: " << v.size() << endl;
+    MRLog() << "Total bodies after pruning: " << v.size() << std::endl;
 
     NewRule r;
     NewRuleSet rs1;
     //bodyMap.openOutputFiles();
     int nrules = bodyMap.buildRules(rs1,r,v,v1,maxBody,maxHead,support*totalGroups,-1);
     //bodyMap.closeOutputFiles();
-    MRLog() << "After extracting rules: " << nrules << endl;
+    MRLog() << "After extracting rules: " << nrules << std::endl;
     MRLogPop();
     coreConn.finalize();
 /*
-    string loadstr1 = "LOAD DATA INFILE '";
+   std::string loadstr1 = "LOAD DATA INFILE '";
     loadstr1 += resultfile;
     loadstr1 += ".r' INTO TABLE ";
     loadstr1 += minerule.getParsedMinerule().tab_result;
-    string loadstr2 = "LOAD DATA INFILE '";
+   std::string loadstr2 = "LOAD DATA INFILE '";
     loadstr2 += resultfile;
     loadstr2 += ".hb' INTO TABLE ";
     loadstr2 += minerule.getParsedMinerule().tab_result;

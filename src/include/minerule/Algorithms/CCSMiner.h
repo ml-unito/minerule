@@ -33,9 +33,9 @@ namespace minerule {
       return true;
     }
 
-    bool find(vector<CCSMSequence*>*vec, CCSMSequence* elem); 
+    bool find(std::vector<CCSMSequence*>*vec, CCSMSequence* elem); 
 
-    void combina(vector<CCSMSequence::ResultItems>&, vector<CCSMSequence*>* k2, size_t k, int min_g, int max_g, double threshold, int check);
+    void combina(std::vector<CCSMSequence::ResultItems>&, std::vector<CCSMSequence*>* k2, size_t k, int min_g, int max_g, double threshold, int check);
 
   };
 }

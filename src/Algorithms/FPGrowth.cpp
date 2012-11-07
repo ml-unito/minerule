@@ -14,11 +14,11 @@ void FPGrowth::execute() {
   if( options.getMiningAlgorithmsOptions().getRulesMiningAlgorithms().getFPGrowth().getAlgoType() ==
       MineruleOptions::MiningAlgorithms::RulesMiningAlgorithms::FPGrowth::Original) {
     MRLog() << "This is FPGrowth Mining algorithm - Original version..." 
-	    << endl;
+	    << std::endl;
     origFPGrowth(options);
   } else {
     MRLog() << "This is FPGrowth Mining algorithm - Anticipated pruning version..." 
-	    << endl;
+	    << std::endl;
 
     prepareData();
     newFPGrowth(options);

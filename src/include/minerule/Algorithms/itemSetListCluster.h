@@ -6,7 +6,7 @@
 #include <vector>
 #include "utils.h"
 
-using namespace std;
+
 
 template< class NODETYPE > class itemSetCluster;  // dichiarazione succ.
 
@@ -14,10 +14,10 @@ template <class NODETYPE>
 class itemSetListCluster {
  public:
  itemSetListCluster();
- list<itemSetCluster<NODETYPE>* >* getList(int pos) {return vect[pos];}
+ std::list<itemSetCluster<NODETYPE>* >* getList(int pos) {return vect[pos];}
  void init();
 
- vector<list<itemSetCluster<NODETYPE>* >* > vect;
+ std::vector<std::list<itemSetCluster<NODETYPE>* >* > vect;
  //list<itemSet<NODETYPE>* > operator[ ] (int which);
 
  void print();
@@ -30,7 +30,7 @@ class itemSetListCluster {
 template< class NODETYPE >
 itemSetListCluster< NODETYPE >::itemSetListCluster()
  {
-  //cout<<"costruttore pList"<<endl;
+  //cout<<"costruttore pList"<<std::endl;
  }
 
 
@@ -39,7 +39,7 @@ template< class NODETYPE >
 void itemSetListCluster< NODETYPE >::init()
  {
   
-  list<itemSetCluster<NODETYPE>* >* temp=NULL;
+  std::list<itemSetCluster<NODETYPE>* >* temp=NULL;
 
   vect.push_back(temp);
   vect.push_back(temp);
@@ -51,15 +51,15 @@ void itemSetListCluster< NODETYPE >::init()
 template< class NODETYPE >
 void itemSetListCluster< NODETYPE >::print()
  {
-  cout<<"PRINT Lista ItemSet"<<endl;
-  list<itemSetCluster<NODETYPE>* >* temp;
-  typename vector<list<itemSetCluster<NODETYPE>* >* >::iterator i;
+  std::cout<<"PRINT Lista ItemSet"<<std::endl;
+  std::list<itemSetCluster<NODETYPE>* >* temp;
+  typename std::vector<std::list<itemSetCluster<NODETYPE>* >* >::iterator i;
 
    for ( i=vect.begin(); i!=vect.end(); i++)
      {
-          cout<<"*i -"<<*i<<endl;
+          std::cout<<"*i -"<<*i<<std::endl;
      }
-    cout<<"Fine PRINT itemSet"<<endl;
+    std::cout<<"Fine PRINT itemSet"<<std::endl;
  }
 
 
@@ -67,38 +67,38 @@ void itemSetListCluster< NODETYPE >::print()
 template< class NODETYPE >
 void itemSetListCluster< NODETYPE >::printAddrItemSet()
  {
-  cout<<"PRINT Lista itemset"<<endl;
-  list<itemSetCluster<NODETYPE>* >* temp;
-  typename vector<list<itemSetCluster<NODETYPE>* >* >::iterator i;
-  typename list<itemSetCluster<NODETYPE>* >::iterator j;
+  std::cout<<"PRINT Lista itemset"<<std::endl;
+  std::list<itemSetCluster<NODETYPE>* >* temp;
+  typename std::vector<std::list<itemSetCluster<NODETYPE>* >* >::iterator i;
+  typename std::list<itemSetCluster<NODETYPE>* >::iterator j;
   int lev;
 
   lev=0;
    for ( i=vect.begin(); i!=vect.end(); i++)
      {
-          cout<<lev<<") Indirizzo Lista "<<*i<<endl;
+          std::cout<<lev<<") Indirizzo Lista "<<*i<<std::endl;
           lev++;
           if ((*i)!=NULL)
           {
            for ( j=(*i)->begin(); j!=(*i)->end(); j++)
             {
-          	cout<<"\t"<<"ItemSetCluster : "<<*j<<endl;
-		//cout<<"FOOT"<<*i<<endl;
+          	std::cout<<"\t"<<"ItemSetCluster : "<<*j<<std::endl;
+		//cout<<"FOOT"<<*i<<std::endl;
 
             }
           }
      }
-    cout<<"Fine PRINT Lista itemset"<<endl;
+    std::cout<<"Fine PRINT Lista itemset"<<std::endl;
  }
 
 template< class NODETYPE >
 void itemSetListCluster< NODETYPE >::removeAll() {
-  //cout<<"Remove All"<<endl;
-  //  list<itemSetCluster<NODETYPE>* >* temp;
-  typename vector<list<itemSetCluster<NODETYPE>* >* >::iterator i;
+  //cout<<"Remove All"<<std::endl;
+  //  std::list<itemSetCluster<NODETYPE>* >* temp;
+  typename std::vector<std::list<itemSetCluster<NODETYPE>* >* >::iterator i;
   
   for ( i=vect.begin(); i!=vect.end(); i++)  {
-       //      cout<<"*i -"<<*i<<endl;
+       //      std::cout<<"*i -"<<*i<<std::endl;
        delete (*i);
      }
   vect.clear();

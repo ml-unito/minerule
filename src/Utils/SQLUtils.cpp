@@ -2,7 +2,7 @@
 #include <map>
 #include <memory>
 
-using namespace std;
+
 
 namespace minerule {
 
@@ -41,8 +41,8 @@ namespace minerule {
   std::string SQLUtils::quote(const std::string& str) {
     // We have to substitute each "'" with "''" in str (since
     // in sql values cannot contain single "'".
-    string rest = str;
-    string result="";
+   std::string rest = str;
+   std::string result="";
 
     while( rest!="" ) {
       size_t p = rest.find("'");
@@ -60,7 +60,7 @@ namespace minerule {
   }
 
   void
-  SQLUtils::removeHeadBodyFromAttrName( string& str ) {
+  SQLUtils::removeHeadBodyFromAttrName( std::string& str ) {
     size_t pos;
     if( (pos=str.find("HEAD."))!=str.npos ) {
       str.erase(pos,5);
@@ -78,12 +78,12 @@ namespace minerule {
   SQLUtils::Type
   SQLUtils::getType( odbc::Connection* connection,
 		     const std::string& tabName, 
-		     string colName ) throw (MineruleException) {
+		    std::string colName ) throw (MineruleException) {
     removeHeadBodyFromAttrName(colName);
     
     try {
       odbc::DatabaseMetaData* dbmd = connection->getMetaData();
-      auto_ptr<odbc::ResultSet> rs( dbmd->getColumns(
+      std::auto_ptr<odbc::ResultSet> rs( dbmd->getColumns(
 	   "", // mysql does not support catalogs, what about the others?
 	   "", // no schema patterns
 	   tabName,
@@ -104,32 +104,32 @@ namespace minerule {
   SQLUtils::Type
   SQLUtils::getType( odbc::Connection* connection,
 		     const std::string& tabName, 
-		     string colName ) throw (MineruleException) {
+		    std::string colName ) throw (MineruleException) {
     removeHeadBodyFromAttrName(colName);
     
     try {
-      static map<pair<string,string>, SQLUtils::Type > typeCatalogue;
-      map<pair<string,string>, SQLUtils::Type>::const_iterator it =
-	typeCatalogue.find(pair<string,string>(tabName,colName));
+      static std::map<std::pair<std::string,std::string>, SQLUtils::Type > typeCatalogue;
+      std::map<std::pair<std::string,std::string>, SQLUtils::Type>::const_iterator it =
+	typeCatalogue.find(std::pair<std::string,std::string>(tabName,colName));
 
       if(it!=typeCatalogue.end())
 	return it->second;
 
       // we are now going to load the catalogue
       odbc::DatabaseMetaData* dbmd = connection->getMetaData();
-      auto_ptr<odbc::ResultSet> rs( dbmd->getColumns(
+      std::auto_ptr<odbc::ResultSet> rs( dbmd->getColumns(
 	   "", // mysql does not support catalogs, what about the others?
 	   "", // no schema patterns
 	   tabName,
 	   "")); // this is the matter of the problme, the library bugs when this is not ""
       
       while( rs->next() ) {
-	typeCatalogue[pair<string,string>(tabName, rs->getString(4))]=
+	typeCatalogue[std::pair<std::string,std::string>(tabName, rs->getString(4))]=
 	  getType( (odbc::Types::SQLType) rs->getShort(5) );
       }
 
       // now we should find the columns in the catalogue!
-      it = typeCatalogue.find(pair<string,string>(tabName,colName));
+      it = typeCatalogue.find(std::pair<std::string,std::string>(tabName,colName));
       if(it!=typeCatalogue.end())
 	return it->second;
     } catch (odbc::SQLException& e) {

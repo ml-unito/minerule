@@ -13,10 +13,10 @@ namespace minerule {
   SourceRowAttributeCollection::SourceRowAttributeCollection(
 				     odbc::ResultSetMetaData* rsmd,
 				     odbc::ResultSet* rs,
-				     vector<int> elems) {
+				     std::vector<int> elems) {
     assert(!elems.empty());
     
-    vector<int>::const_iterator it = elems.begin(); 
+    std::vector<int>::const_iterator it = elems.begin(); 
     for(; it!=elems.end(); it++) {
       SourceRowAttribute* attr = SourceRowAttribute::createAttribute(rsmd,rs,*it);
       attributes.push_back(attr);
@@ -50,7 +50,7 @@ namespace minerule {
 	it1++;
       }
     } catch (std::bad_cast& bc) {
-      MRErr() << "Fatal error (SourceRowAttributeCollection::operator=)" << endl;
+      MRErr() << "Fatal error (SourceRowAttributeCollection::operator=)" << std::endl;
       throw;
     }
 
@@ -80,7 +80,7 @@ namespace minerule {
 
     attrString = ""; 
 
-    //  cerr << "in sourcerowattrcollection::c_str collection size:"<< attributes->size() << endl;
+    //  std::cerr << "in sourcerowattrcollection::c_str collection size:"<< attributes->size() << std::endl;
 
     it=attributes.begin();
     if(it!=attributes.end()) {
@@ -102,7 +102,7 @@ namespace minerule {
   std::string 
   SourceRowAttributeCollection::getSQLData() const {
     CollectionType::const_iterator it = attributes.begin();
-    string result = "";
+   std::string result = "";
 
     if(it!=attributes.end()) {
       result+= (*it)->getSQLData();
@@ -227,7 +227,7 @@ namespace minerule {
   
   void 
   SourceRowAttributeCollection::deserialize(std::istream& is) throw(MineruleException) {
-    string buf;
+   std::string buf;
     is >> buf;
     while(buf!="S" && is) {
       if( buf.size()!=1 ) 
@@ -241,7 +241,7 @@ namespace minerule {
       if(element==NULL)
 	throw MineruleException(MR_ERROR_INTERNAL,
 				"Cannot create a source row element identified by:" +
-				string(buf));
+				std::string(buf));
       element->deserialize(is);
 
       attributes.push_back(element);

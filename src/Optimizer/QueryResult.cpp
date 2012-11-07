@@ -32,7 +32,7 @@ QueryResult::Iterator::init( const std::string& rulesTable,
   odbc::Connection* conn =
     MineruleOptions::getSharedOptions().getOdbc_db().getConnection();
   state=conn->createStatement();
-  string query = 
+ std::string query = 
     "SELECT bodyId, headId, supp, con "
     "FROM " + rulesTable + " "
     "WHERE supp>=" + Converter(support).toString() + " AND "
@@ -42,7 +42,7 @@ QueryResult::Iterator::init( const std::string& rulesTable,
 			   "SELECT elem FROM "+rulesTable+"_elems "+
 			   "WHERE id=?");
 
-  MRDebug() << "QueryResult::Iterator, the filter query is:" << query << endl;
+  MRDebug() << "QueryResult::Iterator, the filter query is:" << query << std::endl;
 
   rs_rules = state->executeQuery(query);
 }

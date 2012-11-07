@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include "Utils/MineruleException.h"
 
-using namespace std;
+
 
 namespace minerule {
 

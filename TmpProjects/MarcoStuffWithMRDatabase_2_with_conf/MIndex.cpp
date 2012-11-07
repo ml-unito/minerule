@@ -80,7 +80,7 @@ void MIndex::showIndex() {
   //OPEN TABLE
   gist *gindex = new gist;
 
-  cout <<"GLI ELEMENTI DI " << priIdx << " SONO:" <<endl;
+  cout <<"GLI ELEMENTI DI " << priIdx << " SONO:" <<std::endl;
 
   rc_t status = gindex->open(priIdx.c_str()); //, extension);
 
@@ -95,7 +95,7 @@ void MIndex::showIndex() {
   query = new bt_query_t(bt_query_t::bt_nooper, NULL, NULL);
 
   if (gindex->fetch_init(cursor, query) != RCOK) {
-      cerr << "can't initialize cursor" << endl;
+      std::cerr << "can't initialize cursor" << endl;
       return;
   }
 
@@ -110,13 +110,13 @@ void MIndex::showIndex() {
       klen = gist_p::max_tup_sz;
       dlen = gist_p::max_tup_sz;
       if (gindex->fetch(cursor, (void *) key, klen, (void *) data, dlen, eof) != RCOK) {
-          cerr << "can't fetch from cursor" << endl;
+          std::cerr << "can't fetch from cursor" << endl;
 			break;
       }
       if (eof) break;
 
       cout << (char*) key;
-      cout <<" : " << (char*) data <<endl;
+      cout <<" : " << (char*) data <<std::endl;
       cnt++;
   }
   cout << "Retrieved " << cnt << " items" << endl;
@@ -193,20 +193,20 @@ bool MIndex::createIndex() {
 		 if (i>0) group += ",";
 		 group += rs->getString(groupCol[i]);
 	}
-cerr << group << endl;
+std::cerr << group << endl;
 	if (typeIsNum) intItem = rs->getInt(iColNum);
 	 else item=rs->getString(iColNum);
 
 	 if (typeIsNum) {
     if (gindex->insert((void* )&intItem, sizeof(intItem),
         (void *) group.c_str(), group.length()+1) != RCOK) {
-      cerr << "can't insert" << endl;
+      std::cerr << "can't insert" << endl;
     }
 	 }
 	 else {
     if (gindex->insert((void* )item.c_str(), item.length()+1,
         (void *) group.c_str(), group.length()+1) != RCOK) {
-      cerr << "can't insert" << endl;
+      std::cerr << "can't insert" << endl;
     }
 	 }
 	 howMany++;
@@ -258,7 +258,7 @@ bool MIndex::existIndex() {
 }
 /************************************************/
 
-bool MIndex::fetchInit(set<std::string>& groups, void *query){
+bool MIndex::fetchInit(std::set<std::string>& groups, void *query){
 
   gist *gindex = new gist;
 
@@ -273,7 +273,7 @@ bool MIndex::fetchInit(set<std::string>& groups, void *query){
   gist_cursor_t cursor;
 
   if (gindex->fetch_init(cursor, (const gist_query_t*) query) != RCOK) {
-      cerr << "can't initialize cursor" << endl;
+      std::cerr << "can't initialize cursor" << endl;
       return false;
   }
  // groups.erase(groups.begin(),groups.end());
@@ -290,7 +290,7 @@ bool MIndex::fetchInit(set<std::string>& groups, void *query){
       klen = gist_p::max_tup_sz;
       dlen = gist_p::max_tup_sz;
       if (gindex->fetch(cursor, (void *) key, klen, (void *) data, dlen, eof) != RCOK) {
-          cerr << "Can't fetch from cursor" << endl;
+          std::cerr << "Can't fetch from cursor" << endl;
           gindex->close();
 	       return false;
       }
@@ -298,14 +298,14 @@ bool MIndex::fetchInit(set<std::string>& groups, void *query){
 			//groups[*(int*)data] = *(int*) data;
 			std::string group((char*)data);
 			groups.insert(group);
-//		  	cout << *(int*)key << " : " << *(int*)data << endl;
+//		  	std::cout << *(int*)key << " : " << *(int*)data << endl;
 		   howMany++;
 		}
 		} while (!eof);
 
   gindex->close();
   
-		cout << "Size: " << groups.size() << " su " << howMany << endl;
+		std::cout << "Size: " << groups.size() << " su " << howMany << endl;
 //		current = groups.begin();
   return true;
 }
@@ -337,9 +337,9 @@ MIndexIterator::MIndexIterator(MIndex& mi, bt_query_t * query) {
 }
 
 void MIndexIterator::intersect(MIndex& mi, bt_query_t * query) {
-	set<std::string> miGroups,newGroups;
+	std::set<std::string> miGroups,newGroups;
 	mi.fetchInit(miGroups,query);
-	insert_iterator<set<std::string> > ii(newGroups, newGroups.begin());
+	insert_iterator<std::set<std::string> > ii(newGroups, newGroups.begin());
 	set_intersection(groups.begin(),groups.end(),miGroups.begin(),miGroups.end(),ii);
 	groups = newGroups;
 	cur= groups.begin();
@@ -351,8 +351,8 @@ void MIndexIterator::unify(MIndex& mi, bt_query_t * query) {
 }
 
 void MIndexIterator::unify(MIndexIterator& mii) {
-	set<std::string> newGroups;
-	insert_iterator<set<std::string> > ii(newGroups, newGroups.begin());
+	std::set<std::string> newGroups;
+	insert_iterator<std::set<std::string> > ii(newGroups, newGroups.begin());
 	set_intersection(groups.begin(),groups.end(),mii.groups.begin(),mii.groups.end(),ii);
 	groups = newGroups;
 	cur= groups.begin();
@@ -375,8 +375,8 @@ int main(int argc, char** argv) {
   bt_query_t::bt_oper oper = bt_query_t::bt_nooper;
 
   if (argc != 2 && argc != 3) {
-	  cerr << "Usage: mindex [bt_operator] key" << endl;
-	  cerr << "Usage example: mindex lt 33" << endl;
+	  std::cerr << "Usage: mindex [bt_operator] key" << endl;
+	  std::cerr << "Usage example: mindex lt 33" << endl;
 	  return -1;
   }
 
@@ -416,7 +416,7 @@ int main(int argc, char** argv) {
 	  current = mr.getResultSet()->getInt(8);
 	  if (prev != current) {
 		  prev = current;
-		  cout << "DATA MAIN: " << current <<endl;
+		  cout << "DATA MAIN: " << current <<std::endl;
 	  }
   }
 

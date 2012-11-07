@@ -2,7 +2,7 @@
 
 namespace minerule {
 
-using namespace std;
+
 
 static int NBITS[] = {
 0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4, 1,
@@ -256,7 +256,7 @@ return !operator==(bs);
 **************************************************************************/
 void BitString::_Xran(int i)
 {
-//cerr << "BitString index out of range: " << i << endl;
+//std::cerr << "BitString index out of range: " << i << std::endl;
 int newNw = i/Nb;
 for (int j=Nw+1; j<=newNw; j++) bits.insert(bits.end(),(Bits)0);
 n = i+1; Nw = newNw;
@@ -297,10 +297,10 @@ return k<0;
 }
 
 /*************************************************************************
-  ostream BitString::operator<<
+  std::ostream BitString::operator<<
 
 **************************************************************************/
-ostream& operator<<(ostream& out, const BitString& bs)
+std::ostream& operator<<(std::ostream& out, const BitString& bs)
 {
 for (int i=0; i<bs.n; i++) out << (bs.test(i) ? '1' : '0');
 return out;
@@ -310,16 +310,16 @@ return out;
   istream BitString::operator>>
 
 **************************************************************************/
-istream& operator>>(istream& in, BitString& bs)
+std::istream& operator>>(std::istream& in, BitString& bs)
 {
-ios::iostate St = ios::goodbit;
+std::ios::iostate St = std::ios::goodbit;
 boolean Chg = false;
 int C = in.rdbuf()->sgetc();
 bs.reset();
 while (C != EOF && C == ' ') C = in.rdbuf()->snextc();
 for (size_t M = 0; true ; C = in.rdbuf()->snextc(), ++M)
 {
-	if (C == EOF) {St |= ios::eofbit; break; }
+	if (C == EOF) {St |= std::ios::eofbit; break; }
 	else if (C != '0' && C != '1') break;
 	//else if (_X.allocation() <= _X.length())
 	//      {_St |= ios::failbit;
@@ -338,7 +338,7 @@ void BitString::serialize(char* serialized,int* start)
 {int i;
 
  memcpy(&(serialized[(*start)]),&Nw,sizeof(int));
-	//cout<<int(serialized[(*start)])<<" "<<endl;
+	//cout<<int(serialized[(*start)])<<" "<<std::endl;
  //cout<<"\"";
  (*start) += sizeof(int);
  memcpy(&(serialized[(*start)]),&n,sizeof(int));
@@ -356,7 +356,7 @@ void BitString::unserialize(char* serialized,int* start)
  char tmpchar;
 
  memcpy(&Nw,&(serialized[(*start)]),sizeof(int));
-	//cout<<int(serialized[(*start)])<<" "<<endl;
+	//cout<<int(serialized[(*start)])<<" "<<std::endl;
  //cout<<"\"";
  (*start) += sizeof(int);
  memcpy(&n,&(serialized[(*start)]),sizeof(int));
@@ -372,7 +372,7 @@ void BitString::unserialize(char* serialized,int* start)
 // setNBit(numbit);
 }
 
-void BitString::print(ostream& out)
+void BitString::print(std::ostream& out)
 {int i,dim;
 
  if (DB_LEVEL_ALL<=DEBUG_LEVEL)
@@ -394,8 +394,8 @@ void BitString::print()
  dim=(*this).length();
  for (i=0;i<dim;i++)
  {
-  if ((i%8==0)&&(i!=0)) cout<<"-";
-  cout<<test(i);
+  if ((i%8==0)&&(i!=0)) std::cout<<"-";
+  std::cout<<test(i);
  }
  }
 }

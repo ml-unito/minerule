@@ -18,7 +18,7 @@ int main() {
     DatabaseMetaData* dbmd =
       connection->getMetaData();
 
-    ResultSet* rsprova = dbmd->getTables("","","",vector<string>());
+    ResultSet* rsprova = dbmd->getTables("","","",vector<std::string>());
     while( rsprova->next() ) {
       cout << ":"<<rsprova->getString(1) << ":" 
 	   << rsprova->getString(2) << ":"

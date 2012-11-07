@@ -28,12 +28,12 @@
 #include "Optimizer/QueryNormalizer.h"
 #include "PredicateUtils/PredicateUtils.h"
 
-using namespace std;
+
 using namespace odbc;
 
 namespace minerule {
 
-  void OptimizedMinerule::attributesInPredicate( const list_OR_node* l, set<std::string>& result ) {
+  void OptimizedMinerule::attributesInPredicate( const list_OR_node* l, std::set<std::string>& result ) {
   	while( l!=NULL ) {
   		list_AND_node* l_and = l->l_and;
   		while( l_and!=NULL ) {
@@ -52,8 +52,8 @@ namespace minerule {
 
   bool OptimizedMinerule::predicateAttributesAreIncluded( const ParsedMinerule& mr1,
 							  const ParsedMinerule& mr2 ) {
-    set<string> mr1Attrs;
-    set<string> mr2Attrs;
+    std::set<std::string> mr1Attrs;
+    std::set<std::string> mr2Attrs;
 
     attributesInPredicate( mr1.mc, mr1Attrs );
     attributesInPredicate( mr2.mc, mr2Attrs );
@@ -86,15 +86,15 @@ namespace minerule {
 
   void OptimizedMinerule::checkForCombinedQueries(  ) {
     MRLogPush("Searching for equivalences due to query combinations...");
-    vector<Predicate> candidates;
+    std::vector<Predicate> candidates;
     
-    vector<ParsedMinerule>::const_iterator it;
+    std::vector<ParsedMinerule>::const_iterator it;
 
     // disabling the logging of the Parser since it would confuse
     // the user.
     MineruleOptions::getSharedOptions().getLogStreamObj().disable();
 
-    ostream& log = MRLog() << "Candidates are: ";
+    std::ostream& log = MRLog() << "Candidates are: ";
     
     for(it=optInfo.minerulesToCombine.begin(); it!=optInfo.minerulesToCombine.end(); it++) {
       if(it!=optInfo.minerulesToCombine.begin()) log<<", ";
@@ -102,7 +102,7 @@ namespace minerule {
       log << it->tab_result;
       candidates.push_back(Predicate(it->mc));
     }
-    log << endl;
+    log << std::endl;
 
     // re-enabling the log 
     MineruleOptions::getSharedOptions().getLogStreamObj().enable();
@@ -122,13 +122,13 @@ namespace minerule {
     try {
       qCombinator.evolve();
     } catch( TimeOutException& e ) {
-      MRLog() << "The algorithm timed out." << endl;
+      MRLog() << "The algorithm timed out." << std::endl;
     }
     
 
 	// FIXME: all of the following is about output. It should be moved into an appropriate method
     if( qCombinator.getResult().empty() ) {
-      MRLog() << "No valid combination found!" << endl;
+      MRLog() << "No valid combination found!" << std::endl;
     } else { 
       std::string qryString;
 
@@ -148,8 +148,8 @@ namespace minerule {
     
 
       MRLog() 	<< "A combination of queries equivalent to the given one"
-	      		<< " has been found. The found query follows:" << endl;
-      MRLog() 	<< qryString << endl;
+	      		<< " has been found. The found query follows:" << std::endl;
+      MRLog() 	<< qryString << std::endl;
 
       optInfo.combinationFormula = qCombinator.getResult();
       optInfo.relationship = Combination;
@@ -167,12 +167,12 @@ namespace minerule {
 #endif
 
     if(minerule.miningTask!=MTMineRules) {
-      MRLog() << "Skipping optimization, " << miningTaskToString(minerule.miningTask) << " task is still unsupported by the optimizer" << endl;
-      MRDebug() << "Skipping optimization, " << miningTaskToString(minerule.miningTask) << " task is still unsupported by the optimizer" << endl;
+      MRLog() << "Skipping optimization, " << miningTaskToString(minerule.miningTask) << " task is still unsupported by the optimizer" << std::endl;
+      MRDebug() << "Skipping optimization, " << miningTaskToString(minerule.miningTask) << " task is still unsupported by the optimizer" << std::endl;
       return;
     }
 
-    list<ParsedMinerule> lPreviousMr;
+    std::list<ParsedMinerule> lPreviousMr;
     if(!MineruleOptions::getSharedOptions().getOptimizations().getTryOptimizations())
       return;
 
@@ -187,7 +187,7 @@ namespace minerule {
     normalizer.normalize();
     optInfo.minerule = minerule;
     optInfo.relationship = None;
-    MRDebug() << "Minerule text after normalization:" << minerule.getText() << endl;
+    MRDebug() << "Minerule text after normalization:" << minerule.getText() << std::endl;
 
     odbc::Connection* connection = 
       MineruleOptions::getSharedOptions().getOdbc_db().getConnection();
@@ -202,11 +202,11 @@ namespace minerule {
 	statement = connection->createStatement();
 	ResultSet* rs = statement->executeQuery("SELECT query_text,query_name FROM mr_query;");
 
-	MRLog() << "Reading past minerules" << endl;	
+	MRLog() << "Reading past minerules" << std::endl;	
 	while(rs->next()) {
 	  ParsedMinerule mr;
 	  mr.init(rs->getString(1).c_str());
-	  MRDebug() << "Optimize: trying minerule:" << mr.getText() << endl;
+	  MRDebug() << "Optimize: trying minerule:" << mr.getText() << std::endl;
 
 	  if( !avoidCombinationDetection && isACandidateQuery(mr,minerule) ) {
 	    optInfo.minerulesToCombine.push_back(mr);
@@ -221,23 +221,23 @@ namespace minerule {
 
 	  switch( currentRel ) {
 	  case Equivalence:
-	    MRLog() << "A past minerule found which includes the current one!" << endl;
-	    MRLog() << "Name of the found minerule:" << rs->getString(2) << endl;
-	    MRLog() << "(The algorithm will store this information in the catalogue" << endl;
-	    MRLog() << " and exit)" << endl;
+	    MRLog() << "A past minerule found which includes the current one!" << std::endl;
+	    MRLog() << "Name of the found minerule:" << rs->getString(2) << std::endl;
+	    MRLog() << "(The algorithm will store this information in the catalogue" << std::endl;
+	    MRLog() << " and exit)" << std::endl;
 	    optInfo.relationship = Equivalence;
 	    optInfo.minerule = mr;
 	    break;
 	  case Dominance:
 	    {
 	      MRLog() << "Minerule named ``" << mr.tab_result 
-		      <<"'' dominates the current one." <<endl;
+		      <<"'' dominates the current one." <<std::endl;
 	      if(optInfo.relationship==None) {
 		// since relationship==None, there is not yet any information
 		// about other Dominances. We simply store the found minerule
 		optInfo.minerule = mr;
 		MRLog() << "Minerule " << "``" << mr.tab_result <<"'' is now the best promising" 
-			<< " dominant minerule." << endl;
+			<< " dominant minerule." << std::endl;
 	      } else {
 		// we must keep the current minerule only if its result set
 		// is smaller than the one of the past Dominant query found
@@ -249,9 +249,9 @@ namespace minerule {
 		  optInfo.minerule = mr;
 		  MRLog() << "Minerule " << "``" << mr.tab_result 
 			  <<"'' is now the best promising" 
-			  << " dominant minerule." << endl;
+			  << " dominant minerule." << std::endl;
 		} else {
-		  MRLog() << "Keeping the previously found dominant minerule" << endl;
+		  MRLog() << "Keeping the previously found dominant minerule" << std::endl;
 		}
 	      }
 	      
@@ -272,15 +272,15 @@ namespace minerule {
 	}
 
 	if(optInfo.relationship==None) 
-	  MRLog() << "No interesting past minerules found." << endl;
+	  MRLog() << "No interesting past minerules found." << std::endl;
 
 	if(optInfo.relationship==Dominance) 
 	  MRLog() << "The best promising dominant minerule found is ``" 
-		  << optInfo.minerule.tab_result << "''" << endl;
+		  << optInfo.minerule.tab_result << "''" << std::endl;
 	
 	MRLogPop();
       } catch (odbc::SQLException& e) {
-	MRErr() << e.what() << endl;
+	MRErr() << e.what() << std::endl;
 	if(rs!=NULL)        delete rs;
 	if(statement!=NULL) delete statement;
 	throw;

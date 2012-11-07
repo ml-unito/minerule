@@ -60,7 +60,7 @@ namespace minerule {
     // A catalogue is a mapping tableName->CatalogueEntry
     class Catalogue : public std::map<std::string, CatalogueEntry> {
     public:
-      Catalogue() : map<std::string, CatalogueEntry>() {}
+      Catalogue() : std::map<std::string, CatalogueEntry>() {}
       Catalogue(const Catalogue& catalogue) : 
 	map<std::string, CatalogueEntry>(catalogue) {}
       virtual ~Catalogue() {}
@@ -71,7 +71,7 @@ namespace minerule {
 			 OrderType orderType) throw(MineruleException);
       static OrderType stringToOrder(const std::string&);
       void initialize() throw (MineruleException);
-      virtual const string& getSchemaInfo(const std::string& schemaKey) const=0;
+      virtual const std::string& getSchemaInfo(const std::string& schemaKey) const=0;
     };
 
     class EqKeysCatalogue : public Catalogue {
@@ -93,7 +93,7 @@ namespace minerule {
 	Catalogue(catalogue), schema(catalogue.schema) { }
       virtual ~EqKeysCatalogue() {}
 
-      virtual const string& getSchemaInfo(const std::string& schemaKey) const {
+      virtual const std::string& getSchemaInfo(const std::string& schemaKey) const {
 	std::map<std::string,std::string>::const_iterator it;
 	it=schema.find(schemaKey);
 	if(it==schema.end())
@@ -122,7 +122,7 @@ namespace minerule {
 	Catalogue(catalogue), schema(catalogue.schema) { }
 
       virtual ~DepFunCatalogue() {}
-      virtual const string& getSchemaInfo(const std::string& schemaKey) const {
+      virtual const std::string& getSchemaInfo(const std::string& schemaKey) const {
 	std::map<std::string,std::string>::const_iterator it;
 	it=schema.find(schemaKey);
 	if(it==schema.end())
@@ -139,7 +139,7 @@ namespace minerule {
     // to the system.
     class MineruleResultInfo : public ParsedMinerule {
     public:
-      string resultset;
+     std::string resultset;
       
       MineruleResultInfo(const ParsedMinerule& mr) : 
 	ParsedMinerule(mr),
@@ -187,18 +187,18 @@ namespace minerule {
 
     static void addMineruleResult( const MineruleResultInfo& mri )
       throw(odbc::SQLException, MineruleException);
-    static string addMineruleAttributeList(const ParsedMinerule::ListType& l) 
+    static std::string addMineruleAttributeList(const ParsedMinerule::ListType& l) 
       throw(odbc::SQLException, MineruleException);
-    static std::string getNewAutoincrementValue(const string& tableName) 
+    static std::string getNewAutoincrementValue(const std::string& tableName) 
       throw(odbc::SQLException, MineruleException);
 
     /**
      * @param queryname
-     * @return a string containing the name of the result set of the 
+     * @return astd::string containing the name of the result set of the 
      *  given query. It throws a MineruleException(MR_ERROR_CATALOGUE_ERROR,"...")
      *  in case queryname is not in the catalogue.
      */
-    static string getResultsetName(const string& queryname) 
+    static std::string getResultsetName(const std::string& queryname) 
       throw(odbc::SQLException, MineruleException);
 
     /**
@@ -206,23 +206,23 @@ namespace minerule {
      * @return true if a query named ``mrname'' has been executed and a result
      *   can be found in the catalogue. it returns false otherwise.
      */
-    static bool existsMinerule(const string& mrname);
+    static bool existsMinerule(const std::string& mrname);
 
-    static void deleteMinerule(const string& mrname) 
+    static void deleteMinerule(const std::string& mrname) 
       throw(MineruleException, odbc::SQLException);
 
     /**
      * The procedure fills the vector nameVec with the names of all
      * queries that have been executed.
      */
-    static void getMRQueryNames(vector<string>& nameVec) 
+    static void getMRQueryNames(std::vector<std::string>& nameVec) 
       throw(odbc::SQLException, MineruleException);
 
     /**
      * It behaves as getMRQueryNames, but provide more information to the
      * caller.
      */
-    static void getMRQueryInfos(vector<CatalogueInfo>& catInfoVec)
+    static void getMRQueryInfos(std::vector<CatalogueInfo>& catInfoVec)
       throw(odbc::SQLException, MineruleException);
 
     /**

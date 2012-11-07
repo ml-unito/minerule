@@ -86,7 +86,7 @@ namespace minerule {
     // Pro: quite general
     // Cons: Nobody ensures that the strings @[ and @] does not appear in the value itself
     //       When this happens everything break
-    // Solution: We should escape any '@' character in the string before inserting it
+    // Solution: We should escape any '@' character in thestd::string before inserting it
     // into the database. (Cons: ``The insertion process becomes more costly...'')
 
 

@@ -104,7 +104,7 @@ int maxHead = 5;
 	if (found2) {
 		t2.loadHead(gid,result1,0);
 	}
-//		cout << "Read transation " << gid << " of size " << t1.size() << " and size " << t2.size() << endl;
+//		std::cout << "Read transation " << gid << " of size " << t1.size() << " and size " << t2.size() << endl;
 //		howManyRows += bodyMap.add(gid,t1,t2);
 		howManyRows += bodyMap.add(t1,totalGroups);
 		howManyRows += headMap.add(t2,totalGroups);
@@ -113,20 +113,20 @@ int maxHead = 5;
 		totalGroups++;
 
 	if (howManyGroups > partOpt.getRowsPerPartition()) {
-		cout << "Reading partition " << howManyPart << " done." << endl;
+		std::cout << "Reading partition " << howManyPart << " done." << endl;
 		howManyRows = 0;
 		if (!withGids) {
   		bodyMap.updateCount();
 //  		bodyMap.pruneMap(support*howManyGroups);
-  		cout << "Total bodies after pruning: " << bodyMap.size() << endl;
+  		std::cout << "Total bodies after pruning: " << bodyMap.size() << endl;
 		}
-		cout << "Saving partition " << howManyPart << "..." << flush;
+		std::cout << "Saving partition " << howManyPart << "..." << flush;
 		//bodyMap.saveMap(out,withGids);
-		cout << "done." << endl;
+		std::cout << "done." << endl;
 //		bodyMap.erase(bodyMap.begin(),bodyMap.end());
   howManyGroups = 0;
 		howManyPart++;
-		cout << "Reading partition " << howManyPart << " ..." << endl;
+		std::cout << "Reading partition " << howManyPart << " ..." << endl;
 	}
 
   }
@@ -134,10 +134,10 @@ int maxHead = 5;
 	bodyMap.updateCount();
 	//bodyMap.pruneMap(support*howManyGroups);
 	bodyMap.pruneMap(support*totalGroups);
-  	cout << "Total bodies after pruning: " << bodyMap.size() << endl;
-	cout << "Saving partition " << howManyPart << "..." << flush;
+  	std::cout << "Total bodies after pruning: " << bodyMap.size() << endl;
+	std::cout << "Saving partition " << howManyPart << "..." << flush;
 //	bodyMap.saveMap(out,withGids);
-	cout << "done." << endl;
+	std::cout << "done." << endl;
 	//bodyMap.erase(bodyMap.begin(),bodyMap.end());
   }
   out.close();
@@ -166,7 +166,7 @@ totalGroups = 99920;
 	bool found2 = t2.findGid(gid,result1,rowDes);
 	if (found2) {
 		t2.loadHead(gid,result1,0);
-//		cout << "Read transation " << gid << " of size " << t1.size() << " and size " << t2.size() << endl;
+//		std::cout << "Read transation " << gid << " of size " << t1.size() << " and size " << t2.size() << endl;
 		howManyRows += bodyMap.add(n++,t1,t2,true);
 	}
   }

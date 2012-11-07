@@ -70,7 +70,7 @@ main(int argc, char** argv) {
 
     copy( results.begin(),
 	  results.end(),
-	  ostream_iterator< ResultRow >( cout, "\n" ) );
+	  std::ostream_iterator< ResultRow >( cout, "\n" ) );
   } catch (std::exception& e) {
     cout << e.what() << endl;
   }

@@ -17,7 +17,7 @@
 extern int mrlex();
 extern void mrerror(char const* s);
 bool check_body_coincident_head(minerule::ParsedMinerule::ListType& , minerule::ParsedMinerule::ListType&);
-using namespace std;
+
 using namespace minerule;
 
 extern std::map<std::string,int> keywords_to_token;
@@ -148,7 +148,7 @@ query: MINE RULE ATTR AS SELECT
 		          having_clause
 		          EXTRACTING ITEMSETS WITH SUPPORT ':' value
 		   {
-		   	cout<<"EFFETTUATA UNA MINE ITEMSET"<<endl<<endl<<endl;
+		   	std::cout<<"EFFETTUATA UNA MINE ITEMSET"<<std::endl<<std::endl<<std::endl;
 			/*
 			if ($16!=NULL){
                         switch ($16->getMeasureType()){
@@ -169,7 +169,7 @@ query: MINE RULE ATTR AS SELECT
 		    mr.miningTask = MTMineItemsets;
 		    mr.bodyCardinalities = *$7;
 		  
-		   cout << mr.bodyCardinalities << endl;
+		   std::cout << mr.bodyCardinalities << std::endl;
 
 		    if( !MineruleOptions::getSharedOptions().getParsers().getBodyCardinalities().contains(mr.bodyCardinalities) )
 			yyerror("\nTHE CARDINALITY IS INCORRECT REGARDING THE OPTION\n");
@@ -227,7 +227,7 @@ query: MINE RULE ATTR AS SELECT
 // 		|
 // 		SUPPORT COMPARISON value
 // 		{
-// 		string comp=$2;
+// 	std::string comp=$2;
 // 		if (comp=="="||comp=="<>")
 // 			mrerror("THE RELATIONAL OPERATOR USED FOR THE SUPPORT IS INCORRECT = or <>");
 // 		if (comp==">")
@@ -376,7 +376,7 @@ value: INT_NUMBER {$$=$1;}
 
 aggr_member: AGGREGATE '(' qualified_attribute ')'
 		{
-		  string temp= $1;
+		 std::string temp= $1;
 		  temp=temp+"("+$3+")";
 		  $$=strndup(temp.c_str(),PARSER_BUF_SIZE);
 		};
@@ -471,7 +471,7 @@ and_cond:
 			|
 	value COMPARISON ATTR
 			{ 
-				string op=$2,nop;
+			std::string op=$2,nop;
 				if (op.compare("")==0) { nop="<";}
 				else if (op==">=") { nop="<=";}
 				else if (op=="<") { nop=">";}
@@ -510,7 +510,7 @@ and_cond:
 			|
 	value COMPARISON qualified_attribute
 			{ 	
-				string op=$2, nop;
+			std::string op=$2, nop;
 				if (op.compare(">")==0) { nop="<";}
 				else if (op==">=") { nop="<=";}
 				else if (op=="<") { nop=">";}

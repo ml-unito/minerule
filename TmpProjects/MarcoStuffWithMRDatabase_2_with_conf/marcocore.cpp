@@ -71,11 +71,11 @@ int main(int argc, char *argv[]) {
   bt_query_t::bt_oper oper = bt_query_t::bt_nooper;
 
   if (argc > 5 || argc < 2) {
-      cerr << "Usage: marcocore {true|false} [[bt_operator] key]" << endl;
-      cerr << "Usage example: marcocore true" << endl;
-      cerr << "Usage example: marcocore true nooper" << endl;
-      cerr << "Usage example: marcocore false lt 1000" << endl;
-      cerr << "Usage example: marcocore true betw 200 500" << endl;
+      std::cerr << "Usage: marcocore {true|false} [[bt_operator] key]" << endl;
+      std::cerr << "Usage example: marcocore true" << endl;
+      std::cerr << "Usage example: marcocore true nooper" << endl;
+      std::cerr << "Usage example: marcocore false lt 1000" << endl;
+      std::cerr << "Usage example: marcocore true betw 200 500" << endl;
      return -1;
   }
 
@@ -134,7 +134,7 @@ int main(int argc, char *argv[]) {
 	  mi = new MIndexIterator(mi1, query1);
 	int howMany =0;
 	for (; mi->current() != mi->end(); (*mi)++) {
-		cout << mi->getCurrentGID() << ' ' << mi->getCurrentItem() << endl;
+		std::cout << mi->getCurrentGID() << ' ' << mi->getCurrentItem() << endl;
 	}
 /*
 	//queryStr += " order by gid";
@@ -162,10 +162,10 @@ cout << queryStr << endl;
     partitionWithClusters( options );
 }
   } catch (odbc::SQLException e) {
-    cerr << e.getMessage() << endl;
+    std::cerr << e.getMessage() << endl;
     throw;
   } catch (std::exception e) {
-    cerr << e.what() << endl;
+    std::cerr << e.what() << endl;
     throw;
   }
   long elapsed = time(NULL)-start;

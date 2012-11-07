@@ -30,7 +30,7 @@ friend istream& operator>>(istream& in, ItemType& i1) {
 in >> i1.item;
 return in;
 }
-friend ostream& operator<<(ostream& out, const ItemType& i1) {
+friend std::ostream& operator<<(ostream& out, const ItemType& i1) {
 out << i1.item;
 return out;
 }
@@ -54,10 +54,10 @@ ItemType& operator=(int value) { item = value; return *this; }
 */
 
 
-class Transaction : public set<ItemType> {
+class Transaction : public std::set<ItemType> {
   HeadBodySourceRowDescription srd;
 public:
-  Transaction(HeadBodySourceRowDescription& rowDes) : set<ItemType>(), srd(rowDes) {}
+  Transaction(HeadBodySourceRowDescription& rowDes) : std::set<ItemType>(), srd(rowDes) {}
   void load(ItemType& gid, odbc::ResultSet *rs) {
     HeadBodySourceRow hbsr(rs,srd);
 
@@ -84,7 +84,7 @@ public:
 };
 
 
-class MapElement : public set<ItemType> {
+class MapElement : public std::set<ItemType> {
 public:
   int count;
   MapElement() : count(0) {}
@@ -92,10 +92,10 @@ public:
 typedef MapElement GidList;
 
 
-//class BodyMapElement : public set<ItemType> {
+//class BodyMapElement : public std::set<ItemType> {
 class BodyMapElement : public MapElement {
 public:
-  pair<iterator, bool> insert(const value_type& x) { return set<ItemType>::insert(x); }
+  pair<iterator, bool> insert(const value_type& x) { return std::set<ItemType>::insert(x); }
   map<ItemType, MapElement > heads;
   void insert(const ItemType& item, MapElement& gidList, bool secondPass = false);
   bool pruneMap (float threshold);
@@ -138,7 +138,7 @@ bool BodyMapElement::updateCount () {
   out << ' ' << i->second.size();
   if (withGids) {
   out  << ' ';
-  copy(i->second.begin(), i->second.end(), ostream_iterator<ItemType>(out, " "));
+  copy(i->second.begin(), i->second.end(), std::ostream_iterator<ItemType>(out, " "));
   }
   i->second.erase(i->second.begin(), i->second.end());
   }
@@ -187,7 +187,7 @@ public:
   NewRule (NewRule& r, map<ItemType, MapElement>::iterator h, GidList& g) : body(r.body), head(r.head), lastBody(r.lastBody), lastHead(h), gids(g), bodySupp(r.bodySupp) {
     head.push_back(h->first);
   }
-  friend ostream& operator<<(ostream& out, NewRule r) {
+  friend std::ostream& operator<<(ostream& out, NewRule r) {
     vector<ItemType>::iterator i;
     for (i=r.body.begin(); i!=r.body.end(); i++) {
       if (i != r.body.begin()) out << ", ";
@@ -535,7 +535,7 @@ int main(int argc, char *argv[]) {
     bool found2 = t2.findGid(gid,result1,rowDes);
     if (found2) {
       t2.load(gid,result1);
-      //		cout << "Read transation " << gid << " of size " << t1.size() << " and size " << t2.size() << endl;
+      //		std::cout << "Read transation " << gid << " of size " << t1.size() << " and size " << t2.size() << endl;
     }
     howManyRows += bodyMap.add(gid,t1,t2);
     howManyGroups++;
@@ -548,7 +548,7 @@ int main(int argc, char *argv[]) {
       if (!withGids) {
 	bodyMap.updateCount();
 	//  		bodyMap.pruneMap(support*howManyGroups);
-	cout << "Total bodies after pruning: " << bodyMap.size() << endl;
+	std::cout << "Total bodies after pruning: " << bodyMap.size() << endl;
       }
       cout << "Saving partition " << howManyPart << "..." << flush;
       //		bodyMap.saveMap(out,withGids);
@@ -594,7 +594,7 @@ int main(int argc, char *argv[]) {
       bool found2 = t2.findGid(gid,result1,rowDes);
       if (found2) {
 	t2.load(gid,result1);
-	//		cout << "Read transation " << gid << " of size " << t1.size() << " and size " << t2.size() << endl;
+	//		std::cout << "Read transation " << gid << " of size " << t1.size() << " and size " << t2.size() << endl;
 	howManyRows += bodyMap.add(gid,t1,t2,true);
       }
     }
@@ -639,10 +639,10 @@ int main(int argc, char *argv[]) {
     partitionWithClusters( options );
     }
     } catch (odbc::SQLException e) {
-    cerr << e.getMessage() << endl;
+    std::cerr << e.getMessage() << endl;
     throw;
     } catch (std::exception e) {
-    cerr << e.what() << endl;
+    std::cerr << e.what() << endl;
     throw;
     }
     long elapsed = time(NULL)-start;

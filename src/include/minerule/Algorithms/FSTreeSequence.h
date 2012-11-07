@@ -61,7 +61,7 @@ namespace minerule {
 		
     /**
      * this method return a pointer to the vector that contains the items as string
-     * @return a pointer of a vector of string that contains items
+     * @return a pointer of a vector ofstd::string that contains items
      */
     ListType* getFSTreeSequence();
 
@@ -96,7 +96,7 @@ namespace minerule {
     void insertHead(const ItemType& s);
 
     /**
-     * @return a string that contains the items in this FSTreeSequence
+     * @return astd::string that contains the items in this FSTreeSequence
      */
     std::string toStdString();
 		
@@ -112,9 +112,9 @@ namespace minerule {
     bool operator==(FSTreeSequence& s);
 
     /**
-     * decompose a string in a FSTreeSequence
-     * every item in the string must be separated with a space
-     * @param s the string that you want decompose
+     * decompose astd::string in a FSTreeSequence
+     * every item in thestd::string must be separated with a space
+     * @param s thestd::string that you want decompose
      */
     void read(odbc::ResultSet* rs, const HeadBodySourceRowDescription&);
 

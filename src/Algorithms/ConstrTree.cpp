@@ -5,7 +5,7 @@
 #include <iterator>
 
 
-using namespace std;
+
 
 namespace minerule {
 
@@ -34,13 +34,13 @@ namespace minerule {
   void ConstrTree::adjustSuppMIndex(){
 
     while( mb2->current() != mb2->end() ) {
-      string g=mb2->getCurrentGID();
+     std::string g=mb2->getCurrentGID();
       ItemSetType* body=new ItemSetType();
-      //cout<<"in adjustSupp:"<<endl;
+      //cout<<"in adjustSupp:"<<std::endl;
       for(; mb2->current() != mb2->end() && mb2->getCurrentGID()==g;(*mb2)++){
 	ItemType gid(*SourceRowElement::deserializeElementFromString("n "+mb2->getCurrentGID()));
 	ItemType item(*SourceRowElement::deserializeElementFromString("n "+mb2->getCurrentItem()));
-	//cout<<item.asString()<<" "<<gid.asString()<<endl;
+	//cout<<item.asString()<<" "<<gid.asString()<<std::endl;
 	body->push_back(item);
       }
     
@@ -70,11 +70,11 @@ namespace minerule {
     while( bodynotend ) {
 
       HeadBodySourceRow curRowb(rb2, bodyDes);
-      //string g=mb2->getCurrentGID();
+      //std::string g=mb2->getCurrentGID();
       gidb=curRowb.getGroupBody();
     
       ItemSetType* body=new ItemSetType();
-      //cout<<"in adjustSupp:"<<endl;
+      //cout<<"in adjustSupp:"<<std::endl;
 
       while(bodynotend && ItemType(curRowb.getGroupBody())==gidb){
 	body->push_back(curRowb.getBody());
@@ -106,7 +106,7 @@ namespace minerule {
 
 
   void ConstrTree::adjustSupp(){
-    MRLog() << "Reading previous result and preparing data structures..." << endl;
+    MRLog() << "Reading previous result and preparing data structures..." << std::endl;
     insertRulesInStructure();
 
     sqlCoreConn coreConn;
@@ -117,7 +117,7 @@ namespace minerule {
 
     if (mb2!=NULL  &&  mh2!=NULL) {
       adjustSuppMIndex();
-      vector<ItemType> body;
+      std::vector<ItemType> body;
       getRoot()->extractRules(body,
 			      minerule->getParsedMinerule().sup,
 			      minerule->getParsedMinerule().conf,
@@ -126,11 +126,11 @@ namespace minerule {
     }
     else {
       if (rb2!=NULL  &&  rh2!=NULL) {
-	MRLog() << "Evaluating constraints and adjusting the support counts in the data structure..." << endl;
+	MRLog() << "Evaluating constraints and adjusting the support counts in the data structure..." << std::endl;
 	adjustSuppRSet();
-	vector<ItemType> body;
+ std::vector<ItemType> body;
 
-	MRLog() << "Pruning rules and writing results..." << endl;
+	MRLog() << "Pruning rules and writing results..." << std::endl;
 	getRoot()->extractRules(body,
 				minerule->getParsedMinerule().sup,
 				minerule->getParsedMinerule().conf,
@@ -163,11 +163,11 @@ namespace minerule {
 
   // Preprocessing functions
   
-  string ConstrTree::buildQry( const std::string& groupAttrStr,
+ std::string ConstrTree::buildQry( const std::string& groupAttrStr,
 						     const std::string& attrStr,
 						     const std::string& constraints) const {
     
-    return string("SELECT "+groupAttrStr+","+attrStr+" "
+    return std::string("SELECT "+groupAttrStr+","+attrStr+" "
 		  "FROM "+minerule->getParsedMinerule().tab_source+" "+
 		  (constraints.size()>0 ?
 		  "WHERE "+constraints+" " :
@@ -196,18 +196,18 @@ namespace minerule {
     MRLogPush("This is the Context Dependent Constructive Mining Algorithm...");
     MRLogPush("Building source information");
 
-    MRLog() << "Separating the constraints in the HEAD and BODY parts..."<<endl;
-    string bodyConstraints;
-    string headConstraints;
+    MRLog() << "Separating the constraints in the HEAD and BODY parts..."<<std::endl;
+   std::string bodyConstraints;
+   std::string headConstraints;
     HeadBodyPredicatesSeparator::separate(minerule->getParsedMinerule().mc->l_and,
 					  bodyConstraints,
 					  headConstraints);
 
-    MRLog() << "Building db queries" << endl;
+    MRLog() << "Building db queries" << std::endl;
     size_t index;
-    string groupAttr;
-    string bodyAttr;
-    string headAttr;
+   std::string groupAttr;
+   std::string bodyAttr;
+   std::string headAttr;
     index=buildAttrStr(minerule->getParsedMinerule().ga,
 		       0,
 		       groupAttr,
@@ -224,19 +224,19 @@ namespace minerule {
 		 headAttr,
 		 headDes.headElems);
 		 
-    string bodyQry =
+   std::string bodyQry =
       buildQry( groupAttr,
 		bodyAttr,
 		bodyConstraints);
 
-    string headQry =
+   std::string headQry =
       buildQry( groupAttr,
 		headAttr,
 		headConstraints);
 
-    MRLog() << "Body query" << bodyQry << endl;
-    MRLog() << "Head query" << headQry << endl;
-    MRLog() << "Executing queries" << endl;
+    MRLog() << "Body query" << bodyQry << std::endl;
+    MRLog() << "Head query" << headQry << std::endl;
+    MRLog() << "Executing queries" << std::endl;
     odbc::Connection* con =
       MineruleOptions::getSharedOptions().getOdbc_db().getConnection();
 
@@ -246,18 +246,18 @@ namespace minerule {
     // Debugging code starts 
     /*
     MRDebugPush("Body description");
-    ostream& dbg = MRDebug();
+    std::ostream& dbg = MRDebug();
     dbg << "Group ids:";
     copy( bodyDes.groupBodyElems.begin(),
 	  bodyDes.groupBodyElems.end(),
-	  ostream_iterator<int>(dbg, ",") );
-    dbg << endl;
+	  std::ostream_iterator<int>(dbg, ",") );
+    dbg << std::endl;
     MRDebug() << "Body ids:";
     copy( bodyDes.bodyElems.begin(),
 	  bodyDes.bodyElems.end(),
-	  ostream_iterator<int>(dbg, ",") );
-    dbg<< endl;
-    MRDebug() << "Body query:" << bodyQry << endl;
+	  std::ostream_iterator<int>(dbg, ",") );
+    dbg<< std::endl;
+    MRDebug() << "Body query:" << bodyQry << std::endl;
     MRDebugPop();
     */
     // Debugging code ends 
@@ -272,14 +272,14 @@ namespace minerule {
     MRDebug() << "Group ids:";
     copy( headDes.groupBodyElems.begin(),
 	  headDes.groupBodyElems.end(),
-	  ostream_iterator<int>(dbg, ",") );
-    dbg << endl;
+	  std::ostream_iterator<int>(dbg, ",") );
+    dbg << std::endl;
     MRDebug() << "Head ids:";
     copy( headDes.headElems.begin(),
 	  headDes.headElems.end(),
-	  ostream_iterator<int>(dbg, ",") );
-    dbg<< endl;
-    MRDebug() << "Head query:" << headQry << endl;
+	  std::ostream_iterator<int>(dbg, ",") );
+    dbg<< std::endl;
+    MRDebug() << "Head query:" << headQry << std::endl;
     MRDebugPop();
     */
     // Debugging code ends
@@ -309,7 +309,7 @@ outfile << opts.getLogStreamObj().getLogger().getCurrentTimeDelta() << " ";
 
 #ifdef SAVE_TIMINGS_ON_FILE
 #warning temporary    
-outfile << opts.getLogStreamObj().getLogger().getCurrentTimeDelta()<< endl;
+outfile << opts.getLogStreamObj().getLogger().getCurrentTimeDelta()<< std::endl;
 //end
 #endif
     MRLogPop();

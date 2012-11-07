@@ -19,7 +19,7 @@ Ci sono molte funzioni xxxHelper. Servono per la ricorsione.
 #include "Counter.h"
 #include "sqlCoreConn.h"
 
-using namespace std;
+
 
 template< class NODETYPE > class Counter;         // dich. successiva
 
@@ -49,7 +49,7 @@ class Tree
 
 // Legge l'albero e genera i file di testo per disegnare con il tool ViZuale
 // il Fp-Tree e i Fp-Tree Conditional
-    void preOrderTraversalToDesign(string Radice);
+    void preOrderTraversalToDesign(std::string Radice);
 
 // Crea la lista dei nodi nel contatore generale
     void makeList(Counter <NODETYPE>& counter);
@@ -65,7 +65,7 @@ class Tree
     void cut(double nSup);
 
 // Ordina la stringa in ingresso in base al contatore generale.
-    string ordinaSequenza(string,Counter <NODETYPE>* );
+   std::string ordinaSequenza(string,Counter <NODETYPE>* );
 
 // Inserisce il cammino nell'albero e anche il peso corretto.
     void insertAddWalk( deque<NODETYPE>& path, int peso);
@@ -108,13 +108,13 @@ class Tree
 			 bool madeListCounter );
     void cutHelper(TreeNode< NODETYPE > *, double );
     void printRulesHelper(TreeNode< NODETYPE > *,
-			  vector<NODETYPE>,
+			  std::vector<NODETYPE>,
 			  sqlCoreConn&, 
 			  const NODETYPE&, 
 			  double totGroups,
 			  Counter<NODETYPE>&);
     void explodeRules( sqlCoreConn& coreConn, 
-		       vector<NODETYPE>& curElem,
+		       std::vector<NODETYPE>& curElem,
 		       double myGroups,
 		       double totGroups ,
 		       Counter<NODETYPE>&);
@@ -196,16 +196,16 @@ void Tree< NODETYPE >::insertNodeHelper(
 
   elems.pop_front();
 
-  //  cout<<"value"<<value<<endl;
+  //  std::cout<<"value"<<value<<std::endl;
   if (anc->getData()==ROOTNODE)  
     anc=ptr;
 
   if ((node=ptr->find(value))!=NULL) {
-    //    cout<<"trovato"<<endl;
+    //    std::cout<<"trovato"<<std::endl;
     node->incCount(sum);
   }
   else {
-    //cout<<"non trovato"<<endl;
+    //cout<<"non trovato"<<std::endl;
     ptr->incChild();
     node = new TreeNode<NODETYPE>(ptr->getMap().key_comp().getCounter(), value,sum);
     ptr->insertNode(value,node);
@@ -229,11 +229,11 @@ void Tree< NODETYPE >::insertNodeHelper(
 // Legge e stampa a video l'albero. Lettura in profondità da sx a dx
 template< class NODETYPE >
 void Tree< NODETYPE >::preOrderTraversal() {
-  cout<<" --------------------- "<<endl;
-  cout<<"         Albero        "<<endl;
-  cout<<" --------------------- "<<endl;
+  std::cout<<" --------------------- "<<std::endl;
+  std::cout<<"         Albero        "<<std::endl;
+  std::cout<<" --------------------- "<<std::endl;
   preOrderHelper( rootPtr,0 );
-  cout<<" --------------------- "<<endl;
+  std::cout<<" --------------------- "<<std::endl;
 }
 
 
@@ -248,14 +248,14 @@ void Tree< NODETYPE >::preOrderHelper( TreeNode< NODETYPE > *ptr, int lev ) {
 
   ancer="--";
 
-//cout<<"ptr"<<ptr->getAncestor()->getData()<<endl;
+//cout<<"ptr"<<ptr->getAncestor()->getData()<<std::endl;
   if (ptr->getAncestor()!=NULL){ ancer=ptr->getAncestor()->getData(); }
 
-  cout <<" "<< ptr->getData() << ":" << ptr->getCount()<<"      ancestor: "<<ancer<< endl;
+  std::cout <<" "<< ptr->getData() << ":" << ptr->getCount()<<"      ancestor: "<<ancer<< std::endl;
 
   for( i=mapCh.begin( ) ; i != mapCh.end( ) ; i++ ) {
     for (int j=0; j<lev;j++)
-      cout<<"  ";
+      std::cout<<"  ";
 
     preOrderHelper(i->second,lev+1);
   }
@@ -270,9 +270,9 @@ void Tree< NODETYPE >::printRules(const NODETYPE& node,
 				  sqlCoreConn& saveRules, 
 				  double totGroups,
 				  Counter<NODETYPE>& gCounter) {
-  vector<NODETYPE> rule;
+  std::vector<NODETYPE> rule;
   printRulesHelper( rootPtr, rule, saveRules, node, totGroups, gCounter);
-  //  cout << "dopo printRulesHelper" << endl;
+  //  std::cout << "dopo printRulesHelper" << std::endl;
 }
 
 
@@ -281,7 +281,7 @@ void Tree< NODETYPE >::printRules(const NODETYPE& node,
 template< class NODETYPE >
 void Tree< NODETYPE >::printRulesHelper( 
 					TreeNode< NODETYPE > *ptr, 
-					vector<NODETYPE> curElem, 
+				 std::vector<NODETYPE> curElem, 
 					sqlCoreConn& saveRules,
 					const NODETYPE& elem,
 					double totGroups,
@@ -322,7 +322,7 @@ double Tree< NODETYPE >::getSupportForItemSet(deque<NODETYPE>& body) {
 
 template< class NODETYPE > 
 void Tree< NODETYPE >::explodeRules( sqlCoreConn& coreConn, 
-				     vector<NODETYPE>& curElem,
+				     std::vector<NODETYPE>& curElem,
 				     double myGroups,
 				     double totGroups,
 				     Counter<NODETYPE>& gCounter  ) {
@@ -334,15 +334,15 @@ void Tree< NODETYPE >::explodeRules( sqlCoreConn& coreConn,
   // N.B. : maxVal = 2^curElem.size() -1
   unsigned int maxVal = (1 << curElem.size())-1;
 
-  //  MRErr() << "maxVal:" << maxVal << endl;
-  //  copy( curElem.begin(), curElem.end(), ostream_iterator<NODETYPE>(MRErr(),";"));
-  //  MRErr() << endl;
+  //  MRErr() << "maxVal:" << maxVal << std::endl;
+  //  copy( curElem.begin(), curElem.end(), std::ostream_iterator<NODETYPE>(MRErr(),";"));
+  //  MRErr() << std::endl;
 
   for(unsigned int i=1; i<maxVal; i++ ) {
-    //    MRErr() << "i==" << i << endl;
-    vector<NODETYPE> body;
+    //    MRErr() << "i==" << i << std::endl;
+    std::vector<NODETYPE> body;
     deque<NODETYPE> bodyCopy;
-    vector<NODETYPE> head;
+    std::vector<NODETYPE> head;
 
     // Here we build the current rule's head and body elements
     for(unsigned int j=0; j<curElem.size(); j++) {
@@ -357,12 +357,12 @@ void Tree< NODETYPE >::explodeRules( sqlCoreConn& coreConn,
 
     float cConf = myGroups/gCounter.getSupportForItemSet(bodyCopy); 
     // float cConf = 1.0;
-    // Building up the string representation of the generated rule...
+    // Building up thestd::string representation of the generated rule...
     // Body part...
 
     /*
-    typename vector<NODETYPE>::iterator it;
-    string regola;
+    typename std::vector<NODETYPE>::iterator it;
+   std::string regola;
 
     it=body.begin();
     if(it!=body.end()) {
@@ -390,9 +390,9 @@ void Tree< NODETYPE >::explodeRules( sqlCoreConn& coreConn,
 
     // Inserting the new rule into the db.
 
-    //    cout << "ItemSet:";
-    //copy( curElem.begin(), curElem.end(), ostream_iterator<NODETYPE>(cout, ";"));
-    //cout << endl << "Regola:" << regola << endl;
+    //    std::cout << "ItemSet:";
+    //copy( curElem.begin(), curElem.end(), std::ostream_iterator<NODETYPE>(cout, ";"));
+    //cout << std::endl << "Regola:" << regola << std::endl;
 
     /*    stringstream strbuf;
     strbuf << "INSERT INTO "+coreConn.getOutTableName()+" VALUES ('"
@@ -402,7 +402,7 @@ void Tree< NODETYPE >::explodeRules( sqlCoreConn& coreConn,
     coreConn.insert_DB(body, head, cSupp, cConf);
   }
 
-  //  MRErr() << "Finito!!!!" << endl;
+  //  MRErr() << "Finito!!!!" << std::endl;
 }
 
 
@@ -430,26 +430,26 @@ int Tree< NODETYPE >::makeOrdinaHelper(TreeNode< NODETYPE > *ptr,
   int peso,pFiglio,tvolte,diff;
 
   tvolte=0;
-// node=(string) ptr->getData();
+// node=(std::string) ptr->getData();
   node=ptr->getData();
   peso=ptr->getCount();
 
-//cout << node << " " << peso << endl;
+//cout << node << " " << peso << std::endl;
 
   if (node!=ROOTNODE) 
     trans.push_back(node);
 
   for ( i=m1.begin() ; i != m1.end() ; i++ ) {
-// cout<<"Ho un figlio"<<endl;
+// std::cout<<"Ho un figlio"<<std::endl;
     pFiglio=makeOrdinaHelper(i->second,trans,linkCount,madeListCounter);
-//cout << trans <<  " Peso Figlio "<< pFiglio << endl;
+//cout << trans <<  " Peso Figlio "<< pFiglio << std::endl;
     tvolte+=pFiglio;
   }
 
   diff=peso-tvolte;
 
   if (diff>0) {
-//cout <<  "sono transazione da inserire :" << trans << "peso da ins " << diff << endl;
+//cout <<  "sono transazione da inserire :" << trans << "peso da ins " << diff << std::endl;
     insertNode(trans,diff,*linkCount,madeListCounter);
   }
 
@@ -460,12 +460,11 @@ int Tree< NODETYPE >::makeOrdinaHelper(TreeNode< NODETYPE > *ptr,
 // Funzione di ordinamento della stringa letta dall'albero non ordinato.
 // la ordina e restituisce in ordine i token da inserire.
 // Funziona di utilità. E' possibile in futuro inserirla in un file di utilità
-template< class NODETYPE >
-string Tree< NODETYPE >::ordinaSequenza(string value,Counter <NODETYPE>* linkCount) {
+template< class NODETYPE >std::string Tree< NODETYPE >::ordinaSequenzastd::string value,Counter <NODETYPE>* linkCount) {
   typedef multimap <int, NODETYPE> mmap;
   mmap coll;
   typename mmap::iterator k;
-  string newstring,okstring,okstring2;
+ std::string newstring,okstring,okstring2;
   NODETYPE node;
   int i;
 
@@ -481,19 +480,19 @@ string Tree< NODETYPE >::ordinaSequenza(string value,Counter <NODETYPE>* linkCou
     node= (NODETYPE) mytoken.nextToken();
     i=linkCount->getValueOrdina(node);
     coll.insert( make_pair(i,node) );
-// cout << "valore di i"<<i<<"nodetype"<<node<<"fine"<<endl;
+// std::cout << "valore di i"<<i<<"nodetype"<<node<<"fine"<<std::endl;
   }
 
   for( k=coll.begin( ) ; k !=coll.end( ) ; k++ )
-    newstring=newstring+(string)k->second +",";
+    newstring=newstring+(std::string)k->second +",";
 
-//cout << "Nuova stringa: "<<newstring<<endl;
+//cout << "Nuova stringa: "<<newstring<<std::endl;
 
   string::reverse_iterator rev;
   for(rev = newstring.rbegin(); rev != newstring.rend(); rev++)
     okstring+=*rev;
 
-//cout<<"stringa finale :"<<okstring<<endl;
+//cout<<"stringa finale :"<<okstring<<std::endl;
   return okstring;
 }
 
@@ -515,9 +514,9 @@ void Tree< NODETYPE >::cut(NODETYPE ancestor,double nSup) {
 
   i=m1.find(ancestor);
   assert(i!=m1.end());
-// cout<<"Non ho più lo stesso antenato"<<endl;
-// cout<<i->first<<endl;
-// cout<<"entro in cutHelper standard ma con ptr di ancestor"<<endl;
+// std::cout<<"Non ho più lo stesso antenato"<<std::endl;
+// std::cout<<i->first<<std::endl;
+// std::cout<<"entro in cutHelper standard ma con ptr di ancestor"<<std::endl;
   if (i->second->getCount()<nSup) {
 // Il mio ancestor non ha supporto sufficiente. Sicchè anche i miei successori
 // non avranno supp. suff. -> dealloco tutto ed elimino tutto.
@@ -542,24 +541,24 @@ void Tree< NODETYPE >::cutHelper( TreeNode< NODETYPE > *ptr, double nSup ) {
   typename TreeNode<NODETYPE>::MapType& m1 = ptr->getMap();
   typename TreeNode<NODETYPE>::MapType::iterator i;
 
-  vector<NODETYPE> elemsToBeDeleted;
+  std::vector<NODETYPE> elemsToBeDeleted;
 
   for ( i=m1.begin( ) ; i != m1.end( ) ; i++ ) {
-    //cout<<"nodo successivo "<<i->second->getData()<<" cont "<<i->second->getCount()<<endl;
-    //    cout << "NODO:" << i->first.c_str() << " count:" << i->second->getCount() << endl;
+    //cout<<"nodo successivo "<<i->second->getData()<<" cont "<<i->second->getCount()<<std::endl;
+    //    std::cout << "NODO:" << i->first.c_str() << " count:" << i->second->getCount() << std::endl;
     if (i->second->getCount()<nSup) {
-      //cout << "dealloco!!!!" << endl;
+      //cout << "dealloco!!!!" << std::endl;
       deallocaErase(i->second);
       i->second=NULL;
       elemsToBeDeleted.push_back(i->first);
     }
     else {
-      //cout << "NON dealloco!"<<endl;
+      //cout << "NON dealloco!"<<std::endl;
       cutHelper(i->second,nSup);
     }
   }
 
-  typename vector<NODETYPE>::iterator it = elemsToBeDeleted.begin();
+  typename std::vector<NODETYPE>::iterator it = elemsToBeDeleted.begin();
   for(; it!=elemsToBeDeleted.end(); it++ ) {
     m1.erase(*it);
   }
@@ -573,7 +572,7 @@ void Tree< NODETYPE >::deallocaErase( TreeNode< NODETYPE > *ptr) {
   typename TreeNode<NODETYPE>::MapType& m1 = ptr->getMap();
   typename TreeNode<NODETYPE>::MapType::iterator i;
 
-// cout <<"DEALLOCA_ERASE"<< ptr->getData() << ":" << ptr->getCount() << endl;
+// std::cout <<"DEALLOCA_ERASE"<< ptr->getData() << ":" << ptr->getCount() << std::endl;
 
   for( i=m1.begin( ) ; i != m1.end( ) ; i++ ) { 
     deallocaErase(i->second); 
@@ -627,24 +626,24 @@ TreeNode< NODETYPE > *ptr, deque<NODETYPE>& path, int sum) {
 // Questi file vengono dati in input al programma vizuale.exe scritto in Vbasic
 // permette di disegnare o salvare una gif con tutta la struttura ad albero.
 template< class NODETYPE >
-void Tree< NODETYPE >::preOrderTraversalToDesign(string Radice) {
+void Tree< NODETYPE >::preOrderTraversalToDesign(std::string Radice) {
   fstream   f1;
-  string files;
+ std::string files;
 
   files="design/file"+Radice+".txt";
   f1.open(files.c_str(), ios::out);
 
   if (!f1) {
-    cout << "Impossibile aprire file.txt.";
+    std::cout << "Impossibile aprire file.txt.";
     exit(1);
   }
-  f1<<"digraph minerule { "<<endl;
-  f1<<"graph[fontsize=8]; edge  [fontsize=8]; node  [fontsize=8]; ranksep = .30; nodesep = .25;"<<endl;
-  f1<<"node [fontname=\"Courier\"]; "<<endl;
-//f1<<"node [shape=record];"<<endl;
-  string ff="";
+  f1<<"digraph minerule { "<<std::endl;
+  f1<<"graph[fontsize=8]; edge  [fontsize=8]; node  [fontsize=8]; ranksep = .30; nodesep = .25;"<<std::endl;
+  f1<<"node [fontname=\"Courier\"]; "<<std::endl;
+//f1<<"node [shape=record];"<<std::endl;
+ std::string ff="";
   preOrderToDesignHelper( rootPtr,0,"",ff,Radice,f1);
-  f1<<"}"<<endl;
+  f1<<"}"<<std::endl;
   f1.close();
 }
 
@@ -652,15 +651,15 @@ void Tree< NODETYPE >::preOrderTraversalToDesign(string Radice) {
 // Segue la sintassi per creare un file testo per legare i vari nodi.
 // Vedi WinGraph e programma vizuale.exe
 template< class NODETYPE >
-void Tree< NODETYPE >::preOrderToDesignHelper( TreeNode< NODETYPE > *ptr, int lev,string prec,string& ff,string Radice,fstream& f1) {
+void Tree< NODETYPE >::preOrderToDesignHelper( TreeNode< NODETYPE > *ptr, int lev, std::string prec, std::string& ff, std::string Radice,fstream& f1) {
   typename TreeNode<NODETYPE>::MapType& m1 = ptr->getMap();
   typename TreeNode<NODETYPE>::MapType::iterator i;
-  string label1,l1,count,newprec,data,address;
+ std::string label1,l1,count,newprec,data,address;
 
   std::stringstream o;
   o << ptr->getCount();
   count=o.str();
-  data=(string)ptr->getData().c_str();
+  data=(std::string)ptr->getData().c_str();
   if (ptr->getData()==ROOTNODE) 
     data=Radice;
 
@@ -672,9 +671,9 @@ void Tree< NODETYPE >::preOrderToDesignHelper( TreeNode< NODETYPE > *ptr, int le
   newprec=address;
   l1="node"+newprec;
 
-  f1<<label1<<endl;
+  f1<<label1<<std::endl;
 
-  if (ff!="")  f1<<ff<<"->"<<l1<<";"<<endl;
+  if (ff!="")  f1<<ff<<"->"<<l1<<";"<<std::endl;
 
   for( i=m1.begin( ) ; i != m1.end( ) ; i++ ) {
     preOrderToDesignHelper(i->second,lev+1,newprec,l1,Radice,f1);
@@ -699,7 +698,7 @@ void Tree< NODETYPE >::makeListHelper( TreeNode< NODETYPE > *ptr,Counter <NODETY
   typename TreeNode<NODETYPE>::MapType& m1 = ptr->getMap();
   typename TreeNode<NODETYPE>::MapType::iterator i;
 
-//cout <<"makelisthelper "<< ptr->getData() << ":" << ptr->getCount() << endl;
+//cout <<"makelisthelper "<< ptr->getData() << ":" << ptr->getCount() << std::endl;
   if (ptr->getData()!=ROOTNODE)
     counter.insertInList(ptr->getData(),ptr);
 

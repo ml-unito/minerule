@@ -15,7 +15,7 @@
 
 //#include "utils.h"
 
-using namespace std;
+
 
 #include "Algorithms/itemSetCluster.h"
 #include "Algorithms/itemSetListCluster.h"
@@ -39,9 +39,9 @@ readSourceTable(
 		int& gid,
 		double& totGroups
 		) {
-  //  cout << endl 
-  //       <<"LEGGO IL DB ED INSERISCO NELLE STRUTTURE DATI... (" << conditionalInsert << ")" << endl
-  //       <<"Rows per partitions (at least):" << options.getPartitionOptions().getRowsPerPartition() << endl;
+  //  std::cout << std::endl 
+  //       <<"LEGGO IL DB ED INSERISCO NELLE STRUTTURE DATI... (" << conditionalInsert << ")" << std::endl
+  //       <<"Rows per partitions (at least):" << options.getPartitionOptions().getRowsPerPartition() << std::endl;
   /*****************
    * result contiene TUTTO il DB. L'algoritmo lavora partizionando
    * il result set. 
@@ -136,15 +136,15 @@ readSourceTable(
 
 #if 0 // DEBUG
     if(rowCount % (allowedRowRead/10)==0) {
-      cout << "rowcount:" << rowCount << "\r";
-      cout.flush();
+      std::cout << "rowcount:" << rowCount << "\r";
+      std::cout.flush();
     }
 #endif
     
   } while(readMoreGroupsForThisPartition && moreRecords  );
 
-  //  cout << endl << "final row count:" << rowCount << endl;
-  //  cout << "kitem size:" << kItem.size() << endl;
+  //  std::cout << std::endl << "final row count:" << rowCount << std::endl;
+  //  std::cout << "kitem size:" << kItem.size() << std::endl;
    
   return moreRecords;
 }
@@ -162,8 +162,8 @@ void partitionWithClusters( const minerule::AlgorithmsOptions& options )
   const minerule::HeadBodySourceRowDescription& 
     rowDes = options.getSourceRowDescription();
 
-  //MRLog() << options.getBodyCardinalities() << endl;
-  //MRLog() << options.getHeadCardinalities() << endl;
+  //MRLog() << options.getBodyCardinalities() << std::endl;
+  //MRLog() << options.getHeadCardinalities() << std::endl;
 
   MRLogPush("Starting `generalized partition' algorithm");
 
@@ -190,7 +190,7 @@ void partitionWithClusters( const minerule::AlgorithmsOptions& options )
 // parametri da passare.
   support= options.getSupport()*100;
   conf=    options.getConfidence()*100;
-  //  cout <<endl<<"+ Supporto: "<<support<<"% Confidenza: "<< conf<<"%"<<endl;
+  //  std::cout <<std::endl<<"+ Supporto: "<<support<<"% Confidenza: "<< conf<<"%"<<std::endl;
 
   // Apertura della connessione e cancellazione db_temporanei
   coreConn.useConnection(connection);
@@ -209,7 +209,7 @@ void partitionWithClusters( const minerule::AlgorithmsOptions& options )
 
   coreConn.create_tmp_db(1, srDescriptor.getBody(), srDescriptor.getHead());
 
-  MRLog() << "Starting to read the Data Base" << endl;   
+  MRLog() << "Starting to read the Data Base" << std::endl;   
   int gid = 1;
   while( readMorePartitions )
   {
@@ -219,27 +219,27 @@ void partitionWithClusters( const minerule::AlgorithmsOptions& options )
     // Svuoto la lista dei livelli.
     prtList.init();
 
-    MRLog() << "Reading partition number: " << isPart << endl;
+    MRLog() << "Reading partition number: " << isPart << std::endl;
     readMorePartitions = readSourceTable(kItem,result,rowDes,options,false,gid,totGroups);
-    MRLog() << "Done! (Reading partition number: " << isPart << ")" << endl;
-   MRLog() << "Items in this partition: " << kItem.size() << endl;
+    MRLog() << "Done! (Reading partition number: " << isPart << ")" << std::endl;
+   MRLog() << "Items in this partition: " << kItem.size() << std::endl;
 
    // A questo punto ho inserito tutte le tuple nel livello 1 della
    // struttura kItem.
    // Posso generare le regole con supp suff! nSup contiene il numero
    // di gruppi in cui l'item deve essere presente
 
-   /*   cout <<"Gruppi Totali di questa partizione "
+   /*   std::cout <<"Gruppi Totali di questa partizione "
 	<<totGroups
 	<<" Supporto "
-	<<support<<endl; */
+	<<support<<std::endl; */
 
    //nSup=ceil( options.getTotGroups()*support/100 );
    nSup=ceil(totGroups*(support/100));
 
-   //   cout << "Numero di gruppi Sufficienti " 
+   //   std::cout << "Numero di gruppi Sufficienti " 
    //<< nSup 
-   //<< endl;
+   //<< std::endl;
    // A questo punto controllo quali item a livello 1 non hanno supporto sufficiente.
    // Se un elem del body non ha supp. suff elimino lui e la sua head.
    // Se un elem del body ha supp suff. devo controllare se esiste almeno un elemento
@@ -248,7 +248,7 @@ void partitionWithClusters( const minerule::AlgorithmsOptions& options )
 
    //   kItem.printToDesign("Body",isPart);
 
-   MRLog() << "Generating large itemsets for this partition" << endl;
+   MRLog() << "Generating large itemsets for this partition" << std::endl;
    kItem.gen_Large_Rule_Base(nSup, options.getHeadCardinalities());
 
    // A questo punto vado in pronfondita' a livelli.
@@ -268,7 +268,7 @@ void partitionWithClusters( const minerule::AlgorithmsOptions& options )
 					 levelIn,
 					 options.getHeadCardinalities()	 );
    }
-   MRLog() << "Done! (Generating large ...)" << endl;
+   MRLog() << "Done! (Generating large ...)" << std::endl;
 
 //   kItem.printToDesign("explode",isPart);
 
@@ -276,44 +276,44 @@ void partitionWithClusters( const minerule::AlgorithmsOptions& options )
   // Salvo tutta la struttura in due db temporanei.
   // allo stesso tempo dealloco le strutture
   // Il tracciato del salvataggio è nel solito file lyx
-   //  cout<<"Save_Large_ItemSet"<<endl;
-   //  cout << "Num Attr. allocati (prima di saveLarge):" << 
-   //    MemDebugGenericSourceRowAttribute::getInstanceCounter() << endl;
+   //  std::cout<<"Save_Large_ItemSet"<<std::endl;
+   //  std::cout << "Num Attr. allocati (prima di saveLarge):" << 
+   //    MemDebugGenericSourceRowAttribute::getInstanceCounter() << std::endl;
    
-   MRLog() << "Saving large large itemsets for this partition" << endl;
+   MRLog() << "Saving large large itemsets for this partition" << std::endl;
    kItem.save_Large_ItemSet(1,isPart,coreConn);
-   MRLog() << "Done! (Saving large ...)" << endl;
-  // cout << "Num Attr. allocati: (dopo)" << 
-  //    MemDebugGenericSourceRowAttribute::getInstanceCounter() << endl;
+   MRLog() << "Done! (Saving large ...)" << std::endl;
+  // std::cout << "Num Attr. allocati: (dopo)" << 
+  //    MemDebugGenericSourceRowAttribute::getInstanceCounter() << std::endl;
 
   // Svuoto la lista dei livelli per il ciclo successivo.
   prtList.removeAll();  
 
  } // fine WHILE
 
-  MRLog() << "Done! (Starting to read the Data Base)" << endl;   
+  MRLog() << "Done! (Starting to read the Data Base)" << std::endl;   
   delete result;   // trashing the trashable 
   result = NULL; 
 
 
- // cout<<"fase di merge"<<endl;
+ // std::cout<<"fase di merge"<<std::endl;
  prtList.init();
 
  // legge i db temporanei salvati da save_large_itemset e ricostruisce la struttura.
 
 
- MRLog() << "Reading back saved informations... (merge phase)" << endl;
+ MRLog() << "Reading back saved informations... (merge phase)" << std::endl;
  kItem.mergeItemSet(coreConn,prtList, srDescriptor);
- MRLog() << "Done! (Reading back saved informations...)" << endl;
+ MRLog() << "Done! (Reading back saved informations...)" << std::endl;
 
  totGroups=0;
 
  // In questa parte leggo di nuovo il db per andare a completare il primo livello
 
  int partNum=0;
- MRLog() << "Reading again the Data Base" << endl;   
+ MRLog() << "Reading again the Data Base" << std::endl;   
  delete statement;   // trashing the trashable 
- string qry = "SELECT * FROM "+options.getOutTableName()+"_tmpSource";
+std::string qry = "SELECT * FROM "+options.getOutTableName()+"_tmpSource";
  statement = connection->prepareStatement(qry);
  result = statement->executeQuery();
  readMorePartitions = result->next();
@@ -322,12 +322,12 @@ void partitionWithClusters( const minerule::AlgorithmsOptions& options )
  while( readMorePartitions ) {
    partNum++;
    double tmpTotGroups=1;
-   MRLog() << "Reading again partition number: " << partNum << endl;
+   MRLog() << "Reading again partition number: " << partNum << std::endl;
    readMorePartitions = readSourceTable(kItem,result,rowDes,options,true,gid,tmpTotGroups);
-   MRLog() << "Done! (Reading again partition number: " << partNum << ")" << endl;
+   MRLog() << "Done! (Reading again partition number: " << partNum << ")" << std::endl;
    totGroups+=tmpTotGroups;
  }
-  MRLog() << "Done! (Reading again the Data Base)" << endl;    
+  MRLog() << "Done! (Reading again the Data Base)" << std::endl;    
 
  delete result;
  delete statement;
@@ -336,16 +336,16 @@ void partitionWithClusters( const minerule::AlgorithmsOptions& options )
  // A questo punto ho una struttura su più livelli ma solo il primo livello delle body
  // e delle head ha le gid,cid a posto.
 
- //  cout<<"Gruppi Totali "<<totGroups<<" Supporto "<<support<<endl;
+ //  std::cout<<"Gruppi Totali "<<totGroups<<" Supporto "<<support<<std::endl;
  //  nSup=ceil(totGroups*(support/100));
  nSup = ceil( options.getTotGroups()*support/100 );
  MRDebug() << "Total number of groups:" << options.getTotGroups() << " "
-	 << "support threshold:" << nSup << endl;
+	 << "support threshold:" << nSup << std::endl;
 
 
-  //  cout<<"nSup fase II: "<<nSup<<endl;
+  //  std::cout<<"nSup fase II: "<<nSup<<std::endl;
 
-  //  cout<<"---  checkSupporBaseDef ---"<<endl;
+  //  std::cout<<"---  checkSupporBaseDef ---"<<std::endl;
   // Qui faccio lo stesso controllo di sopra.
   // controllo se il livello 1 del body e delle rispettive head sono sufficienti.
   // Se trovo qualcuno a supp. non suff. faccio pruning.
@@ -355,17 +355,17 @@ void partitionWithClusters( const minerule::AlgorithmsOptions& options )
   //  kItem.printItemSetRecursive(0);
 
   //  kItem.printToDesign("beforeCheck", 0);
-  MRLog() << "Generating final rules..." <<endl;
+  MRLog() << "Generating final rules..." <<std::endl;
   kItem.checkSupportBaseDef(nSup,pHashMap,prtList);
   //  kItem.printToDesign("afterCheck", 0);
-  //  cout << "------------------ FINE CHEKC SUPP BASE -------" << endl;
-  MRLog() << "Items with sufficient support: " << kItem.size() << endl;
+  //  std::cout << "------------------ FINE CHEKC SUPP BASE -------" << std::endl;
+  MRLog() << "Items with sufficient support: " << kItem.size() << std::endl;
   toContinue=true;
   levelIn=1;
 
   //  pHashMap.print();
 
-  //  cout<<"STO PER GENERARE GEN_FINAL_COUNT"<<endl;
+  //  std::cout<<"STO PER GENERARE GEN_FINAL_COUNT"<<std::endl;
   // Controllo i livelli sfruttando prtList.
   // Controllo i livelli del body, controllando l'esistenza delle head e l'espolosione della
   // stessa head
@@ -375,19 +375,19 @@ void partitionWithClusters( const minerule::AlgorithmsOptions& options )
      toContinue=kItem.gen_final_count(prtList,nSup,levelIn,pHashMap);
      //prtList.printAddrItemSet();
   }
-  MRLog() << "Done! (Generating final rules...)" <<endl;
+  MRLog() << "Done! (Generating final rules...)" <<std::endl;
 
   //  kItem.printToDesign("final",1);
-  //  cout<<"FINE GEN_FINAL_COUNT"<<endl;
+  //  std::cout<<"FINE GEN_FINAL_COUNT"<<std::endl;
   //kItem.printToDesign("Body",numPartition+3);
   coreConn.deleteDestTable();
   coreConn.create_db_rule(1);
   coreConn.init();
 
   // Salvo nel db le regole. Vedi struttura nel file lyx
-  MRLog() << "Extracting rules and saving in the DB" << endl;
-  kItem.extractRule(coreConn,vector<ItemType>(),options.getTotGroups());
-  MRLog() << "Done! (Extracting rules and saving in the DB)" << endl;
+  MRLog() << "Extracting rules and saving in the DB" << std::endl;
+  kItem.extractRule(coreConn,std::vector<ItemType>(),options.getTotGroups());
+  MRLog() << "Done! (Extracting rules and saving in the DB)" << std::endl;
 
   coreConn.finalize();
   //  kItem.printToDesign("check",98);

@@ -8,7 +8,7 @@ namespace minerule {
 
 
 void PartitionWithClusters::execute() {
-  MRLog() << "This is Partition (with clusters) mining algorithm..." << endl;
+  MRLog() << "This is Partition (with clusters) mining algorithm..." << std::endl;
   prepareData();
   partitionWithClusters(options);
 };

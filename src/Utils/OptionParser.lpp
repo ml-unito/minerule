@@ -2,7 +2,7 @@
 #include <iostream>
 #include "Utils/MineruleException.h"
 
-using namespace std;
+
 using namespace minerule;
 
 #define YYSTYPE string	
@@ -23,8 +23,8 @@ COMMSTR .*
 
 [ \t\n]*	{/* ignore them */ 
 		 LEXDBG(cerr << "flex ignoring spaces" <<endl;)}
-\".*\"		{ string inStr=OPtext;  
-		  string resStr(inStr, 1, inStr.length()-2);
+\".*\"		{std::string inStr=OPtext;  
+		 std::string resStr(inStr, 1, inStr.length()-2);
 		  OPlval = resStr;
 		  LEXDBG(cerr << "flex: VALSTRING (" << OPlval <<")"<< endl;)
 		  return STRING;

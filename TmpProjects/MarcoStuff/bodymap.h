@@ -64,11 +64,11 @@ class ItemType {
 	ItemType& operator=(int value) { item = value; return *this; }
 };
 */
-//class Transaction : public set<pair<ItemType, ItemType> > {
-class Transaction : public set<ItemType> {
+//class Transaction : public std::set<std::pair<ItemType, ItemType> > {
+class Transaction : public std::set<ItemType> {
   HeadBodySourceRowDescription srd;
   public:
-	Transaction(HeadBodySourceRowDescription& rowDes) : set<ItemType>(), srd(rowDes) {}
+	Transaction(HeadBodySourceRowDescription& rowDes) : std::set<ItemType>(), srd(rowDes) {}
 	vector<int> values;
 	void loadBody(ItemType& gid, odbc::ResultSet *rs, int nFields) {
 		HeadBodySourceRow hbsr(rs,srd);
@@ -99,7 +99,7 @@ class Transaction : public set<ItemType> {
 	}
 };
 
-//class MapElement : public set<ItemType> {
+//class MapElement : public std::set<ItemType> {
 class MapElement : public BitString {
   public:
 	int counter;
@@ -119,7 +119,7 @@ class MinMax {
 	int maxValue() { return max; }
 };
 
-//class BodyMapElement : public set<ItemType> {
+//class BodyMapElement : public std::set<ItemType> {
 class BodyMapElement : public MapElement {
   public:
 	vector<MinMax> attribute;
@@ -130,7 +130,7 @@ class BodyMapElement : public MapElement {
 		for (int i=0; i<bm.attribute.size(); i++) attribute.insert(attribute.end(),bm.attribute[i]);
 		BitString::operator=((BitString&)bm);
 	}
-	//pair<iterator, bool> insert(const value_type& x) { return set<ItemType>::insert(x); }
+	//pair<iterator, bool> insert(const value_type& x) { return std::set<ItemType>::insert(x); }
 	void insert(const int x) { set(x,true); }
 	map<ItemType, MapElement > heads;
 	void insert(const ItemType& item, const int gid, bool secondPass = false);

@@ -23,7 +23,7 @@ private:
     /**
      + this constructor build an object for a mine rule query
      */
-    HeaderQuery(string& na, 
+    HeaderQuery(std::string& na, 
 		MinMaxPair* cB, 
 		MinMaxPair* cH, 
 		ParsedMinerule::ListType* aB,
@@ -37,7 +37,7 @@ private:
     /**
      + this constructor build an object for a mine itemset query
      */
-    HeaderQuery(string& na,
+    HeaderQuery(std::string& na,
                 MinMaxPair* cB,
                 ParsedMinerule::ListType* aB) :
       name(na),

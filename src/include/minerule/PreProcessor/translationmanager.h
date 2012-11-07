@@ -10,7 +10,7 @@
 
 using namespace::std;
 
-#define BBLOG(a) do { cerr << a << endl; } while(0)
+#define BBLOG(a) do { std::cerr << a << std::endl; } while(0)
 
 #include "translatedtable.h"
 
@@ -49,9 +49,9 @@ class TranslationManager {
    * @param columnName a column of table "tableName"
    */
   
-  string 
-    getTranslationTableNameForColumn(const string& tableName,
-				     const string& columnName) const;
+ std::string 
+    getTranslationTableNameForColumn(const std::string& tableName,
+				     const std::string& columnName) const;
 
   /**
    * It returns a column name of `getTranslationTableNameForColumn(tableName,
@@ -62,8 +62,8 @@ class TranslationManager {
    * @param columnName
    */
   string
-    getTranslatedColumnNameForColumn(const string& tableName, 
-				     const string& columnName) const;
+    getTranslatedColumnNameForColumn(const std::string& tableName, 
+				     const std::string& columnName) const;
   /**
    * It returns a column name of `getTranslationTableNameForColumn(tableName,
    * columnName)`. In particular it returns the column that holds the 
@@ -73,8 +73,8 @@ class TranslationManager {
    * @param columnName
    */
   string
-    getOriginalColumnNameForColumn(const string& tableName,
-				   const string& columnName) const;
+    getOriginalColumnNameForColumn(const std::string& tableName,
+				   const std::string& columnName) const;
  /**
    * It returns the name of the translated table associated to table
    * tableName. This function does not access to the dictionary table to
@@ -86,7 +86,7 @@ class TranslationManager {
    */
 
   string
-    getTranslationTableNameForTable( const string& tableName ) const;
+    getTranslationTableNameForTable( const std::string& tableName ) const;
  public:
     
   /**
@@ -107,13 +107,13 @@ class TranslationManager {
    * to the translated values.
    */
   virtual TranslatedTable* 
-    translateTable(const string& tableName) const = 0;
+    translateTable(const std::string& tableName) const = 0;
 
   /**
    * Look up if, in the current DB, there is an original table whose
    * name is tableName and for which a translatedTable already exists.
    * If so, it returns <true, nameOfTranslatedTable>, otherwise it
-   * returns <false, astring> where astring contains an unpredictable
+   * returns <false, astring> where std::string contains an unpredictable
    * value.
    *
    * @param tableName the name of the original table 
@@ -124,7 +124,7 @@ class TranslationManager {
    * connection
    */
   virtual pair<bool,string> 
-    alreadyTranslated(const string& tableName) const 
+    alreadyTranslated(const std::string& tableName) const 
     throw(odbc::SQLException) = 0;
 };
 

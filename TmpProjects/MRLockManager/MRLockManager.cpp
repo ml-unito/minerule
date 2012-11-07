@@ -58,7 +58,7 @@ class MRLockManager {
       if( errno == EWOULDBLOCK )
 	retVal = true;
       else {
-	cout << "some kind of error occurred, the strerror is: "
+	std::cout << "some kind of error occurred, the strerror is: "
 	     << strerror(errno) << endl;
       }
     } else {
@@ -75,10 +75,10 @@ class MRLockManager {
       cout << "file exists..." << endl;
       // Looking if I can get control of the file...
       if(fileLocked(fname.c_str())) {
-	cout << "file locked!" << endl;
+	std::cout << "file locked!" << endl;
 	throw 1; // file locked!
       } else {
-	cout << "truncating the file..." << endl; 
+	std::cout << "truncating the file..." << endl; 
 	fd=open(fname.c_str(), 
 		O_TRUNC | O_RDWR,
 		S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP );
@@ -101,7 +101,7 @@ class MRLockManager {
 	      O_CREAT | O_RDWR,
 	      S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP );
       if(fd==-1) {
-	cout << "Some error occurred in creating the file, the"
+	std::cout << "Some error occurred in creating the file, the"
 	     << " reported error is:" << strerror(errno) << endl;
 	throw 3;
       } else {

@@ -21,7 +21,7 @@
 
 #include "utils.h"
 
-using namespace std;
+
 using namespace minerule;
 
 
@@ -33,14 +33,14 @@ class itemSet
 {
   public:
   typedef typename newItemSetHashMap<NODETYPE>::HASHTYPE HASHTYPE;
-  typedef map <NODETYPE,itemSetEntry< NODETYPE >, NODETYPE > MapType;
+  typedef std::map <NODETYPE,itemSetEntry< NODETYPE >, NODETYPE > MapType;
 
 
 private:
   // Inner Class LevelInfoStack
   class LevelInfoStack {
     HASHTYPE ancestor;
-    vector<itemSet<NODETYPE>*> levels;
+    std::vector<itemSet<NODETYPE>*> levels;
     
   public:
     size_t getCurLevel() {
@@ -101,12 +101,12 @@ private:
     void setAncestor(const HASHTYPE& anc) {myAncestor=anc;}
     const HASHTYPE& getAncestor() {return myAncestor;}
 
-    void setRefList(typename list<itemSet<NODETYPE>* >::iterator riferimento) {refList=riferimento;}
-    typename list<itemSet<NODETYPE>* >::iterator getRefList()  {return refList;}
+    void setRefList(typename std::list<itemSet<NODETYPE>* >::iterator riferimento) {refList=riferimento;}
+    typename std::list<itemSet<NODETYPE>* >::iterator getRefList()  {return refList;}
     void setItemSet(NODETYPE value, int gidList);
     void setItemSetIfExist(NODETYPE value,int gidList);
-    void setItemSet(NODETYPE value,const set<int>& gidList);
-    void setItemSet(NODETYPE value,const set<int>& gidList,double totGroups);
+    void setItemSet(NODETYPE value,const std::set<int>& gidList);
+    void setItemSet(NODETYPE value,const std::set<int>& gidList,double totGroups);
     void setItemSet(NODETYPE value);
     void printItemSet();
     void printToDesign(int isPart);
@@ -142,12 +142,12 @@ private:
 // Root
     MapType prtt;
     HASHTYPE myAncestor;
-    typename list<itemSet<NODETYPE>* >::iterator refList;
+    typename std::list<itemSet<NODETYPE>* >::iterator refList;
 
-//  vector<list<itemSet<String>* > > vectLevel;
+//  std::vector<std::list<itemSet<String>* > > vectLevel;
 
-    void deleteElemsFromPrtt(vector<NODETYPE>& elVec);
-    void printToDesignHelper(string here,string padre,ofstream& f1);
+    void deleteElemsFromPrtt(std::vector<NODETYPE>& elVec);
+    void printToDesignHelper(std::string here, std::string padre,ofstream& f1);
     void saveIn_DB_Body( int lev, int isPart, NODETYPE node,sqlCoreConn& coreConn);
     void save_Large_ItemSetHelper(int lev,int isPart,sqlCoreConn& coreConn);
 
@@ -204,7 +204,7 @@ private:
 template< class NODETYPE >
 bool itemSet< NODETYPE >::existEntry(NODETYPE item ) {
 
-// cout<<"gidList "<<gidList<<" Item "<<value<<endl;
+// std::cout<<"gidList "<<gidList<<" Item "<<value<<std::endl;
   if (prtt.find(item)==prtt.end())
     return false;
   else return true;
@@ -238,7 +238,7 @@ void itemSet< NODETYPE >::setItemSetIfExist(NODETYPE value,int gidList ) {
 
 
 template< class NODETYPE >
-void itemSet< NODETYPE >::setItemSet(NODETYPE value,const set<int>& gidList ) {
+void itemSet< NODETYPE >::setItemSet(NODETYPE value,const std::set<int>& gidList ) {
   itemSetEntry< NODETYPE > entry;
   typename MapType::iterator i=prtt.find(value);
   if (i==prtt.end()) {
@@ -255,7 +255,7 @@ void itemSet< NODETYPE >::setItemSet(NODETYPE value,const set<int>& gidList ) {
 
 
 template< class NODETYPE >
-void itemSet< NODETYPE >::setItemSet(NODETYPE value,const set<int>& gidList,double totGroups ) {
+void itemSet< NODETYPE >::setItemSet(NODETYPE value,const std::set<int>& gidList,double totGroups ) {
   itemSetEntry< NODETYPE > entry;
   typename MapType::iterator i=prtt.find(value);
 
@@ -285,16 +285,16 @@ void itemSet< NODETYPE >::setItemSet(NODETYPE value ) {
 
 template< class NODETYPE >
 void itemSet< NODETYPE >::printItemSet() {
-  set<int> gList;
+  std::set<int> gList;
   typename MapType::iterator i;
-  typename set<int>::iterator i2;
+  typename std::set<int>::iterator i2;
   for( i=prtt.begin( ) ; i != prtt.end( ) ; i++ ) {
-        cout<<"Item "<<i->first<<"GidList: ";
+        std::cout<<"Item "<<i->first<<"GidList: ";
     gList=i->second.getGidList();
     for (i2=gList.begin(); i2!=gList.end();i2++)
-      cout<<*i2<<"  ";
+      std::cout<<*i2<<"  ";
 
-    cout<<endl;
+    std::cout<<std::endl;
   }
 
 }
@@ -302,43 +302,43 @@ void itemSet< NODETYPE >::printItemSet() {
 
 template< class NODETYPE >
 void itemSet< NODETYPE >::printItemSetRecursive(int lev) {
-  set<int> gList;
+  std::set<int> gList;
   typename MapType::iterator i;
-  typename set<int>::iterator i2;
+  typename std::set<int>::iterator i2;
 
-//cout<<"dentro print"<<endl;
+//cout<<"dentro print"<<std::endl;
   for( i=prtt.begin( ) ; i != prtt.end( ) ; i++ ) {
-//cout<<"Address "<<i<<endl;
+//cout<<"Address "<<i<<std::endl;
     for (int j=0; j<lev;j++)
-      cout<<"  ";
-    cout<<"Item "<<i->first<<" Ancestor "<<myAncestor<<" GidList: ";
+      std::cout<<"  ";
+    std::cout<<"Item "<<i->first<<" Ancestor "<<myAncestor<<" GidList: ";
     gList=i->second.getGidList();
     for (i2=gList.begin(); i2!=gList.end();i2++)
-      cout<<*i2<<"  ";
-    cout<<"level"<<getLevel()<<endl;
-//" refL "<<*refList<<endl;
-//cout<<"* "<<i->second.getItemSet()<<endl;
+      std::cout<<*i2<<"  ";
+    std::cout<<"level"<<getLevel()<<std::endl;
+//" refL "<<*refList<<std::endl;
+//cout<<"* "<<i->second.getItemSet()<<std::endl;
     if (i->second.getItemSet()!=NULL) {
-//cout<<"Address "<<i->second.getItemSet()<<endl;
+//cout<<"Address "<<i->second.getItemSet()<<std::endl;
       i->second.getItemSet()->printItemSetRecursive(lev+1);
     }
   }
-//cout<<"fine print"<<endl;
+//cout<<"fine print"<<std::endl;
 }
 
 
 template< class NODETYPE >
 void itemSet< NODETYPE >::createNewItemSet(double nSup,double
 totGroups,int lev) {
-  set<int> tList,t2,tListNew;
+  std::set<int> tList,t2,tListNew;
   itemSet<NODETYPE>* prttNew;
   typename MapType::iterator i;
   typename MapType::iterator j;
-  typename set<int>::iterator i2;
+  typename std::set<int>::iterator i2;
   bool toLink;
 
   for( i=prtt.begin( ) ; i != prtt.end( ) ; i++ ) {
-// cout<<"PADRE!!!!  "<<i->first<<endl;
+// std::cout<<"PADRE!!!!  "<<i->first<<std::endl;
     j=i;
     j++;
     prttNew=new itemSet(lev);
@@ -346,19 +346,19 @@ totGroups,int lev) {
     tList=i->second.getGidList();
 
     while (j!=prtt.end()) {
-// cout<<"figlio generato "<<j->first;
+// std::cout<<"figlio generato "<<j->first;
       t2=j->second.getGidList();
 
       set_intersection(t2.begin(), t2.end(),tList.begin(), tList.end(), inserter(tListNew,tListNew.begin()));
-// cout<<"intersezione... "<<endl;
+// std::cout<<"intersezione... "<<std::endl;
 // for (i2=tListNew.begin(); i2!=tListNew.end();i2++)
-//     cout<<*i2<<"  ";
-// cout<<endl;
-// cout<<"ListNEW!!! "<<tListNew<<endl;
+//     std::cout<<*i2<<"  ";
+// std::cout<<std::endl;
+// std::cout<<"ListNEW!!! "<<tListNew<<std::endl;
 
-//cout<<"size list"<<tListNew.size()<<endl;
+//cout<<"size list"<<tListNew.size()<<std::endl;
       if (  (tListNew.size()>=nSup) && (!tListNew.empty()) ) {
-//  cout<<"non vuoto"<<endl;
+//  std::cout<<"non vuoto"<<std::endl;
 
         prttNew->setItemSet(j->first,tListNew,totGroups);
 
@@ -367,11 +367,11 @@ totGroups,int lev) {
       }
 
       tListNew.clear();
-//  cout<<"sei solo tu"<<endl;
+//  std::cout<<"sei solo tu"<<std::endl;
       j++;
     }
     i->second.gidListRemove();
-// cout<<"stampa prttNew"<<endl;
+// std::cout<<"stampa prttNew"<<std::endl;
 // prttNew->printItemSet();
     if (toLink) {
       i->second.setItemSetChild(prttNew);
@@ -379,7 +379,7 @@ totGroups,int lev) {
       prttNew->createNewItemSet(nSup,totGroups,lev+1);
     }
     else delete prttNew;
-// cout<<".."<<endl;
+// std::cout<<".."<<std::endl;
   }
 
 }
@@ -393,8 +393,8 @@ bool itemSet< NODETYPE >::gen_Large_ItemSet(
 			      double nSup,
 			      int lev) {
   //  itemSet<NODETYPE>* prttNew;
-  typename list<itemSet<NODETYPE>* >::iterator i;
-  list<itemSet<NODETYPE>* >* listPtr;
+  typename std::list<itemSet<NODETYPE>* >::iterator i;
+  std::list<itemSet<NODETYPE>* >* listPtr;
   unsigned int rLev;
   bool otherItemSet,toContinue;
 
@@ -420,20 +420,20 @@ bool itemSet< NODETYPE >::gen_Large_ItemSet(
 
 template< class NODETYPE >
 bool itemSet< NODETYPE >::gen_Large_ItemSetHelper(itemSetList<NODETYPE>& ptrList,double nSup,unsigned int lev) {
-  set<int> tList,t2,tListNew;
+  std::set<int> tList,t2,tListNew;
   itemSet<NODETYPE>* prttNew;
   typename MapType::iterator i;
   typename MapType::iterator j;
-  //  typename list<NODETYPE>::iterator i2;
+  //  typename std::list<NODETYPE>::iterator i2;
   bool toLink,otherPart;
-  list<itemSet<NODETYPE>* >*  listPtr;
+  std::list<itemSet<NODETYPE>* >*  listPtr;
 
   otherPart=false;
 
   if ((ptrList.vect.size()-1)>=lev)
     listPtr=ptrList.getList(lev);
   else 
-    listPtr=new list<itemSet<NODETYPE>* >();
+    listPtr=new std::list<itemSet<NODETYPE>* >();
 
   for( i=prtt.begin( ) ; i != prtt.end( ) ; i++ ) {
     j=i;
@@ -481,8 +481,8 @@ bool itemSet< NODETYPE >::gen_Large_ItemSetHelper(itemSetList<NODETYPE>& ptrList
 
 
 template<class NODETYPE>
-void itemSet< NODETYPE >::deleteElemsFromPrtt(vector<NODETYPE>& elVec) {
-  typename vector<NODETYPE>::iterator it;
+void itemSet< NODETYPE >::deleteElemsFromPrtt(std::vector<NODETYPE>& elVec) {
+  typename std::vector<NODETYPE>::iterator it;
   for(it=elVec.begin(); it!=elVec.end(); it++) {
     prtt.erase(*it);
   }
@@ -492,7 +492,7 @@ template< class NODETYPE >
 void itemSet< NODETYPE >::gen_Large_ItemSet_Base(double nSup) {
   typename MapType::iterator i;
   NODETYPE elemToDelete;
-  vector<NODETYPE> elemsToBeDeleted;
+  std::vector<NODETYPE> elemsToBeDeleted;
 
   for( i=prtt.begin( ) ; i != prtt.end( ) ; i++ ) {
     if (i->second.getGidList().size() < nSup) {
@@ -505,12 +505,12 @@ void itemSet< NODETYPE >::gen_Large_ItemSet_Base(double nSup) {
 
 
 template< class NODETYPE >
-void itemSet< NODETYPE >::cancellaRef( list<itemSet<NODETYPE>* >* listPtr) {
-  typename list<itemSet<NODETYPE>* >::iterator riferimento;
-  //  cout<<"opa"<<endl;
+void itemSet< NODETYPE >::cancellaRef( std::list<itemSet<NODETYPE>* >* listPtr) {
+  typename std::list<itemSet<NODETYPE>* >::iterator riferimento;
+  //  std::cout<<"opa"<<std::endl;
 
   riferimento=getRefList();
-  //  cout<<"refList"<<*riferimento<<endl;
+  //  std::cout<<"refList"<<*riferimento<<std::endl;
   listPtr->erase(riferimento);
 }
 
@@ -524,7 +524,7 @@ itemSet<NODETYPE>::removeAllReferences(
   itemSet<NODETYPE>* prttChild = delElem.getItemSet();
   if( prttChild!=NULL ) {
     int nlev = prttChild->getLevel();  
-    list<itemSet<NODETYPE>* >* listPtr=ptrList.getList(nlev);;
+    std::list<itemSet<NODETYPE>* >* listPtr=ptrList.getList(nlev);;
     assert( listPtr!=NULL );
 
     prttChild->remove(ptrList);
@@ -543,8 +543,8 @@ void itemSet< NODETYPE >::checkSupportBaseDef(
   //  itemSet<NODETYPE>* prttNew;
   typename MapType::iterator i;
   //  int nlev;
-  //  list<itemSet<NODETYPE>* >* listPtr;
-  vector<NODETYPE> elemsToBeDeleted;
+  //  std::list<itemSet<NODETYPE>* >* listPtr;
+  std::vector<NODETYPE> elemsToBeDeleted;
 
   for( i=prtt.begin( ) ; i != prtt.end( ) ; i++ ) {
     if (i->second.getGidList().size() < nSup) {
@@ -553,7 +553,7 @@ void itemSet< NODETYPE >::checkSupportBaseDef(
     }
     else {
       i->second.setCountGid(i->second.numDistinctGID());
-      vector<NODETYPE> tmp;
+      std::vector<NODETYPE> tmp;
       tmp.push_back(i->first);
       pHashMap.add(tmp);
     }
@@ -639,13 +639,13 @@ void itemSet< NODETYPE >::mergeItemSet(
    Qry="select level,"
      +srd.getBody().getSQLColumnNames()+" from tmp_Rule_Base order by id;";
 
-   //   cerr << endl << "QRY:" << Qry << endl;
+   //   std::cerr << std::endl << "QRY:" << Qry << std::endl;
 
    HeadBodySourceRowDescription srDescription;
    lastElem = srDescription.setBodyElems(2,srd.getBody().getColumnsCount());
 
    resultAllBody=statement->executeQuery(Qry.c_str());
-   //cout<<"dopo resultAllBody"<<endl;
+   //cout<<"dopo resultAllBody"<<std::endl;
    if (resultAllBody!=NULL) {
      mergeItemSetHelper(ptrList,
 			resultAllBody,
@@ -654,7 +654,7 @@ void itemSet< NODETYPE >::mergeItemSet(
 			coreConn,
 			srd);
      delete resultAllBody;
-   } else cout<<"ResultAllBody == NULL"<<endl;
+   } else std::cout<<"ResultAllBody == NULL"<<std::endl;
    delete statement;
 }
 
@@ -737,8 +737,8 @@ void itemSet< NODETYPE >::updatePtrList(
 				     itemSetList<NODETYPE>& ptrList,
 				     unsigned int level,
 				     itemSet<NODETYPE>* newLevel) {
-  list<itemSet<NODETYPE>* >*  listPtr;
-  typename list<itemSet<NODETYPE>* >::iterator riferimento;
+  std::list<itemSet<NODETYPE>* >*  listPtr;
+  typename std::list<itemSet<NODETYPE>* >::iterator riferimento;
 
   if ((ptrList.vect.size()-1)>=level) {
     // esiste la lista di livello level
@@ -747,7 +747,7 @@ void itemSet< NODETYPE >::updatePtrList(
     ptrList.vect[level]=listPtr;
   } else {
     // Non c'e' una lista di livello level!
-    listPtr=new list<itemSet<NODETYPE>* >();
+    listPtr=new std::list<itemSet<NODETYPE>* >();
     listPtr->push_back(newLevel);
     ptrList.vect.push_back(listPtr);
   }
@@ -765,8 +765,8 @@ bool itemSet< NODETYPE >::gen_final_count(
 		int lev,
 		newItemSetHashMap<NODETYPE>& pHashMap) {
 
-   typename list<itemSet<NODETYPE>* >::iterator i;
-   list<itemSet<NODETYPE>* >* listPtr;
+   typename std::list<itemSet<NODETYPE>* >::iterator i;
+   std::list<itemSet<NODETYPE>* >* listPtr;
    unsigned int rLev;
    newItemSetHashMap<NODETYPE> pHashMapNew;
 
@@ -806,7 +806,7 @@ bool itemSet< NODETYPE >::gen_final_count_Helper(
 	      double nSup) {
    typename MapType::iterator i;
 
-   vector<NODETYPE> elemsToBeDeleted;
+   std::vector<NODETYPE> elemsToBeDeleted;
 
    for( i=prtt.begin( ) ; i != prtt.end( ) ; i++ ) {
      prune_children(i->second, pHashMap, pHashMapNew, nSup, ptrList );
@@ -823,7 +823,7 @@ bool itemSet< NODETYPE >::prune_children(
 						double nSup,
 						itemSetList<NODETYPE>& ptrList
 				   ) {
-  set<int>& tList = toBePruned.getGidList();
+  std::set<int>& tList = toBePruned.getGidList();
   if( toBePruned.getItemSet()==NULL ) {
     return false;
   }
@@ -835,16 +835,16 @@ bool itemSet< NODETYPE >::prune_children(
   bool oneOK = false;
   bool doApriori;
 
-  vector<NODETYPE> elemsToBeDeleted;
+  std::vector<NODETYPE> elemsToBeDeleted;
   typename MapType::iterator j;
   for( j=childMap.begin(); j !=childMap.end( ) ; j++ )  {
       doApriori=pHashMap.findTies(myAncestor,j->first,level);
 
       if (doApriori) {
-	  set<int> tListNew;
+	  std::set<int> tListNew;
 
 	  assert( prtt.find(j->first)!=prtt.end() );	  
-	  set<int>& tParentList=(prtt.find(j->first))->second.getGidList();
+	  std::set<int>& tParentList=(prtt.find(j->first))->second.getGidList();
 
 	  set_intersection(tList.begin(),tList.end(),
 			   tParentList.begin(), tParentList.end(),
@@ -868,7 +868,7 @@ bool itemSet< NODETYPE >::prune_children(
 	} else 	{
 	  // Non e' vero che tutti i miei ancestors hanno supporto sufficiente.
 	  // non c'e' speranza che io possa averlo 
-	  //	  cout << "CANCELLO:" << j->first << endl;
+	  //	  std::cout << "CANCELLO:" << j->first << std::endl;
 	  removeAllReferences(j->second, ptrList);
 	  elemsToBeDeleted.push_back(j->first);
 	}
@@ -878,7 +878,7 @@ bool itemSet< NODETYPE >::prune_children(
   // N.B. Non puo' essere fatto prima perche' altrimenti l'iteratore "i"
   // verrebbe invalidato.
 
-  typename vector<NODETYPE>::iterator it;
+  typename std::vector<NODETYPE>::iterator it;
   for(it=elemsToBeDeleted.begin(); it!=elemsToBeDeleted.end(); it++) {
     childMap.erase(*it);
   }
@@ -895,7 +895,7 @@ bool itemSet< NODETYPE >::prune_children(
     
     
     int nLev=(toBePruned.getItemSet()->getLevel())+1;
-    list< itemSet<NODETYPE>* >* listPtr=ptrList.getList(nLev);
+    std::list< itemSet<NODETYPE>* >* listPtr=ptrList.getList(nLev);
     
     toBePruned.getItemSet()->remove(ptrList);
     toBePruned.getItemSet()->cancellaRef(listPtr);
@@ -972,13 +972,13 @@ void itemSet< NODETYPE >::extractRuleHelper( sqlCoreConn& coreConn,
 
 #if 0 // debug
  // stampa ancestor
-  string values;
-  typename vector<NODETYPE>::const_iterator it=curElem.begin();
+ std::string values;
+  typename std::vector<NODETYPE>::const_iterator it=curElem.begin();
   for(;it!=curElem.end(); it++) {
     values += std::string(it->c_str())+"-";
   }
-  cout << "extract..Helper: curElem:" << values << endl;
-  cout << "                 maxVal:" << maxVal << endl;
+  std::cout << "extract..Helper: curElem:" << values << std::endl;
+  std::cout << "                 maxVal:" << maxVal << std::endl;
   //end stampa ancestor
 #endif
 
@@ -1000,21 +1000,21 @@ void itemSet< NODETYPE >::extractRuleHelper( sqlCoreConn& coreConn,
 
 #if 0 // debug
 #warning debug
-    cout << "    i==" <<  i << " body: ";
-    string values;
-    typename vector<NODETYPE>::const_iterator it2=body.begin();
+    std::cout << "    i==" <<  i << " body: ";
+   std::string values;
+    typename std::vector<NODETYPE>::const_iterator it2=body.begin();
     for(;it2!=body.end(); it2++) {
       values += std::string(it2->c_str())+"-";
     }
-    cout << values << endl;
+    std::cout << values << std::endl;
 
-    cout << "    i==" <<  i << " head: ";
+    std::cout << "    i==" <<  i << " head: ";
     values="";
     it2=head.begin();
     for(;it2!=head.end(); it2++) {
       values += std::string(it2->c_str())+"-";
     }
-    cout << values << endl;
+    std::cout << values << std::endl;
 // end warning
 #endif
   
@@ -1022,10 +1022,10 @@ void itemSet< NODETYPE >::extractRuleHelper( sqlCoreConn& coreConn,
     coreConn.insert_DB(body,head,cSupp,cConf);
 
     /*
-    // Building up the string representation of the generated rule...
+    // Building up thestd::string representation of the generated rule...
     // Body part...
-    typename vector<NODETYPE>::iterator it;
-    string regola;
+    typename std::vector<NODETYPE>::iterator it;
+   std::string regola;
 
     it=body.begin();
     if(it!=body.end()) {
@@ -1068,19 +1068,19 @@ template< class NODETYPE >
 void itemSet< NODETYPE >::remove(itemSetList<NODETYPE>& ptrList) {
   typename MapType::iterator i;
   itemSet<NODETYPE>* p;
-  list<itemSet<NODETYPE>* >* listPtr;
+  std::list<itemSet<NODETYPE>* >* listPtr;
   int lev;
-  typename list<itemSet<NODETYPE>* >::iterator riferimento;
+  typename std::list<itemSet<NODETYPE>* >::iterator riferimento;
 
   lev=getLevel();
-  //  cout<<"Remove tutto lev"<<lev<<endl;
+  //  std::cout<<"Remove tutto lev"<<lev<<std::endl;
   for( i=prtt.begin( ) ; i != prtt.end( ) ; i++ ) {
-    //    cout<<"Dentro REmove da taglio "<<i->first<<endl;
+    //    std::cout<<"Dentro REmove da taglio "<<i->first<<std::endl;
     p=i->second.getItemSet();
     if (p!=NULL) {
       p->remove(ptrList);
       listPtr=ptrList.getList(lev);
-      //      cout<<"delete ItemSet dalla lista"<<p<<endl;
+      //      std::cout<<"delete ItemSet dalla lista"<<p<<std::endl;
       riferimento=p->getRefList();
       listPtr->erase(riferimento);
       delete p;
@@ -1103,7 +1103,7 @@ void itemSet< NODETYPE >::removeHelper(itemSetList<NODETYPE>& ptrList)
   for( i=prtt.begin( ) ; i != prtt.end( ) ; i++ )
      {
 p=i->second.getItemSet();
-cout<<"item"<<i->first<<endl;
+cout<<"item"<<i->first<<std::endl;
 
 if (p!=NULL)
 {
@@ -1114,7 +1114,7 @@ delete p;
 }
 prtt.erase(i);
 }
-cout<<"fine removeHelper"<<endl;
+cout<<"fine removeHelper"<<std::endl;
 }
 */
 
@@ -1122,20 +1122,20 @@ cout<<"fine removeHelper"<<endl;
 template< class NODETYPE >
 void itemSet< NODETYPE >::printToDesign(int isPart) {
 
-  string files,label1,values,vStruct,nod,address,idList;
+ std::string files,label1,values,vStruct,nod,address,idList;
   typename MapType::iterator i;
-  typename set<int>::iterator i2;
-  set<int> tList;
+  typename std::set<int>::iterator i2;
+  std::set<int> tList;
   char filename[16];
 
   sprintf(filename,"design/L%d.txt",isPart);
 
   ofstream f1(filename);
 
-  f1<<"digraph minerule { "<<endl;
-  f1<<"graph[fontsize=8]; edge  [fontsize=8]; node  [fontsize=8]; ranksep = .30; nodesep = .25;"<<endl;
-  f1<<"node [fontname=\"Courier\"]; "<<endl;
-  f1<<"node [shape=record];"<<endl;
+  f1<<"digraph minerule { "<<std::endl;
+  f1<<"graph[fontsize=8]; edge  [fontsize=8]; node  [fontsize=8]; ranksep = .30; nodesep = .25;"<<std::endl;
+  f1<<"node [fontname=\"Courier\"]; "<<std::endl;
+  f1<<"node [shape=record];"<<std::endl;
 
   vStruct="struct0";
   label1="struct0[shape=record,label=\"";
@@ -1158,7 +1158,7 @@ void itemSet< NODETYPE >::printToDesign(int isPart) {
 
     #ifndef PRINTGID
     // stampa ancestor
-    typename vector<NODETYPE>::const_iterator it=getAncestor().begin();
+    typename std::vector<NODETYPE>::const_iterator it=getAncestor().begin();
     for(;it!=getAncestor().end(); it++) {
       values += std::string(it->c_str())+"-";
     }
@@ -1172,7 +1172,7 @@ void itemSet< NODETYPE >::printToDesign(int isPart) {
   siz=siz-1;
   if (siz>0)  values.resize(siz);
   label1=label1+values+"\"];";
-  f1<<label1<<endl;
+  f1<<label1<<std::endl;
   values="";
 
   for( i=prtt.begin( ) ; i != prtt.end( ) ; i++ ) {
@@ -1190,7 +1190,7 @@ void itemSet< NODETYPE >::printToDesign(int isPart) {
     }
   }
 
-  f1<<"}"<<endl;
+  f1<<"}"<<std::endl;
 
 }
 
@@ -1198,11 +1198,11 @@ void itemSet< NODETYPE >::printToDesign(int isPart) {
 // Segue la sintassi per creare un file testo per legare i vari nodi.
 // Vedi WinGraph e programma vizuale.exe
 template< class NODETYPE >
-void itemSet< NODETYPE >::printToDesignHelper(string here,string padre,ofstream& f1) {
+void itemSet< NODETYPE >::printToDesignHelper(std::string here, std::string padre,ofstream& f1) {
   typename MapType::iterator i;
-  string files,label1,values,vStruct,nod,address,idList;
-  typename set<int>::iterator i2;
-  set<int> tList;
+ std::string files,label1,values,vStruct,nod,address,idList;
+  typename std::set<int>::iterator i2;
+  std::set<int> tList;
 
   label1="struct"+padre+"[shape=record,label=\""+padre+"|";
   values="";
@@ -1223,14 +1223,14 @@ void itemSet< NODETYPE >::printToDesignHelper(string here,string padre,ofstream&
 
     #ifndef PRINTGID
     // stampa ancestor
-    typename vector<NODETYPE>::const_iterator it=getAncestor().begin();
+    typename std::vector<NODETYPE>::const_iterator it=getAncestor().begin();
     for(;it!=getAncestor().end(); it++) {
       values += std::string(it->c_str())+"-";
     }
     //end stampa ancestor
     #endif
 
-//string myAncestor2=myAncestor;
+//std::string myAncestor2=myAncestor;
 //myAncestor2.replace(1,size(),",");
     values=values+":  "+idList+"|";
   }
@@ -1241,8 +1241,8 @@ void itemSet< NODETYPE >::printToDesignHelper(string here,string padre,ofstream&
   if (siz>0)    values.resize(siz);
 
   label1=label1+values+"\"];";
-  f1<<label1<<endl;
-  f1<<here<<"->"<<"struct"+padre<<endl;
+  f1<<label1<<std::endl;
+  f1<<here<<"->"<<"struct"+padre<<std::endl;
   values="";
   for( i=prtt.begin( ) ; i != prtt.end( ) ; i++ ) {
 

@@ -1,6 +1,6 @@
 #include "Algorithms/FSTreeNode.h"
 #include <iostream>
-using namespace std;
+
 
 namespace minerule {
 

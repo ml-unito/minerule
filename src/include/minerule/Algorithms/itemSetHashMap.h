@@ -4,7 +4,7 @@
 #include <ext/hash_map>
 #include "utils.h"
 
-using namespace std;
+
 using namespace __gnu_cxx;
 
 struct eqstr
@@ -34,14 +34,14 @@ class itemSetHashMap {
 template< class NODETYPE >
 itemSetHashMap< NODETYPE >::itemSetHashMap()
  {
-   //cout<<"costruttore HashMap"<<endl;
+   //cout<<"costruttore HashMap"<<std::endl;
  }
 
 template< class NODETYPE >
 void itemSetHashMap< NODETYPE >::add(const char* elem, NODETYPE item)
  {
    //hashLevel.insert(make_pair(elem,item));
-   //cout<<"Nella add "<<elem<<" item "<<item<<endl;
+   //cout<<"Nella add "<<elem<<" item "<<item<<std::endl;
 
    hashLevel[elem]=item;
  }
@@ -50,8 +50,8 @@ void itemSetHashMap< NODETYPE >::add(const char* elem, NODETYPE item)
 template< class NODETYPE >
 bool itemSetHashMap< NODETYPE >::findTies(String ancestor, NODETYPE item,int lev)
  {
-  //cout<<"findTies"<<endl;
-  //cout<<"ancestor "<<ancestor<<" item "<<item<<endl;
+  //cout<<"findTies"<<std::endl;
+  //cout<<"ancestor "<<ancestor<<" item "<<item<<std::endl;
 
   typename hash_map<const char*, NODETYPE, hash <const char* >, eqstr >::iterator k;
   int i;
@@ -68,9 +68,9 @@ bool itemSetHashMap< NODETYPE >::findTies(String ancestor, NODETYPE item,int lev
      us=us+item;
 
      const char* like=(us).c_str();
-   //  cout<<"undersTring"<<like<<"--"<<endl;
+   //  std::cout<<"undersTring"<<like<<"--"<<std::endl;
      k=hashLevel.find(like);
-     //cout<<"k "<<k->first<<endl;
+     //cout<<"k "<<k->first<<std::endl;
      if (k==hashLevel.end())  ok=false;
 
    }
@@ -82,16 +82,16 @@ bool itemSetHashMap< NODETYPE >::findTies(String ancestor, NODETYPE item,int lev
 template< class NODETYPE >
 void itemSetHashMap< NODETYPE >::print()
  {
-  cout<<"PRINT : Hash Map Size"<<hashLevel.size()<<endl;
+  std::cout<<"PRINT : Hash Map Size"<<hashLevel.size()<<std::endl;
   typename hash_map<const char*, NODETYPE, hash <const char* >, eqstr >::iterator i;
   i=hashLevel.begin();
 
 
   for (int j=0;j<hashLevel.size(); j++,i++)
      {
-          cout<<"elemento Hash"<<i->first<<endl;
+          std::cout<<"elemento Hash"<<i->first<<std::endl;
     }
-  cout<<"Fine PRINT hash"<<endl;
+  std::cout<<"Fine PRINT hash"<<std::endl;
  }
 
 

@@ -6,7 +6,7 @@
 #include <cmath>
 
 
-using namespace std;
+
 
 namespace minerule {
 
@@ -25,15 +25,15 @@ namespace minerule {
       //body e head sono due puntatori a ItemSetType
       /*ItemSetType:: iterator itr=(r.body)->begin();
 		        while(itr!=(r.body)->end()){cout<<" "<<(*itr);itr++;}
-			cout<<" -> ";
+			std::cout<<" -> ";
       itr=(r.head)->begin();
 		        while(itr!=(r.head)->end()){cout<<" "<<(*itr);itr++;}
-			cout<<endl;*/
+			std::cout<<std::endl;*/
       double suppr=round(r.support*ngroups);
-      //cout<<"suppr "<<suppr<<endl;
+      //cout<<"suppr "<<suppr<<std::endl;
       double suppb=round(suppr/r.confidence);
-      //cout<<"suppb "<<suppb<<endl;
-      //cout<<endl;
+      //cout<<"suppb "<<suppb<<std::endl;
+      //cout<<std::endl;
       newhead=root->insertItemSetB(*r.body,suppb);
       newhead->insertItemSetH(*r.head,suppr);
     }
@@ -42,7 +42,7 @@ namespace minerule {
 
 
    void DestrTree::adjustSuppMIndex(){
-     //    MRLog() << "findRulesInTree da adjustSuppMIndex()..."<<endl;
+     //    MRLog() << "findRulesInTree da adjustSuppMIndex()..."<<std::endl;
     bool notend=1;
     //body e head servono per capire quando devo andare avanti nella rispettiva lista oppure no
     bool newbody=1;
@@ -52,7 +52,7 @@ namespace minerule {
     ItemSetType* h1=new ItemSetType();
     ItemSetType* h1nh2=new ItemSetType();
     while( notend ) {
-      string gb,gh;
+     std::string gb,gh;
       if (newbody){delete b1; delete b1nb2;
                 ItemSetType* b1=new ItemSetType();
                 ItemSetType* b1nb2=new ItemSetType();
@@ -103,7 +103,7 @@ namespace minerule {
 
 
   void DestrTree::adjustSuppRSet(){
-    MRLog() << "findRulesInTree da adjustSuppRSet()..."<<endl;
+    MRLog() << "findRulesInTree da adjustSuppRSet()..."<<std::endl;
     ItemType gb;
     ItemType gh;
     bool newbody=1;
@@ -175,69 +175,69 @@ namespace minerule {
 
 
       if (!(gb<gh) && !(gb==gh)) {
-                        /*cout<<"h1= "<<endl;
+                        /*cout<<"h1= "<<std::endl;
                     	ItemSetType:: iterator it1=h1->begin();
 		 	 while(it1!=h1->end()){cout<<" "<<(*it1);it1++;}
-			 cout<<endl;
+			 std::cout<<std::endl;
 
 
-		 	 cout<<"h1nh2= "<<endl;
+		 	 std::cout<<"h1nh2= "<<std::endl;
                  	 ItemSetType:: iterator it2=h1nh2->begin();
 		 	 while(it2!=h1nh2->end()){cout<<" "<<(*it2);it2++;}
-                         cout<<endl;*/
+                         std::cout<<std::endl;*/
 
 
 	                 root->findRulesInTree(NULL, NULL, h1, h1nh2);
                          newbody=0;newhead=1;
 
-      }else if (gb<gh) {/*cout<<"b1= "<<endl;
+      }else if (gb<gh) {/*cout<<"b1= "<<std::endl;
                         ItemSetType:: iterator it3=b1->begin();
 		        while(it3!=b1->end()){cout<<" "<<(*it3);it3++;}
-			cout<<endl;
+			std::cout<<std::endl;
 
 
-			cout<<"b1nb2= "<<endl;
+			std::cout<<"b1nb2= "<<std::endl;
                         ItemSetType:: iterator it4=b1nb2->begin();
 		        while(it4!=b1nb2->end()){cout<<" "<<(*it4);it4++;}
-                        cout<<endl;*/
+                        std::cout<<std::endl;*/
 
 
 
                         root->findRulesInTree(b1, b1nb2, NULL, NULL);
                         newbody=1;newhead=0;
        }
-       else if (gb==gh) {/*cout<<"b1= "<<endl;
+       else if (gb==gh) {/*cout<<"b1= "<<std::endl;
                         ItemSetType:: iterator it5=b1->begin();
 		        while(it5!=b1->end()){cout<<" "<<(*it5);it5++;}
-			cout<<endl;
+			std::cout<<std::endl;
 
 
-			cout<<"b1nb2= "<<endl;
+			std::cout<<"b1nb2= "<<std::endl;
                         ItemSetType:: iterator it6=b1nb2->begin();
 		        while(it6!=b1nb2->end()){cout<<" "<<(*it6);it6++;}
-			cout<<endl;
+			std::cout<<std::endl;
 
 
-			cout<<"h1= "<<endl;
+			std::cout<<"h1= "<<std::endl;
 			ItemSetType:: iterator it7=h1->begin();
 		        while(it7!=h1->end()){cout<<" "<<(*it7);it7++;}
-			cout<<endl;
+			std::cout<<std::endl;
 
 
-			cout<<"h1nh2= "<<endl;
+			std::cout<<"h1nh2= "<<std::endl;
                         ItemSetType:: iterator it8=h1nh2->begin();
 		        while(it8!=h1nh2->end()){cout<<" "<<(*it8);it8++;}
-                        cout<<endl;
+                        std::cout<<std::endl;
 
-			cout<<"stampa terminata"<<endl;*/
+			std::cout<<"stampa terminata"<<std::endl;*/
                          root->findRulesInTree(b1, b1nb2, h1, h1nh2);
                          newbody=1;newhead=1;
        }
 
-     /*cout<<"gruppo di b1: "<<gb<<endl;
-     cout<<"gruppo di h1: "<<gh<<endl;*/
-     //cout<<"gruppo di b1nb2: "<<ItemType(curRowb12.getGroupBody() <<endl;
-     //cout<<"gruppo di h1nh2: "<<ItemType(curRowh12.getGroupBody()<<endl;
+     /*cout<<"gruppo di b1: "<<gb<<std::endl;
+     std::cout<<"gruppo di h1: "<<gh<<std::endl;*/
+     //cout<<"gruppo di b1nb2: "<<ItemType(curRowb12.getGroupBody() <<std::endl;
+     //cout<<"gruppo di h1nh2: "<<ItemType(curRowh12.getGroupBody()<<std::endl;
      if (!b1notend && !h1notend) notend=0;
 
 
@@ -246,9 +246,9 @@ namespace minerule {
 
 
   void DestrTree::adjustSupp(){
-    MRLog() << "Preparing the data structures..." << endl;
+    MRLog() << "Preparing the data structures..." << std::endl;
     insertRulesInStructure();
-    MRLog() << "Done!" << endl;
+    MRLog() << "Done!" << std::endl;
     sqlCoreConn coreConn;
     coreConn.setOutTableName(minerule->getParsedMinerule().tab_result);
     coreConn.useConnection(
@@ -257,7 +257,7 @@ namespace minerule {
 
     if (mb1!=NULL  &&  mh1!=NULL) {
       adjustSuppMIndex();
-      vector<ItemType> body;
+      std::vector<ItemType> body;
       getRoot()->extractRules(body,
 			      minerule->getParsedMinerule().sup,
 			      minerule->getParsedMinerule().conf,
@@ -266,18 +266,18 @@ namespace minerule {
     }
     else {
       if (rb1!=NULL  &&  rh1!=NULL) {
-	MRLog() << "Adjusting support..." << endl;
+	MRLog() << "Adjusting support..." << std::endl;
 	adjustSuppRSet();
-	MRLog() << "Done!" << endl;
+	MRLog() << "Done!" << std::endl;
 
-	vector<ItemType> body;
-	MRLog() << "Extracting rules..." << endl;
+ std::vector<ItemType> body;
+	MRLog() << "Extracting rules..." << std::endl;
 	getRoot()->extractRules(body,
 				minerule->getParsedMinerule().sup,
 				minerule->getParsedMinerule().conf,
 				ngroups,
 				&coreConn);
-	MRLog() << "Done!" << endl;
+	MRLog() << "Done!" << std::endl;
       } else 
 	throw MineruleException (MR_ERROR_INTERNAL,
 				 " cannot create rules ");
@@ -305,11 +305,11 @@ namespace minerule {
 
   // Preprocessing functions
   
-  string DestrTree::buildQry( const std::string& groupAttrStr,
+ std::string DestrTree::buildQry( const std::string& groupAttrStr,
 			      const std::string& attrStr,
 			      const std::string& constraints) const {
     
-    return string("SELECT "+groupAttrStr+","+attrStr+" "
+    return std::string("SELECT "+groupAttrStr+","+attrStr+" "
 		  "FROM "+minerule->getParsedMinerule().tab_source+" "+
 		  (constraints.size()>0 ?
 		  "WHERE "+constraints+" " :
@@ -318,12 +318,12 @@ namespace minerule {
   }
 
   
-  string DestrTree::buildQry1NotQry2( const std::string& groupAttrStr,
+ std::string DestrTree::buildQry1NotQry2( const std::string& groupAttrStr,
 				      const std::string& attrStr,
 				      const std::string& constraint1,
 				      const std::string& constraint2) const {
     
-    return string("SELECT "+groupAttrStr+","+attrStr+" "
+    return std::string("SELECT "+groupAttrStr+","+attrStr+" "
 		  "FROM "+minerule->getParsedMinerule().tab_source+" "
 		  "WHERE "+constraint1+" AND NOT("+constraint2+") "
 		  "ORDER BY "+groupAttrStr);
@@ -348,27 +348,27 @@ namespace minerule {
     MRLogPush("This is the Context Dependent Destructive Mining Algorithm...");
     MRLogPush("Building source information");
 
-    MRLog() << "Separating the constraints in the HEAD and BODY parts..."<<endl;
-    string q1BodyConstraints;
-    string q1HeadConstraints;
-    string q2BodyConstraints;
-    string q2HeadConstraints;
+    MRLog() << "Separating the constraints in the HEAD and BODY parts..."<<std::endl;
+   std::string q1BodyConstraints;
+   std::string q1HeadConstraints;
+   std::string q2BodyConstraints;
+   std::string q2HeadConstraints;
     HeadBodyPredicatesSeparator::separate(minerule->getOptimizationInfo().minerule.mc!=NULL?
 					  minerule->getOptimizationInfo().minerule.mc->l_and:NULL,
 					  q1BodyConstraints,
 					  q1HeadConstraints);
 
-    MRLog() << "Separating the constraints in the HEAD and BODY parts (query 2)..." << endl;
+    MRLog() << "Separating the constraints in the HEAD and BODY parts (query 2)..." << std::endl;
 
     HeadBodyPredicatesSeparator::separate(minerule->getParsedMinerule().mc->l_and,
 					  q2BodyConstraints,
 					  q2HeadConstraints);
 
-    MRLog() << "Building db queries" << endl;
+    MRLog() << "Building db queries" << std::endl;
     size_t index;
-    string groupAttr;
-    string bodyAttr;
-    string headAttr;
+   std::string groupAttr;
+   std::string bodyAttr;
+   std::string headAttr;
     index=buildAttrStr(minerule->getParsedMinerule().ga,
 		       0,
 		       groupAttr,
@@ -385,29 +385,29 @@ namespace minerule {
 		 headAttr,
 		 headDes.headElems);
 
-    string bodyQry1 =
+   std::string bodyQry1 =
       buildQry( groupAttr,
 		bodyAttr,
 		q1BodyConstraints);
 
-    string headQry1 =
+   std::string headQry1 =
       buildQry( groupAttr,
 		headAttr,
 		q1HeadConstraints);
 
-    string bodyQry1NotQry2 =
+   std::string bodyQry1NotQry2 =
       buildQry1NotQry2( groupAttr,
 		 bodyAttr,
 		 q1BodyConstraints,
 		 q2BodyConstraints);
 
-    string headQry1NotQry2 =
+   std::string headQry1NotQry2 =
       buildQry1NotQry2( groupAttr,
 		headAttr,
 		q1HeadConstraints,
 		q2HeadConstraints);
 
-    MRLog() << "Executing queries" << endl;
+    MRLog() << "Executing queries" << std::endl;
     odbc::Connection* con =
       MineruleOptions::getSharedOptions().getOdbc_db().getConnection();
 
@@ -417,18 +417,18 @@ namespace minerule {
     // Debugging code starts
     /*
     MRDebugPush("Body description");
-    ostream& dbg = MRDebug();
+    std::ostream& dbg = MRDebug();
     dbg << "Group ids:";
     copy( bodyDes.groupBodyElems.begin(),
 	  bodyDes.groupBodyElems.end(),
-	  ostream_iterator<int>(dbg, ",") );
-    dbg << endl;
+	  std::ostream_iterator<int>(dbg, ",") );
+    dbg << std::endl;
     MRDebug() << "Body ids:";
     copy( bodyDes.bodyElems.begin(),
 	  bodyDes.bodyElems.end(),
-	  ostream_iterator<int>(dbg, ",") );
-    dbg<< endl;
-    MRDebug() << "Body query:" << bodyQry << endl;
+	  std::ostream_iterator<int>(dbg, ",") );
+    dbg<< std::endl;
+    MRDebug() << "Body query:" << bodyQry << std::endl;
     MRDebugPop();
     */
     // Debugging code ends
@@ -443,14 +443,14 @@ namespace minerule {
     MRDebug() << "Group ids:";
     copy( headDes.groupBodyElems.begin(),
 	  headDes.groupBodyElems.end(),
-	  ostream_iterator<int>(dbg, ",") );
-    dbg << endl;
+	  std::ostream_iterator<int>(dbg, ",") );
+    dbg << std::endl;
     MRDebug() << "Head ids:";
     copy( headDes.headElems.begin(),
 	  headDes.headElems.end(),
-	  ostream_iterator<int>(dbg, ",") );
-    dbg<< endl;
-    MRDebug() << "Head query:" << headQry << endl;
+	  std::ostream_iterator<int>(dbg, ",") );
+    dbg<< std::endl;
+    MRDebug() << "Head query:" << headQry << std::endl;
     MRDebugPop();
     */
     // Debugging code ends
@@ -482,7 +482,7 @@ outfile << opts.getLogStreamObj().getLogger().getCurrentTimeDelta() << " ";
 
 
 /*#warning temporary
-outfile << opts.getLogStreamObj().getLogger().getCurrentTimeDelta()<< endl;
+outfile << opts.getLogStreamObj().getLogger().getCurrentTimeDelta()<< std::endl;
 //end*/
     MRLogPop();
 

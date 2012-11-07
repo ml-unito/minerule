@@ -101,7 +101,7 @@ namespace minerule {
 
   /**
    * SimplePredicate ptrs comparison function. It is needed 
-   * because of the use of set<SimplePredicates*> objects.
+   * because of the use of std::set<SimplePredicates*> objects.
    * We need to order the objects in the set using the <
    * operator defined on SimplePredicates, not using the <
    * operator defined on pointers (which is the default
@@ -203,12 +203,12 @@ namespace minerule {
     }
   };
 
-  inline ostream& operator<<(ostream& os, const SimplePredicate& s) {
+  inline std::ostream& operator<<(std::ostream& os, const SimplePredicate& s) {
     os << s.getVal1() << s.getOp() << s.getVal2();
     return os;
   }
 
-  inline ostream& operator<<(ostream& os, const PredConjunction& p) {
+  inline std::ostream& operator<<(std::ostream& os, const PredConjunction& p) {
     PredConjunction::const_iterator it2;
     for(it2=p.begin(); it2!=p.end(); it2++) {
       if(it2!=p.begin()) {
@@ -221,7 +221,7 @@ namespace minerule {
     return os;
   }
 
-  inline ostream& operator<<(ostream& os, const Predicate& p) {
+  inline std::ostream& operator<<(std::ostream& os, const Predicate& p) {
     Predicate::const_iterator it;
     for( it=p.begin(); it!=p.end(); it++) {
       if(it!=p.begin()) {

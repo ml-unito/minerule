@@ -15,7 +15,7 @@
 #include "RuleFormatter.h"
 #include "MRDatabase/sourcerowelement.h"
 
-using namespace std;
+
 using namespace minerule;
 
 
@@ -23,12 +23,12 @@ using namespace minerule;
 void
 readElems( odbc::PreparedStatement* state,
 	   int id,
-	   vector<string>& elems ) {
+	   std::vector<std::string>& elems ) {
   state->setInt(1,id);
   odbc::ResultSet* rs = state->executeQuery();
 
   while( rs->next() ) {
-    string str = rs->getString(1);
+   std::string str = rs->getString(1);
     try {
       SourceRowElement* elem = SourceRowElement::deserializeElementFromString(str);
       elems.push_back(elem->asString());
@@ -47,7 +47,7 @@ readElems( odbc::PreparedStatement* state,
 
 
 void
-printRules( string queryname,
+printRules(std::string queryname,
 	    RuleFormatter& formatter,
 	    double conf) throw (MineruleException, odbc::SQLException, std::exception) {
   QueryResult::Iterator qit;
@@ -65,7 +65,7 @@ printRules( string queryname,
 
 
 bool
-fileExists(const string& filename) {
+fileExists(const std::string& filename) {
   struct stat st;
   if( stat(filename.c_str(),&st)==0 && S_ISREG(st.st_mode) ) {
     return true;
@@ -78,33 +78,33 @@ fileExists(const string& filename) {
 
 void
 printHelp(int argc, char** argv) {
-  cout << "Usage:" << endl
-       << "   " << argv[0] << " [-c] [-h] [-s <order>] [-x <sepString>] [-f <optionfile>] resultsetname" << endl
-       << " -c do not filter out rules having low confidence" << endl
-       << " Option -s can be used to sort the rules in a given order." << endl
-       << "   supported orders are: " << endl
-       << "     'no' -> no particular order (fastest display)" << endl
-       << "     'scbh' -> order is support, confidence, body, head"<<endl
-       << "     'bhsc' -> order is body, head, supp, conf"<<endl
-       << "     'hbsc' -> order is head, body, supp,  conf"<<endl
-       << "     'csbh' -> order is conf, supp, body, head" << endl
-       << "     'cbhs' -> order is conf, body, head, supp" << endl
-       << "     'cbsh' -> order is conf, body, supp, head" << endl
-       << "   the default is 'no'" << endl
-       << " Option -x allows one to specify if a particular string needs to be" << endl
-       << "   used in order to specify fields in the output (in none is given)" << endl
-       << "   the program uses a human readable format." <<endl
-       << endl << endl;
+  std::cout << "Usage:" << std::endl
+       << "   " << argv[0] << " [-c] [-h] [-s <order>] [-x <sepString>] [-f <optionfile>] resultsetname" << std::endl
+       << " -c do not filter out rules having low confidence" << std::endl
+       << " Option -s can be used to sort the rules in a given order." << std::endl
+       << "   supported orders are: " << std::endl
+       << "     'no' -> no particular order (fastest display)" << std::endl
+       << "     'scbh' -> order is support, confidence, body, head"<<std::endl
+       << "     'bhsc' -> order is body, head, supp, conf"<<std::endl
+       << "     'hbsc' -> order is head, body, supp,  conf"<<std::endl
+       << "     'csbh' -> order is conf, supp, body, head" << std::endl
+       << "     'cbhs' -> order is conf, body, head, supp" << std::endl
+       << "     'cbsh' -> order is conf, body, supp, head" << std::endl
+       << "   the default is 'no'" << std::endl
+       << " Option -x allows one to specify if a particularstd::string needs to be" << std::endl
+       << "   used in order to specify fields in the output (in none is given)" << std::endl
+       << "   the program uses a human readable format." <<std::endl
+       << std::endl << std::endl;
 }
 
 void printVersion() {
-  cout << "PrintRules v:" << MR_VERSION << endl;
+  std::cout << "PrintRules v:" << MR_VERSION << std::endl;
 }
 
 void
 parseOptions(int argc, char** argv, MineruleOptions& opt, RuleFormatter*& rf, double& conf) {
   bool didReadMROpts=false;
-  string sepString="";
+ std::string sepString="";
   rf=NULL;
   for( int i=0; i<argc; i++ ) {
     // checking -f options
@@ -115,7 +115,7 @@ parseOptions(int argc, char** argv, MineruleOptions& opt, RuleFormatter*& rf, do
 	  opt.readFromFile(argv[i+1]);
 	  didReadMROpts=true;
 	} else {
-	  string errstr;
+	 std::string errstr;
 	  if(errno==0) {
 	    errstr = "Not a regular file!";
 	  } else {
@@ -123,13 +123,13 @@ parseOptions(int argc, char** argv, MineruleOptions& opt, RuleFormatter*& rf, do
 	  }
 
 	  // file argv[i+1] does not exists
-	  cout << "Could not open file:" << argv[i+1] <<endl
-	       << "The reason is:" << errstr << endl;
+	  std::cout << "Could not open file:" << argv[i+1] <<std::endl
+	       << "The reason is:" << errstr << std::endl;
 	  exit(1);
 	}
       } else {
 	// -f given, but argv[i+1] is defined
-	cout << "Error parsing arguments!" << endl;
+	std::cout << "Error parsing arguments!" << std::endl;
 	printHelp(argc, argv);
 	exit(2);
       }
@@ -144,7 +144,7 @@ parseOptions(int argc, char** argv, MineruleOptions& opt, RuleFormatter*& rf, do
       if((i+1)<argc) {
 	sepString = argv[i+1];
       } else {
-	cerr << "-x option recognized, but its argument is missing!" << endl;
+	std::cerr << "-x option recognized, but its argument is missing!" << std::endl;
 	printHelp(argc, argv);
 	exit(4);
       }
@@ -162,7 +162,7 @@ parseOptions(int argc, char** argv, MineruleOptions& opt, RuleFormatter*& rf, do
 
     if(argv[i]==string("-s")) {
       if((i+1)<argc) {
-	string arg = argv[i+1];
+std::string arg = argv[i+1];
 	if(string(arg)=="no") {
 	  rf=new SimpleRuleFormatter(cout);
 	} else if(string(arg)=="scbh") {
@@ -179,7 +179,7 @@ parseOptions(int argc, char** argv, MineruleOptions& opt, RuleFormatter*& rf, do
 	  rf=new SortedRuleFormatter<QueryResult::SortConfBodySuppHead>(cout);
 	}
       } else {
-	cerr << "-s option recognized, but its argument is missing!" << endl;
+	std::cerr << "-s option recognized, but its argument is missing!" << std::endl;
 	printHelp(argc,argv);
 	exit(3);
       }
@@ -194,8 +194,8 @@ parseOptions(int argc, char** argv, MineruleOptions& opt, RuleFormatter*& rf, do
     if(fileExists("mroptions"))
       opt.readFromFile("mroptions");
     else {
-      cout << "Cannot open 'mroptions' and not -f option has been given"
-	   << endl;
+      std::cout << "Cannot open 'mroptions' and not -f option has been given"
+	   << std::endl;
       exit(1);
     }
   }
@@ -209,7 +209,7 @@ int
 main(int argc, char** argv) {
   assert(argc>1);
   // The last parameter MUST be the query name
-  string qryname = argv[argc-1];
+ std::string qryname = argv[argc-1];
 
   try {
     MineruleOptions& mr = MineruleOptions::getSharedOptions();
@@ -217,21 +217,21 @@ main(int argc, char** argv) {
     double conf=-1;
     parseOptions(argc, argv, mr, rf, conf);
 
-    MRErr() << "Started..." << endl;
+    MRErr() << "Started..." << std::endl;
     printRules( qryname, *rf, conf);
-    MRErr() << "Done!" << endl;
+    MRErr() << "Done!" << std::endl;
   } catch ( minerule::MineruleException& e ) {
-    MRErr() << "MineruleError:" << e.what() << endl;
+    MRErr() << "MineruleError:" << e.what() << std::endl;
     throw;
   }  catch( odbc::SQLException& e) {
-    MRErr() << "SQLError:" << e.what() << endl;
+    MRErr() << "SQLError:" << e.what() << std::endl;
     throw;
   }  catch (std::exception& e) {
     MRErr() << "Couldn't execute your request, the reason is:" 
-	    << e.what() << endl;
+	    << e.what() << std::endl;
     throw;
   }  catch (...) {
-    MRErr() << "Uncought exception!" << endl;
+    MRErr() << "Uncought exception!" << std::endl;
     throw;
   }
 

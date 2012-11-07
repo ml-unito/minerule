@@ -31,9 +31,9 @@ namespace minerule {
     options.getHeadCardinalities().applyConstraints(mrOptions.getParsers().getHeadCardinalities());
 
     MRLogPush("Preparing data sources..."); 
-    string queryText;
+   std::string queryText;
     pdu.buildSourceTableQuery( queryText, rowDes );
-    MRDebug() << "PartitionBase: query: " << queryText << endl;
+    MRDebug() << "PartitionBase: query: " << queryText << std::endl;
 
     odbc::PreparedStatement* statement= 
       connection->prepareStatement(queryText);
@@ -49,7 +49,7 @@ namespace minerule {
 
 
   void PartitionBase::execute() {
-    MRLog() << "This is Partition (without clusters) mining algorithm..." << endl;
+    MRLog() << "This is Partition (without clusters) mining algorithm..." << std::endl;
     prepareData();
 
     partitionWithoutClusters(options);

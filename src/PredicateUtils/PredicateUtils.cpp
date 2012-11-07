@@ -59,7 +59,7 @@ namespace minerule {
   PredicateUtils::PredicateRelationship
   PredicateUtils::getPredicateRelationship(Predicate& p1,
 					   Predicate& p2,
-					   const string& tab_source) {
+					   const std::string& tab_source) {
     // The following two lines assign unique variables id
     // to elements in p1,p2. It do so setting the variable id
     // for each element of the union (through ci) to the position
@@ -71,9 +71,9 @@ namespace minerule {
     list_AND_node* allPreds=NULL;
 
     CountingIterator ci(counter,allPreds);
-    set<SimplePredicate*, PtrSimplePredComp>& sp1 = 
+    std::set<SimplePredicate*, PtrSimplePredComp>& sp1 = 
       p1.getPredicateList();
-    set<SimplePredicate*, PtrSimplePredComp>& sp2 = 
+    std::set<SimplePredicate*, PtrSimplePredComp>& sp2 = 
       p2.getPredicateList();
 
     std::set_union( sp1.begin(), sp1.end(), 
@@ -109,7 +109,7 @@ namespace minerule {
   bool
   PredicateUtils::predicatesAreEquivalent(Predicate& p1,
 					  Predicate& p2,
-					  const string& tab_source) {
+					  const std::string& tab_source) {
     // The following two lines assign unique variables id
     // to elements in p1,p2. It do so setting the variable id
     // for each element of the union (through ci) to the position
@@ -121,9 +121,9 @@ namespace minerule {
     list_AND_node* allPreds=NULL;
 
     CountingIterator ci(counter, allPreds);
-    set<SimplePredicate*, PtrSimplePredComp>& sp1 = 
+    std::set<SimplePredicate*, PtrSimplePredComp>& sp1 = 
       p1.getPredicateList();
-    set<SimplePredicate*, PtrSimplePredComp>& sp2 = 
+    std::set<SimplePredicate*, PtrSimplePredComp>& sp2 = 
       p2.getPredicateList();
 
     std::set_union( sp1.begin(), sp1.end(), 

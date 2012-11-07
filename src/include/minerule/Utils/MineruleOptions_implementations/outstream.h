@@ -24,7 +24,7 @@ public:
   MRLogger& getLogger() {
 	return *logger;
   }
-  ostream& getStream() const {
+  std::ostream& getStream() const {
 	assert(logger!=NULL);
 	return logger->log();
   }

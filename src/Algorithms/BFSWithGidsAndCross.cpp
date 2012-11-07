@@ -23,14 +23,14 @@ namespace minerule {
   bool BFSWithGidsAndCross::mineruleHasSameBodyHead = false;	
 
   void BFSWithGidsAndCross::BodyMapElement::insert(const ItemType& item, MapElement& gidList, bool secondPass) {
-    map<ItemType, MapElement>::iterator found = heads.find(item);
+    std::map<ItemType, MapElement>::iterator found = heads.find(item);
     if (found == heads.end()) {
       if (!secondPass) heads[item] = gidList;
     } else found->second.insert(gidList.begin(),gidList.end());
   }
 
   bool BFSWithGidsAndCross::BodyMapElement::pruneMap (float threshold) {
-    map<ItemType, MapElement> newMap;
+    std::map<ItemType, MapElement> newMap;
     for (map<ItemType, MapElement>::iterator i = heads.begin(); i != heads.end(); i++)
       if (i->second.count >= threshold) {i->second.count = 0; newMap[i->first] = i->second;}
     heads = newMap;
@@ -50,7 +50,7 @@ namespace minerule {
     MapElement me;
     me.insert(gid);
     for (Transaction::iterator i = t1.begin(); i != t1.end(); i++) {
-      map<ItemType, BodyMapElement>::iterator found = find(i->first);
+      std::map<ItemType, BodyMapElement>::iterator found = find(i->first);
       if (found == end()) {
 	if (secondPass) continue;
 	BodyMapElement bme;
@@ -69,7 +69,7 @@ namespace minerule {
     MapElement me;
     me.insert(gid);
     ItemType body = hbsr.getBody();
-      map<ItemType, BodyMapElement>::iterator found = find(body);
+      std::map<ItemType, BodyMapElement>::iterator found = find(body);
       if (found == end()) {
 	if (secondPass) return 0;
 	BodyMapElement bme;
@@ -83,7 +83,7 @@ namespace minerule {
     return howMany;
   }
 
-  /*void BodyMap::saveMap (ostream& out, bool withGids) {
+  /*void BodyMap::saveMap (std::ostream& out, bool withGids) {
     for (iterator i = begin(); i != end(); i++) {
     out << i->first;
     i->second.saveMap(out, withGids);
@@ -199,8 +199,8 @@ namespace minerule {
 
   void BFSWithGidsAndCross::BodyMap::addHead (NewRuleSet& rs, float threshold, int maxHead, int suppBody, NewRule& rc) {
     if (rc.head.size() < (size_t)maxHead) {
-      map<ItemType, MapElement>::iterator lh = rc.lastHead;
-      map<ItemType, MapElement>::iterator eh = rc.lastBody->second.heads.end();
+      std::map<ItemType, MapElement>::iterator lh = rc.lastHead;
+      std::map<ItemType, MapElement>::iterator eh = rc.lastBody->second.heads.end();
       for (map<ItemType, MapElement>::iterator j = lh; j != eh; j++) {
 	GidList newGidList;
 	if (!BFSWithGidsAndCross::getMineruleHasSameBodyHead() || std::find(rc.body.begin(), rc.body.end(), j->first) == rc.body.end()/* &&
@@ -253,11 +253,11 @@ namespace minerule {
 
 
   
-  string BFSWithGidsAndCross::buildQry( const std::string& groupAttrStr,
+ std::string BFSWithGidsAndCross::buildQry( const std::string& groupAttrStr,
 				       const std::string& attrStr,
 				       const std::string& constraints) const {
     
-    return string("SELECT "+groupAttrStr+","+attrStr+" "
+    return std::string("SELECT "+groupAttrStr+","+attrStr+" "
 		  "FROM "+minerule.getParsedMinerule().tab_source+" "+
 		  (constraints.size()>0 ?
 		   "WHERE "+constraints+" " :
@@ -280,19 +280,19 @@ namespace minerule {
     PrepareDataUtils pdu(minerule, *this);
     options.setTotGroups(pdu.evaluateTotGroups());
 
-    MRLog() << "Building db queries" << endl;
+    MRLog() << "Building db queries" << std::endl;
 /*
-    string bodyConstraints;
-    string headConstraints;
+   std::string bodyConstraints;
+   std::string headConstraints;
     HeadBodyPredicatesSeparator::separate((minerule.getParsedMinerule().mc!=NULL?
 					   minerule.getParsedMinerule().mc->l_and:
 					   NULL),
 					  bodyConstraints,
 					  headConstraints);
     size_t index;
-    string groupAttr;
-    string bodyAttr;
-    string headAttr;
+   std::string groupAttr;
+   std::string bodyAttr;
+   std::string headAttr;
     index=buildAttrStr(minerule.getParsedMinerule().ga,
 		       0,
 		       groupAttr,
@@ -307,17 +307,17 @@ namespace minerule {
 		 headAttr,
 		 rowDes.headElems);
 		 
-    string bodyQry =
+   std::string bodyQry =
       buildQry( groupAttr,
 		bodyAttr,
 		bodyConstraints);
 
-    string headQry =
+   std::string headQry =
       buildQry( groupAttr,
 		headAttr,
 		headConstraints);
 
-    MRLog() << "Executing queries" << endl;
+    MRLog() << "Executing queries" << std::endl;
 i*/
     coreConn.useConnection(MineruleOptions::getSharedOptions().getOdbc_db().getConnection());
     coreConn.setOutTableName(minerule.getParsedMinerule().tab_result);
@@ -326,12 +326,12 @@ i*/
     coreConn.create_db_rule(0);
     coreConn.init();
 
-    MRDebug() << "Preparing data sources..." << endl;
+    MRDebug() << "Preparing data sources..." << std::endl;
 rowDes.setGroupBodyElems(1,minerule.getParsedMinerule().ga.size());
-    string queryText;
+   std::string queryText;
     pdu.buildSourceTableQuery( queryText, rowDes );
 
-    MRDebug() << "BFSWithGidsAndCross: query:" << queryText.c_str() << endl;
+    MRDebug() << "BFSWithGidsAndCross: query:" << queryText.c_str() << std::endl;
     statement= coreConn.getConnection()->prepareStatement(queryText.c_str());
 
 //    statement = coreConn.getConnection()->prepareStatement(bodyQry.c_str());
@@ -342,7 +342,7 @@ rowDes.setGroupBodyElems(1,minerule.getParsedMinerule().ga.size());
   void BFSWithGidsAndCross::execute() {
     MRLogPush("Starting BFSWithGidsAndCross mining algorithm...");
     
-    MRLog() << "Preparing data sources..." << endl;
+    MRLog() << "Preparing data sources..." << std::endl;
     prepareData();
 
     odbc::ResultSet* result/*, *result1*/;
@@ -383,19 +383,19 @@ rowDes.setGroupBodyElems(1,minerule.getParsedMinerule().ga.size());
       if(!result->isAfterLast()) hbsr.init(result,rowDes);
     }
 
-    MRLog() << "Total groups: " << totalGroups << endl;
+    MRLog() << "Total groups: " << totalGroups << std::endl;
     MRLogPop();
 
     MRLogPush("Starting rule extraction...");
 
     bodyMap.updateCount();
-    MRLog() << "Total bodies before pruning: " << bodyMap.size() << endl;
+    MRLog() << "Total bodies before pruning: " << bodyMap.size() << std::endl;
     bodyMap.pruneMap(support*totalGroups);
-    MRLog() << "Total bodies after pruning: " << bodyMap.size() << endl;
+    MRLog() << "Total bodies after pruning: " << bodyMap.size() << std::endl;
     NewRuleSet rs;
 
     int nrules = bodyMap.generateRules(support,totalGroups,maxBody,maxHead);
-    MRLog() << "After extracting rules, rules: " << nrules << endl;
+    MRLog() << "After extracting rules, rules: " << nrules << std::endl;
 
     MRLogPop();
     coreConn.finalize();

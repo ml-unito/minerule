@@ -52,7 +52,7 @@ int main(int argc, char *argv[]) {
       cout << gid.asString() << " " << item.asString() << endl;
     }
   } catch (std::exception& e) {
-    cerr<<e.what()<<endl;
+    std::cerr<<e.what()<<std::endl;
   }
 }
 

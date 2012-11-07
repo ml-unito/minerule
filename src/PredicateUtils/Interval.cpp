@@ -12,7 +12,7 @@ namespace minerule {
   const char* Interval::POSINFTY="+";
   const char* Interval::NEGINFTY="-";
 
-  ostream& operator<<(ostream& os, const Interval& i) {
+  std::ostream& operator<<(std::ostream& os, const Interval& i) {
     if( i.lwrOpen || i.openPoints.find(i.lwr)!=i.openPoints.end()) os << "("; else os << "[";
     os << i.lwr << "," << i.upp;
     if( i.uppOpen || i.openPoints.find(i.upp)!=i.openPoints.end()) os << ")"; else os << "]";
@@ -65,23 +65,23 @@ namespace minerule {
       else if(op[1]=='=')
 	return negateIt?Grt:LessEq;
       else throw MineruleException( MR_ERROR_OPTIMIZER_ERROR,
-				    errMsg+ string(op) );
+				    errMsg+ std::string(op) );
     } else if( op[0]=='>' ) {
       if(!twoCharOp)
 	return negateIt ? LessEq : Grt;
       else if(op[1]=='=')
 	return negateIt ? Less : GrtEq;
       else throw MineruleException(  MR_ERROR_OPTIMIZER_ERROR,
-				     errMsg+ string(op) );
+				     errMsg+ std::string(op) );
 
     }	else if( op[0]=='=' ) {
       if(twoCharOp)
 	throw  MineruleException(  MR_ERROR_OPTIMIZER_ERROR,
-				   errMsg+ string(op) );
+				   errMsg+ std::string(op) );
       else 
 	return negateIt ? NotEq : Eq;
     } else throw MineruleException( MR_ERROR_OPTIMIZER_ERROR,
-				    errMsg+ string(op) );
+				    errMsg+ std::string(op) );
   }
 
   int Interval::compareValues( const char* val1, const char* val2) const throw(MineruleException) {
@@ -111,7 +111,7 @@ namespace minerule {
     } else {
       throw MineruleException(MR_ERROR_INTERNAL,
 			      "SimplePredAnalyzer still does not support SQL types"
-			      " which differ from string and numeric");
+			      " which differ fromstd::string and numeric");
     }
   }
 
@@ -207,7 +207,7 @@ namespace minerule {
 
   bool IntervalChecker::impossibleVariableSetting( const VarSet& vset, const list_AND_node* l) {
     std::map<const char*, Interval, StringCompare> intervals;
-    //    cout << endl;
+    //    std::cout << std::endl;
 
     while( l!=NULL ) {
       const char* attr = Interval::getAttribute( l->sp->val1, l->sp->val2 );
@@ -217,9 +217,9 @@ namespace minerule {
 	i.setType(typeForAttribute(attr));
 	i.update(l, !vset.getVar(pred.getVarId()));
 	
-	//	cout << l->sp->val1 << l->sp->op << l->sp->val2 << " ";
-	//	cout << "id:" << pred.getVarId() << " v(id):" << vset.getVar(pred.getVarId()) << " ";
-	//	cout << i << endl;
+	//	std::cout << l->sp->val1 << l->sp->op << l->sp->val2 << " ";
+	//	std::cout << "id:" << pred.getVarId() << " v(id):" << vset.getVar(pred.getVarId()) << " ";
+	//	std::cout << i << std::endl;
 
 	if(i.isEmpty())
 	  return true;
@@ -228,7 +228,7 @@ namespace minerule {
       l=l->next;
     }
     
-    //    cout << intervals["price"] << " ";
+    //    std::cout << intervals["price"] << " ";
 
     return false;
   }

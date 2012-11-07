@@ -54,7 +54,7 @@ namespace minerule {
 
     virtual std::string asString() const=0;
 
-    // This function should return a string having the sql
+    // This function should return astd::string having the sql
     // representation of the data in the object (it is used
     // by some algorithm to store temporary information about
     // the data.
@@ -70,8 +70,8 @@ namespace minerule {
       throw MineruleException(MR_ERROR_INTERNAL, "getElementType() not implemented!");
     }
 	
-	// Returns a string description of the type of this element and, in case it applies,
-	// of inner elments. Defaults to a string representation of getElementType() except
+	// Returns astd::string description of the type of this element and, in case it applies,
+	// of inner elments. Defaults to astd::string representation of getElementType() except
 	// when the element is composed.
 	virtual std::string getFullElementType() const {
 		char chstr[2] = { getElementType(), '\0' };

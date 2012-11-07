@@ -26,16 +26,16 @@ main() {
       for(it2=it->second.begin(); it2!=it->second.end(); it2++) {
 	copy( it2->first.begin(),
 	      it2->first.end(),
-	      ostream_iterator<string>(cout, " "));
-	cout << "->";
+	      std::ostream_iterator<std::string>(cout, " "));
+	std::cout << "->";
 	copy( it2->second.first.begin(),
 	      it2->second.first.end(),
-	      ostream_iterator<string>(cout, " "));
-	cout << endl;
+	      std::ostream_iterator<std::string>(cout, " "));
+	std::cout << endl;
       }
     }
 
-    vector<string> v;
+    vector<std::string> v;
     v.push_back("item");
 
     if( optCat.isIDAttribute("Sales",

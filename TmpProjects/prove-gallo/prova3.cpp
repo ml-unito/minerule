@@ -13,7 +13,7 @@ using namespace minerule;
 void
 buildHeads(const vector<int>& body) {
     copy(body.begin(), body.end(),
-	 ostream_iterator<int>(cout, " "));
+	 std::ostream_iterator<int>(cout, " "));
     cout << endl;
 }
 

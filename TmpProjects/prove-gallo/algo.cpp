@@ -73,7 +73,7 @@ void ConstrTree::buildAndFindBodies(ItemSetType& body){
    it.getCurrentSet(curBody);
    NodeRowB* ris=root->findBodyInTree(&curBody);
    if (ris!=NULL) {ris->incremSupp();
-     //cout<<"suppb incrementato"<<endl;
+     //cout<<"suppb incrementato"<<std::endl;
    }
  }
 }
@@ -82,7 +82,7 @@ void ConstrTree::buildAndFindBodies(ItemSetType& body){
 //se le trovo incremento il loro supporto
 void ConstrTree::buildAndFindRules(ItemSetType& body,ItemSetType& heads){
  ItemSetType curHeadSet;
- insert_iterator< ItemSetType > ins_it(curHeadSet, curHeadSet.begin());
+ std::insert_iterator< ItemSetType > ins_it(curHeadSet, curHeadSet.begin());
  set_difference(heads.begin(), heads.end(),
                 body.begin(),body.end(),
 		ins_it);
@@ -93,7 +93,7 @@ void ConstrTree::buildAndFindRules(ItemSetType& body,ItemSetType& heads){
    //restituisce un punt all'ultimo item della head della regola (se l'ha trovata)
    NodeRow* ris=root->findRuleInTree(&body,&curHead);
    if (ris!=NULL){ ris->incremSupp();
-   //cout<<"suppr incrementato"<<endl;
+   //cout<<"suppr incrementato"<<std::endl;
    }
  }
 }
@@ -106,11 +106,11 @@ void ConstrTree::adjustSupp(MIndexIterator* b2,MIndexIterator* h2){
      for (; b2->current() != b2->end(); ) {
        string g=b2->getCurrentGID();
        ItemSetType* body=new ItemSetType();
-       cout<<"in adjustSupp:"<<endl;
+       cout<<"in adjustSupp:"<<std::endl;
        for(; b2->current() != b2->end() && b2->getCurrentGID()==g;(*b2)++){
          ItemType gid(*SourceRowElement::deserializeElementFromString("n "+b2->getCurrentGID()));
 	 ItemType item(*SourceRowElement::deserializeElementFromString("n "+b2->getCurrentItem()));
-	 cout<<item.asString()<<" "<<gid.asString()<<endl;
+	 cout<<item.asString()<<" "<<gid.asString()<<std::endl;
 	 body->push_back(item);
        }
        buildAndFindBodies(*body);
@@ -155,7 +155,7 @@ void DestrTree::buildAndFindBodies(ItemSetType& body){
 //se le trovo incremento il loro supporto
 void DestrTree::buildAndFindRules(ItemSetType& body,ItemSetType& heads){
  ItemSetType curHeadSet;
- insert_iterator< ItemSetType > ins_it(curHeadSet, curHeadSet.begin());
+ std::insert_iterator< ItemSetType > ins_it(curHeadSet, curHeadSet.begin());
  set_difference(heads.begin(), heads.end(),
                 body.begin(),body.end(),
 		ins_it);

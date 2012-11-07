@@ -12,7 +12,7 @@ using namespace minerule;
 //per algo distruttivo
 //costruisco tutti itemset con almeno un elemento appartenente al primo vettore
 //simile alla creazione di regole, ma ora AC->BD e' uguale a A->BCD.
-//Li distinguo mettendo tutto in un set<int> e poi passo tutto in un vettore
+//Li distinguo mettendo tutto in un std::set<int> e poi passo tutto in un vettore
 
 void
 buildHeads(const vector<int>& body, const vector<int>& heads) {
@@ -22,7 +22,7 @@ buildHeads(const vector<int>& body, const vector<int>& heads) {
 		 body.begin(), body.end(),
 		 ins_it);
   SubsetIterator it(curHeadSet);
-  set<int> tmp;
+  std::set<int> tmp;
   while(it.next()) {
     vector<int> curHead;
     it.getCurrentSet(curHead);
@@ -36,19 +36,19 @@ buildHeads(const vector<int>& body, const vector<int>& heads) {
        tmp.insert(*itint);
        itint++;
     }
-    set<int>::iterator its=tmp.begin();
-    cout<<"itemset:"<<endl;
+    std::set<int>::iterator its=tmp.begin();
+    cout<<"itemset:"<<std::endl;
     while(its!=tmp.end()){
       cout<<(*its)<<" ";
       its++;
     }
-    cout<<endl;
+    cout<<std::endl;
     /*copy(body.begin(), body.end(),
-	 ostream_iterator<int>(cout, " "));
+	 std::ostream_iterator<int>(cout, " "));
     cout << " -> ";
 
     copy(curHead.begin(), curHead.end(),
-	 ostream_iterator<int>(cout, " "));
+	 std::ostream_iterator<int>(cout, " "));
 
     cout << endl;*/
   }

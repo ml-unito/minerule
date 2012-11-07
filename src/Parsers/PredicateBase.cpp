@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <string>
 
-using namespace std;
+
 
 namespace minerule {
 
@@ -35,7 +35,7 @@ namespace minerule {
 
   PredicateBase& 
   SimplePredicateBase::operator!() const {
-    string nop;
+   std::string nop;
     if (op==">") { nop="<="; }
     else if (op==">=") { nop="<"; }
     else if (op=="<") { nop=">="; }
@@ -163,7 +163,7 @@ namespace minerule {
     for(size_t i=0; i<p.size(); i++) {
       for(size_t j=0; j<oldSize; j++) {
 	assert(j+i*oldSize < this->size() );
-	//	cout << "Pred("<<i<<","<<j<<"):" << *(*this)[j+i*oldSize] << endl;
+	//	std::cout << "Pred("<<i<<","<<j<<"):" << *(*this)[j+i*oldSize] << std::endl;
 	*(*this)[j+i*oldSize] &= *p[i];
       }
     }

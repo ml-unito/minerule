@@ -1,5 +1,5 @@
 // GO.CPP
-// Main. Per ora non c'è il collegamento con i db ed uso file di testo per simulare
+// Main. Per ora non c'Ã¨ il collegamento con i db ed uso file di testo per simulare
 // i dati in input
 
 #include <iostream>
@@ -132,9 +132,9 @@ void newFPGrowth( const minerule::AlgorithmsOptions& options ) {
   treeOrder.makeList(gCount);
   MRLogPop();
 
-  //  cout<<"Gruppi Totali "<<totGroups<<" Supporto "<<support<<endl;
+  //  cout<<"Gruppi Totali "<<totGroups<<" Supporto "<<support<<std::endl;
   nSup=ceil(totGroups*(support/100));
-  //  cout<<"nSup: "<<nSup<<endl;
+  //  cout<<"nSup: "<<nSup<<std::endl;
 
   coreConn.deleteDestTable();
   coreConn.create_db_rule(0);
@@ -142,9 +142,9 @@ void newFPGrowth( const minerule::AlgorithmsOptions& options ) {
 // Genera tutti i fp-tree conditional. 
 // Eliminando quelli relativi a itemset a supporto non sufficiente
 // Per ognuno di essi si occupa, infine, di salvare i risultati sul DB
-  MRLog()<<"Building the conditional fptrees..."<<endl;
+  MRLog()<<"Building the conditional fptrees..."<<std::endl;
   gCount.esplodi(coreConn, nSup, totGroups);
 
-  MRLog()<<"Building rules..."<<endl;;
+  MRLog()<<"Building rules..."<<std::endl;;
   gCount.extractRule(coreConn,nSup,totGroups);
 }

@@ -43,18 +43,18 @@ private:
   OutStream warnStream;
   OutStream debugStream;
   Parsers parsers;
-  map<std::string,std::string> userOptions;
+  std::map<std::string,std::string> userOptions;
   std::string mineruleSourceName; // file name of the file which contained the
                              // minerule text
   std::string mineruleName; // name of the minerule as it appear in the
                        // minerule statement
 
   // the following mapping is used to allow streams to share a common
-  // ostream. If, for instance, the user says that both log and err
+  // std::ostream. If, for instance, the user says that both log and err
   // stream should be redirected onto file "foo", then we will create
-  // an ostream on "foo" once and use for both the streams. Obviously
+  // an std::ostream on "foo" once and use for both the streams. Obviously
   // this means that we need to keep track of already "known" streams.
-  map<std::string, MRLogger* > knownStreams;
+  std::map<std::string, MRLogger* > knownStreams;
   
 
   // This boolean is set when an option object
@@ -159,7 +159,7 @@ public:
     mineruleName = name;
   }
 
-  const map< std::string, MRLogger*>&
+  const std::map< std::string, MRLogger*>&
     getKnownStreams() const {
     return knownStreams;
   }
@@ -210,24 +210,24 @@ public:
     return miningAlgorithms;
   }
 
-  ostream&
+  std::ostream&
     getLogStream() const {
     // the following is an example of color log entry....
     //      return logStream.getStream() << "\e[31;34mLog:\e[0m";
     return logStream.getStream() << "Log:";
   }
 
-  ostream&
+  std::ostream&
     getErrStream() const {
     return errStream.getStream() << "ERROR:";
   }
 
-  ostream&
+  std::ostream&
     getWarnStream() const {
     return warnStream.getStream() << "WARNING:";
   }
 
-  ostream&
+  std::ostream&
     getDebugStream() const {
     return debugStream.getStream() << "DEBUG:";
   }
@@ -282,10 +282,10 @@ public:
     return parsers;
   }
 
-  ostream& saveOptions(ostream& os) const;
+  std::ostream& saveOptions(std::ostream& os) const;
 
   // this could be used to store particular user options
-  map<std::string,std::string>& getUserOptions() {
+  std::map<std::string,std::string>& getUserOptions() {
     return userOptions;
   }
 };

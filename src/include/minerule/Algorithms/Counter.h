@@ -17,7 +17,7 @@ Vedi file Counter.doc per la struttura ed esempio
 #include "Utils/MineruleOptions.h"
 #include "MRDatabase/sourcerowattribute.h"
 
-using namespace std;
+
 template< class NODETYPE > class Tree;            // dichiarazione succ.
 template< class NODETYPE > class Counter;         // dichiarazione succ.
 template< class NODETYPE > class TreeNode;        // dichiarazione succ.
@@ -28,7 +28,7 @@ struct cnt
 {
   unsigned int count;                             // contatore assoluto
   unsigned int ordine;                            // ordine di inserimento
-  list< TreeNode<NODETYPE>*> lista;               // lista dei nodi
+  std::list< TreeNode<NODETYPE>*> lista;               // lista dei nodi
   Tree <NODETYPE> fptree;                         // conditional FP-Tree
 };
 
@@ -41,7 +41,7 @@ class Counter
     return compareElems(n1,n2);
   }
 
-  typedef map < NODETYPE, cnt<NODETYPE> , NODETYPE > MapType;
+  typedef std::map < NODETYPE, cnt<NODETYPE> , NODETYPE > MapType;
 
 // Costruttore
     Counter();
@@ -59,7 +59,7 @@ class Counter
     //    void addValues(StringTokenizer& mytoken, int peso);
 
 // Aggiunge un cammino nel fp-tree conditional. Vedi struttura cnt
-    void addWalk(NODETYPE nt, const vector<NODETYPE>& transaction,int peso);
+    void addWalk(NODETYPE nt, const std::vector<NODETYPE>& transaction,int peso);
 
 // Crea la lista di nodi tutti eguali.
     void insertInList(NODETYPE node,TreeNode<NODETYPE>* value);
@@ -93,8 +93,8 @@ class Counter
 // Dal singolo elemento della lista ritorno verso l'alto e legge il cammino.
 // Lo inserisce poi nel fp-tree conditional.
 // Per un uso efficiente inserisce i sottocammini letti nei fp-tree conditinal corretti.
-    void estrai_cammini(TreeNode<NODETYPE>* tnd, vector<NODETYPE>& path);
-    void estrai_cammini_lazy(TreeNode<NODETYPE>* tnd, vector<NODETYPE>& path);
+    void estrai_cammini(TreeNode<NODETYPE>* tnd, std::vector<NODETYPE>& path);
+    void estrai_cammini_lazy(TreeNode<NODETYPE>* tnd, std::vector<NODETYPE>& path);
 
     // Sorts "elems" accordingly to the current state of the Counter
     void sortVector(deque<NODETYPE>& elems) const;
@@ -123,15 +123,15 @@ void Counter< NODETYPE >::pushElements() {
   NODETYPE elem;
   char buffer[255];
   FILE *infile2;
-  string tokenT;
+ std::string tokenT;
 
 // Qui ci vorrà la query SQL per vedere quanti n sono presenti nella tavola
 
   if ( (infile2=fopen("example/ncoppie.txt","r"))==NULL)
-    { cout << "Error opening file ncoppie"; exit (0); }
+    { std::cout << "Error opening file ncoppie"; exit (0); }
 
     if (fgets(buffer,255,infile2)==NULL )
-      { cout << "Error read"; exit (0); }
+      { std::cout << "Error read"; exit (0); }
 
       tokenT=buffer;
   StringTokenizer mytoken2((string&)tokenT,";\r\n");
@@ -270,12 +270,12 @@ void Counter< NODETYPE >::setOrdina() {
 // Stampa il contatore generale. Stampa valore, count e ordine
 template< class NODETYPE >
 void Counter< NODETYPE >::leggiCounter() {
-  cout <<  "Contatore Generale! " << endl;
+  std::cout <<  "Contatore Generale! " << std::endl;
   MapType& m1 = getMap();
   typename MapType::iterator i;
 
   for (i=m1.begin( ) ; i !=m1.end( ) ; i++ )
-    cout << i->first.c_str() << ", " << i->second.count<< ", " << i->second.ordine <<endl;
+    std::cout << i->first.c_str() << ", " << i->second.count<< ", " << i->second.ordine <<std::endl;
 
 }
 
@@ -287,13 +287,13 @@ void Counter< NODETYPE >::leggiCounter() {
 // nel fp-tree
 // Ricreo un StringTokenizer e poi inserisco nell'albero fp-tree conditional
 template< class NODETYPE >
-void Counter< NODETYPE >::addWalk(NODETYPE nt,const vector<NODETYPE>& transaction,int peso) {
+void Counter< NODETYPE >::addWalk(NODETYPE nt,const std::vector<NODETYPE>& transaction,int peso) {
   typename MapType::iterator it;
 
   unsigned int y=transaction.size();
   assert(y<32);
   unsigned int numIt=1<<y;
-  //cout << "NUMIT" <<  numIt << endl;
+  //cout << "NUMIT" <<  numIt << std::endl;
   deque<NODETYPE> result;
 
   // Si usa un unsigned int per calcolare tutti
@@ -314,12 +314,12 @@ void Counter< NODETYPE >::addWalk(NODETYPE nt,const vector<NODETYPE>& transactio
     // Inserisco il cammino nell'albero fp-tree conditional
     if(!result.empty()) {
       //      #warning DEBUG
-      //cout << "!!! transa" << endl;
-      //copy( transaction.begin(), transaction.end(), ostream_iterator<NODETYPE>(cout, ";"));
-      //cout << "!!! " << endl;
-      //cout << "*** result" << endl;
-      //copy( result.begin(), result.end(), ostream_iterator<NODETYPE>(cout, ";"));
-      //cout << "*** " << endl;
+      //cout << "!!! transa" << std::endl;
+      //copy( transaction.begin(), transaction.end(), std::ostream_iterator<NODETYPE>(cout, ";"));
+      //cout << "!!! " << std::endl;
+      //cout << "*** result" << std::endl;
+      //copy( result.begin(), result.end(), std::ostream_iterator<NODETYPE>(cout, ";"));
+      //cout << "*** " << std::endl;
       it->second.fptree.insertAddWalk(result,peso);
     }
   }
@@ -336,12 +336,12 @@ void Counter< NODETYPE >::extractRule(sqlCoreConn& coreConn, double nSup, double
   //coreConn.deleteDestTable();
   //coreConn.create_db_rule(0);
 
-  //  MRLog() <<" ---- RULE WITH SUPPORT OK ----" <<endl;
+  //  MRLog() <<" ---- RULE WITH SUPPORT OK ----" <<std::endl;
   for( i=m1.begin( ) ; i !=m1.end( ) ; i++ ) {
     if(i->second.count>=nSup) {
-      //      cout << "prima di printRules ord:"<< i->second.count <<"elem:" << i->first << endl;
+      //      std::cout << "prima di printRules ord:"<< i->second.count <<"elem:" << i->first << std::endl;
       i->second.fptree.printRules(i->first,coreConn, totGroups, *this);
-      //      cout << "dopo printRules" << endl;
+      //      std::cout << "dopo printRules" << std::endl;
     }
   }
 }
@@ -353,7 +353,7 @@ void Counter< NODETYPE >::extractRule(sqlCoreConn& coreConn, double nSup, double
 // Man mano che inserisco i sottocamini marco i nodi in modo da non ripetere il lavoro
 // di lettura
 template< class NODETYPE >
-void Counter< NODETYPE >::estrai_cammini(TreeNode<NODETYPE>* tnd, vector<NODETYPE>& path) {
+void Counter< NODETYPE >::estrai_cammini(TreeNode<NODETYPE>* tnd, std::vector<NODETYPE>& path) {
   TreeNode<NODETYPE>* dad;
   NODETYPE node;
   int peso;
@@ -361,17 +361,17 @@ void Counter< NODETYPE >::estrai_cammini(TreeNode<NODETYPE>* tnd, vector<NODETYP
 
   if (dad->getData()!=Tree<NODETYPE>::ROOTNODE) {
     node=tnd->getData();
-    // cout<<"nodo "<<node<<"papa "<<dad->getData()<<"dentro estrai"<<endl;
+    // std::cout<<"nodo "<<node<<"papa "<<dad->getData()<<"dentro estrai"<<std::endl;
     estrai_cammini(dad,path);
     path.push_back(dad->getData());
     if (!tnd->isMarked()) {
       peso=tnd->getCount();
-      // cout<<"add walk"<< path<<" in node "<<(String)node<<" peso "<<peso<<endl;
+      // std::cout<<"add walk"<< path<<" in node "<<(String)node<<" peso "<<peso<<std::endl;
       //#warning DEBUG 
-      //      cout << "before addWalk:";
-      //      cout << node << endl;
-      //      copy(path.begin(), path.end(), ostream_iterator<NODETYPE>(cout,";"));
-      //      cout << endl;
+      //      std::cout << "before addWalk:";
+      //      std::cout << node << std::endl;
+      //      copy(path.begin(), path.end(), std::ostream_iterator<NODETYPE>(cout,";"));
+      //      std::cout << std::endl;
 
       addWalk(node,path,peso);
       tnd->setMarked();
@@ -385,7 +385,7 @@ void Counter< NODETYPE >::estrai_cammini(TreeNode<NODETYPE>* tnd, vector<NODETYP
 // Man mano che inserisco i sottocamini marco i nodi in modo da non ripetere il lavoro
 // di lettura
 template< class NODETYPE >
-void Counter< NODETYPE >::estrai_cammini_lazy(TreeNode<NODETYPE>* tnd, vector<NODETYPE>& path) {
+void Counter< NODETYPE >::estrai_cammini_lazy(TreeNode<NODETYPE>* tnd, std::vector<NODETYPE>& path) {
   TreeNode<NODETYPE>* dad = tnd->getFather();
 
   while(dad->getData()!=Tree<NODETYPE>::ROOTNODE) {
@@ -411,7 +411,7 @@ void Counter< NODETYPE >::esplodi(sqlCoreConn& coreConn,double nSup, double totG
   typename mmap::iterator k;
   TreeNode<NODETYPE>* tempor;
   NODETYPE node;
-  vector<NODETYPE> pth;
+  std::vector<NODETYPE> pth;
 
   for( i=m1.rbegin( ) ; i !=m1.rend( ) ; i++ ) {
     coll.insert( make_pair(i->second.ordine,i->first) );
@@ -420,7 +420,7 @@ void Counter< NODETYPE >::esplodi(sqlCoreConn& coreConn,double nSup, double totG
   for( k=coll.begin( ) ; k !=coll.end( ) ; k++ ) {
     j=generalCount.find(k->second);
     assert(j!=generalCount.end());
-    //    cout<<"dentro ESPLODI... ordine:"<<k->first<<" nodo :"<<k->second<<endl;
+    //    std::cout<<"dentro ESPLODI... ordine:"<<k->first<<" nodo :"<<k->second<<std::endl;
     if( k->first>=nSup ) {
       node=k->second;
       while (!j->second.lista.empty() ) {
@@ -465,10 +465,10 @@ void Counter< NODETYPE >:: insertInList(NODETYPE node,TreeNode<NODETYPE>* value)
 template< class NODETYPE >
 void Counter< NODETYPE >::print() {
   typename MapType::iterator i;
-  MRLog() << "Inizio Contatore Generale"<<endl;
+  MRLog() << "Inizio Contatore Generale"<<std::endl;
   for( i=generalCount.begin( ) ; i !=generalCount.end( ) ; i++ )
-    cout<<"elemento "<<i->first.c_str()<<" count "<<i->second.count<<endl;
+    std::cout<<"elemento "<<i->first.c_str()<<" count "<<i->second.count<<std::endl;
 
-  MRLog() <<"fine Contatore Generale"<<endl;
+  MRLog() <<"fine Contatore Generale"<<std::endl;
 }
 #endif

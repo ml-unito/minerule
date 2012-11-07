@@ -124,8 +124,8 @@ namespace minerule {
       *this |= thisCopy;
     }
 
-    //    cout << "This copy:" << thisCopy << endl;
-    //    cout << "P:" << p << endl;
+    //    std::cout << "This copy:" << thisCopy << std::endl;
+    //    std::cout << "P:" << p << std::endl;
 
     // building the conjunctions (now there are oldSize*p.size() conj
     // in this predicate. The first oldSize ones need to be conjuncted
@@ -134,7 +134,7 @@ namespace minerule {
     for(size_t i=0; i<p.size(); i++) {
       for(size_t j=0; j<oldSize; j++) {
 	assert(j+i*oldSize < this->size() );
-	//	cout << "Pred("<<i<<","<<j<<"):" << *(*this)[j+i*oldSize] << endl;
+	//	std::cout << "Pred("<<i<<","<<j<<"):" << *(*this)[j+i*oldSize] << std::endl;
 	*(*this)[j+i*oldSize] &= *p[i];
       }
     }
@@ -151,7 +151,7 @@ namespace minerule {
   }
 
 
-  set<SimplePredicate*,PtrSimplePredComp>&
+  std::set<SimplePredicate*,PtrSimplePredComp>&
   Predicate::getPredicateList(bool rebuildSet)  {
     if(rebuildSet && predList!=NULL) {
       delete predList;
@@ -161,7 +161,7 @@ namespace minerule {
     if( predList!=NULL )
       return *predList;
 
-    predList = new set<SimplePredicate*,PtrSimplePredComp>();
+    predList = new std::set<SimplePredicate*,PtrSimplePredComp>();
 
     iterator it;
     for( it=begin(); it!=end(); it++ ) {

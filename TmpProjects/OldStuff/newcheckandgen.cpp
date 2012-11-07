@@ -41,7 +41,7 @@ void itemSetCluster< NODETYPE >::prune_children(
 	  } else {
 	    // io non  ho supporto sufficiente sebbene i miei antenati lo abbiano
 	    //ptrList.printAddrItemSet();
-	    //cout<<"ma non questo livello"<<endl;
+	    //cout<<"ma non questo livello"<<std::endl;
 	    eraseAllReferences(j->second, ptrList);
 	    elemsToBeDeleted.push_back(j->first);
 	    }
@@ -70,7 +70,7 @@ void itemSetCluster< NODETYPE >::prune_children(
     // a livello  nLev=(toBePruned.getItemSet()->getLevel()), mentre il
     // codice sottostante lo fa per nLev=(i->second.getItemSet()->getLevel())+1
     
-    //cout<<"cancello iscNew"<<iscNew<<" pttrC di i "<<i->second.getItemSet()<<endl;
+    //cout<<"cancello iscNew"<<iscNew<<" pttrC di i "<<i->second.getItemSet()<<std::endl;
     
     assert( toBePruned.getItemSet()!=NULL );
     

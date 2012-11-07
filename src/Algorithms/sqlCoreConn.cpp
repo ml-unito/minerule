@@ -11,7 +11,7 @@
 bool sqlCoreConn::connect()
  {
   bool connOK;
-  cout<<"Connect..."<<endl;
+  std::cout<<"Connect..."<<std::endl;
 
   connOK=false;
   connection = odbc::DriverManager::getConnection("test", "root", "mysql");
@@ -41,7 +41,7 @@ bool sqlCoreConn::isConnected()
 /*
 void sqlCoreConn::disconnect()
  {
-  cout<<"Disconnect"<<endl;
+  std::cout<<"Disconnect"<<std::endl;
   delete connection;
   odbc::DriverManager::shutdown();
  }
@@ -52,7 +52,7 @@ odbc::ResultSet* sqlCoreConn::openQuery()
     odbc::Statement* statement=connection->createStatement();
     odbc::ResultSet* result;
     if( statement->execute("select tr,item from MRPROVA" ) ) {
-      //cout << "Result set available..." << endl;
+      //cout << "Result set available..." << std::endl;
       result =statement->getResultSet();
     } else
     {
@@ -67,9 +67,9 @@ odbc::ResultSet* sqlCoreConn::openQuery(const char* Qry)
     odbc::Statement* statement=connection->createStatement();
     odbc::ResultSet* result;
 
-    //cout<<"Sono in openQuery"<<endl;
+    //cout<<"Sono in openQuery"<<std::endl;
     if( statement->execute(Qry) ) {
-      // cout << "Result set available..." << endl;
+      // std::cout << "Result set available..." << std::endl;
       result =statement->getResultSet();
     } else
     {
@@ -85,7 +85,7 @@ odbc::ResultSet* sqlCoreConn::openQuery(char* Qry)
     odbc::ResultSet* result;
 
     if( statement->execute(Qry) ) {
-      cout << "Result set available..." << endl;
+      std::cout << "Result set available..." << std::endl;
       result =statement->getResultSet();
     } else
     {
@@ -112,7 +112,7 @@ int sqlCoreConn::getNumRows()
 
     if( statement->execute("select  distinct gidb from InputPartition;" ) )
     {
-      cout << "Result set available..." << endl;
+      std::cout << "Result set available..." << std::endl;
       result =statement->getResultSet();
     } else
     {
@@ -123,7 +123,7 @@ int sqlCoreConn::getNumRows()
       //odbc::ResultSetMetaData* metaData = result->getMetaData();
       numRows = result->getRow();
     }
-    //cout<<"sqlCoreconn.h NumRows "<<numRows<<endl;
+    //cout<<"sqlCoreconn.h NumRows "<<numRows<<std::endl;
     return numRows;
  }
 */
@@ -155,17 +155,17 @@ void sqlCoreConn::deleteTable(const char * tableName)
 	Qry += tableName;
 	try {
 	   stmt->execute(Qry);
-	} catch (odbc::SQLException& e) { cerr << "Wrong statement " << Qry << endl; }
+	} catch (odbc::SQLException& e) { std::cerr << "Wrong statement " << Qry << std::endl; }
    }
    delete stmt;
 }
 
-// Bisogna controllare che non esista già la tabella
+// Bisogna controllare che non esista giÃ  la tabella
 // altrimenti va in errore !!
 void sqlCoreConn::create_db_rule(int sintax)
  {
     odbc::Statement* statement=connection->createStatement();
-    string create, create_index;
+    std::string create, create_index;
 
     // nb sintax is a deprecated parameter...
 
@@ -186,14 +186,14 @@ void sqlCoreConn::create_db_rule(int sintax)
 void sqlCoreConn::DirectDBInserter::insert_DB_HBelems(const HeadBodyType& elems, size_t counter) {
 //  assert( !elems.empty() );
 
-  string query = 
+  std::string query = 
     "INSERT INTO " + coreConn.getElemsOutTableName() + " VALUES (?,?)";
   odbc::PreparedStatement* state = coreConn.connection->prepareStatement(query);
 
 
   HeadBodyType::const_iterator it = elems.begin();
   for(; it!=elems.end() ; it++ ) {
-    string str;
+    std::string str;
     SourceRowElement::serializeElementToString(it->getElement(), str);
     state->setLong(1,counter);
     state->setString(2,str);
@@ -237,17 +237,17 @@ void sqlCoreConn::CachedDBInserter::insert_DB_HBelems(const HeadBodyType& elems,
 //  assert( !elems.empty() );
 
   HeadBodyType::const_iterator it = elems.begin();
-  string str;
+  std::string str;
   for(; it!=elems.end() ; it++ ) {
     SourceRowElement::serializeElementToString(it->getElement(), str);
-    outHB << counter << "\t" << str << endl;
+    outHB << counter << "\t" << str << std::endl;
   }
 
 }
 
 void sqlCoreConn::CachedDBInserter::init() {
   filename = tmpnam(NULL);
-  string temp = filename + ".r";
+  std::string temp = filename + ".r";
   outR.open(temp.c_str());
   temp = filename + ".hb";
   outHB.open(temp.c_str());
@@ -256,9 +256,9 @@ void sqlCoreConn::CachedDBInserter::init() {
 void sqlCoreConn::CachedDBInserter::finalize() {
   outR.close();
   outHB.close();
-  string loadstr1 = filename + ".r";
+  std::string loadstr1 = filename + ".r";
   chmod(loadstr1.c_str(),S_IRUSR|S_IRGRP|S_IROTH);
-  string loadstr2 = filename + ".hb";
+  std::string loadstr2 = filename + ".hb";
   chmod(loadstr2.c_str(),S_IRUSR|S_IRGRP|S_IROTH);
   loadstr1 = "LOAD DATA INFILE '";
   loadstr1 += filename;
@@ -303,7 +303,7 @@ void sqlCoreConn::CachedDBInserter::insert_DB(const HeadBodyType& body,
   size_t headId = counter++;
   insert_DB_HBelems(head, headId);
 
-  outR << bodyId << "\t" << headId << "\t" << support << "\t" << confidence << "\t" << body.size() << "\t" << head.size() << endl;
+  outR << bodyId << "\t" << headId << "\t" << support << "\t" << confidence << "\t" << body.size() << "\t" << head.size() << std::endl;
 
 }
 
@@ -347,14 +347,14 @@ void sqlCoreConn::insert_DB(const char * what)
     static odbc::Statement* statement=connection->createStatement();
     //    odbc::ResultSet* result;
 
-    //    cerr << "000" << what << endl;
+    //    std::cerr << "000" << what << std::endl;
 
     if( statement->execute(what)==0 ) {
-      //cout << "insert eseguita" << endl;
+      //cout << "insert eseguita" << std::endl;
       //result =statement->getResultSet();
     } else
     {
-      cout<<"insert fallita!"<<endl;
+      std::cout<<"insert fallita!"<<std::endl;
     }
     //delete statement;
  }
@@ -377,10 +377,10 @@ odbc::ResultSet* sqlCoreConn::getPartition(int begin,int end)
     Qry+=en;
     Qry+=");";
 
-    //cout<<"query: "<<Qry<<endl;
+    //cout<<"query: "<<Qry<<std::endl;
     if( statement->execute(Qry) )
     {
-      cout << "Result set available..." << endl;
+      std::cout << "Result set available..." << std::endl;
       result =statement->getResultSet();
     } else
     {
@@ -412,7 +412,7 @@ void sqlCoreConn::create_tmp_db(int sintax,
     }
 
     if( statement->execute(create) ) {
-      //cout << "Result set available..." << endl;
+      //cout << "Result set available..." << std::endl;
       result =statement->getResultSet();
     } else
     {

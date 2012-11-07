@@ -25,12 +25,12 @@ void pars_minerule(std::string minerule_text, ParsedMinerule& output) {
     YY_BUFFER_STATE buf = mr_scan_string(minerule_text.c_str());
 
     init_mrparser();
-    cout<<minerule_text<<endl;
+    std::cout<<minerule_text<<std::endl;
     try {
        mrparse();
     } catch (MineruleException& m) {
-      string error;
-      error = string(m.what())+ " Original minerule was:"+minerule_text;
+     std::string error;
+      error = std::string(m.what())+ " Original minerule was:"+minerule_text;
       throw MineruleException(MR_ERROR_MINERULETEXT_PARSING, error);
     }
 

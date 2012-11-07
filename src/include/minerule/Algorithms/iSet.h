@@ -4,7 +4,7 @@
 #include "itemSetList.h"
 #include "itemSetHashMap.h"
 
-using namespace std;
+
 
 template< class NODETYPE >
 class iSet {

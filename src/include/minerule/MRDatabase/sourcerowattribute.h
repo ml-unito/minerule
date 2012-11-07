@@ -69,7 +69,7 @@ namespace minerule {
     virtual int compareTo(const SourceRowAttribute&) const =0;
 
     /** 
-     * return the string representation for the attribute
+     * return thestd::string representation for the attribute
      */ 
     virtual std::string asString() const = 0;
 
@@ -98,7 +98,7 @@ namespace minerule {
     }
 
     /**
-     * return the string representation for the attribute in a format
+     * return thestd::string representation for the attribute in a format
      * suitable to be used in SQL queries (tipically it is implemented
      * as return "'"+this->asString()+"'"
      */

@@ -7,10 +7,10 @@ MINERULE INSTALLATION INSTRUCTIONS
    cd minerule
 3. install dependencies
    install cmake
-   install libodbc++
-   cd into ExtLibs
-      - uncompact build and install galib245 (be sure to verify that the include files in /usr/local/include/ga have read permissions for your user)
-      - uncompact libgist (there is no need to install it since only few headers are needed)
+   cd into ExtLibs where you will find as snapshot of the libraries needed by minerule.
+	  - unzip, build, and install libodbc++
+      - unzip, build, and install galib245 (be sure to verify that the include files in /usr/local/include/ga have read permissions for your user)
+      - unzip libgist (there is no need to install it since only few headers are needed)
 4. build the system
    create a build directory just below the minerule directory
       mkdir build
@@ -21,7 +21,7 @@ MINERULE INSTALLATION INSTRUCTIONS
 5. enjoy!
 
 After step 4, if everything is fine, you will find the minerule executables in the directory 'build'.
-You still have to configure your odbc datasources, create an option file for the minerule and configure the database you will use to support it (see directory Docs for more information).
+You still have to configure your odbc datasources, create an option file for the minerule and configure the database you will use to support the system (see directory Docs for more information).
 
 ---
 Copyright: Roberto Esposito (esposito@di.unito.it)

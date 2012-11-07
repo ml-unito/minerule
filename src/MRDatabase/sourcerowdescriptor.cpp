@@ -6,7 +6,7 @@
 
 
 using namespace minerule;
-using namespace std;
+
 
 
 /* **********************************
@@ -17,7 +17,7 @@ void
 SourceRowAttrCollectionDescriptor::
 setColumnNames(odbc::ResultSet* rs,
 	       const std::vector<int>& collectionElems) {
-  vector<int>::const_iterator it = collectionElems.begin();
+  std::vector<int>::const_iterator it = collectionElems.begin();
   columnNames = "";
 
   if(it!=collectionElems.end()) {
@@ -64,8 +64,8 @@ dataDefinitionForElem(odbc::ResultSet* rs, int elem) {
 void
 SourceRowAttrCollectionDescriptor::
 setDataDefinition(odbc::ResultSet* rs,
-		  const vector<int>& collectionElems) {
-  vector<int>::const_iterator it = collectionElems.begin();
+		  const std::vector<int>& collectionElems) {
+  std::vector<int>::const_iterator it = collectionElems.begin();
   dataDefinition = "";
 
   if(it!=collectionElems.end()) {
@@ -81,7 +81,7 @@ setDataDefinition(odbc::ResultSet* rs,
 
 SourceRowAttrCollectionDescriptor::
 SourceRowAttrCollectionDescriptor(odbc::ResultSet* rs,
-				  const vector<int>& collectionElems) {
+				  const std::vector<int>& collectionElems) {
   setColumnNames(rs,collectionElems);
   setDataDefinition(rs,collectionElems);
   columnsCount = collectionElems.size();

@@ -9,7 +9,7 @@
 #include <fstream>
 #include <iterator>
 
-using namespace std;
+
 
 #include "itemSetEntryCluster.h"
 #include "itemSetListCluster.h"
@@ -26,34 +26,33 @@ using namespace minerule;
 
 
 #if 0
-
-vector<string> DBGVEC;
+ std::vector<std::string> DBGVEC;
 #define DBG_PUSH(str)  DBGCLS dbgclsinstance(str)
 
 class DBGCLS {
  public:
-  DBGCLS(string str) {
-    cout << "Inizio di:" << str<<endl;
+  DBGCLSstd::string str) {
+    std::cout << "Inizio di:" << str<<std::endl;
     DBGVEC.push_back(str);
   }
 
   ~DBGCLS() {
-    cout << "Fine di:" << DBGVEC.back()<<endl;
+    std::cout << "Fine di:" << DBGVEC.back()<<std::endl;
     DBGVEC.pop_back();
   }
 };
 
 inline void
 DBG_PRINT_STACK() {
-  cout << "stack trace:";
-  copy( DBGVEC.begin(), DBGVEC.end(), ostream_iterator<string>(cout,"::"));
-  cout << endl;
+  std::cout << "stack trace:";
+  copy( DBGVEC.begin(), DBGVEC.end(), std::ostream_iterator<std::string>(cout,"::"));
+  std::cout << std::endl;
 }
 #endif
 
 
 
-using namespace std;
+
 using namespace minerule;
 
 
@@ -64,14 +63,14 @@ template< class NODETYPE > class itemSetCluster;
 template< class NODETYPE >
 class itemSetCluster {
  public:
-  typedef map <NODETYPE,itemSetEntryCluster< NODETYPE >, NODETYPE > MapType;
+  typedef std::map <NODETYPE,itemSetEntryCluster< NODETYPE >, NODETYPE > MapType;
   typedef typename newItemSetHashMap<NODETYPE>::HASHTYPE HASHTYPE;
 
  private:
   // Inner Class LevelInfoStack
   class LevelInfoStack {
     HASHTYPE ancestor;
-    vector<itemSetCluster<NODETYPE>*> levels;
+    std::vector<itemSetCluster<NODETYPE>*> levels;
     
   public:
     size_t getCurLevel() {
@@ -129,8 +128,8 @@ class itemSetCluster {
   itemSetCluster(int lev) { numLevel=lev; }
   void setAncestor(const HASHTYPE& anc) {myAncestor=anc;}
   const HASHTYPE& getAncestor() {return myAncestor;}
-  void setRefList(typename list<itemSetCluster<NODETYPE>* >::iterator riferimento) {refList=riferimento;}
-  typename list<itemSetCluster<NODETYPE>* >::iterator getRefList()  {return refList;}
+  void setRefList(typename std::list<itemSetCluster<NODETYPE>* >::iterator riferimento) {refList=riferimento;}
+  typename std::list<itemSetCluster<NODETYPE>* >::iterator getRefList()  {return refList;}
   void setLevel(int lev) { numLevel=lev;}
   int getLevel()  { return numLevel;}
   MapType& getMap() {return isc;}
@@ -158,7 +157,7 @@ class itemSetCluster {
   //   const char* save_Large_ItemSet_Head(int lev,int isPart,sqlCoreConn&);
   std::string save_Large_ItemSet_Head(int lev,int isPart,sqlCoreConn&);
   void printItemSetRecursive(int lev);
-  void printToDesign(string , int );
+  void printToDesign(std::string , int );
   void gen_Large_Rule_Base(double nSup, const MinMaxPair&);
   bool gen_Large_ItemSet(itemSetListCluster<NODETYPE>& ptrList,double nSup,double totGroups,int lev, const MinMaxPair&);
   
@@ -168,9 +167,9 @@ class itemSetCluster {
   void checkSupportBaseDef(double nSup,newItemSetHashMap<NODETYPE>& pHashMap,itemSetListCluster<NODETYPE>& ptrList);
   void printItemSetRecursiveHead(int lev);
   bool gen_final_count(itemSetListCluster<NODETYPE>& ptrList,double nSup,int lev,newItemSetHashMap<NODETYPE>& pHashMap);
-  void extractRule(sqlCoreConn&,const vector<NODETYPE>&,double totGroups);
+  void extractRule(sqlCoreConn&,const std::vector<NODETYPE>&,double totGroups);
 
-  void printToDesign_2(string nome,int isPart);
+  void printToDesign_2(std::string nome,int isPart);
   
   void mergeItemSet(
 		    sqlCoreConn& coreConn,
@@ -185,7 +184,7 @@ class itemSetCluster {
   bool gen_Large_Rule_Base_Head(double nSup);
   void save_Large_ItemSet_HeadHelper(int lev,int isPart,const char* id_head_father,sqlCoreConn& coreConn);
   bool gen_Large_ItemSetHelper(itemSetListCluster<NODETYPE>& ptrList,double nSup,double totGroups,unsigned int lev, const MinMaxPair&);
-  void printToDesignHelper(string here,string padre,ofstream& f1,int isPart);
+  void printToDesignHelper(std::string here,std::string padre,ofstream& f1,int isPart);
   void extend_Head(double, const MinMaxPair&);
   bool gen_Large_ItemSet_Head(itemSetListCluster<NODETYPE>& ptrListHead,double nSup,int lev);
   void save_Large_ItemSetHelper(int lev,int isPart,sqlCoreConn&);
@@ -209,7 +208,7 @@ class itemSetCluster {
   
   void mergeItemSetHeadBase(
 			    odbc::PreparedStatement * statement,
-			    const string& fHead,
+			    const std::string& fHead,
 			    const NODETYPE& item,
 			    const SourceRowDescriptor& srd);
   
@@ -217,7 +216,7 @@ class itemSetCluster {
   void mergeItemSetHead(
 			 odbc::PreparedStatement * statement,
 			 itemSetListCluster<NODETYPE>& ptrList,
-			 const string& fHead,
+			 const std::string& fHead,
 			 const SourceRowDescriptor& srd);
   
   void mergeItemSetHeadHelper(
@@ -227,7 +226,7 @@ class itemSetCluster {
 
    bool setItemSetIfExistHead(const NODETYPE& valueH, const int gidH, const int cidH);
    void remove(itemSetListCluster<NODETYPE>& ptrList);
-   void cancellaRef( list<itemSetCluster<NODETYPE>* >* listPtr);
+   void cancellaRef( std::list<itemSetCluster<NODETYPE>* >* listPtr);
    void cancellaHead(itemSetListCluster <NODETYPE>& listPtrHead);
    bool check_and_gen(itemSetListCluster <NODETYPE>& listPtrHead,double nSup);
    //   bool check_and_gen_from_Body(itemSetListCluster <NODETYPE> listPtrHead, double nSup,itemSetCluster<NODETYPE>* uno, itemSetCluster<NODETYPE>* due);
@@ -259,9 +258,9 @@ class itemSetCluster {
 	      double nSup);
 
    void printRule(sqlCoreConn& coreConn,
-		  const vector<NODETYPE>& body,
+		  const std::vector<NODETYPE>& body,
 		  double denomBody,
-		  const vector<NODETYPE>& head,
+		  const std::vector<NODETYPE>& head,
 		  double totGroups);
 
    void removeAllReferences(
@@ -290,7 +289,7 @@ class itemSetCluster {
    #if 0
    #warning debug
    void
-     saveTList(string tlistname, gidCidList<NODETYPE>  list);
+     saveTListstd::string tlistname, gidCidList<NODETYPE>  list);
    // debug
    #endif
 
@@ -299,7 +298,7 @@ class itemSetCluster {
    int numLevel;
    HASHTYPE myAncestor;
    MapType isc;
-   typename list<itemSetCluster<NODETYPE>* >::iterator refList;
+   typename std::list<itemSetCluster<NODETYPE>* >::iterator refList;
 };
 
 
@@ -308,13 +307,13 @@ class itemSetCluster {
 #warning DEBUG
 template< class NODETYPE >
 void
-itemSetCluster< NODETYPE >::saveTList(string tlistname, gidCidList<NODETYPE>  list) {
+itemSetCluster< NODETYPE >::saveTListstd::string tlistname, gidCidList<NODETYPE>  list) {
   ofstream outfile(tlistname.c_str());
 
-  outfile << "INSERT INTO " << tlistname << " VALUES " << endl;
+  outfile << "INSERT INTO " << tlistname << " VALUES " << std::endl;
 
   typename gidCidList<NODETYPE>::MapType::const_iterator it;
-  typename map <NODETYPE,int,NODETYPE>::const_iterator it2;
+  typename std::map <NODETYPE,int,NODETYPE>::const_iterator it2;
 
   for(it=list.getMap().begin(); it!=list.getMap().end() ;it++ ) {
     it2=it->second.begin();
@@ -327,7 +326,7 @@ itemSetCluster< NODETYPE >::saveTList(string tlistname, gidCidList<NODETYPE>  li
     }
 
     for(; it2!=it->second.end(); it2++) {
-      outfile << "," << endl;
+      outfile << "," << std::endl;
       outfile << "(";
       outfile << it->first.getSQLData() << "," << it2->first.getSQLData();
       outfile << ")";
@@ -348,7 +347,7 @@ bool itemSetCluster< NODETYPE >::existEntry(const NODETYPE& item )
     typename MapType::iterator i;
 
     i=isc.find(item);
-   // cout<<"gidList "<<gidList<<" Item "<<value<<endl;
+   // std::cout<<"gidList "<<gidList<<" Item "<<value<<std::endl;
     if (i==isc.end())
        exist=false;
     else exist=true;
@@ -367,15 +366,15 @@ bool itemSetCluster< NODETYPE >::setItemSetIfExistHead(const NODETYPE& valueH,
  {
     typename MapType::iterator i = isc.find(valueH);
 
-   // cout<<"gidList "<<gidList<<" Item "<<value<<endl;
+   // std::cout<<"gidList "<<gidList<<" Item "<<value<<std::endl;
     if (i==isc.end())
      {
       return false;
-      //cout<<"HEAD FALSE NO INS g"<<gidH<<" c"<<cidH<<" item "<<valueH<<endl;
+      //cout<<"HEAD FALSE NO INS g"<<gidH<<" c"<<cidH<<" item "<<valueH<<std::endl;
      }
     else {
       i->second.getGidCidList().insertValue(gidH,cidH);
-   // cout<<"inserisco valore nella gidLsit"<<endl;
+   // std::cout<<"inserisco valore nella gidLsit"<<std::endl;
       return true;
     }
 
@@ -392,17 +391,17 @@ void itemSetCluster< NODETYPE >::setItemSetIfExist(
 
     typename MapType::iterator i = isc.find(valueB);
 
-   // cout<<"gidList "<<gidList<<" Item "<<value<<endl;
+   // std::cout<<"gidList "<<gidList<<" Item "<<value<<std::endl;
     if (i==isc.end())
      {
-      //cout<<"NON ESISTE E NON LO INSERISCO! "<<valueB<<" g"<<gidB<<" c"<<cidB<<endl;
+      //cout<<"NON ESISTE E NON LO INSERISCO! "<<valueB<<" g"<<gidB<<" c"<<cidB<<std::endl;
      }
     else {
-    //cout<<"Elemento body esiste "<<valueB<<" g"<<gidB<<" c"<<cidB<<endl;
-    //cout<<"controllo head e se ok inserisco"<<endl;
+    //cout<<"Elemento body esiste "<<valueB<<" g"<<gidB<<" c"<<cidB<<std::endl;
+    //cout<<"controllo head e se ok inserisco"<<std::endl;
     if ((i->second.getHead())->setItemSetIfExistHead(valueH,gidB,cidH))
         i->second.getGidCidList().insertValue(gidB,cidB);
-   // cout<<"inserisco valore nella gidLsit"<<endl;
+   // std::cout<<"inserisco valore nella gidLsit"<<std::endl;
     }
 
 
@@ -455,7 +454,7 @@ void itemSetCluster< NODETYPE >::setItemSet(
 
     if (i==isc.end())
      {
-     //cout<<"new value"<<endl;
+     //cout<<"new value"<<std::endl;
      entry.setData(valueB);
      entry.getGidCidList().insertValue(gidB,cidB);
      iscHead=new itemSetCluster();
@@ -567,7 +566,7 @@ void itemSetCluster< NODETYPE >::gen_Large_Rule_Base(double nSup, const MinMaxPa
 
           if ( (i->second.getGidCidList().numDistinctGID()) < nSup )
              {
-	      // cout<<"devo togliere questo elemento con la relativa HEAD"<<endl;
+	      // std::cout<<"devo togliere questo elemento con la relativa HEAD"<<std::endl;
 
                (i->second.getHead())->removeAllElem();
                delete (i->second.getHead());
@@ -580,7 +579,7 @@ void itemSetCluster< NODETYPE >::gen_Large_Rule_Base(double nSup, const MinMaxPa
               headOK=(i->second.getHead())->gen_Large_Rule_Base_Head(nSup);
               //tutti gli elementi della head sono stati cancellati.
               // -> non c'è head -> no body!
-              //cout<<"ptr head "<<(i->second.getHead())<<endl;
+              //cout<<"ptr head "<<(i->second.getHead())<<std::endl;
               if (!headOK)
               {
                delete (i->second.getHead());
@@ -622,19 +621,19 @@ void itemSetCluster< NODETYPE >::printItemSetRecursive(int lev)
      {
 
        for (int j=0; j<lev;j++)
-            cout<<"  ";
+            std::cout<<"  ";
 
-       cout<<"Item "<<i->first<<" H" << endl ;//<<i->second.getHead()<<" ";
+       std::cout<<"Item "<<i->first<<" H" << std::endl ;//<<i->second.getHead()<<" ";
 
        if (i->second.getItemSet()!=NULL)
        {
-         //cout<<"Address "<<i->second.getItemSet()<<endl;
+         //cout<<"Address "<<i->second.getItemSet()<<std::endl;
 	          i->second.getItemSet()->printItemSetRecursive(lev+1);
        }       
 
     }
 
-    cout << "size:" << isc.size() << endl;
+    std::cout << "size:" << isc.size() << std::endl;
  }
 
 
@@ -649,27 +648,27 @@ bool itemSetCluster< NODETYPE >::gen_Large_ItemSet(
 				 const MinMaxPair& hcards)
 {
   //   itemSetCluster<NODETYPE>* iscNew;
-   typename list<itemSetCluster<NODETYPE>* >::iterator i;
-   list<itemSetCluster<NODETYPE>* >* listPtr;
+   typename std::list<itemSetCluster<NODETYPE>* >::iterator i;
+   std::list<itemSetCluster<NODETYPE>* >* listPtr;
    unsigned int rLev;
    bool otherItemSet,toContinue;
 
-   //cout<<"Dentro gen_Large_ItemSet "<<lev<<endl;
+   //cout<<"Dentro gen_Large_ItemSet "<<lev<<std::endl;
    toContinue=false;
    if (lev!=2)
    {
     rLev=lev-1;
-    //cout<<"IF di lev!=2 size"<<ptrList.vect.size()<<"level "<<lev<<" RLEV"<<rLev<<endl;
+    //cout<<"IF di lev!=2 size"<<ptrList.vect.size()<<"level "<<lev<<" RLEV"<<rLev<<std::endl;
     if ((ptrList.vect.size()-1)<=rLev) {
         listPtr=ptrList.getList(rLev);
 
-	//cout<<"OK2 "<<ptrList.vect[rLev]<<endl;
+	//cout<<"OK2 "<<ptrList.vect[rLev]<<std::endl;
 	for ( i=listPtr->begin(); i!=listPtr->end(); i++) {
-	    //cout<<"*i -"<<*i<<endl;
+	    //cout<<"*i -"<<*i<<std::endl;
 	    //  otherItemSet=false;
 	    otherItemSet=(*i)->gen_Large_ItemSetHelper(ptrList,nSup,totGroups,lev,hcards);
 	    if (otherItemSet) toContinue=true;
-	    //  cout<<"altre partizioni create "<<otherItemSet<<endl;
+	    //  std::cout<<"altre partizioni create "<<otherItemSet<<std::endl;
 	  }
     }
    }
@@ -693,21 +692,21 @@ bool itemSetCluster< NODETYPE >::gen_Large_ItemSetHelper(
     itemSetCluster<NODETYPE>* iscNew;
     typename MapType::iterator i;
     typename MapType::iterator j;
-    //typename list<int>::iterator i2;
+    //typename std::list<int>::iterator i2;
     bool toLink,otherPart;
-    list<itemSetCluster<NODETYPE>* >*  listPtr;
+    std::list<itemSetCluster<NODETYPE>* >*  listPtr;
     typename MapType::iterator k;
 
     otherPart=false;
 
-    //cout<<"create New level"<<ptrList.vect.size()<<"level "<<lev<<endl;
+    //cout<<"create New level"<<ptrList.vect.size()<<"level "<<lev<<std::endl;
     if ((ptrList.vect.size()-1)>=lev)
         listPtr=ptrList.getList(lev);
-    else listPtr=new list<itemSetCluster<NODETYPE>* >();
+    else listPtr=new std::list<itemSetCluster<NODETYPE>* >();
 
     for( i=isc.begin( ) ; i != isc.end( ) ; i++ )
      {
-       //cout<<"PADRE!!!!  "<<i->first<<endl;
+       //cout<<"PADRE!!!!  "<<i->first<<std::endl;
        j=i;
        j++;
        iscNew=new itemSetCluster(lev);
@@ -716,7 +715,7 @@ bool itemSetCluster< NODETYPE >::gen_Large_ItemSetHelper(
        gidCidList<int>& tList=i->second.getGidCidList();
        while (j!=isc.end())
          {
-         // cout<<"figlio generato "<<j->first<<endl;
+         // std::cout<<"figlio generato "<<j->first<<std::endl;
           gidCidList<int>& t2=j->second.getGidCidList();
 
 	  tListNew.clear();
@@ -724,12 +723,12 @@ bool itemSetCluster< NODETYPE >::gen_Large_ItemSetHelper(
 
           if ( tListNew.isBigger(nSup) )
           {
-            //cout<<"Supporto sufficiente"<<i->first<<endl;
+            //cout<<"Supporto sufficiente"<<i->first<<std::endl;
             // Okay body con supp suff. controllo se ha una HEAD associata ok
             itemSetCluster <NODETYPE>* iscHead=(i->second.getHead())->gen_New_Head(j,nSup);
             if ( iscHead !=NULL )
             {
-               //cout<<"head diverso di null"<<endl;
+               //cout<<"head diverso di null"<<std::endl;
 
                iscNew->setItemSet(j->first,tListNew);
                k=iscNew->getLink(j->first);
@@ -738,12 +737,12 @@ bool itemSetCluster< NODETYPE >::gen_Large_ItemSetHelper(
 
                toLink=true;
             }
-            //else cout<<"head NULL!"<<endl;
+            //else std::cout<<"head NULL!"<<std::endl;
           }
           j++;
          }
     // i->second.gidListRemove();
-        // cout<<"stampa prttNew"<<endl;
+        // std::cout<<"stampa prttNew"<<std::endl;
         // prttNew->printItemSet();
 
          if (toLink)
@@ -751,12 +750,12 @@ bool itemSetCluster< NODETYPE >::gen_Large_ItemSetHelper(
              i->second.setItemSetChild(iscNew);
              listPtr->push_back(iscNew);
 
-             //cout<<"creato parti ptr "<<prttNew<<endl;
+             //cout<<"creato parti ptr "<<prttNew<<std::endl;
           }
          else delete iscNew;
-        // cout<<".."<<endl;
+        // std::cout<<".."<<std::endl;
      }
-//    cout<<"lunghe lista"<<listPtr->size()<<endl;
+//    std::cout<<"lunghe lista"<<listPtr->size()<<std::endl;
     if (listPtr->size()>0)
      {
        otherPart=true;
@@ -780,7 +779,7 @@ itemSetCluster<NODETYPE>* itemSetCluster< NODETYPE >::gen_New_Head(typename MapT
     itemSetCluster<NODETYPE>* iscNew;
     typename MapType::iterator i;
     //typename MapType::iterator j;
-    //typename list<int>::iterator i2;
+    //typename std::list<int>::iterator i2;
     bool existPtr;
    // iscHead=NULL;
 
@@ -791,7 +790,7 @@ itemSetCluster<NODETYPE>* itemSetCluster< NODETYPE >::gen_New_Head(typename MapT
         gidCidList<int>& tList=i->second.getGidCidList();
         if ( (iterSon->second.getHead())->existEntry(i->first) )
          {
-            //cout<<"elemento esiste nella head."<<i->first<<endl;
+            //cout<<"elemento esiste nella head."<<i->first<<std::endl;
             gidCidList<int>& t2=((iterSon->second.getHead())->getLink(i->first))->second.getGidCidList();
 	    tListNew.clear();
             t2.set_intersection(tList,tListNew);
@@ -819,12 +818,12 @@ template< class NODETYPE >
 void itemSetCluster< NODETYPE >::extend_Head(double nSup, const MinMaxPair& hcards)
 {
 
-   //typename list<itemSetCluster<NODETYPE>* >::iterator i;
+   //typename std::list<itemSetCluster<NODETYPE>* >::iterator i;
    itemSetListCluster <NODETYPE> ptrListHead;
    bool toContinue;
    int levelIn;
 
-   //cout<<"Dentro gen_Large_ItemSet "<<lev<<endl;
+   //cout<<"Dentro gen_Large_ItemSet "<<lev<<std::endl;
    ptrListHead.init();
    toContinue=true;
    levelIn=1;
@@ -839,27 +838,27 @@ void itemSetCluster< NODETYPE >::extend_Head(double nSup, const MinMaxPair& hcar
 template< class NODETYPE >
 bool itemSetCluster< NODETYPE >::gen_Large_ItemSet_Head(itemSetListCluster<NODETYPE>& ptrListHead,double nSup,int lev)
 {
-   typename list<itemSetCluster<NODETYPE>* >::iterator i;
-   list<itemSetCluster<NODETYPE>* >* listPtr;
+   typename std::list<itemSetCluster<NODETYPE>* >::iterator i;
+   std::list<itemSetCluster<NODETYPE>* >* listPtr;
    unsigned int rLev;
    bool otherItemSet,toContinue;
 
-   //cout<<"Dentro gen_Large_ItemSet "<<lev<<endl;
+   //cout<<"Dentro gen_Large_ItemSet "<<lev<<std::endl;
    toContinue=false;
    if (lev!=2) {
      rLev=lev-1;
-     //cout<<"IF di lev!=2 size"<<ptrList.vect.size()<<"level "<<lev<<" RLEV"<<rLev<<endl;
+     //cout<<"IF di lev!=2 size"<<ptrList.vect.size()<<"level "<<lev<<" RLEV"<<rLev<<std::endl;
      if ((ptrListHead.vect.size()-1)<=rLev) {
        listPtr=ptrListHead.getList(rLev);
 
-       //cout<<"OK2 "<<ptrList.vect[rLev]<<endl;
+       //cout<<"OK2 "<<ptrList.vect[rLev]<<std::endl;
        for ( i=listPtr->begin(); i!=listPtr->end(); i++)
 	 {
-	   //cout<<"*i -"<<*i<<endl;
+	   //cout<<"*i -"<<*i<<std::endl;
 	   //  otherItemSet=false;
 	   otherItemSet=(*i)->gen_Large_ItemSet_HeadHelper(ptrListHead,nSup,lev);
 	   if (otherItemSet) toContinue=true;
-	   //  cout<<"altre partizioni create "<<otherItemSet<<endl;
+	   //  std::cout<<"altre partizioni create "<<otherItemSet<<std::endl;
 	 }
      }
    }
@@ -876,20 +875,20 @@ bool itemSetCluster< NODETYPE >::gen_Large_ItemSet_HeadHelper(itemSetListCluster
     itemSetCluster<NODETYPE>* iscNew;
     typename MapType::iterator i;
     typename MapType::iterator j;
-    //typename list<int>::iterator i2;
+    //typename std::list<int>::iterator i2;
     bool toLink,otherPart;
-    list<itemSetCluster<NODETYPE>* >*  listPtr;
+    std::list<itemSetCluster<NODETYPE>* >*  listPtr;
 
     otherPart=false;
 
-    //cout<<"create New level"<<ptrList.vect.size()<<"level "<<lev<<endl;
+    //cout<<"create New level"<<ptrList.vect.size()<<"level "<<lev<<std::endl;
     if ((ptrList.vect.size()-1)>=lev)
         listPtr=ptrList.getList(lev);
-    else listPtr=new list<itemSetCluster<NODETYPE>* >();
+    else listPtr=new std::list<itemSetCluster<NODETYPE>* >();
 
     for( i=isc.begin( ) ; i != isc.end( ) ; i++ )
      {
-       //cout<<"PADRE!!!!  "<<i->first<<endl;
+       //cout<<"PADRE!!!!  "<<i->first<<std::endl;
        j=i;
        j++;
        iscNew=new itemSetCluster(lev);
@@ -898,7 +897,7 @@ bool itemSetCluster< NODETYPE >::gen_Large_ItemSet_HeadHelper(itemSetListCluster
        gidCidList<int>& tList=i->second.getGidCidList();
        while (j!=isc.end())
          {
-         // cout<<"figlio generato "<<j->first<<endl;
+         // std::cout<<"figlio generato "<<j->first<<std::endl;
           gidCidList<int>& t2=j->second.getGidCidList();
 
 	  tListNew.clear();
@@ -907,7 +906,7 @@ bool itemSetCluster< NODETYPE >::gen_Large_ItemSet_HeadHelper(itemSetListCluster
 
           if ( tListNew.isBigger(nSup) )
           {
-          //  cout<<"Supporto Head sufficiente"<<i->first<<endl;
+          //  std::cout<<"Supporto Head sufficiente"<<i->first<<std::endl;
             // Okay head con supp suff.
 
                iscNew->setItemSet(j->first,tListNew);
@@ -916,7 +915,7 @@ bool itemSetCluster< NODETYPE >::gen_Large_ItemSet_HeadHelper(itemSetListCluster
          j++;
         }
     // i->second.gidListRemove();
-        // cout<<"stampa prttNew"<<endl;
+        // std::cout<<"stampa prttNew"<<std::endl;
         // prttNew->printItemSet();
 
          if (toLink)
@@ -924,12 +923,12 @@ bool itemSetCluster< NODETYPE >::gen_Large_ItemSet_HeadHelper(itemSetListCluster
              i->second.setItemSetChild(iscNew);
              listPtr->push_back(iscNew);
 
-             //cout<<"creato parti ptr "<<prttNew<<endl;
+             //cout<<"creato parti ptr "<<prttNew<<std::endl;
           }
          else delete iscNew;
-        // cout<<".."<<endl;
+        // std::cout<<".."<<std::endl;
      }
-//    cout<<"lunghe lista"<<listPtr->size()<<endl;
+//    std::cout<<"lunghe lista"<<listPtr->size()<<std::endl;
     if (listPtr->size()>0)
      {
        otherPart=true;
@@ -954,7 +953,7 @@ void itemSetCluster< NODETYPE >::save_Large_ItemSet(
     typename MapType::iterator i;
     std::string id_head;
 
-    //cout<<"itemSetCluter.h _ Dentro alla procedura"<<endl;
+    //cout<<"itemSetCluter.h _ Dentro alla procedura"<<std::endl;
     for( i=isc.begin( ) ; i != isc.end( ) ; i++ ) {
 
        id_head=i->second.getHead()->save_Large_ItemSet_Head(1,isPart,coreConn);
@@ -985,13 +984,13 @@ std::string itemSetCluster< NODETYPE >::save_Large_ItemSet_Head(int lev,int isPa
     std::stringstream oHead;
 
     oHead << this;
-    //    string nomeH=oHead.str();
+    //   std::string nomeH=oHead.str();
     id_head=oHead.str();
 
     for( i=isc.begin( ) ; i != isc.end( ) ; i++ )
      {
 
-      //cout<<lev<<":::"<<i->first<<endl;
+      //cout<<lev<<":::"<<i->first<<std::endl;
       saveIn_DB_Head(lev,i->first,id_head.c_str(),isPart,coreConn);
       if (i->second.getItemSet()!=NULL) {
            i->second.getItemSet()->save_Large_ItemSet_HeadHelper(lev+1,isPart,id_head.c_str(),coreConn);
@@ -1004,7 +1003,7 @@ std::string itemSetCluster< NODETYPE >::save_Large_ItemSet_Head(int lev,int isPa
 
    isc.clear();
    //out_Head.close();
-   //cout<<"Finito la creazione del file head"<<endl;
+   //cout<<"Finito la creazione del file head"<<std::endl;
    return id_head;
   }
 
@@ -1072,12 +1071,12 @@ void itemSetCluster< NODETYPE >::saveIn_DB_Body(
     sprintf(intPart,"%d",isPart);
     //    bid=node.c_str();
 
-    //cout<<lev<<":::"<<i->first<<":::"<<id_head<<isPart<<endl;
-    //cout << node.getSQLData() << endl;
-    //cout << "!!! "  << id_head << " " << intPart <<  endl;
+    //cout<<lev<<":::"<<i->first<<":::"<<id_head<<isPart<<std::endl;
+    //cout << node.getSQLData() << std::endl;
+    //cout << "!!! "  << id_head << " " << intPart <<  std::endl;
 
     QryDef=Qry+inter+","+node.getSQLData()+",'"+id_head+intPart+"');";
-    //    cout<<QryDef<<endl;
+    //    std::cout<<QryDef<<std::endl;
     const char * dains=QryDef.c_str();
     coreConn.insert_DB(dains);
 
@@ -1100,7 +1099,7 @@ void itemSetCluster< NODETYPE >::saveIn_DB_Head(int lev,const NODETYPE& node,con
     // hid=node.c_str();
 
     QryDef=Qry+id_head+intPart+"',"+inter+","+node.getSQLData()+");";
-    //cout<<QryDef<<endl;
+    //cout<<QryDef<<std::endl;
     const char * dains=QryDef.c_str();
     coreConn.insert_DB(dains);
 }
@@ -1115,8 +1114,8 @@ void itemSetCluster< NODETYPE >::updatePtrList(
 				     itemSetListCluster<NODETYPE>& ptrList,
 				     unsigned int level,
 				     itemSetCluster<NODETYPE>* newLevel) {
-  list<itemSetCluster<NODETYPE>* >*  listPtr;
-  typename list<itemSetCluster<NODETYPE>* >::iterator riferimento;
+  std::list<itemSetCluster<NODETYPE>* >*  listPtr;
+  typename std::list<itemSetCluster<NODETYPE>* >::iterator riferimento;
 
   if ((ptrList.vect.size()-1)>=level) {
     // esiste la lista di livello level
@@ -1125,7 +1124,7 @@ void itemSetCluster< NODETYPE >::updatePtrList(
     ptrList.vect[level]=listPtr;
   } else {
     // Non c'e' una lista di livello level!
-    listPtr=new list<itemSetCluster<NODETYPE>* >();
+    listPtr=new std::list<itemSetCluster<NODETYPE>* >();
     listPtr->push_back(newLevel);
     ptrList.vect.push_back(listPtr);
   }
@@ -1149,7 +1148,7 @@ void itemSetCluster< NODETYPE >::mergeItemSet(
    level=0;
    size_t lastElem;
 
-   string idHead("");
+  std::string idHead("");
 
    // Il db del minerule è connesso!
 
@@ -1159,13 +1158,13 @@ void itemSetCluster< NODETYPE >::mergeItemSet(
    Qry="select level,"
      +srd.getBody().getSQLColumnNames()+",id_head from tmp_Rule_Ext order by id;";
 
-   //   cerr << endl << "QRY:" << Qry << endl;
+   //   std::cerr << std::endl << "QRY:" << Qry << std::endl;
 
    HeadBodySourceRowDescription srDescription;
    lastElem = srDescription.setBodyElems(2,srd.getBody().getColumnsCount());
 
    resultAllBody=statement->executeQuery(Qry.c_str());
-   //cout<<"dopo resultAllBody"<<endl;
+   //cout<<"dopo resultAllBody"<<std::endl;
    if (resultAllBody!=NULL) {
      mergeItemSetHelper(ptrList,
 			resultAllBody,
@@ -1174,7 +1173,7 @@ void itemSetCluster< NODETYPE >::mergeItemSet(
 			coreConn,
 			srd);
      delete resultAllBody;
-   } else cout<<"ResultAllBody == NULL"<<endl;
+   } else std::cout<<"ResultAllBody == NULL"<<std::endl;
    delete statement;
 }
 
@@ -1194,12 +1193,12 @@ void itemSetCluster< NODETYPE >::mergeItemSetHelper(
   levelStack.push_back(this);
 
   NODETYPE lastItem; 
-  string lastHead;
+ std::string lastHead;
 
   unsigned int level;
   NODETYPE item;
-  string head; 
-  string QrySt="select level,"+srd.getHead().getSQLColumnNames()+
+ std::string head; 
+ std::string QrySt="select level,"+srd.getHead().getSQLColumnNames()+
      " from tmp_Rule_Head_Ext where id_head=? order by id;";
   odbc::PreparedStatement* statement=coreConn.getConnection()->prepareStatement(QrySt);
   
@@ -1217,7 +1216,7 @@ void itemSetCluster< NODETYPE >::mergeItemSetHelper(
     lastHead = head;
     head = resultAllBody->getString(lastElem+1);
 
-    //    cerr << "level: " << level << " item:" << item << endl;
+    //    std::cerr << "level: " << level << " item:" << item << std::endl;
 
     while( level<levelStack.getCurLevel() ) {
       // torno indietro
@@ -1260,7 +1259,7 @@ void itemSetCluster< NODETYPE >::mergeItemSetHelper(
 template< class NODETYPE >
 void itemSetCluster< NODETYPE >::mergeItemSetHeadBase(
 				odbc::PreparedStatement * statement,
-				const string& fHead,
+				const std::string& fHead,
 				const NODETYPE& item,
 				const SourceRowDescriptor& srd)
  {
@@ -1288,7 +1287,7 @@ template< class NODETYPE >
 void itemSetCluster< NODETYPE >::mergeItemSetHead(
 			    odbc::PreparedStatement * statement,
 			    itemSetListCluster<NODETYPE>& ptrList,
-			    const string& fHead,
+			    const std::string& fHead,
 			    const SourceRowDescriptor& srd)
  {
 
@@ -1309,7 +1308,7 @@ void itemSetCluster< NODETYPE >::mergeItemSetHead(
 			    resultHead,
 			    srDescription);
      delete resultHead;
-   } else cout<<"ResultHead == NULL"<<endl;
+   } else std::cout<<"ResultHead == NULL"<<std::endl;
 }
 
 
@@ -1326,7 +1325,7 @@ void itemSetCluster< NODETYPE >::mergeItemSetHeadHelper(
 
   unsigned int level = -1;
   NODETYPE item;
-  string head; 
+ std::string head; 
   
   while( resultHead->next() ) {
     // lettura dal db
@@ -1337,7 +1336,7 @@ void itemSetCluster< NODETYPE >::mergeItemSetHeadHelper(
     lastItem = item;
     item = srow.getHead();
 
-    //    cerr << "head - level: " << level << " item:" << item << endl;
+    //    std::cerr << "head - level: " << level << " item:" << item << std::endl;
 
     while( level<levelStack.getCurLevel() ) {
       // torno indietro
@@ -1351,10 +1350,10 @@ void itemSetCluster< NODETYPE >::mergeItemSetHeadHelper(
             
       parentItem=levelStack.getCurLevelInfo()->getLink(lastItem);
 
-      //cerr << "lastItem:" << lastItem << ":fineLastItem" << endl;
-      // cerr << "mappa:" << endl;
+      //std::cerr << "lastItem:" << lastItem << ":fineLastItem" << std::endl;
+      // std::cerr << "mappa:" << std::endl;
       //levelStack.getCurLevelInfo()->printItemSetRecursive(1);
-      // cerr << "finemappa" << endl;
+      // std::cerr << "finemappa" << std::endl;
 
 
       assert(parentItem!=levelStack.getCurLevelInfo()->getMap().end());
@@ -1404,7 +1403,7 @@ itemSetCluster<NODETYPE>::removeAllReferences(
 
   if( iscChild!=NULL ) {
     int nlev = iscChild->getLevel();  
-    list<itemSetCluster<NODETYPE>* >* listPtr=ptrList.getList(nlev);
+    std::list<itemSetCluster<NODETYPE>* >* listPtr=ptrList.getList(nlev);
     assert( listPtr!=NULL );
 
     iscChild->remove(ptrList);
@@ -1429,7 +1428,7 @@ void itemSetCluster< NODETYPE >::checkSupportBaseDef(
     MapType tmpMap;
     NODETYPE elemToDelete;
 
-    vector<NODETYPE> elemsToBeDeleted;
+    std::vector<NODETYPE> elemsToBeDeleted;
 
 
     for( i=isc.begin( ) ; i != isc.end( ) ; i++ )
@@ -1445,13 +1444,13 @@ void itemSetCluster< NODETYPE >::checkSupportBaseDef(
 	    // Qui devo controllare il supp. della head. Se ho almeno una head... ok!
 	    // e mentre controllo faccio che calcolare le liste dei sottolivelli della
 	    // head.
-	    //cout<<"first element of map"<<i->first<<endl;
+	    //cout<<"first element of map"<<i->first<<std::endl;
 	    
 	    if ( i->second.getHead()->check_and_gen(i->second.getListPtrHead(), 
 						    nSup) )
 	      {
 		i->second.setCountGid(i->second.getGidCidList().numDistinctGID());
-		vector<NODETYPE> tmp;
+	 std::vector<NODETYPE> tmp;
 		tmp.push_back(i->first);
 		pHashMap.add(tmp);
 	      }
@@ -1467,8 +1466,8 @@ void itemSetCluster< NODETYPE >::checkSupportBaseDef(
     // N.B. Non puo' essere fatto prima perche' altrimenti l'iteratore "i"
     // verrebbe invalidato.
 
-    cout << "Number of Items without sufficient support: " << elemsToBeDeleted.size() << endl;
-    typename vector<NODETYPE>::iterator it;
+    std::cout << "Number of Items without sufficient support: " << elemsToBeDeleted.size() << std::endl;
+    typename std::vector<NODETYPE>::iterator it;
     for(it=elemsToBeDeleted.begin(); it!=elemsToBeDeleted.end(); it++) {
       isc.erase(*it);
     }
@@ -1482,19 +1481,19 @@ void itemSetCluster< NODETYPE >::remove(itemSetListCluster<NODETYPE>& ptrList)
  {
    typename MapType::iterator i;
    itemSetCluster<NODETYPE>* p;
-   list<itemSetCluster<NODETYPE>* >* listPtr;
+   std::list<itemSetCluster<NODETYPE>* >* listPtr;
    int lev;
-   typename list<itemSetCluster<NODETYPE>* >::iterator riferimento;
+   typename std::list<itemSetCluster<NODETYPE>* >::iterator riferimento;
 
    lev=getLevel();
-   //cout<<"Remove tutto lev"<<lev<<endl;
+   //cout<<"Remove tutto lev"<<lev<<std::endl;
    for( i=isc.begin( ) ; i != isc.end( ) ; i++ )
      {
        //cancello tutta la head. Dalla lista... :-)
        i->second.getHead()->cancellaHead(i->second.getListPtrHead());
        delete (i->second.getHead());
 
-       //    cout<<"Dentro REmove da taglio "<<i->first<<endl;
+       //    std::cout<<"Dentro REmove da taglio "<<i->first<<std::endl;
        p=i->second.getItemSet();
        if (p!=NULL)
 	 {
@@ -1510,12 +1509,12 @@ void itemSetCluster< NODETYPE >::remove(itemSetListCluster<NODETYPE>& ptrList)
 
 
 template< class NODETYPE >
-void itemSetCluster< NODETYPE >::cancellaRef( list<itemSetCluster<NODETYPE>* >* listPtr)
+void itemSetCluster< NODETYPE >::cancellaRef( std::list<itemSetCluster<NODETYPE>* >* listPtr)
  {
-     typename list<itemSetCluster<NODETYPE>* >::iterator riferimento;
+     typename std::list<itemSetCluster<NODETYPE>* >::iterator riferimento;
 
      riferimento=getRefList();
-     //cout<<"refList"<<*riferimento<<endl;
+     //cout<<"refList"<<*riferimento<<std::endl;
      listPtr->erase(riferimento);
  }
 
@@ -1526,8 +1525,8 @@ template< class NODETYPE >
 void itemSetCluster< NODETYPE >::cancellaHead(
 			    itemSetListCluster <NODETYPE>& listPtrHead)
  {
-  typename vector<list<itemSetCluster<NODETYPE>* >* >::iterator i;
-  typename list<itemSetCluster<NODETYPE>* >::iterator j;
+  typename std::vector<std::list<itemSetCluster<NODETYPE>* >* >::iterator i;
+  typename std::list<itemSetCluster<NODETYPE>* >::iterator j;
 
   for ( i=listPtrHead.vect.begin(); i!=listPtrHead.vect.end(); i++)
     {
@@ -1536,7 +1535,7 @@ void itemSetCluster< NODETYPE >::cancellaHead(
 	  for ( j=(*i)->begin(); j!=(*i)->end(); j++)
             {
 	      delete(*j);
-	      //cout<<"FOOT"<<*i<<endl;
+	      //cout<<"FOOT"<<*i<<std::endl;
             }
 	}
     }
@@ -1556,11 +1555,11 @@ bool itemSetCluster< NODETYPE >::check_and_gen(
    //    itemSetCluster<NODETYPE>* iscNew;
     typename MapType::iterator i;
     //    int nlev;
-    //    list<itemSetCluster<NODETYPE>* >* listPtr;
+    //    std::list<itemSetCluster<NODETYPE>* >* listPtr;
     //    NODETYPE elemToDelete;
     
     newItemSetHashMap <NODETYPE> pHashMapHead;
-    vector<NODETYPE> elemsToBeDeleted;
+    std::vector<NODETYPE> elemsToBeDeleted;
     bool existOneHead = false;
     
 
@@ -1570,7 +1569,7 @@ bool itemSetCluster< NODETYPE >::check_and_gen(
 	   elemsToBeDeleted.push_back(i->first);
        } else {
 	   i->second.setCountGid(i->second.getGidCidList().numDistinctGID());
-	   vector<NODETYPE> tmp;
+	   std::vector<NODETYPE> tmp;
 	   tmp.push_back(i->first);
            pHashMapHead.add(tmp);
 	   existOneHead = true;
@@ -1583,7 +1582,7 @@ bool itemSetCluster< NODETYPE >::check_and_gen(
     // N.B. Non puo' essere fatto prima perche' altrimenti l'iteratore "i"
     // verrebbe invalidato.
 
-    typename vector<NODETYPE>::iterator it;
+    typename std::vector<NODETYPE>::iterator it;
     for(it=elemsToBeDeleted.begin(); it!=elemsToBeDeleted.end(); it++) {
       isc.erase(*it);
     }
@@ -1597,7 +1596,7 @@ bool itemSetCluster< NODETYPE >::check_and_gen(
 	while  (toContinue)
 	  {
 	    levelIn=levelIn+1;
-	    //cout<<"Address livello head "<<this<<endl;
+	    //cout<<"Address livello head "<<this<<std::endl;
 	    toContinue=this->gen_final_count_Head(listPtrHead,nSup,levelIn,pHashMapHead);
 	  }
       }
@@ -1613,15 +1612,15 @@ bool itemSetCluster< NODETYPE >::gen_final_count_Head(
 			       int lev,
 			       newItemSetHashMap<NODETYPE>& pHashMap)
 {
-   typename list<itemSetCluster<NODETYPE>* >::iterator i;
-   list<itemSetCluster<NODETYPE>* >* listPtr;
+   typename std::list<itemSetCluster<NODETYPE>* >::iterator i;
+   std::list<itemSetCluster<NODETYPE>* >* listPtr;
    unsigned int rLev;
-   //cout<<"creazione phashMapNew"<<endl;
+   //cout<<"creazione phashMapNew"<<std::endl;
    newItemSetHashMap<NODETYPE> pHashMapNew;
 
 
    //printItemSetRecursiveHead(1);
-   //cout<<"EstimateLevel_HEAD: "<<lev<<endl;
+   //cout<<"EstimateLevel_HEAD: "<<lev<<std::endl;
 
    rLev=lev-1;
 
@@ -1687,7 +1686,7 @@ bool itemSetCluster< NODETYPE >::prune_children(
   bool oneOK = false;
   bool doApriori;
 
-  vector<NODETYPE> elemsToBeDeleted;
+  std::vector<NODETYPE> elemsToBeDeleted;
   typename MapType::iterator j;
   for( j=childMap.begin(); j !=childMap.end( ) ; j++ )  {
 
@@ -1725,7 +1724,7 @@ bool itemSetCluster< NODETYPE >::prune_children(
 	} else 	{
 	  // Non e' vero che tutti i miei ancestors hanno supporto sufficiente.
 	  // non c'e' speranza che io possa averlo 
-	  //cout << "CANCELLO:" << j->first << endl;
+	  //cout << "CANCELLO:" << j->first << std::endl;
 	  removeAllReferences(j->second, ptrList);
 	  elemsToBeDeleted.push_back(j->first);
 	}
@@ -1735,7 +1734,7 @@ bool itemSetCluster< NODETYPE >::prune_children(
   // N.B. Non puo' essere fatto prima perche' altrimenti l'iteratore "i"
   // verrebbe invalidato.
 
-  typename vector<NODETYPE>::iterator it;
+  typename std::vector<NODETYPE>::iterator it;
   for(it=elemsToBeDeleted.begin(); it!=elemsToBeDeleted.end(); it++) {
     childMap.erase(*it);
   }
@@ -1752,7 +1751,7 @@ bool itemSetCluster< NODETYPE >::prune_children(
     
     
     int nLev=(toBePruned.getItemSet()->getLevel())+1;
-    list< itemSetCluster<NODETYPE>* >* listPtr=ptrList.getList(nLev);
+    std::list< itemSetCluster<NODETYPE>* >* listPtr=ptrList.getList(nLev);
     
     toBePruned.getItemSet()->remove(ptrList);
     toBePruned.getItemSet()->cancellaRef(listPtr);
@@ -1771,10 +1770,10 @@ void itemSetCluster< NODETYPE >::gen_final_count_HeadHelper(
               itemSetListCluster<NODETYPE>& ptrList) {
   typename MapType::iterator i;
   
-  //  cout << "DEBUG HEAD" << endl;
-  //  cout << "ISC SIZE:" << isc.size() << endl;
+  //  std::cout << "DEBUG HEAD" << std::endl;
+  //  std::cout << "ISC SIZE:" << isc.size() << std::endl;
 
-  vector<NODETYPE> elemsToBeDeleted;
+  std::vector<NODETYPE> elemsToBeDeleted;
 
   for( i=isc.begin( ) ; i != isc.end( ) ; i++ ) {
     if(prune_children(i->second, pHashMap, pHashMapNew, nSup, ptrList )
@@ -1782,12 +1781,12 @@ void itemSetCluster< NODETYPE >::gen_final_count_HeadHelper(
       elemsToBeDeleted.push_back(i->first);
   }
 
-  typename vector<NODETYPE>::iterator it = elemsToBeDeleted.begin();
+  typename std::vector<NODETYPE>::iterator it = elemsToBeDeleted.begin();
   for( ; it!=elemsToBeDeleted.end(); it++ ) {
     isc.erase(*it);
   }
-  //  cout << "end ISC SIZE:" << isc.size() << endl;
-  //  cout << "end DEBUG HEAD" << endl;
+  //  std::cout << "end ISC SIZE:" << isc.size() << std::endl;
+  //  std::cout << "end DEBUG HEAD" << std::endl;
 }
 
 
@@ -1805,8 +1804,8 @@ bool itemSetCluster< NODETYPE >::gen_final_count(
 		int lev,
 		newItemSetHashMap<NODETYPE>& pHashMap) {
 
-   typename list<itemSetCluster<NODETYPE>* >::iterator i;
-   list<itemSetCluster<NODETYPE>* >* listPtr;
+   typename std::list<itemSetCluster<NODETYPE>* >::iterator i;
+   std::list<itemSetCluster<NODETYPE>* >* listPtr;
    unsigned int rLev;
    newItemSetHashMap<NODETYPE> pHashMapNew;
 
@@ -1847,7 +1846,7 @@ bool itemSetCluster< NODETYPE >::gen_final_count_Helper(
 	      double nSup) {
    typename MapType::iterator i;
 
-   vector<NODETYPE> elemsToBeDeleted;
+   std::vector<NODETYPE> elemsToBeDeleted;
 
    for( i=isc.begin( ) ; i != isc.end( ) ; i++ ) {
      if( prune_children(i->second, pHashMap, pHashMapNew, nSup, ptrList ) 
@@ -1856,7 +1855,7 @@ bool itemSetCluster< NODETYPE >::gen_final_count_Helper(
      } 
    }
 
-   typename vector<NODETYPE>::iterator it;
+   typename std::vector<NODETYPE>::iterator it;
    for(it=elemsToBeDeleted.begin(); it!=elemsToBeDeleted.end(); it++ ) {
      isc.erase(*it);
    }
@@ -1959,9 +1958,9 @@ void itemSetCluster< NODETYPE >::fillGidCidList(
 template< class NODETYPE >
 void itemSetCluster< NODETYPE >::printRule(
 			 sqlCoreConn& coreConn,
-			 const vector<NODETYPE>& body,
+			 const std::vector<NODETYPE>& body,
 			 double denomBody,
-			 const vector<NODETYPE>& head,
+			 const std::vector<NODETYPE>& head,
 			 double totGroups) {
    typename MapType::iterator i;
    double sup,conf;
@@ -1969,7 +1968,7 @@ void itemSetCluster< NODETYPE >::printRule(
 
    for( i=isc.begin( ) ; i != isc.end( ) ; i++ )
      {
-       vector<NODETYPE> curHead = head;
+       std::vector<NODETYPE> curHead = head;
 
        curHead.push_back(i->first);
        double numHead= i->second.getCountGid();
@@ -1988,18 +1987,18 @@ void itemSetCluster< NODETYPE >::printRule(
 
 
 template< class NODETYPE >
-void itemSetCluster< NODETYPE >::extractRule(sqlCoreConn& coreConn,const vector<NODETYPE>& body, double totGroups)
+void itemSetCluster< NODETYPE >::extractRule(sqlCoreConn& coreConn,const std::vector<NODETYPE>& body, double totGroups)
  {
    typename MapType::iterator i;
 
    for( i=isc.begin( ) ; i != isc.end( ) ; i++ )
      {
-       vector<NODETYPE> curBody = body;
+       std::vector<NODETYPE> curBody = body;
        curBody.push_back(i->first);
 
        double denom=i->second.getCountGid();
        
-       i->second.getHead()->printRule(coreConn,curBody,denom,vector<NODETYPE>(),totGroups);
+       i->second.getHead()->printRule(coreConn,curBody,denom,std::vector<NODETYPE>(),totGroups);
 
        if (i->second.getItemSet()!=NULL) {
          i->second.getItemSet()->extractRule(coreConn,curBody,totGroups);
@@ -2011,17 +2010,17 @@ void itemSetCluster< NODETYPE >::extractRule(sqlCoreConn& coreConn,const vector<
 
 #if 0 // deprecated
 template< class NODETYPE >
-void itemSetCluster< NODETYPE >::extractRule(sqlCoreConn& coreConn,string regola,int lev,double totGroups)
+void itemSetCluster< NODETYPE >::extractRule(sqlCoreConn& coreConnstd::string regola,int lev,double totGroups)
  {
    typename MapType::iterator i;
-   string rule;
+  std::string rule;
    
    rule=regola;
 
 
    for( i=isc.begin( ) ; i != isc.end( ) ; i++ )
      {
-        //cout<<"Address "<<i<<endl;
+        //cout<<"Address "<<i<<std::endl;
 	if (rule!="")
 	  regola=rule+","+i->first.c_str();
 	else
@@ -2029,18 +2028,18 @@ void itemSetCluster< NODETYPE >::extractRule(sqlCoreConn& coreConn,string regola
        //cout<<"Item "<<i->first<<" GidList: ";
        //gList=i->second.getGidList();
        //for (i2=gList.begin(); i2!=gList.end();i2++)
-       //    cout<<*i2<<"  ";
-       //cout<<"level"<<getLevel()<<endl;
+       //    std::cout<<*i2<<"  ";
+       //cout<<"level"<<getLevel()<<std::endl;
        //if (lev!=1) combina2(regola);
-       //cout<<"BODY : "<<lev<<endl;
+       //cout<<"BODY : "<<lev<<std::endl;
        double denom=i->second.getCountGid();
        i->second.getHead()->printRule(coreConn,regola,lev,denom,"",1,totGroups);
        if (i->second.getItemSet()!=NULL)
        {
-         //cout<<"Address "<<i->second.getItemSet()<<endl;
+         //cout<<"Address "<<i->second.getItemSet()<<std::endl;
 
          i->second.getItemSet()->extractRule(coreConn,regola,lev+1,totGroups);
-	 //         cout<<endl;
+	 //         std::cout<<std::endl;
        }
      regola="";
     }
@@ -2054,35 +2053,35 @@ void itemSetCluster< NODETYPE >::extractRule(sqlCoreConn& coreConn,string regola
 
 //------------------------- disegno GRAFICAMENTE la struttura : WinGraph //
 template< class NODETYPE >
-void itemSetCluster< NODETYPE >::printToDesign(string nome,int isPart)
+void itemSetCluster< NODETYPE >::printToDesign(std::string nome,int isPart)
  {
 
-   /*string files,label1,values,nod,vStruct,address ,idList;*/
+   /* std::string files,label1,values,nod,vStruct,address ,idList;*/
    typename MapType::iterator i;
-   //typename list<int>::iterator i2;
+   //typename std::list<int>::iterator i2;
    //list<int> tList;
    char filename[255];
    const char* nomeSt;
-   //string myAncestor;
+   //std::string myAncestor;
 
-   //cout<<"Sono in disegno grafico della struttura"<<endl;
+   //cout<<"Sono in disegno grafico della struttura"<<std::endl;
    nomeSt=nome.c_str();
 
    sprintf(filename,"design/LClust%s%d.txt",nomeSt,isPart);
 
    ofstream f1(filename);
 
-   f1<<"digraph minerule { "<<endl;
-   f1<<"graph[fontsize=8]; edge  [fontsize=8]; node  [fontsize=8]; ranksep = .30; nodesep = .25;"<<endl;
-   f1<<"node [fontname=\"Courier\"]; "<<endl;
-   f1<<"node [shape=record];"<<endl;
+   f1<<"digraph minerule { "<<std::endl;
+   f1<<"graph[fontsize=8]; edge  [fontsize=8]; node  [fontsize=8]; ranksep = .30; nodesep = .25;"<<std::endl;
+   f1<<"node [fontname=\"Courier\"]; "<<std::endl;
+   f1<<"node [shape=record];"<<std::endl;
 
-   string vStruct="struct0";
-   string label1="struct0[shape=record,label=\"";
-   string values;
+  std::string vStruct="struct0";
+  std::string label1="struct0[shape=record,label=\"";
+  std::string values;
    for( i=isc.begin( ) ; i != isc.end( ) ; i++ )
      {
-      string idList;
+     std::string idList;
       values=values+"<"+
 	i->first.c_str()+">"+
 	i->first.c_str();
@@ -2090,13 +2089,13 @@ void itemSetCluster< NODETYPE >::printToDesign(string nome,int isPart)
        {
         std::stringstream oHead;
         oHead <<i->second.getHead();
-        string nomeH=oHead.str();
+       std::string nomeH=oHead.str();
 	//        values=values+" : H_"+nomeH;
 	
      }
 
 #if 1      //stampa degli ancestor
-      typename vector<NODETYPE>::const_iterator it=getAncestor().begin();
+      typename std::vector<NODETYPE>::const_iterator it=getAncestor().begin();
       for(;it!=getAncestor().end(); it++) {
 	values += std::string(it->c_str())+"-";
       }
@@ -2111,22 +2110,22 @@ void itemSetCluster< NODETYPE >::printToDesign(string nome,int isPart)
    siz=siz-1;
    if (siz>0)  values.resize(siz);
    label1=label1+values+"\"];";
-   f1<<label1<<endl;
+   f1<<label1<<std::endl;
    //values="";
 
 
    for( i=isc.begin( ) ; i != isc.end( ) ; i++ )
    {
 
-    string nod=i->first.c_str();
+   std::string nod=i->first.c_str();
 
     if (i->second.getHead()!=NULL)
      {
       std::stringstream oHead;
       oHead <<i->second.getHead();
-      string nomeH=oHead.str();
+     std::string nomeH=oHead.str();
 
-       //cout<<"nome File head"<<nomeH<<endl;
+       //cout<<"nome File head"<<nomeH<<std::endl;
        i->second.getHead()->printToDesign(nomeH,isPart);
      }
 
@@ -2136,26 +2135,26 @@ void itemSetCluster< NODETYPE >::printToDesign(string nome,int isPart)
 
       std::stringstream o2;
       o2 <<i->second.getItemSet();
-      string address=o2.str();
+     std::string address=o2.str();
       nod=vStruct+":"+nod;
 
       i->second.getItemSet()->printToDesignHelper(nod,address,f1,isPart);
      }
    }
 
-  f1<<"}"<<endl;
-  //cout<<"Fine : Sono in disegno grafico della struttura"<<endl;
+  f1<<"}"<<std::endl;
+  //cout<<"Fine : Sono in disegno grafico della struttura"<<std::endl;
 
  }
 
 // Segue la sintassi per creare un file testo per legare i vari nodi.
 // Vedi WinGraph e programma vizuale.exe
 template< class NODETYPE >
-void itemSetCluster< NODETYPE >::printToDesignHelper(string here,string padre,ofstream& f1,int isPart)
+void itemSetCluster< NODETYPE >::printToDesignHelper(std::string here, std::string padre,ofstream& f1,int isPart)
  {
    typename MapType::iterator i;
-   string files,label1,values,vStruct,nod,address,idList,myAncestor;
-   //typename list<int>::iterator i2;
+  std::string files,label1,values,vStruct,nod,address,idList,myAncestor;
+   //typename std::list<int>::iterator i2;
    //list<int> tList;
 
 
@@ -2168,7 +2167,7 @@ void itemSetCluster< NODETYPE >::printToDesignHelper(string here,string padre,of
       values=values+"<"+i->first.c_str()+">"+i->first.c_str();
 
 #if 1      // Stampa gli ancestor nel grafo generato
-      typename vector<NODETYPE>::const_iterator it=getAncestor().begin();
+      typename std::vector<NODETYPE>::const_iterator it=getAncestor().begin();
       values += "A";
       for(;it!=getAncestor().end(); it++) {
 	values += std::string(it->c_str())+"-";
@@ -2180,7 +2179,7 @@ void itemSetCluster< NODETYPE >::printToDesignHelper(string here,string padre,of
         {
         std::stringstream oHead;
         oHead <<i->second.getHead();
-        string nomeH=oHead.str();
+       std::string nomeH=oHead.str();
          values=values+" : H_"+nomeH;
 
       }
@@ -2196,8 +2195,8 @@ void itemSetCluster< NODETYPE >::printToDesignHelper(string here,string padre,of
    if (siz>0)    values.resize(siz);
 
    label1=label1+values+"\"];";
-   f1<<label1<<endl;
-   f1<<here<<"->"<<"struct"+padre<<endl;
+   f1<<label1<<std::endl;
+   f1<<here<<"->"<<"struct"+padre<<std::endl;
    values="";
    for( i=isc.begin( ) ; i != isc.end( ) ; i++ )
    {
@@ -2208,9 +2207,9 @@ void itemSetCluster< NODETYPE >::printToDesignHelper(string here,string padre,of
      {
       std::stringstream oHead;
       oHead <<i->second.getHead();
-      string nomeH=oHead.str();
+     std::string nomeH=oHead.str();
 
-       //cout<<"nome File head"<<nomeH<<endl;
+       //cout<<"nome File head"<<nomeH<<std::endl;
        i->second.getHead()->printToDesign(nomeH,isPart);
      }
 
@@ -2234,13 +2233,13 @@ void itemSetCluster< NODETYPE >::printItemSetRecursiveHead(int lev)
  {
    typename MapType::iterator i;
 
-    //cout<<"dentro print"<<endl;
+    //cout<<"dentro print"<<std::endl;
     for( i=isc.begin( ) ; i != isc.end( ) ; i++ )
      {
-        //cout<<"Address "<<i<<endl;
+        //cout<<"Address "<<i<<std::endl;
        for (int j=0; j<lev;j++)
-            cout<<"  ";
-       cout<<getLevel()<<" Item "<<i->first<<" Ancestor "<<myAncestor<<" GidList: ";
+            std::cout<<"  ";
+       std::cout<<getLevel()<<" Item "<<i->first<<" Ancestor "<<myAncestor<<" GidList: ";
        i->second.getGidCidList().print();
 
 
@@ -2249,47 +2248,47 @@ void itemSetCluster< NODETYPE >::printItemSetRecursiveHead(int lev)
         i->second.getItemSet()->printItemSetRecursiveHead(lev+1);
        }
     }
-     //cout<<"fine print"<<endl;
+     //cout<<"fine print"<<std::endl;
  }
 
 
 //------------------------- disegno GRAFICAMENTE la struttura : WinGraph //
 template< class NODETYPE >
-void itemSetCluster< NODETYPE >::printToDesign_2(string nome,int isPart)
+void itemSetCluster< NODETYPE >::printToDesign_2(std::string nome,int isPart)
  {
 
-   /*string files,label1,values,nod,vStruct,address ,idList;*/
+   /*std::string files,label1,values,nod,vStruct,address ,idList;*/
    typename MapType::iterator i;
-   //typename list<int>::iterator i2;
+   //typename std::list<int>::iterator i2;
    //list<int> tList;
    char filename[255];
    const char* nomeSt;
-   //string myAncestor;
+   //std::string myAncestor;
 
-   //cout<<"Sono in disegno grafico della struttura"<<endl;
+   //cout<<"Sono in disegno grafico della struttura"<<std::endl;
    nomeSt=nome.c_str();
 
    sprintf(filename,"design/LClust%s%d.txt",nomeSt,isPart);
 
    ofstream f1(filename);
 
-   f1<<"digraph minerule { "<<endl;
-   f1<<"graph[fontsize=8]; edge  [fontsize=8]; node  [fontsize=8]; ranksep = .30; nodesep = .25;"<<endl;
-   f1<<"node [fontname=\"Courier\"]; "<<endl;
-   f1<<"node [shape=record];"<<endl;
+   f1<<"digraph minerule { "<<std::endl;
+   f1<<"graph[fontsize=8]; edge  [fontsize=8]; node  [fontsize=8]; ranksep = .30; nodesep = .25;"<<std::endl;
+   f1<<"node [fontname=\"Courier\"]; "<<std::endl;
+   f1<<"node [shape=record];"<<std::endl;
 
-   string vStruct="struct0";
-   string label1="struct0[shape=record,label=\"";
-   string values;
+  std::string vStruct="struct0";
+  std::string label1="struct0[shape=record,label=\"";
+  std::string values;
    for( i=isc.begin( ) ; i != isc.end( ) ; i++ )
      {
-      string idList;
+     std::string idList;
       values=values+"<"+i->first+">"+i->first;
       if (i->second.getHead()!=NULL)
        {
         std::stringstream oHead;
         oHead <<i->second.getHead();
-        string nomeH=oHead.str();
+       std::string nomeH=oHead.str();
         values=values+" : H_"+nomeH;
 
      }
@@ -2302,21 +2301,21 @@ void itemSetCluster< NODETYPE >::printToDesign_2(string nome,int isPart)
    siz=siz-1;
    if (siz>0)  values.resize(siz);
    label1=label1+values+"\"];";
-   f1<<label1<<endl;
+   f1<<label1<<std::endl;
    //values="";
 
 
    for( i=isc.begin( ) ; i != isc.end( ) ; i++ )
    {
 
-    string nod=i->first;
+   std::string nod=i->first;
  /*     if (i->second.getHead()!=NULL)
      {
       std::stringstream oHead;
       oHead <<i->second.getHead();
-      string nomeH=oHead.str();
+     std::string nomeH=oHead.str();
 
-       //cout<<"nome File head"<<nomeH<<endl;
+       //cout<<"nome File head"<<nomeH<<std::endl;
        i->second.getHead()->printToDesign(nomeH,isPart);
      }
 */
@@ -2326,15 +2325,15 @@ void itemSetCluster< NODETYPE >::printToDesign_2(string nome,int isPart)
 
       std::stringstream o2;
       o2 <<i->second.getItemSet();
-      string address=o2.str();
+     std::string address=o2.str();
       nod=vStruct+":"+nod;
 
       //i->second.getItemSet()->printToDesignHelper(nod,address,f1,isPart);
      }
    }
 
-  f1<<"}"<<endl;
-  //cout<<"Fine : Sono in disegno grafico della struttura"<<endl;
+  f1<<"}"<<std::endl;
+  //cout<<"Fine : Sono in disegno grafico della struttura"<<std::endl;
   //f1.close();
  }
 

@@ -8,17 +8,17 @@
 #include <cassert>
 
 //#include "utils.h"
-using namespace std;
+
 
 template <class NODETYPELIST>
 class gidCidList {
  public:
-  typedef map<NODETYPELIST, map <NODETYPELIST,int /*, NODETYPELIST*/>/*, NODETYPELIST*/ > MapType;
+  typedef std::map<NODETYPELIST, std::map <NODETYPELIST,int /*, NODETYPELIST*/>/*, NODETYPELIST*/ > MapType;
 
   gidCidList() {}
   void insertValue(NODETYPELIST gid, NODETYPELIST cid);
   void print();
-  string getListToDesign();
+ std::string getListToDesign();
   double numDistinctGID() const;
   bool existGidCid(NODETYPELIST gid, NODETYPELIST cid);
   MapType& getMap() {return lista;}
@@ -58,7 +58,7 @@ gidCidList< NODETYPELIST >::set_gid_intersection(gidCidList<NODETYPELIST>& list)
 /*
   typename MapType::iterator selfIt = getMap().begin();
   typename MapType::iterator listIt = list.getMap().begin();
-  vector<NODETYPELIST> elemsToBeErased;
+  std::vector<NODETYPELIST> elemsToBeErased;
 
   while( selfIt!=getMap().end() && listIt!=list.getMap().end() ) {
     if( selfIt->first == listIt->first ) {
@@ -85,7 +85,7 @@ gidCidList< NODETYPELIST >::set_gid_intersection(gidCidList<NODETYPELIST>& list)
     getMap().erase( selfIt, getMap().end() );
   }
 
-  typename vector<NODETYPELIST>::iterator it;
+  typename std::vector<NODETYPELIST>::iterator it;
   for(it=elemsToBeErased.begin(); it!=elemsToBeErased.end(); it++) {
     getMap().erase(*it);
   }
@@ -105,11 +105,11 @@ gidCidList< NODETYPELIST >::set_intersection(gidCidList <NODETYPELIST>& t1,
 					     gidCidList <NODETYPELIST>& newLst)
  {
    typename MapType::const_iterator i;
-   typename map <NODETYPELIST,int/*,NODETYPELIST*/>::const_iterator j;
+   typename std::map <NODETYPELIST,int/*,NODETYPELIST*/>::const_iterator j;
 
-   //cout<<"gidcidlista padre"<<endl;
+   //cout<<"gidcidlista padre"<<std::endl;
    //t1.print();
-   //cout<<"gidcidlista figlio"<<endl;
+   //cout<<"gidcidlista figlio"<<std::endl;
    //print();
    const MapType& t1map=t1.getMap();
 
@@ -119,7 +119,7 @@ gidCidList< NODETYPELIST >::set_intersection(gidCidList <NODETYPELIST>& t1,
             if (existGidCid(i->first,j->first))
                newLst.insertValue(i->first,j->first);
      }
-  // cout<<"fine set_inter"<<endl;
+  // std::cout<<"fine set_inter"<<std::endl;
 #ifndef min
 #define min(a,b) ((a) < (b) ? (a) : (b))
 #endif
@@ -131,7 +131,7 @@ template< class NODETYPELIST >
 bool gidCidList< NODETYPELIST >::existGidCid(NODETYPELIST gid,NODETYPELIST cid)
  {
   typename MapType::iterator i=lista.find(gid);;
-  map<NODETYPELIST,int/*, NODETYPELIST*/> temp;
+  std::map<NODETYPELIST,int/*, NODETYPELIST*/> temp;
   //list < NODETYPELIST> tList;
 
   if (i==lista.end())
@@ -153,24 +153,24 @@ template< class NODETYPELIST >
 void gidCidList< NODETYPELIST >::insertValue(NODETYPELIST gid,NODETYPELIST cid)
  {
   typename MapType::iterator i;
-  map<NODETYPELIST,int/*,NODETYPELIST*/> temp;
+  std::map<NODETYPELIST,int/*,NODETYPELIST*/> temp;
   //list < NODETYPELIST> tList;
 
- // cout<<"inserTVALUE gid "<<gid<<" cid "<<cid<<endl;
+ // std::cout<<"inserTVALUE gid "<<gid<<" cid "<<cid<<std::endl;
 
   i=lista.find(gid);
 
  if (i==lista.end())
    {
-    // cout<<"l'elemento della map non esiste"<<endl;
+    // std::cout<<"l'elemento della map non esiste"<<std::endl;
      temp[cid]=1;
      lista[gid]=temp;
    }
   else
    {
      if (i->second.find(cid)==i->second.end())
-         i->second.insert(make_pair(cid,1));
-     //else cout<<"l'elemento esiste già"<<endl;
+         i->second.insert(std::make_pair(cid,1));
+     //else std::cout<<"l'elemento esiste già"<<std::endl;
 
    }
 
@@ -187,26 +187,25 @@ template< class NODETYPELIST >
 void gidCidList< NODETYPELIST >::print()
  {
   typename MapType::iterator i;
-  typename map<NODETYPELIST,int/*,NODETYPELIST*/ >::iterator j;
+  typename std::map<NODETYPELIST,int/*,NODETYPELIST*/ >::iterator j;
 
   //cout<<"itno ";
   for( i=lista.begin( ) ; i != lista.end( ) ; i++ )
      {
 
        for (j=i->second.begin(); j!=i->second.end();j++)
-           cout<<i->first<<","<<j->first<<"   ";
+           std::cout<<i->first<<","<<j->first<<"   ";
 
      }
-   cout<<endl;
+   std::cout<<std::endl;
  }
 
 
-template< class NODETYPELIST >
-string gidCidList< NODETYPELIST >::getListToDesign()
+template< class NODETYPELIST >std::string gidCidList< NODETYPELIST >::getListToDesign()
  {
   typename MapType::iterator i;
-  typename map<NODETYPELIST,int/*, NODETYPELIST*/>::iterator j;
-  string result;
+  typename std::map<NODETYPELIST,int/*, NODETYPELIST*/>::iterator j;
+ std::string result;
   // char numgid[20],numcid[20];
 
   //cout<<"itno ";
@@ -221,11 +220,11 @@ string gidCidList< NODETYPELIST >::getListToDesign()
 	     i->first.c_str()+";"+
 	     j->first.c_str()+" ";
           //result="pipo";
-          // cout<<i->first<<","<<j->first<<"   ";
+          // std::cout<<i->first<<","<<j->first<<"   ";
          }
 
      }
-   //cout<<endl;
+   //cout<<std::endl;
   return result;
  }
 

@@ -9,7 +9,7 @@
 #include <set>
 
 
-using namespace std;
+
 
 template< class NODETYPE > class itemSet;  // dichiarazione succ.
 
@@ -26,8 +26,8 @@ public:
    itemSet<NODETYPE>* getItemSet()  { return myItemSet; }
    void setData(NODETYPE val)  { data=val; }
    void setGidList(int gid)  { gidList.insert(gid); }
-   void setGidList(const set<int>& gidL)  { gidList=gidL; }
-   set<int>& getGidList()  { return gidList; }
+   void setGidList(const std::set<int>& gidL)  { gidList=gidL; }
+   std::set<int>& getGidList()  { return gidList; }
    void setCountGid(double cGid) {
      countGid=cGid;
    }
@@ -65,7 +65,7 @@ private:
    double countGid;
 
    // Lista delle gidlist
-   set<int> gidList;
+   std::set<int> gidList;
 
 };
 
@@ -74,7 +74,7 @@ private:
 template< class NODETYPE >
 itemSetEntry< NODETYPE >::itemSetEntry()
  {
- // cout<<"costruttore pEntry"<<endl;
+ // std::cout<<"costruttore pEntry"<<std::endl;
   countGid=0;
   //numPartOK=0;
   myItemSet=NULL;
@@ -85,7 +85,7 @@ itemSetEntry< NODETYPE >::itemSetEntry()
 template< class NODETYPE >
 itemSetEntry< NODETYPE >::itemSetEntry(NODETYPE value)
  {
- // cout<<"costruttore pEntry"<<endl;
+ // std::cout<<"costruttore pEntry"<<std::endl;
   data=value;
   myItemSet=NULL;
  }

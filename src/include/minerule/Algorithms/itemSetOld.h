@@ -23,7 +23,7 @@
 #include "utils.h"
 
 
-using namespace std;
+
 
 typedef int boolean;
 
@@ -44,8 +44,8 @@ public:
    void setAncestor(String anc) {myAncestor=anc;}
    String getAncestor() {return myAncestor;}
 
-   void setRefList(typename list<itemSet<NODETYPE>* >::iterator riferimento) {refList=riferimento;}
-   typename list<itemSet<NODETYPE>* >::iterator getRefList()  {return refList;}
+   void setRefList(typename std::list<itemSet<NODETYPE>* >::iterator riferimento) {refList=riferimento;}
+   typename std::list<itemSet<NODETYPE>* >::iterator getRefList()  {return refList;}
    void setItemSet(NODETYPE value,NODETYPE gidList);
    void setItemSetIfExist(NODETYPE value,NODETYPE gidList);
    void setItemSet(NODETYPE value,list<NODETYPE> gidList);
@@ -71,19 +71,19 @@ public:
    void extractRule(String regola,int lev);
 
    void removeEntry(NODETYPE elem);
-   map <NODETYPE,itemSetEntry< NODETYPE > > getMap() {return prtt;}
+   std::map <NODETYPE,itemSetEntry< NODETYPE > > getMap() {return prtt;}
 
 private:
    int numLevel;
    // Root
-   map <NODETYPE,itemSetEntry< NODETYPE > > prtt;
+   std::map <NODETYPE,itemSetEntry< NODETYPE > > prtt;
 
    String myAncestor;
 
-   typename list<itemSet<NODETYPE>* >::iterator refList;
+   typename std::list<itemSet<NODETYPE>* >::iterator refList;
 
 
-   //  vector<list<itemSet<String>* > > vectLevel;
+   //  std::vector<std::list<itemSet<String>* > > vectLevel;
 
    void printToDesignHelper(String here,String padre,ofstream& f1);
    void save_Large_ItemSetHelper(int lev,ofstream& out);
@@ -101,10 +101,10 @@ template< class NODETYPE >
 boolean itemSet< NODETYPE >::existEntry(NODETYPE item )
  {
     boolean exist;
-    typename map <NODETYPE,itemSetEntry< NODETYPE > >::iterator i;
+    typename std::map <NODETYPE,itemSetEntry< NODETYPE > >::iterator i;
 
     i=prtt.find(item);
-   // cout<<"gidList "<<gidList<<" Item "<<value<<endl;
+   // std::cout<<"gidList "<<gidList<<" Item "<<value<<std::endl;
     if (i==prtt.end())
        exist=false;
     else exist=true;
@@ -118,20 +118,20 @@ template< class NODETYPE >
 void itemSet< NODETYPE >::setItemSet(NODETYPE value,NODETYPE gidList )
  {
     itemSetEntry< NODETYPE > entry;
-    typename map <NODETYPE,itemSetEntry< NODETYPE > >::iterator i;
+    typename std::map <NODETYPE,itemSetEntry< NODETYPE > >::iterator i;
 
     i=prtt.find(value);
-   // cout<<"gidList "<<gidList<<" Item "<<value<<endl;
+   // std::cout<<"gidList "<<gidList<<" Item "<<value<<std::endl;
     if (i==prtt.end())
       {
-	//cout<<"new value"<<endl;
+	//cout<<"new value"<<std::endl;
 	entry.setData(value);
 	entry.setGidList(gidList);
 	prtt[value]=entry;
       }
     else {
       i->second.setGidList(gidList);
-   // cout<<"inserisco valore nella gidLsit"<<endl;
+   // std::cout<<"inserisco valore nella gidLsit"<<std::endl;
     }
 
    //itemSetEntry <NODETYPE> entry = new itemSetEntry < NODETYPE > (value);
@@ -143,17 +143,17 @@ template< class NODETYPE >
 void itemSet< NODETYPE >::setItemSetIfExist(NODETYPE value,int gidList )
  {
     itemSetEntry< NODETYPE > entry;
-    typename map <NODETYPE,itemSetEntry< NODETYPE > >::iterator i;
+    typename std::map <NODETYPE,itemSetEntry< NODETYPE > >::iterator i;
 
     i=prtt.find(value);
-   // cout<<"gidList "<<gidList<<" Item "<<value<<endl;
+   // std::cout<<"gidList "<<gidList<<" Item "<<value<<std::endl;
     if (i==prtt.end())
      {
-     cout<<"NON ESISTE E NON LO INSERISCO! "<<value<<endl;
+     std::cout<<"NON ESISTE E NON LO INSERISCO! "<<value<<std::endl;
      }
     else {
     i->second.setGidList(gidList);
-   // cout<<"inserisco valore nella gidLsit"<<endl;
+   // std::cout<<"inserisco valore nella gidLsit"<<std::endl;
     }
 
    //itemSetEntry <NODETYPE> entry = new itemSetEntry < NODETYPE > (value);
@@ -165,20 +165,20 @@ template< class NODETYPE >
 void itemSet< NODETYPE >::setItemSet(NODETYPE value,list<NODETYPE> gidList )
  {
     itemSetEntry< NODETYPE > entry;
-    typename map <NODETYPE,itemSetEntry< NODETYPE > >::iterator i;
+    typename std::map <NODETYPE,itemSetEntry< NODETYPE > >::iterator i;
 
     i=prtt.find(value);
-//    cout<<"gidList "<<gidList<<" Item "<<value<<endl;
+//    std::cout<<"gidList "<<gidList<<" Item "<<value<<std::endl;
     if (i==prtt.end())
      {
-  //   cout<<"new value"<<endl;
+  //   std::cout<<"new value"<<std::endl;
      entry.setData(value);
      entry.setGidList(gidList);
      prtt[value]=entry;
      }
     else {
     i->second.setGidList(gidList);
- //   cout<<"inserisco valore nella gidLsit"<<endl;
+ //   std::cout<<"inserisco valore nella gidLsit"<<std::endl;
     }
 
    //itemSetEntry <NODETYPE> entry = new itemSetEntry < NODETYPE > (value);
@@ -191,7 +191,7 @@ template< class NODETYPE >
 void itemSet< NODETYPE >::setItemSet(NODETYPE value,list<NODETYPE> gidList,double totGroups )
  {
     itemSetEntry< NODETYPE > entry;
-    typename map <NODETYPE,itemSetEntry< NODETYPE > >::iterator i;
+    typename std::map <NODETYPE,itemSetEntry< NODETYPE > >::iterator i;
 
     i=prtt.find(value);
 
@@ -213,7 +213,7 @@ template< class NODETYPE >
 void itemSet< NODETYPE >::setItemSet(NODETYPE value )
  {
     itemSetEntry< NODETYPE > entry;
-    typename map <NODETYPE,itemSetEntry< NODETYPE > >::iterator i;
+    typename std::map <NODETYPE,itemSetEntry< NODETYPE > >::iterator i;
 
     i=prtt.find(value);
 
@@ -228,17 +228,17 @@ void itemSet< NODETYPE >::setItemSet(NODETYPE value )
 template< class NODETYPE >
 void itemSet< NODETYPE >::printItemSet()
  {
-    list<NODETYPE> gList;
-    typename map <NODETYPE,itemSetEntry< NODETYPE > >::iterator i;
-    typename list<NODETYPE>::iterator i2;
+    std::list<NODETYPE> gList;
+    typename std::map <NODETYPE,itemSetEntry< NODETYPE > >::iterator i;
+    typename std::list<NODETYPE>::iterator i2;
     for( i=prtt.begin( ) ; i != prtt.end( ) ; i++ )
      {
-       cout<<"Item "<<i->first<<"GidList: ";
+       std::cout<<"Item "<<i->first<<"GidList: ";
        gList=i->second.getGidList();
        for (i2=gList.begin(); i2!=gList.end();i2++)
-           cout<<*i2<<"  ";
+           std::cout<<*i2<<"  ";
 
-       cout<<endl;
+       std::cout<<std::endl;
      }
 
  }
@@ -246,30 +246,30 @@ void itemSet< NODETYPE >::printItemSet()
 template< class NODETYPE >
 void itemSet< NODETYPE >::printItemSetRecursive(int lev)
  {
-    list<NODETYPE> gList;
-    typename map <NODETYPE,itemSetEntry< NODETYPE > >::iterator i;
-    typename list<NODETYPE>::iterator i2;
+    std::list<NODETYPE> gList;
+    typename std::map <NODETYPE,itemSetEntry< NODETYPE > >::iterator i;
+    typename std::list<NODETYPE>::iterator i2;
 
-    //cout<<"dentro print"<<endl;
+    //cout<<"dentro print"<<std::endl;
     for( i=prtt.begin( ) ; i != prtt.end( ) ; i++ )
      {
-        //cout<<"Address "<<i<<endl;
+        //cout<<"Address "<<i<<std::endl;
        for (int j=0; j<lev;j++)
-            cout<<"  ";
-       cout<<"Item "<<i->first<<" Ancestor "<<myAncestor<<" GidList: ";
+            std::cout<<"  ";
+       std::cout<<"Item "<<i->first<<" Ancestor "<<myAncestor<<" GidList: ";
        gList=i->second.getGidList();
        for (i2=gList.begin(); i2!=gList.end();i2++)
-           cout<<*i2<<"  ";
-        cout<<"level"<<getLevel()<<endl;
-       //" refL "<<*refList<<endl;
-       //cout<<"* "<<i->second.getItemSet()<<endl;
+           std::cout<<*i2<<"  ";
+        std::cout<<"level"<<getLevel()<<std::endl;
+       //" refL "<<*refList<<std::endl;
+       //cout<<"* "<<i->second.getItemSet()<<std::endl;
        if (i->second.getItemSet()!=NULL)
        {
-         //cout<<"Address "<<i->second.getItemSet()<<endl;
+         //cout<<"Address "<<i->second.getItemSet()<<std::endl;
          i->second.getItemSet()->printItemSetRecursive(lev+1);
        }
     }
-     //cout<<"fine print"<<endl;
+     //cout<<"fine print"<<std::endl;
  }
 
 
@@ -277,17 +277,17 @@ template< class NODETYPE >
 void itemSet< NODETYPE >::createNewItemSet(double nSup,double
 totGroups,int lev)
  {
-    list<NODETYPE> tList,t2,tListNew;
+    std::list<NODETYPE> tList,t2,tListNew;
     itemSet<NODETYPE>* prttNew;
-    typename map <NODETYPE,itemSetEntry< NODETYPE > >::iterator i;
-    typename map <NODETYPE,itemSetEntry< NODETYPE > >::iterator j;
-    typename list<NODETYPE>::iterator i2;
+    typename std::map <NODETYPE,itemSetEntry< NODETYPE > >::iterator i;
+    typename std::map <NODETYPE,itemSetEntry< NODETYPE > >::iterator j;
+    typename std::list<NODETYPE>::iterator i2;
     boolean toLink;
 
 
     for( i=prtt.begin( ) ; i != prtt.end( ) ; i++ )
      {
-      // cout<<"PADRE!!!!  "<<i->first<<endl;
+      // std::cout<<"PADRE!!!!  "<<i->first<<std::endl;
        j=i;
        j++;
        prttNew=new itemSet(lev);
@@ -296,21 +296,21 @@ totGroups,int lev)
 
        while (j!=prtt.end())
          {
-         // cout<<"figlio generato "<<j->first;
+         // std::cout<<"figlio generato "<<j->first;
           t2=j->second.getGidList();
 
 
           set_intersection(t2.begin(), t2.end(),tList.begin(), tList.end(), back_inserter(tListNew));
-         // cout<<"intersezione... "<<endl;
+         // std::cout<<"intersezione... "<<std::endl;
          // for (i2=tListNew.begin(); i2!=tListNew.end();i2++)
-         //     cout<<*i2<<"  ";
-         // cout<<endl;
-         // cout<<"ListNEW!!! "<<tListNew<<endl;
+         //     std::cout<<*i2<<"  ";
+         // std::cout<<std::endl;
+         // std::cout<<"ListNEW!!! "<<tListNew<<std::endl;
 
-          //cout<<"size list"<<tListNew.size()<<endl;
+          //cout<<"size list"<<tListNew.size()<<std::endl;
           if (  (tListNew.size()>=nSup) && (!tListNew.empty()) )
           {
-          //  cout<<"non vuoto"<<endl;
+          //  std::cout<<"non vuoto"<<std::endl;
 
             prttNew->setItemSet(j->first,tListNew,totGroups);
 
@@ -318,11 +318,11 @@ totGroups,int lev)
           //  i->second.setItemSetChild(prttNew);
           }
           tListNew.clear();
-        //  cout<<"sei solo tu"<<endl;
+        //  std::cout<<"sei solo tu"<<std::endl;
           j++;
          }
         i->second.gidListRemove();
-        // cout<<"stampa prttNew"<<endl;
+        // std::cout<<"stampa prttNew"<<std::endl;
         // prttNew->printItemSet();
          if (toLink)
           {
@@ -331,7 +331,7 @@ totGroups,int lev)
              prttNew->createNewItemSet(nSup,totGroups,lev+1);
           }
          else delete prttNew;
-        // cout<<".."<<endl;
+        // std::cout<<".."<<std::endl;
         }
 
  }
@@ -342,28 +342,28 @@ template< class NODETYPE >
 boolean itemSet< NODETYPE >::gen_Large_ItemSet(itemSetList<NODETYPE>& ptrList,double nSup,double totGroups,int lev)
 {
    itemSet<NODETYPE>* prttNew;
-   typename list<itemSet<NODETYPE>* >::iterator i;
-   list<itemSet<NODETYPE>* >* listPtr;
+   typename std::list<itemSet<NODETYPE>* >::iterator i;
+   std::list<itemSet<NODETYPE>* >* listPtr;
    int rLev;
    boolean otherItemSet,toContinue;
 
-   //cout<<"Dentro gen_Large_ItemSet "<<lev<<endl;
+   //cout<<"Dentro gen_Large_ItemSet "<<lev<<std::endl;
    toContinue=false;
    if (lev!=2)
    {
     rLev=lev-1;
-    //cout<<"IF di lev!=2 size"<<ptrList.vect.size()<<"level "<<lev<<" RLEV"<<rLev<<endl;
+    //cout<<"IF di lev!=2 size"<<ptrList.vect.size()<<"level "<<lev<<" RLEV"<<rLev<<std::endl;
     if ((ptrList.vect.size()-1)<=rLev)
         listPtr=ptrList.getList(rLev);
 
-    //cout<<"OK2 "<<ptrList.vect[rLev]<<endl;
+    //cout<<"OK2 "<<ptrList.vect[rLev]<<std::endl;
     for ( i=listPtr->begin(); i!=listPtr->end(); i++)
      {
-        //cout<<"*i -"<<*i<<endl;
+        //cout<<"*i -"<<*i<<std::endl;
 
         otherItemSet=((itemSet*)(*i))->gen_Large_ItemSetHelper(ptrList,nSup,totGroups,lev);
         if (otherItemSet) toContinue=true;
-      //  cout<<"altre partizioni create "<<otherItemSet<<endl;
+      //  std::cout<<"altre partizioni create "<<otherItemSet<<std::endl;
      }
    }
    else toContinue=gen_Large_ItemSetHelper(ptrList,nSup,totGroups,lev);
@@ -376,24 +376,24 @@ template< class NODETYPE >
 boolean itemSet< NODETYPE >::gen_Large_ItemSetHelper(itemSetList<NODETYPE>& ptrList,double nSup,double totGroups,unsigned es
 int lev)
  {
-    list<NODETYPE> tList,t2,tListNew;
+    std::list<NODETYPE> tList,t2,tListNew;
     itemSet<NODETYPE>* prttNew;
-    typename map <NODETYPE,itemSetEntry< NODETYPE > >::iterator i;
-    typename map <NODETYPE,itemSetEntry< NODETYPE > >::iterator j;
-    typename list<NODETYPE>::iterator i2;
+    typename std::map <NODETYPE,itemSetEntry< NODETYPE > >::iterator i;
+    typename std::map <NODETYPE,itemSetEntry< NODETYPE > >::iterator j;
+    typename std::list<NODETYPE>::iterator i2;
     boolean toLink,otherPart;
-    list<itemSet<NODETYPE>* >*  listPtr;
+    std::list<itemSet<NODETYPE>* >*  listPtr;
 
     otherPart=false;
 
-    //cout<<"create New level"<<ptrList.vect.size()<<"level "<<lev<<endl;
+    //cout<<"create New level"<<ptrList.vect.size()<<"level "<<lev<<std::endl;
     if ((ptrList.vect.size()-1)>=lev)
         listPtr=ptrList.getList(lev);
-    else listPtr=new list<itemSet<NODETYPE>* >();
+    else listPtr=new std::list<itemSet<NODETYPE>* >();
 
     for( i=prtt.begin( ) ; i != prtt.end( ) ; i++ )
      {
-      // cout<<"PADRE!!!!  "<<i->first<<endl;
+      // std::cout<<"PADRE!!!!  "<<i->first<<std::endl;
        j=i;
        j++;
        prttNew=new itemSet(lev);
@@ -401,21 +401,21 @@ int lev)
        tList=i->second.getGidList();
        while (j!=prtt.end())
          {
-         // cout<<"figlio generato "<<j->first;
+         // std::cout<<"figlio generato "<<j->first;
           t2=j->second.getGidList();
 
 
           set_intersection(t2.begin(), t2.end(),tList.begin(), tList.end(), back_inserter(tListNew));
-         // cout<<"intersezione... "<<endl;
+         // std::cout<<"intersezione... "<<std::endl;
          // for (i2=tListNew.begin(); i2!=tListNew.end();i2++)
-         //     cout<<*i2<<"  ";
-         // cout<<endl;
-         // cout<<"ListNEW!!! "<<tListNew<<endl;
+         //     std::cout<<*i2<<"  ";
+         // std::cout<<std::endl;
+         // std::cout<<"ListNEW!!! "<<tListNew<<std::endl;
 
-         // cout<<"size list"<<tListNew.size()<<endl;
+         // std::cout<<"size list"<<tListNew.size()<<std::endl;
           if (  (tListNew.size()>=nSup) && (!tListNew.empty()) )
           {
-          //  cout<<"non vuoto"<<endl;
+          //  std::cout<<"non vuoto"<<std::endl;
 
             prttNew->setItemSet(j->first,tListNew,totGroups);
 
@@ -423,26 +423,26 @@ int lev)
           //  i->second.setItemSetChild(prttNew);
           }
           tListNew.clear();
-        //  cout<<"sei solo tu"<<endl;
+        //  std::cout<<"sei solo tu"<<std::endl;
           j++;
          }
         i->second.gidListRemove();
-        // cout<<"stampa prttNew"<<endl;
+        // std::cout<<"stampa prttNew"<<std::endl;
         // prttNew->printItemSet();
          if (toLink)
           {
              i->second.setItemSetChild(prttNew);
              listPtr->push_back(prttNew);
 
-             //cout<<"creato parti ptr "<<prttNew<<endl;
+             //cout<<"creato parti ptr "<<prttNew<<std::endl;
 
 
 
           }
          else delete prttNew;
-        // cout<<".."<<endl;
+        // std::cout<<".."<<std::endl;
      }
-//    cout<<"lunghe lista"<<listPtr->size()<<endl;
+//    std::cout<<"lunghe lista"<<listPtr->size()<<std::endl;
     if (listPtr->size()>0)
      {
        otherPart=true;
@@ -452,30 +452,30 @@ int lev)
 
      }
 
-  //   cout<<"lista new dimension VETTORE"<<ptrList.vect.size()<<endl;
-  //   cout<<"lista address"<<listPtr<<endl;
+  //   std::cout<<"lista new dimension VETTORE"<<ptrList.vect.size()<<std::endl;
+  //   std::cout<<"lista address"<<listPtr<<std::endl;
   //   ptrList.print();
-     // typename list<itemSet<NODETYPE>* >::iterator k;
+     // typename std::list<itemSet<NODETYPE>* >::iterator k;
      //for ( k=listPtr.begin(); k!=listPtr.end(); k++)
-     //   cout<<"*k -"<<*k<<endl;
-     //cout<<"uffa"<<endl;
+     //   std::cout<<"*k -"<<*k<<std::endl;
+     //cout<<"uffa"<<std::endl;
      return otherPart;
  }
 
 
 //IMPORTante proprietà della map
-//Erasing an element from a map also does not invalidate any iterators, except,
+//Erasing an element from a std::map also does not invalidate any iterators, except,
 //of course, for iterators that actually point to the element that is being erased.
 template< class NODETYPE >
 void itemSet< NODETYPE >::gen_Large_ItemSet_Base(double nSup,double totGroups)
  {
-    list<NODETYPE> gList;
-    typename map <NODETYPE,itemSetEntry< NODETYPE > >::iterator i;
+    std::list<NODETYPE> gList;
+    typename std::map <NODETYPE,itemSetEntry< NODETYPE > >::iterator i;
     NODETYPE elemToDelete;
     boolean isDelete;
 
     isDelete=false;
-   // typename list<NODETYPE>::iterator i2;
+   // typename std::list<NODETYPE>::iterator i2;
     for( i=prtt.begin( ) ; i != prtt.end( ) ; i++ )
      {
        if (isDelete)
@@ -486,7 +486,7 @@ void itemSet< NODETYPE >::gen_Large_ItemSet_Base(double nSup,double totGroups)
 
        if (i->second.getGidList().size() < nSup)
        {
-          //cout<<"elimino entry dalla prt base"<<endl;
+          //cout<<"elimino entry dalla prt base"<<std::endl;
           gList=i->second.getGidList();
 
           elemToDelete=i->first;
@@ -505,13 +505,13 @@ void itemSet< NODETYPE >::gen_Large_ItemSet_Base(double nSup,double totGroups)
 
  }
 template< class NODETYPE >
-void itemSet< NODETYPE >::cancellaRef( list<itemSet<NODETYPE>* >* listPtr)
+void itemSet< NODETYPE >::cancellaRef( std::list<itemSet<NODETYPE>* >* listPtr)
  {
-     typename list<itemSet<NODETYPE>* >::iterator riferimento;
-     cout<<"opa"<<endl;
+     typename std::list<itemSet<NODETYPE>* >::iterator riferimento;
+     std::cout<<"opa"<<std::endl;
 
      riferimento=getRefList();
-     cout<<"refList"<<*riferimento<<endl;
+     std::cout<<"refList"<<*riferimento<<std::endl;
      listPtr->erase(riferimento);
  }
 
@@ -528,16 +528,16 @@ void itemSet< NODETYPE >::checkSupportBaseDef(
  {
 
     itemSet<NODETYPE>* prttNew;
-    typename map <NODETYPE,itemSetEntry< NODETYPE > >::iterator i;
+    typename std::map <NODETYPE,itemSetEntry< NODETYPE > >::iterator i;
     int nlev;
-    list<itemSet<NODETYPE>* >* listPtr;
-    map <NODETYPE,itemSetEntry< NODETYPE > > tmpMap;
+    std::list<itemSet<NODETYPE>* >* listPtr;
+    std::map <NODETYPE,itemSetEntry< NODETYPE > > tmpMap;
     NODETYPE elemToDelete;
     boolean isDelete;
 
     //tmpMap=getMap();
 
-   // typename list<NODETYPE>::iterator i2;
+   // typename std::list<NODETYPE>::iterator i2;
     isDelete=false;
 
     for( i=prtt.begin( ) ; i != prtt.end( ) ; i++ )
@@ -547,26 +547,26 @@ void itemSet< NODETYPE >::checkSupportBaseDef(
           prtt.erase(elemToDelete);
           isDelete=false;
          }
-       cout<<"elemento "<<i->first<<endl;
+       std::cout<<"elemento "<<i->first<<std::endl;
 
        if (i->second.getGidList().size() < nSup)
        {
-          cout<<"CheckSupportBaseDef size"<<i->first<<" "<<i->second.getGidList().size()<<endl;
+          std::cout<<"CheckSupportBaseDef size"<<i->first<<" "<<i->second.getGidList().size()<<std::endl;
           prttNew=i->second.getItemSet();
           if (prttNew!=NULL)
             {
               prttNew->remove(ptrList);
               // rimuovere la entry!!!!
               nlev=prttNew->getLevel();
-             // cout<<"refList prima"<<*refList<<endl;
-              cout<<"livello in cui cercare nella lista "<<nlev<<endl;
+             // std::cout<<"refList prima"<<*refList<<std::endl;
+              std::cout<<"livello in cui cercare nella lista "<<nlev<<std::endl;
               listPtr=ptrList.getList(nlev);
-  	      cout<<"delete ItemSet dalla lista"<<prttNew<<endl;
+  	      std::cout<<"delete ItemSet dalla lista"<<prttNew<<std::endl;
   	      prttNew->cancellaRef(listPtr);
               //listPtr->erase(refList);
               delete prttNew;
             }
-          cout<<"elemento  che sto a cancella "<<i->first<<endl;
+          std::cout<<"elemento  che sto a cancella "<<i->first<<std::endl;
           elemToDelete=i->first;
           isDelete=true;
           //prtt.erase(i->first);
@@ -594,7 +594,7 @@ template< class NODETYPE >
 void itemSet< NODETYPE >::save_Large_ItemSet(int lev,int isPart)
  {
 
-    typename map <NODETYPE,itemSetEntry< NODETYPE > >::iterator i;
+    typename std::map <NODETYPE,itemSetEntry< NODETYPE > >::iterator i;
     char filename[8];
 
     sprintf(filename,"example/L%d.txt",isPart);
@@ -603,7 +603,7 @@ void itemSet< NODETYPE >::save_Large_ItemSet(int lev,int isPart)
      for( i=prtt.begin( ) ; i != prtt.end( ) ; i++ )
      {
 
-      out<<lev<<":::"<<i->first<<":::"<<setprecision(4)<<i->second.getCount()<<endl;
+      out<<lev<<":::"<<i->first<<":::"<<setprecision(4)<<i->second.getCount()<<std::endl;
 
       if (i->second.getItemSet()!=NULL)
          i->second.getItemSet()->save_Large_ItemSetHelper(lev+1,out);
@@ -617,12 +617,12 @@ void itemSet< NODETYPE >::save_Large_ItemSet(int lev,int isPart)
 template< class NODETYPE >
 void itemSet< NODETYPE >::save_Large_ItemSetHelper(int lev,ofstream& out)
  {
-    typename map <NODETYPE,itemSetEntry< NODETYPE > >::iterator i;
+    typename std::map <NODETYPE,itemSetEntry< NODETYPE > >::iterator i;
 
      for( i=prtt.begin( ) ; i != prtt.end( ) ; i++ )
      {
 
-    /*  out<<lev<<":::"<<i->first<<":::"<<endl;
+    /*  out<<lev<<":::"<<i->first<<":::"<<std::endl;
 
       if (i->second.getItemSet()!=NULL)
       {
@@ -665,24 +665,24 @@ int itemSet< NODETYPE >::mergeItemSetHelper(String& nToken,ifstream&in,NODETYPE 
     String token;
     itemSet<NODETYPE>* prttNew;
     boolean isNewItemSet;
-    list<itemSet<NODETYPE>* >*  listPtr;
-    typename list<itemSet<NODETYPE>* >::iterator riferimento;
+    std::list<itemSet<NODETYPE>* >*  listPtr;
+    typename std::list<itemSet<NODETYPE>* >::iterator riferimento;
 
-    //cout<<"---- Dentro HELPER ----"<<endl;
+    //cout<<"---- Dentro HELPER ----"<<std::endl;
 
     level=0;
     isNewItemSet=false;
-    cout<<"prec"<<prec<<"ancestor "<<ancestor<<endl;
+    std::cout<<"prec"<<prec<<"ancestor "<<ancestor<<std::endl;
     if (ancestor!="")
        ancestor=ancestor+prec+",";
     else {
            if (prec!="")
            ancestor=prec+",";
          }
-    //cout<<"Ancestor prima del ciclo "<<ancestor<<endl;
+    //cout<<"Ancestor prima del ciclo "<<ancestor<<std::endl;
     if (OK=true)
     {
-      //cout<<"Ok True"<<endl;
+      //cout<<"Ok True"<<std::endl;
       getline(in, token);
 
       StringTokenizer mytoken((String&)token,":::\r\n");
@@ -696,18 +696,18 @@ int itemSet< NODETYPE >::mergeItemSetHelper(String& nToken,ifstream&in,NODETYPE 
     }
     if (level==1) ancestor="";
     nToken=token;
-    //cout<<"Level"<<level<<" Item: "<<item<<endl;
-    //cout<<"Getlevel"<<getLevel()<<endl;
+    //cout<<"Level"<<level<<" Item: "<<item<<std::endl;
+    //cout<<"Getlevel"<<getLevel()<<std::endl;
     diff=level-getLevel();
     levelPast=level;
-    //cout<<"levelPast "<<levelPast<<endl;
-    //cout<<"Differenza prima WHILE"<<diff<<endl;
+    //cout<<"levelPast "<<levelPast<<std::endl;
+    //cout<<"Differenza prima WHILE"<<diff<<std::endl;
     while (diff>=0)
       {
         if (diff>0)
           {
-          //cout<<"livello successivo "<<item<<endl;
-          typename map <NODETYPE,itemSetEntry< NODETYPE > >::iterator curr;
+          //cout<<"livello successivo "<<item<<std::endl;
+          typename std::map <NODETYPE,itemSetEntry< NODETYPE > >::iterator curr;
 
           curr=prtt.find(prec);
           prttNew=curr->second.getItemSet();
@@ -719,8 +719,8 @@ int itemSet< NODETYPE >::mergeItemSetHelper(String& nToken,ifstream&in,NODETYPE 
            prttNew->setLevel(level);
            curr->second.setItemSetChild(prttNew);
            isNewItemSet=true;
-           //cout<<"creata ItemSet del livello "<<level<<" elemento "<<item<<endl;
-           //cout<<"valore ItemSet creata "<<prttNew<<endl;
+           //cout<<"creata ItemSet del livello "<<level<<" elemento "<<item<<std::endl;
+           //cout<<"valore ItemSet creata "<<prttNew<<std::endl;
           }
           else
           {
@@ -735,43 +735,43 @@ int itemSet< NODETYPE >::mergeItemSetHelper(String& nToken,ifstream&in,NODETYPE 
               if ((ptrList.vect.size()-1)>=level)
                 {
                   listPtr=ptrList.getList(level);
-                  //cout<<"utilizzo una lista già esistente "<<listPtr<<endl;
+                  //cout<<"utilizzo una lista già esistente "<<listPtr<<std::endl;
                   listPtr->push_back(prttNew);
 		  riferimento=listPtr->end();
 		  riferimento--;
-		  //cout<<"FOOOT: addr ptr list"<<*riferimento<<endl;
+		  //cout<<"FOOOT: addr ptr list"<<*riferimento<<std::endl;
                   prttNew->setRefList(riferimento);
                   ptrList.vect[level]=listPtr;
                 }
               else
                 {
-                 listPtr=new list<itemSet<NODETYPE>* >();
-                 //cout<<"creo nuova LISTA "<<listPtr<<endl;
+                 listPtr=new std::list<itemSet<NODETYPE>* >();
+                 //cout<<"creo nuova LISTA "<<listPtr<<std::endl;
                  listPtr->push_back(prttNew);
 		 riferimento=listPtr->end();
 	         riferimento--;
                  prttNew->setRefList(riferimento);
-       	         //cout<<"FOOOT: addr ptr list"<<*riferimento<<endl;
+       	         //cout<<"FOOOT: addr ptr list"<<*riferimento<<std::endl;
                  ptrList.vect.push_back(listPtr);
                 }
             }
-           //else cout<<"ho gia' la ItemSet"<<endl;
+           //else std::cout<<"ho gia' la ItemSet"<<std::endl;
 
-          //cout<<"Inserico il link da "<<prec<<" a "<<item<<endl;
-          cout<<"ancestor"<<ancestor<<endl;
+          //cout<<"Inserico il link da "<<prec<<" a "<<item<<std::endl;
+          std::cout<<"ancestor"<<ancestor<<std::endl;
           levelPast=prttNew->mergeItemSetHelper(nToken,in,item,true,ptrList,ancestor);
-	  //cout<<"Ancestor dopo ricorsione :"<<ancestor<<" inpart"<<getAncestor()<<endl;
+	  //cout<<"Ancestor dopo ricorsione :"<<ancestor<<" inpart"<<getAncestor()<<std::endl;
 	  ancestor=getAncestor();
-          //cout<<"Qui avevo item "<<prec<<endl;
-          //cout<<"Uscita dalla ricorsione levelPast "<<levelPast<<endl;
-          //cout<<"Uscita dalla ricorsione level "<<level<<endl;
+          //cout<<"Qui avevo item "<<prec<<std::endl;
+          //cout<<"Uscita dalla ricorsione levelPast "<<levelPast<<std::endl;
+          //cout<<"Uscita dalla ricorsione level "<<level<<std::endl;
           diff=levelPast-getLevel();
 
 
           }
         else
         {
-          //cout<<"diff=0"<<endl;
+          //cout<<"diff=0"<<std::endl;
 
           StringTokenizer mytoken2((String&)nToken,":::\r\n");
 
@@ -780,19 +780,19 @@ int itemSet< NODETYPE >::mergeItemSetHelper(String& nToken,ifstream&in,NODETYPE 
             level=atoi(mytoken2.nextToken().c_str());
             item=(NODETYPE)mytoken2.nextToken();
           }
-          //cout<<"SetitemSet Item in stesso livello "<<getLevel()<<" "<<item<<endl;
+          //cout<<"SetitemSet Item in stesso livello "<<getLevel()<<" "<<item<<std::endl;
           setItemSet(item);
           //printItemSetRecursive(1);
           levelPast=mergeItemSetHelper(nToken,in,item,true,ptrList,ancestor);
 	  //cout<<"Ancestor dopo ricorsione :"<<ancestor;
-          //cout<<"Uscita dalla ricorsione levelPast "<<levelPast<<endl;
-          //cout<<"Uscita dalla ricorsione level "<<level<<endl;
+          //cout<<"Uscita dalla ricorsione levelPast "<<levelPast<<std::endl;
+          //cout<<"Uscita dalla ricorsione level "<<level<<std::endl;
           diff=levelPast-getLevel();
-          //cout<<"=0 differenza "<<diff<<endl;
+          //cout<<"=0 differenza "<<diff<<std::endl;
         }
 
       }
-     //cout<<"finePROCEDURA"<<levelPast<<endl;
+     //cout<<"finePROCEDURA"<<levelPast<<std::endl;
      return levelPast;
 
 }
@@ -802,23 +802,23 @@ int itemSet< NODETYPE >::mergeItemSetHelper(String& nToken,ifstream&in,NODETYPE 
 template< class NODETYPE >
 boolean itemSet< NODETYPE >::gen_final_count(itemSetList<NODETYPE>& ptrList,double nSup,double totGroups,int lev,itemSetHashMap<NODETYPE>& pHashMap)
 {
-   typename list<itemSet<NODETYPE>* >::iterator i;
-   list<itemSet<NODETYPE>* >* listPtr;
+   typename std::list<itemSet<NODETYPE>* >::iterator i;
+   std::list<itemSet<NODETYPE>* >* listPtr;
    int rLev;
    boolean toContinue,okNext;
-   //cout<<"creazione phashMapNew"<<endl;
+   //cout<<"creazione phashMapNew"<<std::endl;
    itemSetHashMap<NODETYPE> pHashMapNew;
 
 
    toContinue=true;
-   cout<<"EstimateLevel: "<<lev<<endl;
+   std::cout<<"EstimateLevel: "<<lev<<std::endl;
 
    rLev=lev-1;
    if ((ptrList.vect.size()-1)>=rLev)
         listPtr=ptrList.getList(rLev);
    else toContinue=false;
 
-//   if (toContinue) cout<<"Size lista: "<<listPtr->empty()<<endl;
+//   if (toContinue) std::cout<<"Size lista: "<<listPtr->empty()<<std::endl;
 //pHashMap.print();
    if (toContinue)
    {
@@ -827,10 +827,10 @@ boolean itemSet< NODETYPE >::gen_final_count(itemSetList<NODETYPE>& ptrList,doub
                 toContinue=false;
                 for ( i=listPtr->begin(); i!=listPtr->end(); i++)
                 {
-                        cout<<"lista address: "<<"*i -"<<*i<<endl;
+                        std::cout<<"lista address: "<<"*i -"<<*i<<std::endl;
 
                         okNext=((itemSet*)(*i))->gen_final_countHelper(ptrList,nSup,totGroups,lev,pHashMap,pHashMapNew);
-                       // cout<<" okNext "<< okNext<<endl;
+                       // std::cout<<" okNext "<< okNext<<std::endl;
                        // if (okNext) toContinue=true;
                 }
         }
@@ -851,17 +851,17 @@ boolean itemSet< NODETYPE >::gen_final_count(itemSetList<NODETYPE>& ptrList,doub
 template< class NODETYPE >
 boolean itemSet< NODETYPE >::gen_final_countHelper(itemSetList<NODETYPE>& ptrList,double nSup,double totGroups,int lev,itemSetHashMap<NODETYPE>& pHashMap,itemSetHashMap<NODETYPE>& pHashMapNew)
  {
-    list<NODETYPE> tList,t2,tListNew;
+    std::list<NODETYPE> tList,t2,tListNew;
     itemSet<NODETYPE>* prttNew;
-    typename map <NODETYPE,itemSetEntry< NODETYPE > >::iterator i;
-    typename map <NODETYPE,itemSetEntry< NODETYPE > >::iterator j;
-    typename list<NODETYPE>::iterator i2;
+    typename std::map <NODETYPE,itemSetEntry< NODETYPE > >::iterator i;
+    typename std::map <NODETYPE,itemSetEntry< NODETYPE > >::iterator j;
+    typename std::list<NODETYPE>::iterator i2;
     boolean oneOK,doApriori;
-    list<itemSet<NODETYPE>* >*  listPtr;
+    std::list<itemSet<NODETYPE>* >*  listPtr;
     String myAncestor;
     int level;
-    map <NODETYPE,itemSetEntry< NODETYPE > > tmp;
-    typename list<itemSet<NODETYPE>* >::iterator riferimento;
+    std::map <NODETYPE,itemSetEntry< NODETYPE > > tmp;
+    typename std::list<itemSet<NODETYPE>* >::iterator riferimento;
     NODETYPE elemToDelete;
     boolean isDelete;
 
@@ -869,10 +869,10 @@ boolean itemSet< NODETYPE >::gen_final_countHelper(itemSetList<NODETYPE>& ptrLis
 
     for( i=prtt.begin( ) ; i != prtt.end( ) ; i++ )
      {
-       cout<<"PADRE  "<<i->first<<endl;
+       std::cout<<"PADRE  "<<i->first<<std::endl;
 
        prttNew=i->second.getItemSet();
-       cout<<"indirizzo ItemSet figlia : "<<prttNew<<endl;
+       std::cout<<"indirizzo ItemSet figlia : "<<prttNew<<std::endl;
        tList=i->second.getGidList();
 
        oneOK=false;
@@ -881,9 +881,9 @@ boolean itemSet< NODETYPE >::gen_final_countHelper(itemSetList<NODETYPE>& ptrLis
        {
          myAncestor=prttNew->getAncestor();
          level=prttNew->getLevel();
-         //cout<<"cosa sto per analizzare"<<endl;
+         //cout<<"cosa sto per analizzare"<<std::endl;
          //prttNew->printItemSet();
-         // cout<<"fine cosa sto per analizzare"<<endl;
+         // std::cout<<"fine cosa sto per analizzare"<<std::endl;
 
          tmp=prttNew->getMap();
 
@@ -900,41 +900,41 @@ boolean itemSet< NODETYPE >::gen_final_countHelper(itemSetList<NODETYPE>& ptrLis
                 isDelete=false;
              }
 
-           cout<<"figlio in esame"<<j->first<<endl;
+           std::cout<<"figlio in esame"<<j->first<<std::endl;
            doApriori=pHashMap.findTies(myAncestor,j->first,level);
 
            if (doApriori)
              {
-              cout<<"tutti gli antenati ci sono dei fare merge lista"<<endl;
+              std::cout<<"tutti gli antenati ci sono dei fare merge lista"<<std::endl;
               t2=(prtt.find(j->first))->second.getGidList();
               //t2=j->second.getGidList();
               set_intersection(t2.begin(), t2.end(),tList.begin(), tList.end(), back_inserter(tListNew));
-              //cout<<"size della lista "<<tListNew.size()<<endl;
+              //cout<<"size della lista "<<tListNew.size()<<std::endl;
               if (  (tListNew.size()>=nSup) && (!tListNew.empty()) )
         	{
                    prttNew->setItemSet(j->first,tListNew,totGroups);
                    String newElemHash=myAncestor+(j->first).c_str();
                    const char* it=newElemHash.c_str();
-                   cout<<"Supporto Sufficiente nuovo elemnto in pHashMapNew"<<newElemHash<<endl;
-                   //cout<<"elemento in hash"<<it<<"----"<<endl;
+                   std::cout<<"Supporto Sufficiente nuovo elemnto in pHashMapNew"<<newElemHash<<std::endl;
+                   //cout<<"elemento in hash"<<it<<"----"<<std::endl;
                    pHashMapNew.add(it,newElemHash);
                    oneOK=true;
                    //pHashMapNew.print();
                 }
                 else
                  {
-                    cout<<"devo rimuovere tutto sotto "<<j->first<<" ItemSet "<<prttNew<<endl;
+                    std::cout<<"devo rimuovere tutto sotto "<<j->first<<" ItemSet "<<prttNew<<std::endl;
 
                     //ptrList.printAddrItemSet();
-                    cout<<"ma non questo livello"<<endl;
+                    std::cout<<"ma non questo livello"<<std::endl;
                     if (j->second.getItemSet()!=NULL)
                        {
-                        cout<<"address ItemSet figlia "<<j->second.getItemSet();
+                        std::cout<<"address ItemSet figlia "<<j->second.getItemSet();
                         j->second.getItemSet()->remove(ptrList);
                         int nextLev;
                         nextLev= j->second.getItemSet()->getLevel();
                         listPtr=ptrList.getList(nextLev);
-  	                cout<<"delete ItemSet dalla lista"<<j->second.getItemSet()<<endl;
+  	                std::cout<<"delete ItemSet dalla lista"<<j->second.getItemSet()<<std::endl;
   	                riferimento= j->second.getItemSet()->getRefList();
                         listPtr->erase(riferimento);
 
@@ -944,7 +944,7 @@ boolean itemSet< NODETYPE >::gen_final_countHelper(itemSetList<NODETYPE>& ptrLis
                        elemToDelete=j->first;
                        isDelete=true;
 
-                 //cout<<"elemento  che sto a cancella "<<i->first<<endl;
+                 //cout<<"elemento  che sto a cancella "<<i->first<<std::endl;
                  //elemToDelete=i->first;
                  //isDelete=true;
                 }
@@ -952,15 +952,15 @@ boolean itemSet< NODETYPE >::gen_final_countHelper(itemSetList<NODETYPE>& ptrLis
              }
            else
              {
-               cout<<"posso fare aPriori"<<myAncestor<<" "<<j->first<<endl;
+               std::cout<<"posso fare aPriori"<<myAncestor<<" "<<j->first<<std::endl;
                  if (j->second.getItemSet()!=NULL)
                        {
-                        cout<<"address ItemSet figlia "<<j->second.getItemSet();
+                        std::cout<<"address ItemSet figlia "<<j->second.getItemSet();
                         j->second.getItemSet()->remove(ptrList);
                         int nextLev;
                         nextLev= j->second.getItemSet()->getLevel();
                         listPtr=ptrList.getList(nextLev);
-  	                cout<<"delete ItemSet dalla lista"<<j->second.getItemSet()<<endl;
+  	                std::cout<<"delete ItemSet dalla lista"<<j->second.getItemSet()<<std::endl;
   	                riferimento= j->second.getItemSet()->getRefList();
                         listPtr->erase(riferimento);
 
@@ -982,21 +982,21 @@ boolean itemSet< NODETYPE >::gen_final_countHelper(itemSetList<NODETYPE>& ptrLis
        // se l'elemento da cancellare fosse l'ultimo della map :)
        if (isDelete)
           {
-             cout<<"ultimo elem da cancellare "<<elemToDelete<<endl;
+             std::cout<<"ultimo elem da cancellare "<<elemToDelete<<std::endl;
              prttNew->removeEntry(elemToDelete);
              isDelete=false;
           }
 
-      //if (!oneOK) cout<<"posso cancellare questo livello non ho niente addrx :"<<prttNew<<endl;
-      cout<<"ho finito entry "<<i->first<<" oneOK "<<oneOK<<" ItemSet a cui punto "<<prttNew<<endl;
+      //if (!oneOK) std::cout<<"posso cancellare questo livello non ho niente addrx :"<<prttNew<<std::endl;
+      std::cout<<"ho finito entry "<<i->first<<" oneOK "<<oneOK<<" ItemSet a cui punto "<<prttNew<<std::endl;
       if (!oneOK)
          {
-            cout<<"cancello prttNew"<<prttNew<<" pttrC di i "<<i->second.getItemSet()<<endl;
+            std::cout<<"cancello prttNew"<<prttNew<<" pttrC di i "<<i->second.getItemSet()<<std::endl;
  	    i->second.getItemSet()->remove(ptrList);
 
             int nLev;
             nLev=(i->second.getItemSet()->getLevel())+1;
-	    cout<<"nlev "<<nLev<<endl;
+	    std::cout<<"nlev "<<nLev<<std::endl;
             listPtr=ptrList.getList(nLev);
 
             riferimento= i->second.getItemSet()->getRefList();
@@ -1007,13 +1007,13 @@ boolean itemSet< NODETYPE >::gen_final_countHelper(itemSetList<NODETYPE>& ptrLis
 
          }
    }
-   else cout<<"non ho una ItemSet figlia"<<endl;
+   else std::cout<<"non ho una ItemSet figlia"<<std::endl;
    i->second.gidListRemove();
   }
 
 
 
-  cout<<"finito gen_final_count"<<endl;
+  std::cout<<"finito gen_final_count"<<std::endl;
   return true;
 
 }
@@ -1029,28 +1029,28 @@ void itemSet< NODETYPE >::removeEntry(NODETYPE elem)
 template< class NODETYPE >
 void itemSet< NODETYPE >::extractRule(String regola,int lev)
  {
-   typename map <NODETYPE,itemSetEntry< NODETYPE > >::iterator i;
+   typename std::map <NODETYPE,itemSetEntry< NODETYPE > >::iterator i;
    String rule;
 
    rule=regola;
 
    for( i=prtt.begin( ) ; i != prtt.end( ) ; i++ )
      {
-        //cout<<"Address "<<i<<endl;
+        //cout<<"Address "<<i<<std::endl;
         regola=rule+(String)i->first+",";
        //cout<<"Item "<<i->first<<" GidList: ";
        //gList=i->second.getGidList();
        //for (i2=gList.begin(); i2!=gList.end();i2++)
-       //    cout<<*i2<<"  ";
-       //cout<<"level"<<getLevel()<<endl;
+       //    std::cout<<*i2<<"  ";
+       //cout<<"level"<<getLevel()<<std::endl;
        if (lev!=1) combina2(regola);
-       //  cout<<"regola"<<regola<<endl;
+       //  std::cout<<"regola"<<regola<<std::endl;
        if (i->second.getItemSet()!=NULL)
        {
-         //cout<<"Address "<<i->second.getItemSet()<<endl;
+         //cout<<"Address "<<i->second.getItemSet()<<std::endl;
 
          i->second.getItemSet()->extractRule(regola,lev+1);
-         cout<<endl;
+         std::cout<<std::endl;
        }
      regola="";
     }
@@ -1062,23 +1062,23 @@ void itemSet< NODETYPE >::extractRule(String regola,int lev)
 template< class NODETYPE >
 void itemSet< NODETYPE >::remove(itemSetList<NODETYPE>& ptrList)
  {
-   typename map <NODETYPE,itemSetEntry< NODETYPE > >::iterator i;
+   typename std::map <NODETYPE,itemSetEntry< NODETYPE > >::iterator i;
    itemSet<NODETYPE>* p;
-   list<itemSet<NODETYPE>* >* listPtr;
+   std::list<itemSet<NODETYPE>* >* listPtr;
    int lev;
-   typename list<itemSet<NODETYPE>* >::iterator riferimento;
+   typename std::list<itemSet<NODETYPE>* >::iterator riferimento;
 
    lev=getLevel();
-   cout<<"Remove tutto lev"<<lev<<endl;
+   std::cout<<"Remove tutto lev"<<lev<<std::endl;
    for( i=prtt.begin( ) ; i != prtt.end( ) ; i++ )
      {
-         cout<<"Dentro REmove da taglio "<<i->first<<endl;
+         std::cout<<"Dentro REmove da taglio "<<i->first<<std::endl;
          p=i->second.getItemSet();
          if (p!=NULL)
   	    {
   	       p->remove(ptrList);
   	       listPtr=ptrList.getList(lev);
-  	       cout<<"delete ItemSet dalla lista"<<p<<endl;
+  	       std::cout<<"delete ItemSet dalla lista"<<p<<std::endl;
   	       riferimento=p->getRefList();
                listPtr->erase(riferimento);
   	       delete p;
@@ -1093,7 +1093,7 @@ void itemSet< NODETYPE >::remove(itemSetList<NODETYPE>& ptrList)
 template< class NODETYPE >
 void itemSet< NODETYPE >::removeHelper(itemSetList<NODETYPE>& ptrList)
  {
-   typename map <NODETYPE,itemSetEntry< NODETYPE > >::iterator i;
+   typename std::map <NODETYPE,itemSetEntry< NODETYPE > >::iterator i;
    itemSet<NODETYPE>* p;
    int lev;
 
@@ -1101,7 +1101,7 @@ void itemSet< NODETYPE >::removeHelper(itemSetList<NODETYPE>& ptrList)
   for( i=prtt.begin( ) ; i != prtt.end( ) ; i++ )
      {
          p=i->second.getItemSet();
-         cout<<"item"<<i->first<<endl;
+         std::cout<<"item"<<i->first<<std::endl;
 
   	 if (p!=NULL)
   	    {
@@ -1112,7 +1112,7 @@ void itemSet< NODETYPE >::removeHelper(itemSetList<NODETYPE>& ptrList)
             }
         prtt.erase(i);
      }
-  cout<<"fine removeHelper"<<endl;
+  std::cout<<"fine removeHelper"<<std::endl;
 }
 */
 
@@ -1126,9 +1126,9 @@ void itemSet< NODETYPE >::printToDesign(int isPart)
  {
 
    String files,label1,values,vStruct,nod,address,idList;
-   typename map <NODETYPE,itemSetEntry< NODETYPE > >::iterator i;
-   typename list<NODETYPE>::iterator i2;
-   list<NODETYPE> tList;
+   typename std::map <NODETYPE,itemSetEntry< NODETYPE > >::iterator i;
+   typename std::list<NODETYPE>::iterator i2;
+   std::list<NODETYPE> tList;
    char filename[16];
 
 
@@ -1137,10 +1137,10 @@ void itemSet< NODETYPE >::printToDesign(int isPart)
 
    ofstream f1(filename);
 
-   f1<<"digraph minerule { "<<endl;
-   f1<<"graph[fontsize=8]; edge  [fontsize=8]; node  [fontsize=8]; ranksep = .30; nodesep = .25;"<<endl;
-   f1<<"node [fontname=\"Courier\"]; "<<endl;
-   f1<<"node [shape=record];"<<endl;
+   f1<<"digraph minerule { "<<std::endl;
+   f1<<"graph[fontsize=8]; edge  [fontsize=8]; node  [fontsize=8]; ranksep = .30; nodesep = .25;"<<std::endl;
+   f1<<"node [fontname=\"Courier\"]; "<<std::endl;
+   f1<<"node [shape=record];"<<std::endl;
 
    vStruct="struct0";
    label1="struct0[shape=record,label=\"";
@@ -1166,7 +1166,7 @@ void itemSet< NODETYPE >::printToDesign(int isPart)
    siz=siz-1;
    if (siz>0)  values.resize(siz);
    label1=label1+values+"\"];";
-   f1<<label1<<endl;
+   f1<<label1<<std::endl;
    values="";
 
    for( i=prtt.begin( ) ; i != prtt.end( ) ; i++ )
@@ -1186,7 +1186,7 @@ void itemSet< NODETYPE >::printToDesign(int isPart)
      }
    }
 
-  f1<<"}"<<endl;
+  f1<<"}"<<std::endl;
 
  }
 
@@ -1195,10 +1195,10 @@ void itemSet< NODETYPE >::printToDesign(int isPart)
 template< class NODETYPE >
 void itemSet< NODETYPE >::printToDesignHelper(String here,String padre,ofstream& f1)
  {
-   typename map <NODETYPE,itemSetEntry< NODETYPE > >::iterator i;
+   typename std::map <NODETYPE,itemSetEntry< NODETYPE > >::iterator i;
    String files,label1,values,vStruct,nod,address,idList;
-   typename list<NODETYPE>::iterator i2;
-   list<NODETYPE> tList;
+   typename std::list<NODETYPE>::iterator i2;
+   std::list<NODETYPE> tList;
 
 
    label1="struct"+padre+"[shape=record,label=\""+padre+"|";
@@ -1227,8 +1227,8 @@ void itemSet< NODETYPE >::printToDesignHelper(String here,String padre,ofstream&
    if (siz>0)    values.resize(siz);
 
    label1=label1+values+"\"];";
-   f1<<label1<<endl;
-   f1<<here<<"->"<<"struct"+padre<<endl;
+   f1<<label1<<std::endl;
+   f1<<here<<"->"<<"struct"+padre<<std::endl;
    values="";
    for( i=prtt.begin( ) ; i != prtt.end( ) ; i++ )
    {

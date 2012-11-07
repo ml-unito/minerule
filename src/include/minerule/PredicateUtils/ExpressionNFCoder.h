@@ -42,7 +42,7 @@ namespace minerule {
 			     const EncodedNF& nf2);
   };
 
-  ostream& operator<<(ostream& os, const EncodedNF&);
+  std::ostream& operator<<(std::ostream& os, const EncodedNF&);
 
   // ----------------------------------------------------------------------
   // EncodedNFIterator

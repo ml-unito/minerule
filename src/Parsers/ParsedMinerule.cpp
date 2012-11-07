@@ -35,15 +35,15 @@
 
 extern void yyerror(char*); */
 
-using namespace std;
 
-bool find_in_list(string s,minerule::ParsedMinerule::ListType l);
+
+bool find_in_list(std::string s,minerule::ParsedMinerule::ListType l);
 
 //int init_analisi_minerule(int ,char **);
-int init_analisi_minerule(const string&);
+int init_analisi_minerule(const std::string&);
 
 void
-print_AND_list(ostream& os, list_AND_node* andnode) {
+print_AND_list(std::ostream& os, list_AND_node* andnode) {
   if( andnode==NULL )
     return;
 
@@ -52,9 +52,9 @@ print_AND_list(ostream& os, list_AND_node* andnode) {
 	    andnode->sp->op!=NULL &&
 	    andnode->sp->val2 != NULL );
 
-    cout << andnode->sp->val1;
-    cout << " " << andnode->sp->op;
-    cout << " " << andnode->sp->val2;
+    std::cout << andnode->sp->val1;
+    std::cout << " " << andnode->sp->op;
+    std::cout << " " << andnode->sp->val2;
   }
 
   if( andnode->next!=NULL ) {
@@ -64,7 +64,7 @@ print_AND_list(ostream& os, list_AND_node* andnode) {
 }
 
 void
-print_OR_list(ostream& os, list_OR_node* ornode) {
+print_OR_list(std::ostream& os, list_OR_node* ornode) {
   if( ornode==NULL ) 
     return;
 
@@ -126,48 +126,48 @@ list_OR_node* clone_l_OR(list_OR_node* l)
 
 namespace minerule {
 
-  ostream& operator<<(ostream& os, const ParsedMinerule& mr) {
-    os << "ParsedMinerule" << endl;
+  std::ostream& operator<<(std::ostream& os, const ParsedMinerule& mr) {
+    os << "ParsedMinerule" << std::endl;
     os << " - ba:";
-    copy( mr.ba.begin(), mr.ba.end(), ostream_iterator<string>(os, " "));
-    os << endl;
+    copy( mr.ba.begin(), mr.ba.end(), std::ostream_iterator<std::string>(os, " "));
+    os << std::endl;
 
     os << " - ha:";
-    copy( mr.ha.begin(), mr.ha.end(), ostream_iterator<string>(os, " "));
-    os << endl;
+    copy( mr.ha.begin(), mr.ha.end(), std::ostream_iterator<std::string>(os, " "));
+    os << std::endl;
 
     os << " - ga:";
-    copy( mr.ga.begin(), mr.ga.end(), ostream_iterator<string>(os, " "));
-    os << endl 
+    copy( mr.ga.begin(), mr.ga.end(), std::ostream_iterator<std::string>(os, " "));
+    os << std::endl 
        << " - ca:";
-    copy( mr.ca.begin(), mr.ca.end(), ostream_iterator<string>(os, " "));
-    os << endl 
+    copy( mr.ca.begin(), mr.ca.end(), std::ostream_iterator<std::string>(os, " "));
+    os << std::endl 
        << " - ra:";
-    copy( mr.ra.begin(), mr.ra.end(), ostream_iterator<string>(os, " "));
-    os << endl
+    copy( mr.ra.begin(), mr.ra.end(), std::ostream_iterator<std::string>(os, " "));
+    os << std::endl
        << " = mc:";
     print_OR_list(os,mr.mc);
-    os << endl 
+    os << std::endl 
        << " = gc:";
     print_OR_list(os,mr.gc);
-    os << endl
+    os << std::endl
        << " = cc:";
     print_OR_list(os,mr.cc);
-    os << endl;
+    os << std::endl;
   
     os << " ! clust. agg. list:";
     copy( mr.c_aggr_list.begin(), 
 	  mr.c_aggr_list.end(), 
-	  ostream_iterator<string>(os, " "));
-    os << endl;
+	  std::ostream_iterator<std::string>(os, " "));
+    os << std::endl;
 
-    os << " * sup:" << mr.sup << endl;
-    os << " * conf:" << mr.conf << endl;
-    os << " & tautologies: "<<mr.tautologies << endl;
-    os << " & body coinc head:"<<mr.body_coincident_head << endl;
-    os << " tab_source:" << mr.tab_source << endl;
-    os << " tab_result:" << mr.tab_result << endl;
-    os << "ParsedMinerule - end" << endl;
+    os << " * sup:" << mr.sup << std::endl;
+    os << " * conf:" << mr.conf << std::endl;
+    os << " & tautologies: "<<mr.tautologies << std::endl;
+    os << " & body coinc head:"<<mr.body_coincident_head << std::endl;
+    os << " tab_source:" << mr.tab_source << std::endl;
+    os << " tab_result:" << mr.tab_result << std::endl;
+    os << "ParsedMinerule - end" << std::endl;
 
     return os;
   }
@@ -206,8 +206,8 @@ namespace minerule {
     return tmp;
   }
 
-  string
-  trim( string text ) {
+  std::string
+  trim(std::string text ) {
     size_t begSpaces = text.find_first_not_of(" ");
     if( begSpaces == text.npos ) // all elements are spaces
       return "";
@@ -233,14 +233,14 @@ namespace minerule {
     } */
 
   void
-  ParsedMinerule::init(const string& minerule_text)
+  ParsedMinerule::init(const std::string& minerule_text)
   {
     pars_minerule( minerule_text, *this );
 #if 0
-    //  cout << "STO CREANDO LA MINERULE:" << endl << minerule_text << endl;
+    //  std::cout << "STO CREANDO LA MINERULE:" << std::endl << minerule_text << std::endl;
     MRLogPush("Parsing Algorithm...");
     MRDebugPush("Parsing Algorithm...");
-    MRDebug() << "mr text:" << minerule_text << endl;
+    MRDebug() << "mr text:" << minerule_text << std::endl;
 
 
     //workaround di compatibilita'
@@ -253,16 +253,16 @@ namespace minerule {
     //    outmr << minerule_text;
     //    outmr.close();
 
-    MRLog() << "analyzing minerule text..." <<endl;
+    MRLog() << "analyzing minerule text..." <<std::endl;
     //    int error=init_analisi_minerule(2,argv);
     int error=init_analisi_minerule(minerule_text);
 
     if (error!=0) {
-      cerr << "Errore numero " << error << " nel parsing" << endl;
+      std::cerr << "Errore numero " << error << " nel parsing" << std::endl;
       stringstream ss;
-      ss << "Some error occurred while parsing the Minerule, the error" << endl
-	 << "code is:" << error << ". More informations can be found in" << endl
-	 << "the parser Log file (look at the option file to enable it or" <<endl
+      ss << "Some error occurred while parsing the Minerule, the error" << std::endl
+	 << "code is:" << error << ". More informations can be found in" << std::endl
+	 << "the parser Log file (look at the option file to enable it or" <<std::endl
 	 << "to change its target." << ends;
       throw MineruleException(MR_ERROR_MINERULETEXT_PARSING, ss.str());
     }
@@ -274,7 +274,7 @@ namespace minerule {
     if( par_sqlcode[PARFROMSQL]!=NULL )
       tab_source= trim(par_sqlcode[PARFROMSQL]);
 
-    MRDebug() << "tab_source:" << tab_source << endl;
+    MRDebug() << "tab_source:" << tab_source << std::endl;
 
     if( partablename!=NULL )
       tab_result= trim(partablename);
@@ -300,7 +300,7 @@ namespace minerule {
     sort(ga.begin(), ga.end()); 
     sort(ca.begin(), ca.end());
     set_union(ba.begin(),ba.end(),ha.begin(),ha.end(),
-	      insert_iterator<ListType>(ra, ra.begin()));
+	      std::insert_iterator<ListType>(ra, ra.begin()));
 
 
   
@@ -325,19 +325,19 @@ namespace minerule {
 
     headCardinalities = p;
   
-    MRLog() << "The name of the minerule is: " << tab_result << endl;
-    MRLog() << "Analyzing minerule predicates..." << endl;
-    //   cout << "MC:" << par_sqlcode[PARMINSQL] << endl;
+    MRLog() << "The name of the minerule is: " << tab_result << std::endl;
+    MRLog() << "Analyzing minerule predicates..." << std::endl;
+    //   std::cout << "MC:" << par_sqlcode[PARMINSQL] << std::endl;
     MRDebugPush("Parsing Mining Condition...");
-    MRDebug() << "par_sqlcod[PARMINSQL]:"<< par_sqlcode[PARMINSQL]<<endl;
+    MRDebug() << "par_sqlcod[PARMINSQL]:"<< par_sqlcode[PARMINSQL]<<std::endl;
 
     mc=predicate_parser(par_sqlcode[PARMINSQL]);
 
-    MRDebug() << "mc:" << mc << endl;
+    MRDebug() << "mc:" << mc << std::endl;
     MRDebugPop();
-    //  cout << "GC:" << par_sqlcode[PARGROUPSQL] << endl;
+    //  std::cout << "GC:" << par_sqlcode[PARGROUPSQL] << std::endl;
     gc=predicate_parser(par_sqlcode[PARGROUPSQL]);
-    //  cout << "CC:" << par_sqlcode[PARCLUSTSQL] << endl;
+    //  std::cout << "CC:" << par_sqlcode[PARCLUSTSQL] << std::endl;
     cc=predicate_parser(par_sqlcode[PARCLUSTSQL]);
 
     // pulizia strutture parser
@@ -359,13 +359,13 @@ namespace minerule {
       ListType::iterator li;
       ListType list_in;
       ListType list_out;
-      string query;
-      string key_id;
+     std::string query;
+     std::string key_id;
       for (li=ga.begin();li!=ga.end(); li++) {
-      cout << "Normalizzazione attributo: " << *li << endl;
+      std::cout << "Normalizzazione attributo: " << *li << std::endl;
       list_out.clear();
       list_out.push_back(*li);
-      cout << "fatta pulizia list_out e inserito'" << (*li) << endl;
+      std::cout << "fatta pulizia list_out e inserito'" << (*li) << std::endl;
 
       //mysql3 non sopporta select annidate
       /*
@@ -383,52 +383,51 @@ namespace minerule {
 	query += "WHERE mr_eq_keys.tab_name = '"+tab_source+"' AND ";
 	query += "      mr_eq_keys.key_id=mr_eq_keys_col.key_id AND ";
 	query += "      mr_eq_keys_col.col_name = '"+(*li)+"';";
-	cout << query << endl;
+	std::cout << query << std::endl;
 	rs=statement->executeQuery(query);
 	
 	try
 	  {
 	    rs->next(); key_id=rs->getString(1).c_str();
-	    cout << "REF: " << key_id << endl;
+	    std::cout << "REF: " << key_id << std::endl;
 	    
 	    statement=connection->createStatement();
 	    query =  "SELECT col_name FROM mr_eq_keys_col WHERE key_id='"+key_id+"';";
-	    cout << query << endl;
+	    std::cout << query << std::endl;
 	    rs=statement->executeQuery(query);
 	    while(rs->next() ) {                        //&& trovato)
 	      //trovato=false;
-	      cout << " --> " << rs->getString(1).c_str() << endl;
+	      std::cout << " --> " << rs->getString(1).c_str() << std::endl;
 	      //trovato=find_in_list(rs->getString(1),ga);
 	    }
 	  }
 	catch (odbc::SQLException e) {
-	  cerr << "MineRule Installation Error" <<endl;
-	  cerr << "The Kernel module was not able to find an equivalent" << endl
-	       << "key id for table '" <<tab_source<<"', column '" << (*li) << "'" <<endl;
-	  cerr << "Among possible causes there are: " << endl;
-	  cerr << "  1) an SQL server error" << endl
-	       << "  2) the meta informations about the given table were not " << endl
-	       << "     inserted properly into the MineRule system." << endl;
-	  cerr << "The SQL query used to retrieve such information were:" << endl
-	       << query << endl;
-	  cerr << "The odbc driver returned the following error msg:"<<  endl;
-	  cerr << e.getMessage() << endl;
-	  cerr << endl;
-	  cerr << "I'm continuing the execution anyway, be aware that you" <<endl
-	       << "are likely to loose some optimizations" << endl;
+	  std::cerr << "MineRule Installation Error" <<std::endl;
+	  std::cerr << "The Kernel module was not able to find an equivalent" << std::endl
+	       << "key id for table '" <<tab_source<<"', column '" << (*li) << "'" <<std::endl;
+	  std::cerr << "Among possible causes there are: " << std::endl;
+	  std::cerr << "  1) an SQL server error" << std::endl
+	       << "  2) the meta informations about the given table were not " << std::endl
+	       << "     inserted properly into the MineRule system." << std::endl;
+	  std::cerr << "The SQL query used to retrieve such information were:" << std::endl
+	       << query << std::endl;
+	  std::cerr << "The odbc driver returned the following error msg:"<<  std::endl;
+	  std::cerr << e.getMessage() << std::endl;
+	  std::cerr << std::endl;
+	  std::cerr << "I'm continuing the execution anyway, be aware that you" <<std::endl
+	       << "are likely to loose some optimizations" << std::endl;
 	}
       }
     catch (odbc::SQLException& e) {
-      cout << "What happened?" << e.getMessage() << endl;
+      std::cout << "What happened?" << e.getMessage() << std::endl;
       throw;
     }
     delete statement;
   } 
 }
 #endif
-  
-string ParsedMinerule::getAttrText(const ListType& l) const {
-  string result;
+  std::string ParsedMinerule::getAttrText(const ListType& l) const {
+ std::string result;
   ListType::const_iterator it = l.begin();
   assert(it!=l.end());
 
@@ -441,10 +440,9 @@ string ParsedMinerule::getAttrText(const ListType& l) const {
 
   return result;
 }
-
-string ParsedMinerule::getSimplePredText(const simple_pred* pred) const {
+std::string ParsedMinerule::getSimplePredText(const simple_pred* pred) const {
   assert(pred!=NULL);
-  string result;
+ std::string result;
   if( pred->val1!=NULL)
     result+=pred->val1;
 
@@ -456,10 +454,9 @@ string ParsedMinerule::getSimplePredText(const simple_pred* pred) const {
 
   return result;
 }
-
-string ParsedMinerule::getAndListText(const list_AND_node* cond)const {
+std::string ParsedMinerule::getAndListText(const list_AND_node* cond)const {
   assert( cond != NULL);
-  string result="";
+ std::string result="";
 
   result = getSimplePredText(cond->sp);
   cond= cond->next;
@@ -471,10 +468,9 @@ string ParsedMinerule::getAndListText(const list_AND_node* cond)const {
 
   return result;
 }
-
-string ParsedMinerule::getCondText(const list_OR_node* cond)const {
+std::string ParsedMinerule::getCondText(const list_OR_node* cond)const {
   assert(cond!=NULL);
-  string result ="";
+ std::string result ="";
 
   result = "("+getAndListText(cond->l_and)+")";
   cond = cond->next;
@@ -486,9 +482,8 @@ string ParsedMinerule::getCondText(const list_OR_node* cond)const {
     
   return result;
 }
-
-string ParsedMinerule::getCardsText(const MinMaxPair& mm) const {
-  string result;
+std::string ParsedMinerule::getCardsText(const MinMaxPair& mm) const {
+ std::string result;
   result=Converter(mm.getMin()).toString()+"..";
   if( mm.getMax()!=mm.getDefaultMax() )
     result+=Converter(mm.getMax()).toString();
@@ -496,9 +491,8 @@ string ParsedMinerule::getCardsText(const MinMaxPair& mm) const {
     result+="n";
   return result;
 }
-
-string ParsedMinerule::getMinesequenceText() const {
-  string result;
+std::string ParsedMinerule::getMinesequenceText() const {
+ std::string result;
   result = 
     "MINE SEQUENCE " + tab_result + " AS " +
     "SELECT DISTINCT " + 
@@ -509,8 +503,7 @@ string ParsedMinerule::getMinesequenceText() const {
 
   return result;
 }
-
-string ParsedMinerule::getText() const {
+std::string ParsedMinerule::getText() const {
   switch( miningTask ) {
   case MTMineRules:
     return getMineruleText();
@@ -524,9 +517,8 @@ string ParsedMinerule::getText() const {
 			     "(i.e., it is not a MINE RULE nor a MINE SEQUENCE query" );
   }
 }
-
-string ParsedMinerule::getMineruleText() const {
-  string result;
+std::string ParsedMinerule::getMineruleText() const {
+ std::string result;
   result = 
     "MINE RULE " + tab_result + " AS " +
     "SELECT DISTINCT " + 
@@ -557,9 +549,8 @@ string ParsedMinerule::getMineruleText() const {
     
   return result;
 }
-
-string ParsedMinerule::getMineitemsetsText() const {
-  string result;
+std::string ParsedMinerule::getMineitemsetsText() const {
+ std::string result;
   result = 
     "MINE ITEMSET " + tab_result + " AS " +
     "SELECT DISTINCT " + 
@@ -594,7 +585,7 @@ bool ParsedMinerule::hasIDConstraints() const throw(MineruleException) {
       bool attr1 = SQLUtils::isAttribute(it_and->sp->val1);
       bool attr2 = SQLUtils::isAttribute(it_and->sp->val2);
       const ListType* attrList;
-      string theAttr;
+     std::string theAttr;
 
       if(attr1) {
 	theAttr=it_and->sp->val1;
@@ -631,14 +622,14 @@ bool ParsedMinerule::hasIDConstraints() const throw(MineruleException) {
 
 
 bool ParsedMinerule::hasCrossConditions(const list_OR_node* cond) const {
-  MRLog()<<"Checking whether the minerule contains cross predicates" << endl;
+  MRLog()<<"Checking whether the minerule contains cross predicates" << std::endl;
   
   const list_OR_node* curr_OR;
   for(curr_OR=cond; curr_OR!=NULL; curr_OR=curr_OR->next) {
     list_AND_node* curr_AND;
     for(curr_AND=curr_OR->l_and; curr_AND!=NULL; curr_AND=curr_AND->next) {
       assert(curr_AND->sp!=NULL);
-      MRLog() << curr_AND->sp->val1 << " " << curr_AND->sp->val2 << endl;
+      MRLog() << curr_AND->sp->val1 << " " << curr_AND->sp->val2 << std::endl;
       bool hasHead = 
 	strstr(curr_AND->sp->val1, "HEAD.")==curr_AND->sp->val1 ||
 	strstr(curr_AND->sp->val2, "HEAD.")==curr_AND->sp->val2;
@@ -646,19 +637,19 @@ bool ParsedMinerule::hasCrossConditions(const list_OR_node* cond) const {
 	strstr(curr_AND->sp->val1, "BODY.")==curr_AND->sp->val1 ||
 	strstr(curr_AND->sp->val2, "BODY.")==curr_AND->sp->val2;
       if( hasHead && hasBody ) {
-	MRLog() << "Cross predicate found!" << endl;
+	MRLog() << "Cross predicate found!" << std::endl;
 	return true;
       }
     }
   }
 
-  MRLog() << "Cross predicate not found!" << endl;
+  MRLog() << "Cross predicate not found!" << std::endl;
   return false;
 }
  
 /*
   void ParsedMinerule::substituteInList(ListType& l,
-  const string& attr,
+  const std::string& attr,
   const SubstitutionInfo& info) const {
   // attr was == info.getAttribute() 
   ListType::const_iterator it;
@@ -690,17 +681,17 @@ bool ParsedMinerule::hasCrossConditions(const list_OR_node* cond) const {
   if(lhs==NULL)
   return;
     
-  string substitute = info.getSubstAttribute();
+ std::string substitute = info.getSubstAttribute();
   *lhs = realloc( *lhs, sizeof( char[substitute.length()+1] ) );
   strcpy( *lhs, substitute.c_str() );
 
-  string substVal;
+ std::string substVal;
   if( info.getSubstValue(*rhs,substVal) ) {
   *rhs = realloc( *rhs, sizeof( char[substVal.length()+1] ));
   strcpy( *rhs, substVal.c_str() );
   }
 
-  string substOp;
+ std::string substOp;
   if( info.getSubstOp(*op, substOp) ) {
   *op = realloc( *op, sizeof( char[substOp.length()+1] ) );
   strcpy( *op, substOp.c_str() );
@@ -723,7 +714,7 @@ bool ParsedMinerule::hasCrossConditions(const list_OR_node* cond) const {
 					
 
 
-  void ParsedMinerule::substituteAttribute(const string& attr,
+  void ParsedMinerule::substituteAttribute(const std::string& attr,
   const SubstitutionInfo& info) {
   substituteInList(ga,  info);
   substituteInList(ca,  info);

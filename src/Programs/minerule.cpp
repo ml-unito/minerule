@@ -24,11 +24,11 @@
 #include "Utils/MineruleErrors.h"
 
 
-using namespace std;
+
 using namespace minerule;
 
 
-bool fileExist(const string& fname) {
+bool fileExist(const std::string& fname) {
   struct stat trash;
   if( stat(fname.c_str(),&trash)==0 ) 
     return true;
@@ -38,23 +38,23 @@ bool fileExist(const string& fname) {
 
 void
 printHelp(char* progName) {
-  cout << "Usage:" << endl
-       << "  " << progName << " [-i <mineruletextfile>] [-m '<mineruletext>'] " << endl
-       << "     -f <mineruleoptionfile> -O <optionlist> -v -h " << endl << endl;
-  cout << "   -i -- specify a file name containing the text of the minerule" << endl
-       << "   -m -- the argument is the text of the minerule" << endl
-       << "   -f -- specify a file name containing the Options to be used." << endl
-       << "         more than one is allowed and later ones override the options"<< endl
-       << "         read from previous ones" << endl
-       << "   -O -- Allows to specify some options from the command line" << endl
-       << "         whether those options overrides or not the ones given by -f"<<endl
-       << "         commands depends on which comes first" <<endl
-       << "   -v -- version informations" << endl
-       << "   -h -- this message" << endl
-       << " exit codes:" << endl;
+  std::cout << "Usage:" << std::endl
+       << "  " << progName << " [-i <mineruletextfile>] [-m '<mineruletext>'] " << std::endl
+       << "     -f <mineruleoptionfile> -O <optionlist> -v -h " << std::endl << std::endl;
+  std::cout << "   -i -- specify a file name containing the text of the minerule" << std::endl
+       << "   -m -- the argument is the text of the minerule" << std::endl
+       << "   -f -- specify a file name containing the Options to be used." << std::endl
+       << "         more than one is allowed and later ones override the options"<< std::endl
+       << "         read from previous ones" << std::endl
+       << "   -O -- Allows to specify some options from the command line" << std::endl
+       << "         whether those options overrides or not the ones given by -f"<<std::endl
+       << "         commands depends on which comes first" <<std::endl
+       << "   -v -- version informations" << std::endl
+       << "   -h -- this message" << std::endl
+       << " exit codes:" << std::endl;
   for(int i=me_error_begin(); i<me_error_end(); i++) {
-    cout 
-      <<  "\t" << i << "\t- " << me_error_name((MineruleErrors) i) << endl;
+    std::cout 
+      <<  "\t" << i << "\t- " << me_error_name((MineruleErrors) i) << std::endl;
 
 
 
@@ -66,7 +66,7 @@ printHelp(char* progName) {
 }
 
 void printVersion() {
-  cout << "Minerule Kernel v:" << MR_VERSION << endl;
+  std::cout << "Minerule Kernel v:" << MR_VERSION << std::endl;
 }
 
 
@@ -74,16 +74,15 @@ void printVersion() {
  * Tries to parse mrtext in order to find the name of
  * the current minerule. 
  */
-
-string 
-parseMineruleName(const string& mrtext) {
-  string mrtextcopy = mrtext;
-  string spacechars = " \t\n";
+std::string 
+parseMineruleName(const std::string& mrtext) {
+ std::string mrtextcopy = mrtext;
+ std::string spacechars = " \t\n";
   
-  string mstringrule="mine rule ";
-  string mstringsequence="mine sequence";
-  string mstringitemset="mine itemset";
-  string mstring;
+ std::string mstringrule="mine rule ";
+ std::string mstringsequence="mine sequence";
+ std::string mstringitemset="mine itemset";
+ std::string mstring;
 
   size_t minerulepos;
   size_t startnamepos = string::npos;
@@ -118,10 +117,10 @@ parseMineruleName(const string& mrtext) {
     MRErr() << "Error in retrieving the minerule name from the " 
 	    << "text which define the minerule. I could not "
 	    << "initialize, then, the text for %m parameter. " 
-	    << "I'm now switching to the default 'mrnameerror' mine rule name" << endl
-	    << "NOTE: If the minerule main parser succeed in parsing the" << endl
-	    << " minerule text, then, this message is a BUG and should be"<<endl
-	    << " reported!" << endl;
+	    << "I'm now switching to the default 'mrnameerror' mine rule name" << std::endl
+	    << "NOTE: If the minerule main parser succeed in parsing the" << std::endl
+	    << " minerule text, then, this message is a BUG and should be"<<std::endl
+	    << " reported!" << std::endl;
     return "mrnameerror";
   } 
 
@@ -130,7 +129,7 @@ parseMineruleName(const string& mrtext) {
 
 
 void
-parseOptions(int argc, char** argv, MineruleOptions& mrOpts, string& mrtext) {
+parseOptions(int argc, char** argv, MineruleOptions& mrOpts, std::string& mrtext) {
   int opt;
   bool mrtextok=false;
   while((opt=getopt(argc,argv,"hi:f:m:O:ev"))!=-1) {
@@ -146,19 +145,19 @@ parseOptions(int argc, char** argv, MineruleOptions& mrOpts, string& mrtext) {
       {
 	if(mrtextok) {
 	  MRErr() << "More than one minerule has been specified! "
-	    "(you cannot specify more than one {-i,-m} options)" << endl;
+	    "(you cannot specify more than one {-i,-m} options)" << std::endl;
 
-	  cerr  << "More than one minerule has been specified! "
-	    "(you cannot specify more than one {-i,-m} options)" << endl;
+	  std::cerr  << "More than one minerule has been specified! "
+	    "(you cannot specify more than one {-i,-m} options)" << std::endl;
 	  exit(MR_ERROR_OPTION_PARSING);
 	}
 	ifstream infile(optarg);
 	if(!infile) {
-	  MRErr() << "Cannot open input file" << endl;
-	  cerr <<  "Cannot open input file" << endl;
+	  MRErr() << "Cannot open input file" << std::endl;
+	  std::cerr <<  "Cannot open input file" << std::endl;
 	  exit(MR_ERROR_INPUT_FILE_NOT_FOUND);
 	}
-	string buf;
+std::string buf;
 	mrtext = "";
 	while( infile >> buf ) {
 	  mrtext += " " + buf;
@@ -172,23 +171,23 @@ parseOptions(int argc, char** argv, MineruleOptions& mrOpts, string& mrtext) {
     case 'f':
       if( fileExist(optarg) ) {
 	mrOpts.readFromFile(optarg);
-	MRLog() << "Options read from '" << optarg <<"'." << endl;
+	MRLog() << "Options read from '" << optarg <<"'." << std::endl;
       } else {
-	MRLog() << optarg << " not found, starting with default Options" << endl;
+	MRLog() << optarg << " not found, starting with default Options" << std::endl;
       }
       break;
     case 'O':
       mrOpts.readFromString(string(optarg));
       MRLog() << "Setted options accordingly to command line paramenter:-O " 
-	      << optarg << endl;
+	      << optarg << std::endl;
       break;
     case 'm':
       if( mrtextok ) {
 	  MRErr() << "More than one minerule has been specified! "
-	    "(you cannot specify more than one {-i,-m} options)" << endl;
+	    "(you cannot specify more than one {-i,-m} options)" << std::endl;
 
-	  cerr  << "More than one minerule has been specified! "
-	    "(you cannot specify more than one {-i,-m} options)" << endl;
+	  std::cerr  << "More than one minerule has been specified! "
+	    "(you cannot specify more than one {-i,-m} options)" << std::endl;
 	  exit(MR_ERROR_OPTION_PARSING);
       }
       mrtext=optarg;
@@ -197,15 +196,15 @@ parseOptions(int argc, char** argv, MineruleOptions& mrOpts, string& mrtext) {
       mrOpts.setMineruleSourceName("MRFromSTDIN");
       break;
     default:
-      MRErr() << "Option not recognized:" << (char)opt << endl;
-      cerr <<  "Option not recognized:" << (char)opt << endl;
+      MRErr() << "Option not recognized:" << (char)opt << std::endl;
+      std::cerr <<  "Option not recognized:" << (char)opt << std::endl;
       exit(MR_ERROR_OPTION_PARSING);
     }
   }
 
   if(!mrtextok) {
-    MRErr() << "No minerule has been specified (use -i or -m options)" << endl;
-    cerr << "No minerule has been specified (use -i or -m options)" << endl;
+    MRErr() << "No minerule has been specified (use -i or -m options)" << std::endl;
+    std::cerr << "No minerule has been specified (use -i or -m options)" << std::endl;
     exit(MR_ERROR_NO_MINERULE_SPECIFIED);
   }
 }
@@ -213,9 +212,9 @@ parseOptions(int argc, char** argv, MineruleOptions& mrOpts, string& mrtext) {
 int main (int argc, char *argv[])
 {
   MineruleOptions& mrOpts =  MineruleOptions::getSharedOptions();
-  string mrtext;
+ std::string mrtext;
   parseOptions(argc, argv, mrOpts, mrtext);
-  MRDebug() << "Minerule source text:[" << mrtext << "]" <<endl;
+  MRDebug() << "Minerule source text:[" << mrtext << "]" <<std::endl;
 
   MRLogPush("Minerule system starting");
 
@@ -223,22 +222,22 @@ int main (int argc, char *argv[])
     OptimizedMinerule optMR(mrtext);
     Algorithms::executeMinerule(optMR);
   } catch (odbc::SQLException& e) {
-    MRErr() << "ODBC Exception:" << e.getMessage() << endl;
-    cout << "ODBC Exception:" << e.getMessage() << endl;
+    MRErr() << "ODBC Exception:" << e.getMessage() << std::endl;
+    std::cout << "ODBC Exception:" << e.getMessage() << std::endl;
     exit(MR_ERROR_DATABASE_ERROR);
     throw;
   } catch (MineruleException& e) {
-    MRErr() << "Minerule Exception:" << e.what() << endl;
-    cout << "Minerule Exception:" << e.what() << endl;
+    MRErr() << "Minerule Exception:" << e.what() << std::endl;
+    std::cout << "Minerule Exception:" << e.what() << std::endl;
     exit( e.getErrorCode() );
   } catch (std::exception& e) {
-    MRErr() << "Exception:" << e.what() << endl;
-    cout << "Exception:" << e.what() << endl;
+    MRErr() << "Exception:" << e.what() << std::endl;
+    std::cout << "Exception:" << e.what() << std::endl;
     exit( MR_ERROR_UNKNOWN );
   }
   catch(...) {
-    MRErr() << "An unknown exception has been thrown..." << endl;
-    cout << "An unknown exception has been thrown..." << endl;
+    MRErr() << "An unknown exception has been thrown..." << std::endl;
+    std::cout << "An unknown exception has been thrown..." << std::endl;
     exit( MR_ERROR_UNKNOWN );
   }
 

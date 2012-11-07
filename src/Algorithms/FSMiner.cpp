@@ -32,7 +32,7 @@ namespace minerule {
 		coreConn.setBodyCardinalities(minerule.getParsedMinerule().bodyCardinalities);
 		coreConn.create_db_rule(0);
 
-		MRDebug() << "FSMiner query:" << sqlQuery.c_str() << endl;
+		MRDebug() << "FSMiner query:" << sqlQuery.c_str() << std::endl;
 
 		statement = coreConn.getConnection()->prepareStatement(sqlQuery.c_str());
 
@@ -52,7 +52,7 @@ namespace minerule {
 		MRLogPop();
 
 		h->setThreshold(options.getSupport());
-		MRLog() << "Support threshold is:" << h->getThreshold() << endl;
+		MRLog() << "Support threshold is:" << h->getThreshold() << std::endl;
 
 		MRLogPush("Building unfrequent bigram link table...");	
 		h->createLinkNSTable();
@@ -75,8 +75,8 @@ namespace minerule {
 
 		map<FSTreeSequence,int,FSTreeSequence::less_sequence>::iterator res_it;
 		map<FSTreeSequence,int,FSTreeSequence::less_sequence>* ris = h->getResult();
-	//string s=""
-		cout<<"ris->size "<<ris->size()<<endl;
+	//std::string s=""
+		std::cout<<"ris->size "<<ris->size()<<std::endl;
 		MRLogPush("contiguos frequent sequence find: "+ris->size());
 		for (res_it=ris->begin();res_it!=ris->end();res_it++){
 			FSTreeSequence temp=(*res_it).first;

@@ -164,18 +164,18 @@ class FSTree{
 
   /**
    * @see addList(node* father, node* children) 
-   * this method append a child to node r, the node creates contains the string t
+   * this method append a child to node r, the node creates contains thestd::string t
    * @param r the father of the node that the method create
-   * @param t the string that is contained in the new node
+   * @param t thestd::string that is contained in the new node
    * @return a pointer to the new node created
    */
   FSTreeNode* appendChild(FSTreeNode* r, const ItemType& t);
 
   /** 
    * this method add a new pointer to a node, in m_lsit, from the sequence of two elements that is formed with
-   * the string of the father plus the string of the children
-   * @param father a node that contains the first string of the sequence of two elements
-   * @param children a node that contains the second string of the sequence of two elements
+   * thestd::string of the father plus thestd::string of the children
+   * @param father a node that contains the firststd::string of the sequence of two elements
+   * @param children a node that contains the secondstd::string of the sequence of two elements
    */
   void addList(FSTreeNode* father, FSTreeNode* children);
 

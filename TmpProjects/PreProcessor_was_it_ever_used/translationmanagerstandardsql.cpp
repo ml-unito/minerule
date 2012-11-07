@@ -350,7 +350,7 @@ TranslationManagerStandardSQL::createTranslationTableForColumn(
   //      displaySize per i varchar, percio' non si ha nessuna informazione 
   //      sulla lunghezza dei campi stringa
 
-  //  cout << table << "*!*:"<<rsmd.getColumnTypeName(1) <<endl;
+  //  cout << table << "*!*:"<<rsmd.getColumnTypeName(1) <<std::endl;
   //  cout << "@@@" << precision << endl;
   //  cout << "###" << scale << endl;
   //  cout << "!!!" << rsmd.getColumnDisplaySize(1) << endl;

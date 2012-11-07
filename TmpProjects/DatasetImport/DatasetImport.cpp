@@ -79,8 +79,8 @@ main(int argc, char** argv) {
       }
 
       if(ngroup%1000==0) {
-	cout << "count:" << ngroup << "\r";
-	cout.flush();
+	std::cout << "count:" << ngroup << "\r";
+	std::cout.flush();
       }
       
     }

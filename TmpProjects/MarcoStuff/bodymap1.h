@@ -1,6 +1,6 @@
 class NewRule {
   public:
-	set<ItemType> body, head;
+	std::set<ItemType> body, head;
 	map<ItemType, BodyMapElement>::iterator lastBody;
 	map<ItemType, MapElement>::iterator lastHead;
 	int bodySupp;
@@ -24,7 +24,7 @@ class NewRule {
 		head.insert(h->first);
 	}
 	friend ostream& operator<<(ostream& out, NewRule r) {
-		set<ItemType>::iterator i;
+		std::set<ItemType>::iterator i;
 		for (i=r.body.begin(); i!=r.body.end(); i++) {
 			if (i != r.body.begin()) out << ", ";
 			out << *i;

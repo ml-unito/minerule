@@ -8,10 +8,10 @@ namespace minerule {
 
 	class BFSWithGidsNoCross : public MiningAlgorithm {
 
-		class Transaction : public set<ItemType> {
+		class Transaction : public std::set<ItemType> {
 			HeadBodySourceRowDescription srd;
 		public:
-			Transaction(HeadBodySourceRowDescription& rowDes) : set<ItemType>(), srd(rowDes) {}
+			Transaction(HeadBodySourceRowDescription& rowDes) : std::set<ItemType>(), srd(rowDes) {}
 			void loadBody(ItemType& gid, odbc::ResultSet *rs) {
 				HeadBodySourceRow hbsr(rs,srd);
 
@@ -61,8 +61,8 @@ namespace minerule {
 			};
 
 
-  //class MapElement : public set<ItemType> {
-			class MapElement : public set<int> {
+  //class MapElement : public std::set<ItemType> {
+			class MapElement : public std::set<int> {
 			public:
 				int count;
 				MapElement() : count(0) {}
@@ -72,8 +72,8 @@ namespace minerule {
 
 			class BodyMapElement : public MapElement {
 			public:
-    //pair<iterator, bool> insert(const value_type& x) { return set<ItemType>::insert(x); }
-				pair<iterator, bool> insert(const value_type& x) { return set<int>::insert(x); }
+    //pair<iterator, bool> insert(const value_type& x) { return std::set<ItemType>::insert(x); }
+				pair<iterator, bool> insert(const value_type& x) { return std::set<int>::insert(x); }
 				map<ItemType, MapElement > heads;
 				void insert(const ItemType& item, MapElement& gidList, bool secondPass = false);
 				bool pruneMap (float threshold);
@@ -82,7 +82,7 @@ namespace minerule {
 
 			class NewRule {
 			public:
-				vector<ItemType> body, head;
+			 std::vector<ItemType> body, head;
 				map<ItemType, BodyMapElement>::iterator lastBody;
 				map<ItemType, MapElement>::iterator lastHead;
 				double conf;
@@ -94,22 +94,22 @@ namespace minerule {
 					body.push_back(b->first);
 					lastHead = b->second.heads.begin();
 				}
-				NewRule (NewRule& r, map<ItemType, BodyMapElement>::iterator b, GidList& g) : body(r.body), lastBody(b), gids(g) {
+				NewRule (NewRule& r, std::map<ItemType, BodyMapElement>::iterator b, GidList& g) : body(r.body), lastBody(b), gids(g) {
 					body.push_back(b->first);
 					lastHead = b->second.heads.begin();
 				}
-				NewRule (map<ItemType, BodyMapElement>::iterator b, map<ItemType, MapElement>::iterator h, GidList& g, int bs) : lastBody(b), lastHead(h), gids(g), bodySupp(bs) {
+				NewRule (map<ItemType, BodyMapElement>::iterator b, std::map<ItemType, MapElement>::iterator h, GidList& g, int bs) : lastBody(b), lastHead(h), gids(g), bodySupp(bs) {
 					body.push_back(b->first);
 					head.push_back(h->first);
 				}
-				NewRule (NewRule& r, map<ItemType, BodyMapElement>::iterator b, GidList& g, int bs) : body(r.body), head(r.head), lastBody(b), lastHead(r.lastHead), gids(g), bodySupp(bs) {
+				NewRule (NewRule& r, std::map<ItemType, BodyMapElement>::iterator b, GidList& g, int bs) : body(r.body), head(r.head), lastBody(b), lastHead(r.lastHead), gids(g), bodySupp(bs) {
 					body.push_back(b->first);
 				}
-				NewRule (NewRule& r, map<ItemType, MapElement>::iterator h, GidList& g) : body(r.body), head(r.head), lastBody(r.lastBody), lastHead(h), gids(g), bodySupp(r.bodySupp) {
+				NewRule (NewRule& r, std::map<ItemType, MapElement>::iterator h, GidList& g) : body(r.body), head(r.head), lastBody(r.lastBody), lastHead(h), gids(g), bodySupp(r.bodySupp) {
 					head.push_back(h->first);
 				}
-				friend ostream& operator<<(ostream& out, NewRule r) {
-					vector<ItemType>::iterator i;
+				friend std::ostream& operator<<(std::ostream& out, NewRule r) {
+				 std::vector<ItemType>::iterator i;
 					for (i=r.body.begin(); i!=r.body.end(); i++) {
 						if (i != r.body.begin()) out << ", ";
 						out << *i;
@@ -119,21 +119,21 @@ namespace minerule {
 						if (i != r.head.begin()) out << ", ";
 						out << *i;
 					}
-					out << endl;
+					out << std::endl;
 					return out;
 				}
 			};
 
-			class NewRuleSet : public vector<NewRule> {};
+			class NewRuleSet : public std::vector<NewRule> {};
 
-			class BodyMap : public map<ItemType, BodyMapElement> {
+			class BodyMap : public std::map<ItemType, BodyMapElement> {
 				sqlCoreConn* coreConn;
 				void insertRules( const NewRuleSet& rs, double totGroups );
 			public:
 				BodyMap(sqlCoreConn& cc) : coreConn(&cc) {};
     //int add(ItemType& gid, Transaction& t1, Transaction& t2, bool secondPass = false);
 				int add(int gid, Transaction& t1, Transaction& t2, bool secondPass = false);
-    //	void saveMap(ostream& out, bool withGids = true);
+    //	void saveMap(std::ostream& out, bool withGids = true);
     //	void loadMap(istream& in, bool withGids = true);
 				void pruneMap(float threshold);
 				void updateCount ();

@@ -12,7 +12,7 @@
 #include"Utils/MineruleException.h"
 #include"Utils/AlgorithmTypes.h"
 
-using namespace std;
+
 
 
 typedef struct __tagsimple_pred simple_pred;
@@ -57,7 +57,7 @@ list_AND_node* clone_l_AND(list_AND_node* l);
 class Attribute
 {
   public:
-    string  name;
+   std::string  name;
     Attribute(const char* s);
     bool operator<(const Attribute& a) const;
 };
@@ -70,17 +70,17 @@ namespace minerule {
 class ParsedMinerule
 {
  public:
-  typedef std::vector<string> ListType;
+  typedef std::vector<std::string> ListType;
 
 
  private:
   void fillAttrList(ListType& dest, struct att_list* source);
 
-  string getAttrText(const ListType& l) const;
-  string getSimplePredText(const simple_pred* pred) const;
-  string getAndListText(const list_AND_node* cond)const;
-  string getCondText(const list_OR_node* cond)const;
-  string getCardsText(const MinMaxPair& mm) const;
+ std::string getAttrText(const ListType& l) const;
+ std::string getSimplePredText(const simple_pred* pred) const;
+ std::string getAndListText(const list_AND_node* cond)const;
+ std::string getCondText(const list_OR_node* cond)const;
+ std::string getCardsText(const MinMaxPair& mm) const;
 
  public:
 
@@ -104,8 +104,8 @@ class ParsedMinerule
   float     conf;
   MinMaxPair bodyCardinalities;
   MinMaxPair headCardinalities;
-  string    tab_source;
-  string    tab_result;
+ std::string    tab_source;
+ std::string    tab_result;
 
   bool tautologies;
   bool body_coincident_head;
@@ -127,7 +127,7 @@ class ParsedMinerule
     sequenceAllowedGaps( MinMaxPair(0,0)) {
   };
 
-  explicit ParsedMinerule(const string& minerule_text ):  
+  explicit ParsedMinerule(const std::string& minerule_text ):  
     mc(NULL), 
     gc(NULL), 
     cc(NULL), 
@@ -170,7 +170,7 @@ class ParsedMinerule
     cc=clone_l_OR(mr.cc);
   }
   
-  void init(const string& minerule_text);
+  void init(const std::string& minerule_text);
 
   
 
@@ -204,10 +204,10 @@ class ParsedMinerule
   std::string getMinesequenceText() const;
   std::string getMineruleText() const;
   std::string getMineitemsetsText() const;
-  string getText() const;
+  std::string getText() const;
 };
 
-ostream& operator<<(ostream& os, const ParsedMinerule& mr);
+  std::ostream& operator<<(std::ostream& os, const ParsedMinerule& mr);
 } // namespace minerule
 
 #endif

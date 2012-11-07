@@ -26,7 +26,7 @@ namespace minerule {
 			+ "FROM "+ pm.tab_source + " "
 			+ "ORDER BY "+groupAttrList+","+ordAttrList;
 
-		//	cout << sqlQuery << endl;
+		//	std::cout << sqlQuery << std::endl;
 
 		size_t last_elem;
 
@@ -39,13 +39,13 @@ namespace minerule {
 		//coreConn.setBodyCardinalities(minerule.getParsedMinerule().bodyCardinalities);
 		//coreConn.create_db_rule(0);
 
-		MRDebug() << "FSMiner query:" << sqlQuery.c_str() << endl;
+		MRDebug() << "FSMiner query:" << sqlQuery.c_str() << std::endl;
 
 		statement = coreConn.getConnection()->prepareStatement(sqlQuery.c_str());
 	}
 
-	bool CCSMiner::find(vector<CCSMSequence*>* vec, CCSMSequence* elem){
-		vector<CCSMSequence*>::iterator it;
+	bool CCSMiner::find(std::vector<CCSMSequence*>* vec, CCSMSequence* elem){
+	 std::vector<CCSMSequence*>::iterator it;
 		bool trovato = false;
 		for (it=vec->begin();it!=vec->end()&&!trovato;++it){
 			if ((*(*it)) == *elem)
@@ -56,33 +56,33 @@ namespace minerule {
 
 
 
-	void CCSMiner::combina(vector<CCSMSequence::ResultItems>& result, vector<CCSMSequence*>* k2, size_t k, int min_g, int max_g, double threshold, int check){
+	void CCSMiner::combina(std::vector<CCSMSequence::ResultItems>& result, std::vector<CCSMSequence*>* k2, size_t k, int min_g, int max_g, double threshold, int check){
 		size_t seq_length=0;
 		time_t init1, end1, init, end;
 
-		vector<size_t> pos_canc;
-		vector<CCSMSequence*>* rif_singleton= k2;
-		vector<CCSMSequence*>* k_rif;	
+	 std::vector<size_t> pos_canc;
+	 std::vector<CCSMSequence*>* rif_singleton= k2;
+	 std::vector<CCSMSequence*>* k_rif;	
 
 
-		vector<CCSMSequence*>* k_2=k2;
-		vector<CCSMSequence*>* k_1=NULL;
+	 std::vector<CCSMSequence*>* k_2=k2;
+	 std::vector<CCSMSequence*>* k_1=NULL;
 
 		list<CCSMSequence*> suff;
 		list<CCSMSequence*> pre;
 		list<CCSMSequence*>::iterator pre_it;
 		list<CCSMSequence*>::iterator suf_it;
-		vector<CCSMSequence*>* da_cancellare = new vector<CCSMSequence*>() ;
+	 std::vector<CCSMSequence*>* da_cancellare = new std::vector<CCSMSequence*>() ;
 		bool canContinue=true;
 		while (seq_length!=k&&canContinue){			
 			time(&init1);
 			//utilizzato per la fase di transaction reduction, mi memorizza le seq che sono di livello k e da cui al passo
 			//successivo andro a generare le seq di livello k+1
 
-			k_rif = new vector<CCSMSequence*>();
+			k_rif = new std::vector<CCSMSequence*>();
 
 
-			k_1 = new vector<CCSMSequence*>();
+			k_1 = new std::vector<CCSMSequence*>();
 			canContinue=false;			
 			int cont=0;
 			for (size_t i=0;i<k_2->size();++i){
@@ -97,10 +97,10 @@ namespace minerule {
 						CCSMSequence* dino = 
 							CCSMSequence::merge((*suf_it),(*pre_it)->getLastItem(),min_g,max_g,threshold);
 						time(&end1);	
-/*				//		cout<<"tempo di generazione "<<difftime(end1,init1)<<endl;
-				//		cout<<(*suf_it)->toStdString()<<" + "<<endl<<"  "<<(*pre_it)->toStdString();
-				//		cout<<" = "<<endl;
-						cout<<"			 "<<dino->toStdString()<<" con conteggio "<<dino->getCount()<<endl;
+/*				//		std::cout<<"tempo di generazione "<<difftime(end1,init1)<<std::endl;
+				//		std::cout<<(*suf_it)->toStdString()<<" + "<<std::endl<<"  "<<(*pre_it)->toStdString();
+				//		std::cout<<" = "<<std::endl;
+						std::cout<<"			 "<<dino->toStdString()<<" con conteggio "<<dino->getCount()<<std::endl;
 */
 						if (dino->getCount()>=threshold){
 								//inserisco i punatori alle sequenze di lunghezza k
@@ -110,9 +110,9 @@ namespace minerule {
 
 							(*suf_it)->addPrefixSequence(dino);			
 							(*pre_it)->addSuffixSequence(dino);
-								//cout<<"sequenza "<<dino->toStdString()<<endl;
+								//cout<<"sequenza "<<dino->toStdString()<<std::endl;
 							result.push_back(dino->getSequenceItems());
-//								cout<<"OK"<<endl;
+//								std::cout<<"OK"<<std::endl;
 							}else 
 								delete dino;
 						}
@@ -132,7 +132,7 @@ namespace minerule {
 					//ed uno in quella dei prefissi, in modo che possa generare una possibile sequenza frequente di livello k
 					//cout<<(*pre_it)->toStdString()<<" ";
 						if ((*pre_it)->canGenerate()){
-						//cout<<"puo generare"<<endl;
+						//cout<<"puo generare"<<std::endl;
 							bool trovato=find(k_1,(*pre_it));
 							if (!trovato)
 								k_1->push_back((*pre_it));
@@ -145,7 +145,7 @@ namespace minerule {
 								bool trovato = find(da_cancellare,(*pre_it));
 								if (!trovato)
 									da_cancellare->push_back((*pre_it));
-						//cout<<"inserisco in da_cancellare"<<endl;
+						//cout<<"inserisco in da_cancellare"<<std::endl;
 
 							}
 						}
@@ -155,7 +155,7 @@ namespace minerule {
 					//cout<<(*suf_it)->toStdString()<<" ";
 							if ((*suf_it)->canGenerate()){
 						//se la sequenza non è gia presente allora si inserisce altrimenti niente		
-						//cout<<"puo generare"<<endl;
+						//cout<<"puo generare"<<std::endl;
 								bool trovato=find(k_1,(*suf_it));
 								if (!trovato)
 									k_1->push_back((*suf_it));
@@ -166,13 +166,13 @@ namespace minerule {
 								bool trovato = find(da_cancellare,(*suf_it));
 								if (!trovato)
 									da_cancellare->push_back((*suf_it));
-						//cout<<"inserisco in da_cancellare"<<endl;
+						//cout<<"inserisco in da_cancellare"<<std::endl;
 
 							}
 						}
 					}
 
-					vector<CCSMSequence*>::iterator del;
+				 std::vector<CCSMSequence*>::iterator del;
 					if (seq_length!=0){
 						for (del = k_2->begin();del!=k_2->end();++del){
 							delete (*del);	
@@ -188,51 +188,51 @@ namespace minerule {
 
 						pos_canc = CCSMSequence::reduce_tr(k_rif);
 						time(&end);
-						//	cout<<"tempo per scovare le transazioni non interessanti "<<difftime(end,init)<<endl;
+						//	std::cout<<"tempo per scovare le transazioni non interessanti "<<difftime(end,init)<<std::endl;
 						if (pos_canc.size()>1){
 							time(&init);
 							for (del=rif_singleton->begin();del!=rif_singleton->end();++del){
-				//cout<<"ridotto singleton"<<endl;
+				//cout<<"ridotto singleton"<<std::endl;
 								(*del)->reduction(pos_canc);
 							}
 							time(&end);
-							//	cout<<"tempo riduzione di "<<rif_singleton->size()<<" singleton "<<difftime(end,init)<<endl;
+							//	std::cout<<"tempo riduzione di "<<rif_singleton->size()<<" singleton "<<difftime(end,init)<<std::endl;
 							time(&init);
 							for (del=k_rif->begin();del!=k_rif->end();++del){
-					//cout<<"ridotta coppia"<<endl;
+					//cout<<"ridotta coppia"<<std::endl;
 								(*del)->reduction(pos_canc);
 							}
 							time(&end);
-							//	cout<<"tempo riduzione di "<<k_rif->size()<<" non singleton "<<difftime(end,init)<<endl;
+							//	std::cout<<"tempo riduzione di "<<k_rif->size()<<" non singleton "<<difftime(end,init)<<std::endl;
 						}
 					}
 					delete k_rif;
 
-					//	cout<<"transazioni eliminate "<<pos_canc.size()<<" modalita' "<<check<<endl;
+					//	std::cout<<"transazioni eliminate "<<pos_canc.size()<<" modalita' "<<check<<std::endl;
 					seq_length++;
-	//		cout<<"da cancellare size "<<da_cancellare->size()<<endl;
-					vector<CCSMSequence*>::iterator da_c;
+	//		std::cout<<"da cancellare size "<<da_cancellare->size()<<std::endl;
+				 std::vector<CCSMSequence*>::iterator da_c;
 		/*	canContinue=false;*/
 
 					if (seq_length!=k&&canContinue){
 						for ( da_c= da_cancellare->begin();da_c!=da_cancellare->end();++da_c){
-	//			//	cout<<"cancello "<<(*da_c)->toStdString()<<" che hano sup "<<(*da_c)->getCount()<<endl;
+	//			//	std::cout<<"cancello "<<(*da_c)->toStdString()<<" che hano sup "<<(*da_c)->getCount()<<std::endl;
 							delete (*da_c);
 						}
-	//			cout<<"finita cancellazione: "<<da_cancellare->size()<<endl;
+	//			std::cout<<"finita cancellazione: "<<da_cancellare->size()<<std::endl;
 						delete da_cancellare;
-						da_cancellare = new vector<CCSMSequence*>();
+						da_cancellare = new std::vector<CCSMSequence*>();
 					}
 
 
 				}
-				vector<CCSMSequence*>::iterator del, it_kk;
+			 std::vector<CCSMSequence*>::iterator del, it_kk;
 				list<CCSMSequence*>::iterator del1;
 				for (del = k_1->begin();del!=k_1->end();++del)
 					delete (*del);
-	//	cout<<"fuori dal ciclo"<<endl;
+	//	std::cout<<"fuori dal ciclo"<<std::endl;
 
-				vector<CCSMSequence*>* temp = new vector<CCSMSequence*>();
+			 std::vector<CCSMSequence*>* temp = new std::vector<CCSMSequence*>();
 
 				for (it_kk= da_cancellare->begin();it_kk!=da_cancellare->end();++it_kk){
 					suff = (*it_kk)->getSuffixSequence();
@@ -255,7 +255,7 @@ namespace minerule {
 				for (del= da_cancellare->begin();del!=da_cancellare->end();++del){
 					delete (*del);
 				}
-	//	cout<<"finita cancellazione: "<<da_cancellare->size()<<endl;
+	//	std::cout<<"finita cancellazione: "<<da_cancellare->size()<<std::endl;
 				delete da_cancellare;
 				delete k_1;
 			}
@@ -277,11 +277,11 @@ namespace minerule {
 					assert(false);
 
 				int reduce = 1;
-				vector<CCSMSequence::ResultItems> result;
-				vector<CCSMSequence*> singleton;
+			 std::vector<CCSMSequence::ResultItems> result;
+			 std::vector<CCSMSequence*> singleton;
 				CCSMSequence input;
 				CCSMSequence* single;
-				vector<CCSMSequence*>::iterator it;
+			 std::vector<CCSMSequence*>::iterator it;
 				size_t number=0;
 				time(&init);
 				int riga=0;
@@ -323,17 +323,17 @@ namespace minerule {
 					riga++;
 				}
 
-				cout<<endl;
+				std::cout<<std::endl;
 				for (size_t i=0;i<singleton.size();i++){
 					singleton[i]->setPresent(number-1,0);		
 				}
-				//	cout<<"numbe e uguale a: "<<number<<endl;
+				//	std::cout<<"numbe e uguale a: "<<number<<std::endl;
 				//				in.close();
-				//	cout<<"size "<<singleton.size()<<endl;
+				//	std::cout<<"size "<<singleton.size()<<std::endl;
 				time(&end);
 				// double ttt = difftime(end,init);
-				//			cout<<"tempo finora "<<ttt<<endl;
-				//	cout<<"tempo medio per riga"<<ttt/number<<endl;
+				//			std::cout<<"tempo finora "<<ttt<<std::endl;
+				//	std::cout<<"tempo medio per riga"<<ttt/number<<std::endl;
 				time_tot=time_tot+difftime(end,init);
 				time(&init);
 
@@ -341,8 +341,8 @@ namespace minerule {
 				if (threshold == 0)
 					threshold = 0.00001;
 
-				vector<CCSMSequence*>* suppSingleton= new vector<CCSMSequence*>();
-				vector<CCSMSequence*>::iterator itt;
+			 std::vector<CCSMSequence*>* suppSingleton= new std::vector<CCSMSequence*>();
+			 std::vector<CCSMSequence*>::iterator itt;
 
 				for (itt=singleton.begin();itt!=singleton.end();++itt){
 					if ((*itt)->getCount()>=threshold){
@@ -351,7 +351,7 @@ namespace minerule {
 					else delete (*itt);
 				}
 
-				//	cout<<"tempo finora "<<difftime(end,init)<<endl;
+				//	std::cout<<"tempo finora "<<difftime(end,init)<<std::endl;
 				time_tot=time_tot+difftime(end,init);
 
 				if (reduce>0){
@@ -364,15 +364,15 @@ namespace minerule {
 						}
 					}
 					time(&end);
-					//	cout<<"transazioni eliminate sui singleton"<<temp.size()<<endl;
-					//cout<<"tempo della riduzione delle transazioni "<<difftime(end,init)<<endl;
+					//	std::cout<<"transazioni eliminate sui singleton"<<temp.size()<<std::endl;
+					//cout<<"tempo della riduzione delle transazioni "<<difftime(end,init)<<std::endl;
 					time_tot=time_tot+difftime(end,init);
 				}
 
 				time(&init);
 				time_t init1, end1;
-				vector<CCSMSequence*>* coppie= new vector<CCSMSequence*>();	
-				//	cout<<"la threshold e uguale a: "<<threshold<<endl;
+			 std::vector<CCSMSequence*>* coppie= new std::vector<CCSMSequence*>();	
+				//	std::cout<<"la threshold e uguale a: "<<threshold<<std::endl;
 				for (size_t i=0;i<suppSingleton->size();++i){
 					for (size_t j=0;j<suppSingleton->size();++j){
 
@@ -393,7 +393,7 @@ namespace minerule {
 					}
 					time(&end);
 					time_tot=time_tot+difftime(end,init);
-					//cout<<"tempo x generare gli insiemi F1 ed F2 "<<difftime(end,init)<<endl;
+					//cout<<"tempo x generare gli insiemi F1 ed F2 "<<difftime(end,init)<<std::endl;
 
 
 					if (reduce>0){
@@ -402,48 +402,48 @@ namespace minerule {
 						std::vector<size_t> temp = CCSMSequence::reduce_tr(coppie);
 						if (temp.size()!=0){
 							for (itt=suppSingleton->begin();itt!=suppSingleton->end();++itt){
-				//cout<<"ridotto singleton"<<endl;
+				//cout<<"ridotto singleton"<<std::endl;
 								(*itt)->reduction(temp);
 							}
 							for (itt=coppie->begin();itt!=coppie->end();++itt){
-				//cout<<"ridotta coppia"<<endl;
+				//cout<<"ridotta coppia"<<std::endl;
 								(*itt)->reduction(temp);
 							}
 						}
 						time(&end);
-						//	cout<<"transazioni eliminate "<<temp.size()<<endl;
-						//cout<<"tempo della riduzione delle transazioni "<<difftime(end,init)<<endl;
+						//	std::cout<<"transazioni eliminate "<<temp.size()<<std::endl;
+						//cout<<"tempo della riduzione delle transazioni "<<difftime(end,init)<<std::endl;
 						time_tot=time_tot+difftime(end,init);
 					}
 					//
-					//		cout<<"prima di combina"<<endl;
-					//cout<<"cardinalita F1 : "<<suppSingleton->size()<<endl;
+					//		std::cout<<"prima di combina"<<std::endl;
+					//cout<<"cardinalita F1 : "<<suppSingleton->size()<<std::endl;
 					time(&init);
 
 					combina(result, suppSingleton ,10, min_g,max_g,threshold,reduce);
 
-					//cout<<"dopo combina"<<endl;
+					//cout<<"dopo combina"<<std::endl;
 					time(&end);	
 
 					for (size_t i=0;i<result.size();++i){
-						vector<ItemType>::iterator it_list = result[i].first.begin();
+					 std::vector<ItemType>::iterator it_list = result[i].first.begin();
 						for (;it_list!=result[i].first.end();++it_list)
-							cout<<(*it_list)<<" ";
-						cout<<" con conteggio: "<<result[i].second;
-						cout<<endl;
+							std::cout<<(*it_list)<<" ";
+						std::cout<<" con conteggio: "<<result[i].second;
+						std::cout<<std::endl;
 					}
 
 					time_tot=time_tot+difftime(end,init);
-					//	cout<<"tempo x generare insiemi da F3.... "<<difftime(end,init)<<endl;
-					//cout<<"tempo totale "<<time_tot<<endl;
+					//	std::cout<<"tempo x generare insiemi da F3.... "<<difftime(end,init)<<std::endl;
+					//cout<<"tempo totale "<<time_tot<<std::endl;
 					for (itt=suppSingleton->begin();itt!=suppSingleton->end();++itt)
 						delete (*itt);
 					delete coppie;
 /*	for (itt=coppie.begin();itt!=coppie.end();++itt)
 					delete (*itt);*/
 						delete suppSingleton;
-					cout<<"cardinalita insieme risultato "<<result.size()<<endl;
-					//	cout<<"threshold "<<threshold<<endl;
+					std::cout<<"cardinalita insieme risultato "<<result.size()<<std::endl;
+					//	std::cout<<"threshold "<<threshold<<std::endl;
 
 				}
 

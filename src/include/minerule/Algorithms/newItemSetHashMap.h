@@ -10,7 +10,7 @@
 
 #define hash_set std::tr1::unordered_set
 
-using namespace std;
+
 using namespace __gnu_cxx;
 
 template<class NODETYPE>
@@ -21,7 +21,7 @@ template <class NODETYPE>
 class newItemSetHashMap {
  public:
 
-  typedef vector<NODETYPE> HASHTYPE;
+  typedef std::vector<NODETYPE> HASHTYPE;
 
   newItemSetHashMap();
   void print();
@@ -77,14 +77,14 @@ class HashingHelper {
 template< class NODETYPE >
 newItemSetHashMap< NODETYPE >::newItemSetHashMap()
  {
-   //cout<<"costruttore HashMap"<<endl;
+   //cout<<"costruttore HashMap"<<std::endl;
  }
 
 template< class NODETYPE >
 void newItemSetHashMap< NODETYPE >::add(const HASHTYPE& item)
  {
    //hashLevel.insert(make_pair(elem,item));
-   //cout<<"Nella add "<<elem<<" item "<<item<<endl;
+   //cout<<"Nella add "<<elem<<" item "<<item<<std::endl;
 
    hashLevel.insert(item);
  }
@@ -96,24 +96,24 @@ bool newItemSetHashMap< NODETYPE >::findTies(
 						unsigned int lev)
 {
   //#define DEBUG_FINDTIES
-  //cout<<"findTies"<<endl;
-  //cout<<"ancestor "<<ancestor<<" item "<<item<<endl;
+  //cout<<"findTies"<<std::endl;
+  //cout<<"ancestor "<<ancestor<<" item "<<item<<std::endl;
 #ifdef DEBUG_FINDTIES
-  cout << "FIND TIES ancestor:";
-  copy( ancestor.begin(), ancestor.end(), ostream_iterator<NODETYPE>(cout,"!"));
-  cout << ":end ancestor" << endl 
-       << "FIND TIES item:" << item << ":end item" << endl;
-  cout << "FIND TIES lev:" << lev << ":end lev" << endl;
-  cout << "FIND TIES hash_set:";
+  std::cout << "FIND TIES ancestor:";
+  copy( ancestor.begin(), ancestor.end(), std::ostream_iterator<NODETYPE>(cout,"!"));
+  std::cout << ":end ancestor" << std::endl 
+       << "FIND TIES item:" << item << ":end item" << std::endl;
+  std::cout << "FIND TIES lev:" << lev << ":end lev" << std::endl;
+  std::cout << "FIND TIES hash_set:";
   typename hash_set<HASHTYPE, HashingHelper<NODETYPE>, HashingHelper<NODETYPE> >::const_iterator 
     it = hashLevel.begin();
   while( it!=hashLevel.end() ) {
-    cout << "HT(" << endl;
-    copy( it->begin(),it->end(), ostream_iterator<NODETYPE>(cout,"@"));
-    cout << ") " <<endl;
+    std::cout << "HT(" << std::endl;
+    copy( it->begin(),it->end(), std::ostream_iterator<NODETYPE>(cout,"@"));
+    std::cout << ") " <<std::endl;
     it++;
   }
-  cout << ":end hash_set" << endl;
+  std::cout << ":end hash_set" << std::endl;
 #endif
   
   typename hash_set<HASHTYPE, 
@@ -124,14 +124,14 @@ bool newItemSetHashMap< NODETYPE >::findTies(
   bool ok;
   
   /*  if( ancestor.size() != lev-1 ) {
-    cout << "lev-1:" << lev-1 << " " << ancestor.size() <<endl;
+    std::cout << "lev-1:" << lev-1 << " " << ancestor.size() <<std::endl;
     typename HASHTYPE::const_iterator it = ancestor.begin();
-    cout << "ancestor:";
+    std::cout << "ancestor:";
     while( it!=ancestor.end() ) {
-      cout << *it << " ";
+      std::cout << *it << " ";
       it++;
     }
-    cout << endl;
+    std::cout << std::endl;
     }*/
   assert( ancestor.size() == lev-1 );
   // print();
@@ -149,19 +149,19 @@ bool newItemSetHashMap< NODETYPE >::findTies(
       subPath.erase(it);
       subPath.push_back(item);
 #ifdef DEBUG_FINDTIES
-      cout << "FIND TIES subPath:";
-      copy( subPath.begin(), subPath.end(), ostream_iterator<NODETYPE>(cout,"!"));
-      cout << ":end subPath" << endl;
+      std::cout << "FIND TIES subPath:";
+      copy( subPath.begin(), subPath.end(), std::ostream_iterator<NODETYPE>(cout,"!"));
+      std::cout << ":end subPath" << std::endl;
 #endif
       k=hashLevel.find(subPath);
-      //cout<<"k "<<k->first<<endl;
+      //cout<<"k "<<k->first<<std::endl;
       if (k==hashLevel.end())  
 	ok=false;
       
       i++;
     }
 #ifdef DEBUG_FINDTIES
-  cout << "FIND-TIES result:" << ok << endl;
+  std::cout << "FIND-TIES result:" << ok << std::endl;
 #endif
   return ok;
 }
@@ -170,7 +170,7 @@ bool newItemSetHashMap< NODETYPE >::findTies(
 template< class NODETYPE >
 void newItemSetHashMap< NODETYPE >::print()
  {
-  cout<<"PRINT : Hash Map Size"<<hashLevel.size()<<endl;
+  std::cout<<"PRINT : Hash Map Size"<<hashLevel.size()<<std::endl;
   typename hash_set<HASHTYPE, 
     HashingHelper<NODETYPE>, 
     HashingHelper<NODETYPE> >::iterator i;
@@ -178,13 +178,13 @@ void newItemSetHashMap< NODETYPE >::print()
   i=hashLevel.begin();
   
   for(; i!=hashLevel.end(); i++) {
-    cout << "Elemento Hash:";
+    std::cout << "Elemento Hash:";
     typename HASHTYPE::const_iterator it = i->begin();
     for(; it!=i->end(); it++ ) {
-      cout << (*it) << " ";
+      std::cout << (*it) << " ";
     }
 
-    cout << endl;
+    std::cout << std::endl;
   }
   
 
@@ -192,10 +192,10 @@ void newItemSetHashMap< NODETYPE >::print()
   /*
   for (int j=0;j<hashLevel.size(); j++,i++)
      {
-          cout<<"elemento Hash"<<i->first<<endl;
+          std::cout<<"elemento Hash"<<i->first<<std::endl;
     }
   */
-  cout<<"Fine PRINT hash"<<endl;
+  std::cout<<"Fine PRINT hash"<<std::endl;
  }
 
 

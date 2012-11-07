@@ -42,20 +42,20 @@ namespace minerule {
       if(op[1]=='>')
 	return 5;
       
-      throw MineruleException(MR_ERROR_INTERNAL, (string) "Operator "+op+" not recognized");
+      throw MineruleException(MR_ERROR_INTERNAL, (std::string) "Operator "+op+" not recognized");
     } else if(op[0]=='>') {
       if(op[1]=='\0')
 	return 4;
       if(op[1]=='=')
 	return 3;
 
-      throw MineruleException(MR_ERROR_INTERNAL,(string) "Operator"+op+" not recognized");
+      throw MineruleException(MR_ERROR_INTERNAL,(std::string) "Operator"+op+" not recognized");
     } else  if(op[0]=='=') {
       if(op[1]=='\0')
 	return 2;
     }
 
-    throw MineruleException(MR_ERROR_INTERNAL,(string) "Operator"+op+" not recognized");
+    throw MineruleException(MR_ERROR_INTERNAL,(std::string) "Operator"+op+" not recognized");
   }
 
   size_t SimplePredAnalyzer::getValuesRelationshipIndex(const char* value1, 
@@ -72,7 +72,7 @@ namespace minerule {
     } else {
       throw MineruleException(MR_ERROR_INTERNAL,
                  "SimplePredAnalyzer still does not support SQL types"
-		 " which differ from string and numeric");
+		 " which differ fromstd::string and numeric");
     }
 
     /*

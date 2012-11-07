@@ -12,7 +12,7 @@
 #include <ext/hash_map>
 
 
-using namespace std;
+
 using namespace __gnu_cxx;
 
 namespace minerule {
@@ -32,8 +32,8 @@ class TranslatedTableStandardSQL : public TranslatedTable {
 
  private:
   const TranslationManagerStandardSQL* tmanager;
-  string originalTable;
-  string translatedTable;
+ std::string originalTable;
+ std::string translatedTable;
   bool translateEverything;
   typedef hash_map<
     const char*,
@@ -45,12 +45,12 @@ class TranslatedTableStandardSQL : public TranslatedTable {
 
  protected:
   void
-    setOriginalTableName(const string& table) {
+    setOriginalTableName(const std::string& table) {
     originalTable = table;
   }
   
   void
-    setTranslatedTableName(const string& table) {
+    setTranslatedTableName(const std::string& table) {
     translatedTable = table;
   }
 
@@ -65,8 +65,8 @@ class TranslatedTableStandardSQL : public TranslatedTable {
 
  public:
   TranslatedTableStandardSQL(const TranslationManagerStandardSQL* manager, 
-			     const string& parOriginalTable,
-			     const string& parTranslatedTable,
+			     const std::string& parOriginalTable,
+			     const std::string& parTranslatedTable,
 			     bool parTranslateEverything) :
     tmanager(manager), originalTable(parOriginalTable), translatedTable(parTranslatedTable) {
     translateEverything = parTranslateEverything;
@@ -80,12 +80,12 @@ class TranslatedTableStandardSQL : public TranslatedTable {
    * @return the name of the translated table. The returned value 
    * can be used to form queries involving the translated values. 
    */
-  virtual string getTranslatedName() const throw (odbc::SQLException);
+  virtualstd::string getTranslatedName() const throw (odbc::SQLException);
 
   /**
    * @return the name of the original table. 
    */
-  virtual string getOriginalName() const throw (odbc::SQLException);
+  virtualstd::string getOriginalName() const throw (odbc::SQLException);
 
   /**
    * Takes a column name of the current table and returns its translated name.
@@ -94,7 +94,7 @@ class TranslatedTableStandardSQL : public TranslatedTable {
    * @param columnName the name of a table column
    * @return the name of the translated column
    */
-  virtual string getTranslatedColumnName( const string& columnName) const throw (odbc::SQLException); 
+  virtualstd::string getTranslatedColumnName( const std::string& columnName) const throw (odbc::SQLException); 
   
   /* I sincerely cannot see any applicatio for this method... if needed
    * I will add it to the interface.
@@ -103,23 +103,23 @@ class TranslatedTableStandardSQL : public TranslatedTable {
    * @return the name, in the original table, of the column named
    * translatedColumnName in the translated table.
    */
-  // string getOriginalColumnName( const string& translatedColumnName ) const = 0;
+  //std::string getOriginalColumnName( const std::string& translatedColumnName ) const = 0;
 
   /**
    * @param columnName a column name of the original table
    * @param value the value to be translated
    * @return the translatedValue
    */
-  virtual string getTranslatedValue( const string& columnName,
-			     const string& value) const throw (odbc::SQLException);
+  virtualstd::string getTranslatedValue( const std::string& columnName,
+			     const std::string& value) const throw (odbc::SQLException);
   
   /**
    * @param columnName a column name of the original table
    * @param translatedValue a translated value
    * @return the value of translatedValue in the original table
    */
-virtual  string getOriginalValue( const string& columnName,
-			   const string& translatedValue) const throw (odbc::SQLException);
+virtual std::string getOriginalValue( const std::string& columnName,
+			   const std::string& translatedValue) const throw (odbc::SQLException);
 
 
  virtual ~TranslatedTableStandardSQL(); 

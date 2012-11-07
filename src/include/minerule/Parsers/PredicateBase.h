@@ -33,9 +33,9 @@ namespace minerule {
 	
     /**
      * the Constructor of class SimplePredicate
-     * @param string v1 the first term
-     * @param string op the comparison term
-     * @param string v2 the second term
+     * @paramstd::string v1 the first term
+     * @paramstd::string op the comparison term
+     * @paramstd::string v2 the second term
      */
     SimplePredicateBase( const std::string& v1, 
 			 const std::string& o, 
@@ -82,7 +82,7 @@ namespace minerule {
     virtual PredConjunctionBase* newPredConjunction() const;
     /**
      * This method return a pointer to first term of Simple Predicate
-     *@return string& val1 the firt term
+     *@return std::string& val1 the firt term
      */
     const std::string& getVal1() const {
       return val1;  
@@ -90,7 +90,7 @@ namespace minerule {
     
     /**
      * This method return a pointer to second term of Simple Predicate
-     * @return string& val2 the second term
+     * @return std::string& val2 the second term
      */
     const std::string& getVal2() const {
       return val2;
@@ -98,7 +98,7 @@ namespace minerule {
     
     /**
      * This method return a pointer to comparison operator of Simple Predicate
-     * @return string& op the comparison operator
+     * @return std::string& op the comparison operator
      */
     const std::string& getOp() const {
       return op;

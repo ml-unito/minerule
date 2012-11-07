@@ -41,7 +41,7 @@ void BodyMapElement::saveMap (ostream& out, bool withGids) {
 		out << ' ' << i->second.size();
 	if (withGids) {
 		out  << ' ';
-		copy(i->second.begin(), i->second.end(), ostream_iterator<ItemType>(out, " "));
+		copy(i->second.begin(), i->second.end(), std::ostream_iterator<ItemType>(out, " "));
 	}
 		i->second.erase(i->second.begin(), i->second.end());
 	}
@@ -397,7 +397,7 @@ int BodyMap::buildHead (NewRuleSet& rs, float threshold, int maxHead, int suppBo
 
 void BodyMap::howManyItemsets () {
 	for (int i = 1; i < itemsets.size(); i++) {
-		cout << "Itemset Length: " << i << " -> " << itemsets[i] << endl;
+		std::cout << "Itemset Length: " << i << " -> " << itemsets[i] << endl;
 	}
 }
 

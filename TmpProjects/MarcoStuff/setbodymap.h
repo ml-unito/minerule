@@ -4,10 +4,10 @@
 #include "Algorithms/MiningAlgorithmBase.h"
 #include "Algorithms/sqlCoreConn.h"
 
-  class Transaction : public set<ItemType> {
+  class Transaction : public std::set<ItemType> {
     HeadBodySourceRowDescription srd;
   public:
-    Transaction(HeadBodySourceRowDescription& rowDes) : set<ItemType>(), srd(rowDes) {}
+    Transaction(HeadBodySourceRowDescription& rowDes) : std::set<ItemType>(), srd(rowDes) {}
     void loadBody(ItemType& gid, odbc::ResultSet *rs, int n) {
       HeadBodySourceRow hbsr(rs,srd);
 
@@ -52,7 +52,7 @@
   };
 
 
-  class MapElement : public set<int> {
+  class MapElement : public std::set<int> {
   public:
     int counter;
     MapElement() : counter(0) {}
@@ -71,7 +71,7 @@ class MinMax {
 	int maxValue() { return max; }
 };
 
-//class BodyMapElement : public set<ItemType> {
+//class BodyMapElement : public std::set<ItemType> {
 class BodyMapElement : public MapElement {
   public:
 //	vector<MinMax> attribute;
@@ -82,7 +82,7 @@ class BodyMapElement : public MapElement {
 //		for (int i=0; i<bm.attribute.size(); i++) attribute.insert(attribute.end(),bm.attribute[i]);
 //		BitString::operator=((BitString&)bm);
 //	}
-    pair<iterator, bool> insert(const value_type& x) { return set<int>::insert(x); }
+    pair<iterator, bool> insert(const value_type& x) { return std::set<int>::insert(x); }
 	map<ItemType, MapElement > heads;
 	void insert(const ItemType& item, const int gid, bool secondPass = false);
 	bool pruneMap(float threshold, bool onlyBody = false);

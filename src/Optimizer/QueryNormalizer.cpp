@@ -276,7 +276,7 @@ namespace minerule {
   // Implements *2* *3* !I2!
   void QueryNormalizer::substituteInAndList( list_AND_node*& andList,
 					     const OptimizerCatalogue::CatalogueEntry& catEntry,
-					     const string& prefix) const {
+					     const std::string& prefix) const {
     BodyInfo bodies;    // information needed to delete old predicates
     HeadInfo heads;     // will be used to build new predicates
 
@@ -297,7 +297,7 @@ namespace minerule {
   }
 
  
-  string QueryNormalizer::reverseOperator( string op, bool doReverse) const {
+ std::string QueryNormalizer::reverseOperator(std::string op, bool doReverse) const {
     if(!doReverse)
       return op;
 
@@ -325,7 +325,7 @@ namespace minerule {
 					   const OptimizerCatalogue::OrderType order,
 					   BodyInfo& bodies,
 					   HeadInfo& heads,
-					   const string& prefix) const {
+					   const std::string& prefix) const {
     if( andList == NULL )
       return false;
 
@@ -403,7 +403,7 @@ namespace minerule {
 	  foundHeadEntries.insert( headEntry );
 	}
 	else
-	  const_cast< vector<SubstEntryHead::Elem>& >(it->elems).push_back(headElem);
+	  const_cast< std::vector<SubstEntryHead::Elem>& >(it->elems).push_back(headElem);
       }
 
     nextNode:
@@ -444,11 +444,11 @@ namespace minerule {
 
   void QueryNormalizer::addNewConditions( list_AND_node*& andList,
 					  const HeadInfo& heads,
-					  const string& prefix) const {
+					  const std::string& prefix) const {
     HeadInfo::const_iterator it;
     for( it=heads.begin(); it!=heads.end(); it++ ) {
       assert( it->refKey.size()==1 );
-      string ai = *(it->refKey.begin());
+     std::string ai = *(it->refKey.begin());
       
       // note: the following is NOT a recursive call to this function (note
       //  that this function ends with an 's' while the following one does
@@ -460,18 +460,18 @@ namespace minerule {
 
 
   void QueryNormalizer::setSimplePred(simple_pred* pred,
-				      string colName,
-				      string op,
+				     std::string colName,
+				     std::string op,
 				      SQLUtils::Type type,
-				      const string& value) const {
-      string quote;
+				      const std::string& value) const {
+     std::string quote;
       
       if( type==SQLUtils::String )
 	quote = "'";
       else
 	quote = "";
 
-      string val2=quote+ value + quote;
+     std::string val2=quote+ value + quote;
 
       pred->val1 = new char[colName.length()+1];
       pred->val2 = new char[val2.length()+1];
@@ -493,11 +493,11 @@ namespace minerule {
 
 
   void QueryNormalizer::addNewCondition(   list_AND_node*& andList,
-					   const string& aiVal,
-					   const vector<SubstEntryHead::Elem>& elems,
-					   const string& prefix) const {
-    string queryCondition;
-    vector<SubstEntryHead::Elem>::const_iterator it=elems.begin();
+					   const std::string& aiVal,
+					   const std::vector<SubstEntryHead::Elem>& elems,
+					   const std::string& prefix) const {
+   std::string queryCondition;
+    std::vector<SubstEntryHead::Elem>::const_iterator it=elems.begin();
     assert(it!=elems.end());
 
     queryCondition = it->colName + it->op + it->value;
@@ -507,7 +507,7 @@ namespace minerule {
       queryCondition += " AND " + it->colName + it->op + it->value;
     }
     
-    string query = (string)
+   std::string query = (std::string)
       "SELECT " +   " min(" + aiVal + "), max(" + aiVal +")"
       " FROM " + mr->tab_source + 
       " WHERE " + queryCondition; // +
@@ -536,18 +536,18 @@ namespace minerule {
 	strcpy( lower_bound->op, "=");
       } else if( rs->getString(1)==rs->getString(2) ) {
 	lower_bound = new simple_pred;
-	string val = rs->getString(1);
+std::string val = rs->getString(1);
 	setSimplePred( lower_bound, prefix+aiVal, "=", SQLUtils::getType(rs, 1), val);
       } else {
-	string minVal=rs->getString(1);
-	string maxVal=rs->getString(2);
+std::string minVal=rs->getString(1);
+std::string maxVal=rs->getString(2);
 
 	delete rs;
 	delete state;
 	rs=NULL;
 	state=NULL;
 	
-	query = (string)
+	query = (std::string)
 	  "SELECT " +   " min(" + aiVal + "), max(" + aiVal +")"
 	  " FROM " + mr->tab_source;
 
@@ -556,7 +556,7 @@ namespace minerule {
 
 	assert( rs->next() );
 
-	string new_aiVal = prefix+aiVal;
+std::string new_aiVal = prefix+aiVal;
 	
 	if( rs->getString(1)!=minVal ) {
 	  lower_bound = new simple_pred;
@@ -613,15 +613,15 @@ namespace minerule {
     // just to be sure that l is sorted...
     sort(l.begin(),l.end());
 
-    set<string> heads; // <- union of all heads elements
-    set<string> tails; // <- union of all tails elements
+    std::set<std::string> heads; // <- union of all heads elements
+    std::set<std::string> tails; // <- union of all tails elements
 
     OptimizerCatalogue::CatalogueEntry::const_iterator eit;
     
     // tails  <- union of all tails in the current entry of the catalog which can be applied to l
     for(eit=catEntry.begin(); eit!=catEntry.end(); eit++ ) {
       if( TAIL(*eit).size() != 1 ) {
-	MRErr() << "Warning: Found a substitution A->B, whit |B|<>0, it will be ignored!"<<endl;
+	MRErr() << "Warning: Found a substitution A->B, whit |B|<>0, it will be ignored!"<<std::endl;
 	continue;
       }
 
@@ -637,7 +637,7 @@ namespace minerule {
       // -- adding HEAD and TAIL to the set of found heads and tails elements
       // insert all head elements in "heads"
       copy( HEAD(*eit).begin(), HEAD(*eit).end(), 
-	    insert_iterator< set<string> >(heads, heads.begin()) );
+	    std::insert_iterator< std::set<std::string> >(heads, heads.begin()) );
       
       // insert the single tail element in tails
       tails.insert( *TAIL(*eit).begin() );
@@ -647,16 +647,16 @@ namespace minerule {
     // Now that we have all the relevant informations about all the rules that can 
     // be applied, we can perform the substitution
 
-    vector<string> tmp;
+    std::vector<std::string> tmp;
     // tmp = l - heads;
     set_difference( l.begin(), l.end(), 
 		    heads.begin(), heads.end(), 
-		    insert_iterator< vector<string> >(tmp,tmp.begin()));
+		    std::insert_iterator< std::vector<std::string> >(tmp,tmp.begin()));
     // l = Union( tmp, tails)
     l.clear();
     set_union( tmp.begin(), tmp.end(), 
 	       tails.begin(), tails.end(),
-	       insert_iterator< ParsedMinerule::ListType >( l, l.begin() ) );
+	       std::insert_iterator< ParsedMinerule::ListType >( l, l.begin() ) );
     
 #undef HEAD
 #undef TAIL
@@ -671,29 +671,29 @@ namespace minerule {
     }
   }
 
-  string QueryNormalizer::getRelaxedValue(const string& tabSource,
-					  const string& attr,
-					  const string& op,
-					  const string& value) 
+ std::string QueryNormalizer::getRelaxedValue(const std::string& tabSource,
+					  const std::string& attr,
+					  const std::string& op,
+					  const std::string& value) 
     throw(MineruleException,odbc::SQLException) {
     assert(op=="<" || op==">");
 
     odbc::Connection* conn = 
       MineruleOptions::getSharedOptions().getOdbc_db().getConnection();
-    auto_ptr<odbc::Statement> state(conn->createStatement());
+    std::auto_ptr<odbc::Statement> state(conn->createStatement());
     
-    string sqlfun;
+   std::string sqlfun;
     if( op=="<" )
       sqlfun="max";
     if( op==">" )
       sqlfun="min";
 
-    string query = 
+   std::string query = 
       "SELECT "+sqlfun+"("+attr+") "
       "FROM "+tabSource+" "
       "WHERE "+attr+op+value;
 
-    auto_ptr<odbc::ResultSet> result(state->executeQuery(query));
+    std::auto_ptr<odbc::ResultSet> result(state->executeQuery(query));
     if(!result->next())
       throw MineruleException(MR_ERROR_DATABASE_ERROR,
 			      "Failed to select "+sqlfun+" of column "+attr+
@@ -704,11 +704,11 @@ namespace minerule {
 
   void QueryNormalizer::relaxOperatorInPred(simple_pred* pred) 
     throw(MineruleException,odbc::SQLException) {
-    string attribute;
-    string op;
-    string value;
-    string newvalue;
-    string prefix;
+   std::string attribute;
+   std::string op;
+   std::string value;
+   std::string newvalue;
+   std::string prefix;
     size_t prefPos;
 
     if( SQLUtils::isAttribute(pred->val1) ) {

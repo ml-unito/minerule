@@ -27,10 +27,10 @@ string quote(const string& elem) {
   return "["+elem+"]";
 }
 
-string quoteElems(const vector<string>& elems) {
+string quoteElems(const vector<std::string>& elems) {
   string result;
 
-  vector<string>::const_iterator it=elems.begin();
+  vector<std::string>::const_iterator it=elems.begin();
 
   if(it!=elems.end()) {
     result = quote(*it);
@@ -45,8 +45,8 @@ string quoteElems(const vector<string>& elems) {
 }
 
 
-void printRule(const vector<string>& body,
-		const vector<string>& head,
+void printRule(const vector<std::string>& body,
+		const vector<std::string>& head,
 		double supp,
 		double conf) {
   cout << quoteElems(body) << " => " << quoteElems(head)
@@ -60,7 +60,7 @@ void printRule(const vector<string>& body,
 void
 readElems( odbc::PreparedStatement* state,
 	   int id,
-	   vector<string>& elems ) {
+	   vector<std::string>& elems ) {
   state->setInt(1,id);
   odbc::ResultSet* rs = state->executeQuery();
 
@@ -100,8 +100,8 @@ printRules( odbc::Connection* conn,
   odbc::ResultSet* rs = state->executeQuery(query);
 
   while( rs->next() ) {
-    vector<string> body;
-    vector<string> head;
+    vector<std::string> body;
+    vector<std::string> head;
     double supp;
     double conf;
     
@@ -151,9 +151,9 @@ main(int argc, char** argv) {
       //resultsetname = OptimizerCatalogue::getResultsetName(tablename);
     } catch (MineruleException& mr) {
       MRWarn() << endl
-	       << "The optimizer catalogue does not report any minerule" <<endl
-	       << "having the name you specified. I'm trying to use the" <<endl
-	       << "name you provided to locate the result set by myself."<<endl;
+	       << "The optimizer catalogue does not report any minerule" <<std::endl
+	       << "having the name you specified. I'm trying to use the" <<std::endl
+	       << "name you provided to locate the result set by myself."<<std::endl;
       resultsetname = tablename;
     }
     resultsetname = tablename;

@@ -5,7 +5,7 @@
 #include "itemSetListCluster.h"
 
 
-using namespace std;
+
 
 template< class NODETYPE > class itemSetCluster;  // dichiarazione succ.
 template< class NODETYPE > class itemSetListCluster;
@@ -60,7 +60,7 @@ class itemSetEntryCluster {
 template< class NODETYPE >
 itemSetEntryCluster< NODETYPE >::itemSetEntryCluster()
  {
- // cout<<"costruttore pEntry"<<endl;
+ // std::cout<<"costruttore pEntry"<<std::endl;
 
   myItemSetCluster=NULL;
   myItemSetHead=NULL;
@@ -73,7 +73,7 @@ itemSetEntryCluster< NODETYPE >::itemSetEntryCluster()
 template< class NODETYPE >
 itemSetEntryCluster< NODETYPE >::itemSetEntryCluster(NODETYPE value)
  {
- // cout<<"costruttore pEntry"<<endl;
+ // std::cout<<"costruttore pEntry"<<std::endl;
   data=value;
   myItemSetHead=NULL;
   myItemSetCluster=NULL;

@@ -6,12 +6,12 @@
 #include "Algorithms/sqlCoreConn.h"
 #include "PredicateUtils/HeadBodyPredicatesSeparator.h"
 
-using namespace std;
+
 
 namespace minerule {
 
 void
-IDIncrementalAlgorithm::getItemInfos( string& itemDescr, 
+IDIncrementalAlgorithm::getItemInfos( std::string& itemDescr, 
 				      HeadBodySourceRowDescription& hbsr ) const {
   assert(attrList!=NULL);
   ParsedMinerule::ListType::const_iterator it;
@@ -26,12 +26,12 @@ IDIncrementalAlgorithm::getItemInfos( string& itemDescr,
 }
 
 
-set<ItemType>*
-IDIncrementalAlgorithm::fillValidItems(const string& constraints) const throw(odbc::SQLException) {
+std::set<ItemType>*
+IDIncrementalAlgorithm::fillValidItems(const std::string& constraints) const throw(odbc::SQLException) {
   if(constraints=="")
     return NULL;
 
-  set<ItemType>* result = new set<ItemType>;
+  std::set<ItemType>* result = new std::set<ItemType>;
 
 #ifdef MRUSERWARNING
 #warning In the future we will assume to have a normalized database. \
@@ -39,12 +39,12 @@ IDIncrementalAlgorithm::fillValidItems(const string& constraints) const throw(od
   relation of the db instead of over the current source table (which \
   is needingly larger).
 #endif 
-  string itemDescr;
+ std::string itemDescr;
   HeadBodySourceRowDescription hbsr;
   
   getItemInfos(itemDescr,hbsr);
 
-  string query =
+ std::string query =
     "SELECT DISTINCT "+itemDescr+" "+
     "FROM "+minerule->getParsedMinerule().tab_source+" "+
     (constraints.size()>0 ?
@@ -53,8 +53,8 @@ IDIncrementalAlgorithm::fillValidItems(const string& constraints) const throw(od
   odbc::Connection* con = 
     MineruleOptions::getSharedOptions().getOdbc_db().getConnection();
 
-  auto_ptr<odbc::Statement> state(con->createStatement());
-  auto_ptr<odbc::ResultSet> rs(state->executeQuery(query.c_str()));
+  std::auto_ptr<odbc::Statement> state(con->createStatement());
+  std::auto_ptr<odbc::ResultSet> rs(state->executeQuery(query.c_str()));
 
   while(rs->next()) {
     HeadBodySourceRow sr(rs.get(), hbsr);
@@ -82,7 +82,7 @@ IDIncrementalAlgorithm::fillValidItems(const string& constraints) const throw(od
  */
 
 bool
-IDIncrementalAlgorithm::checkInclusion(const set<ItemType>& validOnes, 
+IDIncrementalAlgorithm::checkInclusion(const std::set<ItemType>& validOnes, 
 				       const ItemSetType& foundOnes) const {
   ItemSetType::const_iterator it;
   for(it=foundOnes.begin();
@@ -116,7 +116,7 @@ IDIncrementalAlgorithm::filterQueries(const ValidRules& validRules)
   throw(MineruleException,odbc::SQLException) {
   OptimizerCatalogue& cat = 
     MineruleOptions::getSharedOptions().getOptimizations().getCatalogue();
-  string resName = cat.getResultsetName(
+ std::string resName = cat.getResultsetName(
        		minerule->getOptimizationInfo().minerule.tab_result );
 
   QueryResult::Iterator qri;
@@ -125,28 +125,28 @@ IDIncrementalAlgorithm::filterQueries(const ValidRules& validRules)
 	   minerule->getOptimizationInfo().minerule.conf);
 
   MRLog() << "tab results:" 
-	  << resName << endl;
+	  << resName << std::endl;
   MRLog() << "Orig supp:" 
-	  << minerule->getOptimizationInfo().minerule.sup << endl;
+	  << minerule->getOptimizationInfo().minerule.sup << std::endl;
   MRLog() << "Orig conf:" 
-	  << minerule->getOptimizationInfo().minerule.conf << endl;
+	  << minerule->getOptimizationInfo().minerule.conf << std::endl;
 
-  MRLog() << "sqlCoreConn ..."<<endl;
+  MRLog() << "sqlCoreConn ..."<<std::endl;
   sqlCoreConn coreConn;
   coreConn.setOutTableName(minerule->getParsedMinerule().tab_result);
-  //  MRLog() << "ok coreConn.setOutTableName" << endl;
+  //  MRLog() << "ok coreConn.setOutTableName" << std::endl;
  
   coreConn.setBodyCardinalities(minerule->getParsedMinerule().bodyCardinalities);
-  //MRLog() << "ok coreConn.setBodyCardinalities" << endl;
+  //MRLog() << "ok coreConn.setBodyCardinalities" << std::endl;
 
   coreConn.setHeadCardinalities(minerule->getParsedMinerule().headCardinalities);
-  //MRLog() << "ok coreConn.setHeadCardinalities" << endl;
+  //MRLog() << "ok coreConn.setHeadCardinalities" << std::endl;
 
   coreConn.useConnection( MineruleOptions::getSharedOptions().getOdbc_db().getConnection());
-  //MRLog() << "ok coreConn.useConnection" << endl; 
+  //MRLog() << "ok coreConn.useConnection" << std::endl; 
 
   coreConn.create_db_rule(0);
-  //MRLog() << "ok coreConn.create_db_rule" << endl;
+  //MRLog() << "ok coreConn.create_db_rule" << std::endl;
 
   size_t rcount = 0;
   while(qri.next()) {
@@ -157,8 +157,8 @@ IDIncrementalAlgorithm::filterQueries(const ValidRules& validRules)
 
     rcount++;
   }
-  MRLog() << "Processed #" << rcount << " rules."<<endl;
-  //  cout << "count: " << rcount << endl;
+  MRLog() << "Processed #" << rcount << " rules."<<std::endl;
+  //  std::cout << "count: " << rcount << std::endl;
 }
 
 
@@ -166,21 +166,21 @@ void
 IDIncrementalAlgorithm::printValidRules(const IDIncrementalAlgorithm::ValidRules& vr) const {
   ValidRules::const_iterator it;
   for(it=vr.begin(); it!=vr.end(); it++) {
-    cout << "BODIES" << endl;
+    std::cout << "BODIES" << std::endl;
     if(it->first==NULL)
-      cout << "NULL" << endl;
+      std::cout << "NULL" << std::endl;
     else
       copy( it->first->begin(),
 	    it->first->end(),
-	    ostream_iterator<ItemType>(cout, "\n") );
+	    std::ostream_iterator<ItemType>(cout, "\n") );
 
-    cout << "HEADS" << endl;
+    std::cout << "HEADS" << std::endl;
     if(it->second==NULL)
-      cout << "NULL" << endl;
+      std::cout << "NULL" << std::endl;
     else
       copy( it->second->begin(),
 	    it->second->end(),
-	    ostream_iterator<ItemType>(cout, "\n") );
+	    std::ostream_iterator<ItemType>(cout, "\n") );
 
   }
 }
@@ -205,18 +205,18 @@ IDIncrementalAlgorithm::execute() throw(MineruleException,odbc::SQLException) {
   MRLogPush("Building the list of items satisfying the constraints");
   size_t conjNum=0;
   for(it=minerule->getParsedMinerule().mc; it!=NULL; it=it->next) {
-    MRLog() << "Conjunct number:" << ++conjNum << endl;
-    string bodyConstraints;
-    string headConstraints;
+    MRLog() << "Conjunct number:" << ++conjNum << std::endl;
+   std::string bodyConstraints;
+   std::string headConstraints;
     HeadBodyPredicatesSeparator::separate(it->l_and, bodyConstraints, headConstraints);
     // a little bit ugly, but useful. The fillValidItems will use the attrList
     // in order to select the correct portion of the database needed to build
     // the items in the head/body part of the rule. We need to set it to the
     // correct list before calling fillValidItems
     attrList = &minerule->getParsedMinerule().ba;
-    set<ItemType>* validBodies = fillValidItems( bodyConstraints );
+    std::set<ItemType>* validBodies = fillValidItems( bodyConstraints );
     attrList = &minerule->getParsedMinerule().ha;
-    set<ItemType>* validHeads  = fillValidItems( headConstraints );
+    std::set<ItemType>* validHeads  = fillValidItems( headConstraints );
     attrList = NULL;
     validRules.push_back(ValidRule(validBodies,validHeads));
   }
@@ -256,7 +256,7 @@ outfile << opts.getLogStreamObj().getLogger().getCurrentTimeDelta()<< " ";
   
 #ifdef SAVE_TIMINGS_ON_FILE
 #warning temporary     
-outfile << opts.getLogStreamObj().getLogger().getCurrentTimeDelta()<< endl;
+outfile << opts.getLogStreamObj().getLogger().getCurrentTimeDelta()<< std::endl;
 //end
 #endif
   MRLogPop();

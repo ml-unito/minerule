@@ -25,11 +25,11 @@ namespace minerule {
 
 		MiningAlgorithm* userChoice= MiningAlgorithm::algorithmForType(userChoiceOfAT, mr);
 		if( userChoice->canHandleMinerule() ) {
-			MRDebug() << "Selected the algorithm given by the user preference" << endl;
+			MRDebug() << "Selected the algorithm given by the user preference" << std::endl;
 			return userChoice;
 		}
 		else {
-			MRDebug() << "User preference cannot be fulfilled" << endl;
+			MRDebug() << "User preference cannot be fulfilled" << std::endl;
 			delete userChoice;
 			userChoice=NULL;
 		}
@@ -38,26 +38,26 @@ namespace minerule {
   // to find the best algorithm.
 
 		if( BFSWithGidsNoCross(mr).canHandleMinerule() ) {
-			MRDebug() << "Selected BFSWithGidsNoCross" << endl;
+			MRDebug() << "Selected BFSWithGidsNoCross" << std::endl;
 			return new BFSWithGidsNoCross(mr);
 		}
 
-		MRDebug() << "BFSWithGidsNoCross cannot handle it." << endl;
+		MRDebug() << "BFSWithGidsNoCross cannot handle it." << std::endl;
 
 		if( BFSWithGidsAndCross(mr).canHandleMinerule() ) {
-			MRDebug() << "Selected BFSWithGidsAndCross" << endl;
+			MRDebug() << "Selected BFSWithGidsAndCross" << std::endl;
 			return new BFSWithGidsAndCross(mr);
 		}
 
-		MRDebug() << "BFSWithGidsAndCross cannot handle it." << endl;
+		MRDebug() << "BFSWithGidsAndCross cannot handle it." << std::endl;
 
 
 		if( PartitionWithClusters(mr).canHandleMinerule() ) {
-			MRDebug() << "Selected PartitionWithClusters" << endl;
+			MRDebug() << "Selected PartitionWithClusters" << std::endl;
 			return new PartitionWithClusters(mr);
 		}
   
-		MRDebug() << "Panic! No known algorithm can handle it." << endl;
+		MRDebug() << "Panic! No known algorithm can handle it." << std::endl;
 		throw MineruleException( MR_ERROR_INTERNAL, "No known algorithm can handle the given minerule!" );
 	}
 	
@@ -72,11 +72,11 @@ namespace minerule {
 
 		MiningAlgorithm* userChoice= MiningAlgorithm::algorithmForType(userChoiceOfAT, mr);
 		if( userChoice->canHandleMinerule() ) {
-			MRDebug() << "Selected the algorithm given by the user preference" << endl;
+			MRDebug() << "Selected the algorithm given by the user preference" << std::endl;
 			return userChoice;
 		}
 		else {
-			MRDebug() << "User preference cannot be fulfilled" << endl;
+			MRDebug() << "User preference cannot be fulfilled" << std::endl;
 			delete userChoice;
 			userChoice=NULL;
 		}
@@ -85,11 +85,11 @@ namespace minerule {
   // to find the best algorithm.
 
 		if( ConstrItemSetsExtraction(mr).canHandleMinerule() ) {
-			MRDebug() << "Selected ConstrItemSetsExtraction" << endl;
+			MRDebug() << "Selected ConstrItemSetsExtraction" << std::endl;
 			return new ConstrItemSetsExtraction(mr);
 		}
   
-		MRDebug() << "Panic! No known algorithm can handle it." << endl;
+		MRDebug() << "Panic! No known algorithm can handle it." << std::endl;
 		throw MineruleException( MR_ERROR_INTERNAL, "No known algorithm can handle the given minerule!" );
 	}
 
@@ -146,8 +146,8 @@ namespace minerule {
 			delete incrAlgo;
 			return true;
 		} else {
-			MRLog() << "The needed incremental algorithms has not been integrated" << endl
-				<< " to the system yet." << endl;
+			MRLog() << "The needed incremental algorithms has not been integrated" << std::endl
+				<< " to the system yet." << std::endl;
 			return false;
 		}
 	}
@@ -168,10 +168,10 @@ namespace minerule {
 	Algorithms::executeMinerule(OptimizedMinerule& mr) throw(MineruleException,odbc::SQLException, std::exception) {
 		if( OptimizerCatalogue::existsMinerule(mr.getParsedMinerule().tab_result) ) {
 			if( MineruleOptions::getSharedOptions().getSafety().getOverwriteHomonymMinerules() ) {
-				MRLog() << "The optimizer Catalogue reports that a minerule " << endl;
-				MRLog() << "having the same name as the one you gave already" << endl;
-				MRLog() << "exists. I'm now going to delete the previous result as" << endl;
-				MRLog() << "it has been specified in the option settings." << endl;
+				MRLog() << "The optimizer Catalogue reports that a minerule " << std::endl;
+				MRLog() << "having the same name as the one you gave already" << std::endl;
+				MRLog() << "exists. I'm now going to delete the previous result as" << std::endl;
+				MRLog() << "it has been specified in the option settings." << std::endl;
 	
 				OptimizerCatalogue::deleteMinerule(mr.getParsedMinerule().tab_result);
 	
@@ -188,24 +188,24 @@ namespace minerule {
   
 
 		MRDebugPush("Unoptimized Minerule info");
-		MRDebug() << "Optimized Minerule:[" << mr.getParsedMinerule().getText()<< "]" << endl;
-		MRDebug() << "Body attribute list size:" << mr.getParsedMinerule().ba.size() << endl;
-		MRDebug() << "Head attribute list size:" << mr.getParsedMinerule().ha.size() << endl;
-		MRDebug() << "Rule attribute list size:" << mr.getParsedMinerule().ra.size() << endl;
+		MRDebug() << "Optimized Minerule:[" << mr.getParsedMinerule().getText()<< "]" << std::endl;
+		MRDebug() << "Body attribute list size:" << mr.getParsedMinerule().ba.size() << std::endl;
+		MRDebug() << "Head attribute list size:" << mr.getParsedMinerule().ha.size() << std::endl;
+		MRDebug() << "Rule attribute list size:" << mr.getParsedMinerule().ra.size() << std::endl;
 		MRDebugPop();
 
 		mr.optimize(); // internally it will check if the optimization option
                  // is set.
 
 		MRDebugPush("Optimized Minerule info");
-		MRDebug() << "Optimized Minerule:[" << mr.getParsedMinerule().getText()<< "]" << endl;
-		MRDebug() << "Body attribute list size:" << mr.getParsedMinerule().ba.size() << endl;
-		MRDebug() << "Head attribute list size:" << mr.getParsedMinerule().ha.size() << endl;
-		MRDebug() << "Rule attribute list size:" << mr.getParsedMinerule().ra.size() << endl;
+		MRDebug() << "Optimized Minerule:[" << mr.getParsedMinerule().getText()<< "]" << std::endl;
+		MRDebug() << "Body attribute list size:" << mr.getParsedMinerule().ba.size() << std::endl;
+		MRDebug() << "Head attribute list size:" << mr.getParsedMinerule().ha.size() << std::endl;
+		MRDebug() << "Rule attribute list size:" << mr.getParsedMinerule().ra.size() << std::endl;
 		MRDebugPop();
 
 
-		string unsupportedRelation = "";
+	std::string unsupportedRelation = "";
 		OptimizerCatalogue::MineruleResultInfo result(mr.getParsedMinerule());
 
 		switch(mr.getOptimizationInfo().relationship) {
@@ -217,8 +217,8 @@ namespace minerule {
 					OptimizerCatalogue::getMRQueryInfo( mr.getOptimizationInfo().minerule.tab_result, catInfo );
 					result.resultset = catInfo.resName;
     
-					MRDebug() << "Inclusion found with respect minerule:" << mr.getOptimizationInfo().minerule.getText() << endl;
-					MRDebug() << "Current Minerule:" << result.getText() << endl;
+					MRDebug() << "Inclusion found with respect minerule:" << mr.getOptimizationInfo().minerule.getText() << std::endl;
+					MRDebug() << "Current Minerule:" << result.getText() << std::endl;
 					OptimizerCatalogue::addMineruleResult(result);
 				}
 				break;
@@ -238,7 +238,7 @@ namespace minerule {
 						break;
 					} else {
 						MRLog() << "The support for the found dominance relationship is not yet implemented"
-							<< " switching back to the non-incremental mining algorithm;" << endl;
+							<< " switching back to the non-incremental mining algorithm;" << std::endl;
 					}
 				}
 			
@@ -250,10 +250,10 @@ namespace minerule {
 			// NO RELATION FOUND
 			case OptimizedMinerule::None:
 				if( unsupportedRelation!="" ) {
-					MRWarn() << "The optimizer found that there exists a minerule in the catalogue" << endl
-						<< "which is in `" << unsupportedRelation <<"' relationship with the" << endl
-						<< "current one. Unfortunately such kind of relationship is still" << endl
-						<< "not supported and hence I will switch to the default algorithm" << endl;
+					MRWarn() << "The optimizer found that there exists a minerule in the catalogue" << std::endl
+						<< "which is in `" << unsupportedRelation <<"' relationship with the" << std::endl
+						<< "current one. Unfortunately such kind of relationship is still" << std::endl
+						<< "not supported and hence I will switch to the default algorithm" << std::endl;
 				}
 				executeExtractionAlgorithm(mr);
 				if( mr.getParsedMinerule().miningTask==MTMineRules ||

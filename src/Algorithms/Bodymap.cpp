@@ -37,18 +37,18 @@ bool BodyMapElement::updateCount () {
 }
 
 /*
-void BodyMapElement::saveMap (ostream& out, bool withGids) {
+void BodyMapElement::saveMap (std::ostream& out, bool withGids) {
 	out << ' ' << heads.size();
 	for (map<ItemType, MapElement>::iterator i = heads.begin(); i != heads.end(); i++) {
 		out << ' ' << i->first;
 		out << ' ' << i->second.size();
 	if (withGids) {
 		out  << ' ';
-		copy(i->second.begin(), i->second.end(), ostream_iterator<ItemType>(out, " "));
+		copy(i->second.begin(), i->second.end(), std::ostream_iterator<ItemType>(out, " "));
 	}
 		i->second.erase(i->second.begin(), i->second.end());
 	}
-	out << endl;
+	out << std::endl;
 }
 */
 
@@ -176,7 +176,7 @@ int BodyMap::add(const int gid, Transaction& t1, bool secondPass) {
 */
 
 /*
-void BodyMap::saveMap (ostream& out, bool withGids) {
+void BodyMap::saveMap (std::ostream& out, bool withGids) {
 	for (iterator i = begin(); i != end(); i++) {
 		out << i->first;
 		i->second.saveMap(out, withGids);
@@ -209,8 +209,8 @@ void BodyMap::updateCount () {
 		i->second.updateCount();
 }
 
-int BodyMap::buildRules (NewRuleSet& rs1, NewRule& rc, vector<BodyMap::iterator>& vb, vector<BodyMap::iterator>& vh, int maxBodyCard, int maxHeadCard, float threshold, int j) {
-	vector<BodyMap::iterator> newVb, newVh;
+int BodyMap::buildRules (NewRuleSet& rs1, NewRule& rc, std::vector<BodyMap::iterator>& vb, std::vector<BodyMap::iterator>& vh, int maxBodyCard, int maxHeadCard, float threshold, int j) {
+ std::vector<BodyMap::iterator> newVb, newVh;
 	NewRuleSet rs;
 	int start = rs.size();
 	bool intersect = (rc.gids.size() > 0 );
@@ -242,9 +242,8 @@ int BodyMap::buildRules (NewRuleSet& rs1, NewRule& rc, vector<BodyMap::iterator>
 	}
 	return howManyRules;
 }
-
-vector<BodyMap::iterator> BodyMap::buildHead (NewRuleSet& rs, NewRule rc, vector<BodyMap::iterator>& v, int maxCard, float threshold, int j) {
-	vector<BodyMap::iterator> newV;
+ std::vector<BodyMap::iterator> BodyMap::buildHead (NewRuleSet& rs, NewRule rc, std::vector<BodyMap::iterator>& v, int maxCard, float threshold, int j) {
+ std::vector<BodyMap::iterator> newV;
 //	NewRuleSet rs;
 	int start = rs.size();
 	for (size_t k=j+1; k<v.size(); k++)// {
@@ -282,8 +281,8 @@ bool BodyMap::checkMono (NewRule& rc) {
 	return flag;
 }
 
-int BodyMap::buildItemset (NewRuleSet& rs1, NewRule& rc, vector<BodyMap::iterator>& v, int maxCard, float threshold, int j) {
-	vector<BodyMap::iterator> newV;
+int BodyMap::buildItemset (NewRuleSet& rs1, NewRule& rc, std::vector<BodyMap::iterator>& v, int maxCard, float threshold, int j) {
+ std::vector<BodyMap::iterator> newV;
 	NewRuleSet rs;
 	int start = rs.size();
 	bool intersect = rc.gids.size() > 0;
@@ -318,8 +317,8 @@ int BodyMap::buildItemset (NewRuleSet& rs1, NewRule& rc, vector<BodyMap::iterato
 	return howManyRules;
 }
 
-int BodyMap::generateStartItemSets (NewRuleSet& rs1, NewRule& rc, vector<BodyMap::iterator>& v, int maxCard, float threshold, int j) {
-	vector<BodyMap::iterator> newV;
+int BodyMap::generateStartItemSets (NewRuleSet& rs1, NewRule& rc, std::vector<BodyMap::iterator>& v, int maxCard, float threshold, int j) {
+ std::vector<BodyMap::iterator> newV;
 	NewRuleSet rs;
 	//	int start = rs.size();
 	bool intersect = rc.gids.size() > 0;
@@ -377,12 +376,12 @@ int BodyMap::buildRules (NewRuleSet& rs2, NewRule rc, BodyMap::iterator p, float
 	return howManyRules;
 }
 
-int BodyMap::buildHead (NewRuleSet& rs, float threshold, int maxHead, int suppBody, NewRule& rc, map<ItemType, MapElement>::iterator j) {
+int BodyMap::buildHead (NewRuleSet& rs, float threshold, int maxHead, int suppBody, NewRule& rc, std::map<ItemType, MapElement>::iterator j) {
 	int nrules = 0;
 	if (rc.head.size() < (size_t)maxHead) {
 		map<ItemType, MapElement>::iterator eh = rc.lastBody->second.heads.end();
 		while (j != eh) {
-//cout << "Extending head of " << *i << " with " << j->first  << " size " << j->second.size() << endl;
+//cout << "Extending head of " << *i << " with " << j->first  << " size " << j->second.size() << std::endl;
 		if (std::find(rc.body.begin(), rc.body.end(),j->first) == rc.body.end()) {
 			GidList newGidList(rc.gids);
 			newGidList &= j->second;
@@ -400,7 +399,7 @@ int BodyMap::buildHead (NewRuleSet& rs, float threshold, int maxHead, int suppBo
 
 void BodyMap::howManyItemsets () {
 	for (size_t i = 1; i < itemsets.size(); i++) {
-		cout << "Itemset Length: " << i << " -> " << itemsets[i] << endl;
+		std::cout << "Itemset Length: " << i << " -> " << itemsets[i] << std::endl;
 	}
 }
 

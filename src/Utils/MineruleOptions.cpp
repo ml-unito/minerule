@@ -2,12 +2,12 @@
 #include <iostream>
 #include <fstream>
 
-using namespace std;
+
 //#include <malloc.h>
 
 #include<odbc++/drivermanager.h>
 
-const string MINERULE_OPTIONS_PARSING_ERROR = "Parsing Error while parsing MineruleOptions";
+const std::string MINERULE_OPTIONS_PARSING_ERROR = "Parsing Error while parsing MineruleOptions";
 
 #include "Utils/OptionParserLib.h"
 
@@ -16,9 +16,9 @@ namespace minerule {
   MineruleOptions MineruleOptions::sharedOptions;
 
   MineruleOptions::~MineruleOptions() {
-    map<string, MRLogger*>::iterator it;
+    std::map<std::string, MRLogger*>::iterator it;
     for(it=knownStreams.begin(); it!=knownStreams.end(); it++) {
-      ostream* ostr=NULL;
+      std::ostream* ostr=NULL;
       
       if( it->first!="<stdout>" &&
 	  it->first!="<stderr>" ) {
@@ -64,8 +64,8 @@ namespace minerule {
 
     optimizations.setTryOptimizations(false);
 
-    MRLogger* stdlog=new MRLogger(cout);
-    MRLogger* errlog=new MRLogger(cerr);
+    MRLogger* stdlog=new MRLogger(std::cout);
+    MRLogger* errlog=new MRLogger(std::cerr);
 
     logStream.setLogger(*stdlog);
     errStream.setLogger(*errlog);
@@ -84,7 +84,7 @@ namespace minerule {
   }
 
   void
-  MineruleOptions::readFromFile(string filename) throw(MineruleException){
+  MineruleOptions::readFromFile(std::string filename) throw(MineruleException){
     FILE* file = fopen(filename.c_str(), "r");
 
     try {
@@ -98,13 +98,13 @@ namespace minerule {
       if(file!=NULL)
 	fclose(file);
       
-      cerr << e.what() << endl;
+      std::cerr << e.what() << std::endl;
       throw;
     } catch(odbc::SQLException& e) {
       if( file!=NULL )
 	fclose(file);
 
-      cerr << e.getMessage() << endl;
+      std::cerr << e.getMessage() << std::endl;
       throw;
     }
 
@@ -112,79 +112,79 @@ namespace minerule {
   }
 
   void
-  MineruleOptions::readFromString(const string& str) throw(MineruleException, odbc::SQLException){
+  MineruleOptions::readFromString(const std::string& str) throw(MineruleException, odbc::SQLException){
     initializeOptionsFromString(*this,str);
 
     odbc_db.resetConnection();
   }
 
-  ostream& MineruleOptions::saveOptions(ostream& os) const {
-    os << "# Options related to the ODBC connection" << endl;
-    os << "odbc::{" << endl
-       << "  name="<< getOdbc_db().getName() <<endl
-       << "  username="<<getOdbc_db().getUsername() << endl
-       << "  password="<<getOdbc_db().getPassword() << endl
-       << "  cacheWrites="<<Converter(getOdbc_db().getCacheWrites()).toString() << endl
-       << "}" << endl << endl;
+  std::ostream& MineruleOptions::saveOptions(std::ostream& os) const {
+    os << "# Options related to the ODBC connection" << std::endl;
+    os << "odbc::{" << std::endl
+       << "  name="<< getOdbc_db().getName() <<std::endl
+       << "  username="<<getOdbc_db().getUsername() << std::endl
+       << "  password="<<getOdbc_db().getPassword() << std::endl
+       << "  cacheWrites="<<Converter(getOdbc_db().getCacheWrites()).toString() << std::endl
+       << "}" << std::endl << std::endl;
 
-    os << "# Options related to data safety issues" << endl;
-    os << "safety::{" << endl
-       << "# if the following option is set to 'True', then the"<<endl
-       << "# system will delete old results whenever a new minerule"<<endl
-       << "# having the same name of an old one is inserted. Otherwise"<<endl
-       << "# the system will report an error message and exit." << endl
+    os << "# Options related to data safety issues" << std::endl;
+    os << "safety::{" << std::endl
+       << "# if the following option is set to 'True', then the"<<std::endl
+       << "# system will delete old results whenever a new minerule"<<std::endl
+       << "# having the same name of an old one is inserted. Otherwise"<<std::endl
+       << "# the system will report an error message and exit." << std::endl
        << "  overwriteHomonymMinerules=" 
-       << Converter( getSafety().getOverwriteHomonymMinerules() ).toString() << endl
-       << "# if overwriteHomonymMinerules is set to True, then the" << endl
-       << "# following option decides whether the system should delete"<<endl
-       << "# also the minerules for which the result depends on the " << endl
-       << "# deleted one. If the option is set to True, those " << endl
-       << "# minerule will be deleted as well, otherwise the system " <<endl
-       << "# with halt reporting an error." << endl
+       << Converter( getSafety().getOverwriteHomonymMinerules() ).toString() << std::endl
+       << "# if overwriteHomonymMinerules is set to True, then the" << std::endl
+       << "# following option decides whether the system should delete"<<std::endl
+       << "# also the minerules for which the result depends on the " << std::endl
+       << "# deleted one. If the option is set to True, those " << std::endl
+       << "# minerule will be deleted as well, otherwise the system " <<std::endl
+       << "# with halt reporting an error." << std::endl
        << "  allowCascadeDeletes=" 
-       << Converter( getSafety().getAllowCascadeDeletes() ).toString() << endl
-       << "}" << endl << endl;
+       << Converter( getSafety().getAllowCascadeDeletes() ).toString() << std::endl
+       << "}" << std::endl << std::endl;
 
-    os << "# Options related to mining algorithms" << endl;
-    os << "miningalgorithms::{" << endl;
-    os << "  #options for configuring rule mining algorithms" << endl;
-    os << "  rulesmining::{" << endl;
-    os << "    preferredAlgorithm=" << algorithmTypeToString(getMiningAlgorithms().getRulesMiningAlgorithms().getPreferredAlgorithm()) << endl << endl;
-    os << "    # Options related to PartitionBase algorithm" << endl;
-    os << "    partitionbase::{" << endl
+    os << "# Options related to mining algorithms" << std::endl;
+    os << "miningalgorithms::{" << std::endl;
+    os << "  #options for configuring rule mining algorithms" << std::endl;
+    os << "  rulesmining::{" << std::endl;
+    os << "    preferredAlgorithm=" << algorithmTypeToString(getMiningAlgorithms().getRulesMiningAlgorithms().getPreferredAlgorithm()) << std::endl << std::endl;
+    os << "    # Options related to PartitionBase algorithm" << std::endl;
+    os << "    partitionbase::{" << std::endl
        << "      rowsPerPartition=" << 
-                   getMiningAlgorithms().getRulesMiningAlgorithms().getPartitionBase().getRowsPerPartition() << endl
-       << "    }" << endl << endl;
+                   getMiningAlgorithms().getRulesMiningAlgorithms().getPartitionBase().getRowsPerPartition() << std::endl
+       << "    }" << std::endl << std::endl;
 
-    os << "    # Options related to PartitionWithClusters algorithm" << endl;
-    os << "    partitionwithclusters::{" << endl
+    os << "    # Options related to PartitionWithClusters algorithm" << std::endl;
+    os << "    partitionwithclusters::{" << std::endl
        << "      rowsPerPartition=" << 
-                   getMiningAlgorithms().getRulesMiningAlgorithms().getPartitionWithClusters().getRowsPerPartition() << endl
-       << "    }" << endl << endl;
+                   getMiningAlgorithms().getRulesMiningAlgorithms().getPartitionWithClusters().getRowsPerPartition() << std::endl
+       << "    }" << std::endl << std::endl;
     
-    string algoType;
+   std::string algoType;
     if(getMiningAlgorithms().getRulesMiningAlgorithms().getFPGrowth().getAlgoType()==MiningAlgorithms::RulesMiningAlgorithms::FPGrowth::Original)
       algoType="Original";
     else
       algoType="SingleReorder";
 
-    os << "    # Options related to FPGrowth algorithms" << endl;
-    os << "    fpgrowth::{" << endl
-       << "      algoType=" << algoType << endl
-       << "    }" <<endl;
-    os << "  }" << endl;
+    os << "    # Options related to FPGrowth algorithms" << std::endl;
+    os << "    fpgrowth::{" << std::endl
+       << "      algoType=" << algoType << std::endl
+       << "    }" <<std::endl;
+    os << "  }" << std::endl;
     
-    os << " itemsetsmining::{" << endl;
-    os << "    preferredAlgorithm=" << algorithmTypeToString(getMiningAlgorithms().getItemsetsMiningAlgorithms().getPreferredAlgorithm()) << endl << endl;
-    os << " }" << endl;
-    os << "}" << endl << endl;
+    os << " itemsetsmining::{" << std::endl;
+    os << "    preferredAlgorithm=" << algorithmTypeToString(getMiningAlgorithms().getItemsetsMiningAlgorithms().getPreferredAlgorithm()) << std::endl << std::endl;
+    os << " }" << std::endl;
+    os << "}" << std::endl << std::endl;
 
-    string optimizations;
+   std::string optimizations;
     if(getOptimizations().getTryOptimizations())
       optimizations="True";
     else
       optimizations="False";
-    string incrAlgorithm;
+   std::string incrAlgorithm;
     switch(getOptimizations().getIncrementalAlgorithm()) {
     case Optimizations::ConstructiveAlgo: 
       incrAlgorithm = "constructive";
@@ -197,121 +197,121 @@ namespace minerule {
       break;
     }
 
-    os << "# Options related to Optimizations" << endl;
-    os << "optimizations::{" << endl
-       << "  enableOptimizations=" << optimizations << endl
-       << "# If set to True, this option will disable the detection of dominant" << endl
-       << "# queries (this imply also that the system will not try to find equivalent" << endl
-       << "# queries, since they are a particular case of dominance)" << endl
+    os << "# Options related to Optimizations" << std::endl;
+    os << "optimizations::{" << std::endl
+       << "  enableOptimizations=" << optimizations << std::endl
+       << "# If set to True, this option will disable the detection of dominant" << std::endl
+       << "# queries (this imply also that the system will not try to find equivalent" << std::endl
+       << "# queries, since they are a particular case of dominance)" << std::endl
        << "  avoidDominanceDetection=" 
-       << Converter( getOptimizations().getAvoidDominanceDetection() ).toString() << endl
-       << "# If set to True this option will make the optimizer to "<<endl
-       << "# consider equivalent queries as if they were dominant ones"<<endl
-       << "# (i.e., it will call an incremental algorithm instead of"<< endl
-       << "# dealing with the equivalence)." << endl
+       << Converter( getOptimizations().getAvoidDominanceDetection() ).toString() << std::endl
+       << "# If set to True this option will make the optimizer to "<<std::endl
+       << "# consider equivalent queries as if they were dominant ones"<<std::endl
+       << "# (i.e., it will call an incremental algorithm instead of"<< std::endl
+       << "# dealing with the equivalence)." << std::endl
        << "  avoidEquivalenceDetection=" 
-       << Converter( getOptimizations().getAvoidEquivalenceDetection() ).toString() << endl
-       << "# If set to True the optimizer will not try to find " << endl
-       << "# a combinations of previous queries equivalent to the current one." << endl
-       << "# Notice that the search for combination may be a slow process" << endl
+       << Converter( getOptimizations().getAvoidEquivalenceDetection() ).toString() << std::endl
+       << "# If set to True the optimizer will not try to find " << std::endl
+       << "# a combinations of previous queries equivalent to the current one." << std::endl
+       << "# Notice that the search for combination may be a slow process" << std::endl
        << "  avoidCombinationDetection=" 
-       << Converter(getOptimizations().getAvoidCombinationDetection() ).toString() << endl
-       << "# The following option allows the user to specify how a " << endl
-       << "# particular incremental algorithm  have to be chosen. The" <<endl
-       << "# following values are allowed:{Constructive,Destructive," << endl
-       << "# Auto}"<<endl
-       << "# Constructive and Destructive force the corresponding "<<endl
-       << "# algorithm to be chosen. " << endl
-       << "# Auto leaves the choice to the optimizer." << endl
-       << "  incrementalAlgorithm=" << incrAlgorithm << endl
-       << "# Options related to the query combinator algorithm" << endl
-       << "  combinator {" << endl
-       << "# amount of time the search for a combination is allowed to run " << endl
+       << Converter(getOptimizations().getAvoidCombinationDetection() ).toString() << std::endl
+       << "# The following option allows the user to specify how a " << std::endl
+       << "# particular incremental algorithm  have to be chosen. The" <<std::endl
+       << "# following values are allowed:{Constructive,Destructive," << std::endl
+       << "# Auto}"<<std::endl
+       << "# Constructive and Destructive force the corresponding "<<std::endl
+       << "# algorithm to be chosen. " << std::endl
+       << "# Auto leaves the choice to the optimizer." << std::endl
+       << "  incrementalAlgorithm=" << incrAlgorithm << std::endl
+       << "# Options related to the query combinator algorithm" << std::endl
+       << "  combinator {" << std::endl
+       << "# amount of time the search for a combination is allowed to run " << std::endl
        << "    timeOut=" 
-       << Converter(getOptimizations().getCombinator().getTimeOutThreshold()).toString() << endl
-       << "# Max number of disjuncts. It is the number of disjuncts that is considered" << endl
-       << "# during the search. Notice that increasing this number has a strong impact" << endl
-       << "# on the dimension of the search space." << endl 
+       << Converter(getOptimizations().getCombinator().getTimeOutThreshold()).toString() << std::endl
+       << "# Max number of disjuncts. It is the number of disjuncts that is considered" << std::endl
+       << "# during the search. Notice that increasing this number has a strong impact" << std::endl
+       << "# on the dimension of the search space." << std::endl 
        << "    maxDisjuncts=" 
-       << Converter(long(getOptimizations().getCombinator().getMaxDisjuncts())).toString() << endl
-       << "# Max number of queries. Max number of distinct queries the user allows to" <<endl
-       << "# be combined in the result. Formulae with a larger number of queries are" << endl
-       << "# penalized in the evaluation function." << endl
+       << Converter(long(getOptimizations().getCombinator().getMaxDisjuncts())).toString() << std::endl
+       << "# Max number of queries. Max number of distinct queries the user allows to" <<std::endl
+       << "# be combined in the result. Formulae with a larger number of queries are" << std::endl
+       << "# penalized in the evaluation function." << std::endl
        << "    maxQueries="
-       << Converter(long(getOptimizations().getCombinator().getMaxQueries())).toString() << endl
-       << "# Max distinct predicates. Max number of distinct predicates that the user"<<endl
-       << "# allows. This afflict the response time: the time spent in assessing each" <<endl
-       << "# formula grows exponentially fast with the number of predicates." << endl
+       << Converter(long(getOptimizations().getCombinator().getMaxQueries())).toString() << std::endl
+       << "# Max distinct predicates. Max number of distinct predicates that the user"<<std::endl
+       << "# allows. This afflict the response time: the time spent in assessing each" <<std::endl
+       << "# formula grows exponentially fast with the number of predicates." << std::endl
        << "    maxDistinctPredicates="
-       << Converter(long(getOptimizations().getCombinator().getMaxDistinctPredicates())).toString()<<endl
-       << "  }" << endl
-       << "}" <<endl << endl;
-    os << "# Options related to the parsing algorithms"<< endl;
-    os << "parsers::{" << endl;
-    os << "# Parsers log stream, valid names are:" << endl;
-    os << "#   <stdout>, <stderr> and any writeable file." << endl;
-    os << " logfile=/dev/null" << endl;
-    os << "# The following four options allows to set constraint on" << endl
-       << "# cardinalities of elements which appears in the body/head" <<endl
-       << "# part of rules. The constraints set here 'win' on the ones"<<endl
-       << "# in minerules (i.e., if you say '1..n' as BODY in your minerule"<<endl
-       <<"# but set it to 1..5 here, than 1..5 will be used instead." <<endl;
+       << Converter(long(getOptimizations().getCombinator().getMaxDistinctPredicates())).toString()<<std::endl
+       << "  }" << std::endl
+       << "}" <<std::endl << std::endl;
+    os << "# Options related to the parsing algorithms"<< std::endl;
+    os << "parsers::{" << std::endl;
+    os << "# Parsers log stream, valid names are:" << std::endl;
+    os << "#   <stdout>, <stderr> and any writeable file." << std::endl;
+    os << " logfile=/dev/null" << std::endl;
+    os << "# The following four options allows to set constraint on" << std::endl
+       << "# cardinalities of elements which appears in the body/head" <<std::endl
+       << "# part of rules. The constraints set here 'win' on the ones"<<std::endl
+       << "# in minerules (i.e., if you say '1..n' as BODY in your minerule"<<std::endl
+       <<"# but set it to 1..5 here, than 1..5 will be used instead." <<std::endl;
     os <<" minBodyElems=" << 
-      getParsers().getBodyCardinalities().getMin() <<endl;
+      getParsers().getBodyCardinalities().getMin() <<std::endl;
     os <<" maxBodyElems=" 
-       << getParsers().getBodyCardinalities().getMax() << endl;
+       << getParsers().getBodyCardinalities().getMax() << std::endl;
     os <<" minHeadElems=" 
-       << getParsers().getHeadCardinalities().getMin() << endl;
+       << getParsers().getHeadCardinalities().getMin() << std::endl;
     os <<" maxHeadElems="
-       << getParsers().getHeadCardinalities().getMax()<<endl;
-    os << "}" << endl << endl;
+       << getParsers().getHeadCardinalities().getMax()<<std::endl;
+    os << "}" << std::endl << std::endl;
     
-    os << "# Options related to streams, note that they are commented." << endl
-       << "# the reason is that the following conresponds to default " << endl
-       << "# settings instead of the actual ones." << endl
-       << "# In specifying the stream parameter, you can:" << endl
-       << "# 1) Specify a file path" << endl
-       << "# 2) Specify <stdout>,<stderr> in order to specify the standard" << endl
-       << "#    output and the standard error respectively" << endl
-       << "# 3) Specify a file path including the %m and %i symbols"  << endl
-       << "# In case 3) %m is expandend to the current minerule name as" << endl
-       << "# it appear in the minerule text, %i is expanded to the value" << endl
-       << "# of the -i parameter if any, to 'mr' otherwise" << endl
-       << "#" << endl
-       << "# logstream::{" << endl
-       << "#    stream=<stdout> " << endl
-       << "#    loglevel=100" << endl
-       << "# }" << endl
-       << "# errstream::{" << endl
-       << "#    stream=<stderr> " << endl
-       << "#    loglevel=100" << endl
-       << "# }" << endl
-       << "# warnstream::{" << endl
-       << "#    stream=<stdout> " << endl
-       << "#    loglevel=100" << endl
-       << "# }" << endl
-       << "# debugstream::{" << endl
-       << "#    stream=<stderr> " << endl
-       << "#    loglevel=100" << endl
-       << "# }" << endl;
+    os << "# Options related to streams, note that they are commented." << std::endl
+       << "# the reason is that the following conresponds to default " << std::endl
+       << "# settings instead of the actual ones." << std::endl
+       << "# In specifying the stream parameter, you can:" << std::endl
+       << "# 1) Specify a file path" << std::endl
+       << "# 2) Specify <stdout>,<stderr> in order to specify the standard" << std::endl
+       << "#    output and the standard error respectively" << std::endl
+       << "# 3) Specify a file path including the %m and %i symbols"  << std::endl
+       << "# In case 3) %m is expandend to the current minerule name as" << std::endl
+       << "# it appear in the minerule text, %i is expanded to the value" << std::endl
+       << "# of the -i parameter if any, to 'mr' otherwise" << std::endl
+       << "#" << std::endl
+       << "# logstream::{" << std::endl
+       << "#    stream=<stdout> " << std::endl
+       << "#    loglevel=100" << std::endl
+       << "# }" << std::endl
+       << "# errstream::{" << std::endl
+       << "#    stream=<stderr> " << std::endl
+       << "#    loglevel=100" << std::endl
+       << "# }" << std::endl
+       << "# warnstream::{" << std::endl
+       << "#    stream=<stdout> " << std::endl
+       << "#    loglevel=100" << std::endl
+       << "# }" << std::endl
+       << "# debugstream::{" << std::endl
+       << "#    stream=<stderr> " << std::endl
+       << "#    loglevel=100" << std::endl
+       << "# }" << std::endl;
     
     return os;
   }
 
 
-  ostream& MRLog(int id) {
+  std::ostream& MRLog(int id) {
     return MineruleOptions::getSharedOptions().getLogStream();
   }
 
-  ostream& MRErr(int id) {
+  std::ostream& MRErr(int id) {
     return MineruleOptions::getSharedOptions().getErrStream();
   }
 
-  ostream& MRWarn(int id) {
+  std::ostream& MRWarn(int id) {
     return MineruleOptions::getSharedOptions().getWarnStream();
   }
 
-  ostream& MRDebug(int id) {
+  std::ostream& MRDebug(int id) {
     return MineruleOptions::getSharedOptions().getDebugStream();
   }
 
@@ -320,7 +320,7 @@ namespace minerule {
     return logId++;
   }
 
-  void MRLogPush(const string& descr) {
+  void MRLogPush(const std::string& descr) {
     MineruleOptions::getSharedOptions().getLogStreamObj().getLogger().push(descr);
   }
 
@@ -328,7 +328,7 @@ namespace minerule {
     MineruleOptions::getSharedOptions().getLogStreamObj().getLogger().pop();
   }
 
-  void MRErrPush(const string& descr) {
+  void MRErrPush(const std::string& descr) {
     MineruleOptions::getSharedOptions().getErrStreamObj().getLogger().push(descr);
   }
 
@@ -336,7 +336,7 @@ namespace minerule {
     MineruleOptions::getSharedOptions().getErrStreamObj().getLogger().pop();
   }
 
-  void MRWarnPush(const string& descr) {
+  void MRWarnPush(const std::string& descr) {
     MineruleOptions::getSharedOptions().getWarnStreamObj().getLogger().push(descr);
   }
 
@@ -344,7 +344,7 @@ namespace minerule {
     MineruleOptions::getSharedOptions().getWarnStreamObj().getLogger().pop();
   }
 
-  void MRDebugPush(const string& descr) {
+  void MRDebugPush(const std::string& descr) {
     MineruleOptions::getSharedOptions().getDebugStreamObj().getLogger().push(descr);
   }
 
@@ -354,15 +354,15 @@ namespace minerule {
 
   
   void
-  MineruleOptions::Parsers::setLogFILE(const string& fname) throw(MineruleException) {
+  MineruleOptions::Parsers::setLogFILE(const std::string& fname) throw(MineruleException) {
     clearStream();
     logfile = fopen(fname.c_str(), "w");
     if(logfile==NULL) 
       throw MineruleException(MR_ERROR_OUTPUT_FILE_PROBLEM,
-			      string("Error while parsing options,I've tried to open file:")
+			      std::string("Error while parsing options,I've tried to open file:")
 			      +fname+
-			      string(", but an error occurred")
-			      +string(" the reason is:\n") + strerror(errno));
+			      std::string(", but an error occurred")
+			      +std::string(" the reason is:\n") + strerror(errno));
   }
 
   void
@@ -379,8 +379,8 @@ namespace minerule {
 
 
   void 
-  MineruleOptions::Odbc_db::setOption(const string& name, 
-				      const string& value) 
+  MineruleOptions::Odbc_db::setOption(const std::string& name, 
+				      const std::string& value) 
                       throw(MineruleException) {
     if(name=="name")
       setName(value);
@@ -391,16 +391,16 @@ namespace minerule {
     else if(name=="cacheWrites")
       setCacheWrites(Converter(value).toBool());
     else {
-      cerr << "Error while parsing options, expecting an odbc option in:" <<endl
-	   << "{name, userName, password, cacheWrites} and: " << endl
-	   << "\"" << name << "\" found." << endl;
+      std::cerr << "Error while parsing options, expecting an odbc option in:" <<std::endl
+	   << "{name, userName, password, cacheWrites} and: " << std::endl
+	   << "\"" << name << "\" found." << std::endl;
       throw MineruleException(MR_ERROR_OPTION_PARSING, MINERULE_OPTIONS_PARSING_ERROR);
     }
   }
 
   void 
-  MineruleOptions::Safety::setOption(const string& name,
-				     const string& value)
+  MineruleOptions::Safety::setOption(const std::string& name,
+				     const std::string& value)
     throw(MineruleException) {
     try {
       if(name=="overwriteHomonymMinerules") {
@@ -412,9 +412,9 @@ namespace minerule {
 				 "Expected a value in {overwriteHomonymMinerules,allowCascadeDeletes}, but "+value+" found.");
       }
     } catch (MineruleException& e) {
-      cerr << "Parsing error while parsing a safety option(given option name:"
+      std::cerr << "Parsing error while parsing a safety option(given option name:"
 	   << name << " given option value:" << value << "). The reason for"
-	   << " the error is:" << e.what() << endl;
+	   << " the error is:" << e.what() << std::endl;
       throw MineruleException( MR_ERROR_OPTION_PARSING, 
 			       MINERULE_OPTIONS_PARSING_ERROR);
     }
@@ -422,119 +422,119 @@ namespace minerule {
 
   
   void
-  MineruleOptions::MiningAlgorithms::RulesMiningAlgorithms::PartitionBase::setOption(const string& name, 
-					    const string& value) throw(MineruleException) {
+  MineruleOptions::MiningAlgorithms::RulesMiningAlgorithms::PartitionBase::setOption(const std::string& name, 
+					    const std::string& value) throw(MineruleException) {
     if(name=="rowsPerPartition") {
       unsigned int rpp = stringToLong(value,name);
       setRowsPerPartition(rpp);
     }
     else {
-      cerr << "Error while parsing options, expecting a partition option in:"
-	   <<endl
-	   << "{rowsPerPartition} and: " << endl
-	   << "\"" << name << "\" found." << endl;
+      std::cerr << "Error while parsing options, expecting a partition option in:"
+	   <<std::endl
+	   << "{rowsPerPartition} and: " << std::endl
+	   << "\"" << name << "\" found." << std::endl;
       throw MineruleException(MR_ERROR_OPTION_PARSING, MINERULE_OPTIONS_PARSING_ERROR);
     }
   }
 
 
   void
-  MineruleOptions::MiningAlgorithms::RulesMiningAlgorithms::PartitionWithClusters::setOption(const string& name, 
-					    const string& value) throw(MineruleException) {
+  MineruleOptions::MiningAlgorithms::RulesMiningAlgorithms::PartitionWithClusters::setOption(const std::string& name, 
+					    const std::string& value) throw(MineruleException) {
     if(name=="rowsPerPartition") {
       unsigned int rpp = stringToLong(value,name);
       setRowsPerPartition(rpp);
     }
     else {
-      cerr << "Error while parsing options, expecting a partition option in:"
-	   <<endl
-	   << "{rowsPerPartition} and: " << endl
-	   << "\"" << name << "\" found." << endl;
+      std::cerr << "Error while parsing options, expecting a partition option in:"
+	   <<std::endl
+	   << "{rowsPerPartition} and: " << std::endl
+	   << "\"" << name << "\" found." << std::endl;
       throw MineruleException(MR_ERROR_OPTION_PARSING, MINERULE_OPTIONS_PARSING_ERROR);
     }
   }
   
   void 
-  MineruleOptions::MiningAlgorithms::RulesMiningAlgorithms::FPGrowth::setOption(const string& name, 
-							 const string& value) throw(MineruleException) {
+  MineruleOptions::MiningAlgorithms::RulesMiningAlgorithms::FPGrowth::setOption(const std::string& name, 
+							 const std::string& value) throw(MineruleException) {
     if(name=="algoType") {
       if(value=="Original") {
 	setAlgoType(Original);
       } else if(value=="SingleReorder") {
 	setAlgoType(SingleReorder);
       } else {
-	cerr << "Error while parsing options, expecting a fpgrowth::algoType "
-	     <<" value in:" <<endl
-	     << "{Original,SingleReorder} and: " << endl
-	     << "\"" << value << "\" found." << endl;
+	std::cerr << "Error while parsing options, expecting a fpgrowth::algoType "
+	     <<" value in:" <<std::endl
+	     << "{Original,SingleReorder} and: " << std::endl
+	     << "\"" << value << "\" found." << std::endl;
 	throw MineruleException(MR_ERROR_OPTION_PARSING, MINERULE_OPTIONS_PARSING_ERROR);
       }
     }
     else {
-      cerr << "Error while parsing options, expecting a fpgrowth option in:" 
-	   <<endl
-	   << "{algoType} and: " << endl
-	   << "\"" << name << "\" found." << endl;
+      std::cerr << "Error while parsing options, expecting a fpgrowth option in:" 
+	   <<std::endl
+	   << "{algoType} and: " << std::endl
+	   << "\"" << name << "\" found." << std::endl;
       throw MineruleException(MR_ERROR_OPTION_PARSING, MINERULE_OPTIONS_PARSING_ERROR);
     }
   }
 
   void
-  MineruleOptions::MiningAlgorithms::RulesMiningAlgorithms::setOption(const string& name, 
-					       const string& value) throw(MineruleException) {
+  MineruleOptions::MiningAlgorithms::RulesMiningAlgorithms::setOption(const std::string& name, 
+					       const std::string& value) throw(MineruleException) {
     if(name=="preferredAlgorithm") {
       try {
 	setPreferredAlgorithm( stringToAlgorithmType(value) );
       } catch (MineruleException e) {
-	cerr << "Error while parsing options, expecting an algorithm option in {" <<
-	  stringWithListOfAlgorithmTypes() << "}, but \"" << value << "\" found." << endl;
+	std::cerr << "Error while parsing options, expecting an algorithm option in {" <<
+	  stringWithListOfAlgorithmTypes() << "}, but \"" << value << "\" found." << std::endl;
 	throw MineruleException( MR_ERROR_OPTION_PARSING, MINERULE_OPTIONS_PARSING_ERROR);
       }
     } else {
-      cerr << "Error while parsing options, expecting a miningalgorithms option in:" 
-	   << endl
-	   << "{preferredAlgorithm} and: " << endl
-	   << "\"" << name << "\" found." << endl;
+      std::cerr << "Error while parsing options, expecting a miningalgorithms option in:" 
+	   << std::endl
+	   << "{preferredAlgorithm} and: " << std::endl
+	   << "\"" << name << "\" found." << std::endl;
       throw MineruleException(MR_ERROR_OPTION_PARSING, MINERULE_OPTIONS_PARSING_ERROR);
     }
   }
 
   void
-  MineruleOptions::MiningAlgorithms::ItemsetsMiningAlgorithms::setOption(const string& name, 
-									 const string& value) throw(MineruleException) {
+  MineruleOptions::MiningAlgorithms::ItemsetsMiningAlgorithms::setOption(const std::string& name, 
+									 const std::string& value) throw(MineruleException) {
     if(name=="preferredAlgorithm") {
       try {
 	setPreferredAlgorithm( stringToAlgorithmType(value) );
       } catch (MineruleException e) {
-	cerr << "Error while parsing options, expecting an algorithm option in {" <<
-	  stringWithListOfAlgorithmTypes() << "}, but \"" << value << "\" found." << endl;
+	std::cerr << "Error while parsing options, expecting an algorithm option in {" <<
+	  stringWithListOfAlgorithmTypes() << "}, but \"" << value << "\" found." << std::endl;
 	throw MineruleException( MR_ERROR_OPTION_PARSING, MINERULE_OPTIONS_PARSING_ERROR);
       }
     } else {
-      cerr << "Error while parsing options, expecting a miningalgorithms option in:" 
-	   << endl
-	   << "{preferredAlgorithm} and: " << endl
-	   << "\"" << name << "\" found." << endl;
+      std::cerr << "Error while parsing options, expecting a miningalgorithms option in:" 
+	   << std::endl
+	   << "{preferredAlgorithm} and: " << std::endl
+	   << "\"" << name << "\" found." << std::endl;
       throw MineruleException(MR_ERROR_OPTION_PARSING, MINERULE_OPTIONS_PARSING_ERROR);
     }
   }
 
   void
-  MineruleOptions::MiningAlgorithms::SequencesMiningAlgorithms::setOption(const string& name,
-                                                                         const string& value) throw(MineruleException) {
+  MineruleOptions::MiningAlgorithms::SequencesMiningAlgorithms::setOption(const std::string& name,
+                                                                         const std::string& value) throw(MineruleException) {
     if(name=="preferredAlgorithm") {
       try {
         setPreferredAlgorithm( stringToAlgorithmType(value) );
       } catch (MineruleException e) {
-        cerr << "Error while parsing options, expecting an algorithm option in {" <<
-          stringWithListOfAlgorithmTypes() << "}, but \"" << value << "\" found." << endl;
+        std::cerr << "Error while parsing options, expecting an algorithm option in {" <<
+          stringWithListOfAlgorithmTypes() << "}, but \"" << value << "\" found." << std::endl;
         throw MineruleException( MR_ERROR_OPTION_PARSING, MINERULE_OPTIONS_PARSING_ERROR);
       }
     } else {
-      cerr << "Error while parsing options, expecting a miningalgorithms option in:"
-           << endl
-           << "{preferredAlgorithm} and: " << endl
-           << "\"" << name << "\" found." << endl;
+      std::cerr << "Error while parsing options, expecting a miningalgorithms option in:"
+           << std::endl
+           << "{preferredAlgorithm} and: " << std::endl
+           << "\"" << name << "\" found." << std::endl;
       throw MineruleException(MR_ERROR_OPTION_PARSING, MINERULE_OPTIONS_PARSING_ERROR);
     }
   }
@@ -544,8 +544,8 @@ namespace minerule {
 
   
   void 
-  MineruleOptions::Optimizations::setOption(const string& name, 
-					    const string& value) 
+  MineruleOptions::Optimizations::setOption(const std::string& name, 
+					    const std::string& value) 
                                             throw(MineruleException) {
     if(name=="enableOptimizations") {
       if(value=="True") {
@@ -553,10 +553,10 @@ namespace minerule {
       } else if(value=="False") {
 	setTryOptimizations(false);
       } else {
-	cerr << "Error while parsing options, expecting an "
-	     << "optimizations::tryOptimizations value in " <<endl
-	   << "{True,False} and: " << endl
-	   << "\"" << value << "\" found." << endl;
+	std::cerr << "Error while parsing options, expecting an "
+	     << "optimizations::tryOptimizations value in " <<std::endl
+	   << "{True,False} and: " << std::endl
+	   << "\"" << value << "\" found." << std::endl;
       throw MineruleException(MR_ERROR_OPTION_PARSING, MINERULE_OPTIONS_PARSING_ERROR);
       }
     } else if(name=="incrementalAlgorithm") {
@@ -567,16 +567,16 @@ namespace minerule {
       } else if(value=="Auto") {
 	setIncrementalAlgorithm(Optimizations::AutochooseIncrAlgo);
       } else {
-	cerr << "Error while parsing options, expecting an optimizations::incrementalAlgorithm value" << endl
-	     << "in {Constructive,Destructive,Auto}, but \""+value+"\" found." << endl;
+	std::cerr << "Error while parsing options, expecting an optimizations::incrementalAlgorithm value" << std::endl
+	     << "in {Constructive,Destructive,Auto}, but \""+value+"\" found." << std::endl;
 	throw MineruleException(MR_ERROR_OPTION_PARSING, MINERULE_OPTIONS_PARSING_ERROR);
       }
     } else if(name=="avoidDominanceDetection") {
       try {
 	setAvoidDominanceDetection( Converter(value).toBool() );
       } catch (MineruleException& e) {
-	cerr << "Error while parsing avoidDominanceDetection option, expecting "
-	  "a value in {True, False}, but " << value << "found" << endl;
+	std::cerr << "Error while parsing avoidDominanceDetection option, expecting "
+	  "a value in {True, False}, but " << value << "found" << std::endl;
 	throw MineruleException( MR_ERROR_OPTION_PARSING,
 				 MINERULE_OPTIONS_PARSING_ERROR);
       }
@@ -584,8 +584,8 @@ namespace minerule {
       try {
 	setAvoidEquivalenceDetection( Converter(value).toBool() );
       } catch (MineruleException& e) {
-	cerr << "Error while parsing avoidEquivalenceDetection option, expecting "
-	  "a value in {True, False}, but " << value << "found" << endl;
+	std::cerr << "Error while parsing avoidEquivalenceDetection option, expecting "
+	  "a value in {True, False}, but " << value << "found" << std::endl;
 	throw MineruleException( MR_ERROR_OPTION_PARSING,
 				 MINERULE_OPTIONS_PARSING_ERROR);
       }
@@ -593,17 +593,17 @@ namespace minerule {
       try {
 	setAvoidCombinationDetection( Converter(value).toBool() );
       } catch (MineruleException& e) {
-	cerr << "Error while parsing avoidCombinationDetection option, expecting "
-	  "a value in {True, False}, but " << value << "found" << endl;
+	std::cerr << "Error while parsing avoidCombinationDetection option, expecting "
+	  "a value in {True, False}, but " << value << "found" << std::endl;
 	throw MineruleException( MR_ERROR_OPTION_PARSING,
 				 MINERULE_OPTIONS_PARSING_ERROR);
       }
     } else {
-      cerr << "Error while parsing options, expecting an optimization option in:" 
-	   <<endl
+      std::cerr << "Error while parsing options, expecting an optimization option in:" 
+	   <<std::endl
 	   << "{enableOptimizations, incrementalAlgorithm, avoidEquivalenceDetection"
-	   << ", tryOptimizationThruCombination} and: " << endl
-	   << "\"" << name << "\" found." << endl;
+	   << ", tryOptimizationThruCombination} and: " << std::endl
+	   << "\"" << name << "\" found." << std::endl;
       throw MineruleException(MR_ERROR_OPTION_PARSING,MINERULE_OPTIONS_PARSING_ERROR);
     }
   }
@@ -621,10 +621,10 @@ namespace minerule {
     else if(name=="maxDistinctPredicates")
       setMaxDistinctPredicates( Converter(value).toLong() );
     else {
-      cerr << "Error while parsing options, expecting a combinator option i:"
-	   << endl
-	   << "{timeOut,maxDisjuncts,maxQueries,maxDistinctPredicates}, but" << endl
-	   << "\"" << name << "\" found." << endl;
+      std::cerr << "Error while parsing options, expecting a combinator option i:"
+	   << std::endl
+	   << "{timeOut,maxDisjuncts,maxQueries,maxDistinctPredicates}, but" << std::endl
+	   << "\"" << name << "\" found." << std::endl;
 
       throw MineruleException(MR_ERROR_OPTION_PARSING,
 			      MINERULE_OPTIONS_PARSING_ERROR);
@@ -634,13 +634,13 @@ namespace minerule {
 
 
   void 
-  MineruleOptions::OutStream::setOption(const string& name, 
-					const string& value) 
+  MineruleOptions::OutStream::setOption(const std::string& name, 
+					const std::string& value) 
                                  throw(MineruleException) {
     // we need to modify value, hence we made a copy of it
     // and use it in the rest of the procedure
-    string valueCopy=value;
-    map<string, MRLogger* >& knownStreams =
+   std::string valueCopy=value;
+    std::map<std::string, MRLogger* >& knownStreams =
       getSharedOptions().knownStreams;
 
     if(name=="stream") {
@@ -657,19 +657,19 @@ namespace minerule {
 
 
       if(knownStreams.find(valueCopy)==knownStreams.end()) {
-	ostream* ostrptr(new ofstream(valueCopy.c_str()));
+	std::ostream* ostrptr(new std::ofstream(valueCopy.c_str()));
 
 	if(!*ostrptr) {
-	  cerr << "Error while parsing options, failure while trying to" 
-	       << endl
-	       << "open in output the following file " << valueCopy << endl
+	  std::cerr << "Error while parsing options, failure while trying to" 
+	       << std::endl
+	       << "open in output the following file " << valueCopy << std::endl
 	       << "Possible values for the stream options are:" 
-	       << "{<stdin>,<stdout>,anyStringRepresentingAFileName}" << endl
-	       << "Note you can also use file names having the modifier %i or %m inside." << endl
-	       << "In that case %i is expandended into the current value of the -i parameter" << endl
-	       << "(provided that the -i parameter is used instead of the -m one, otherwise, the" << endl
-	       << "default 'mr' value is assumed). Analogously, the %m parameter will be" << endl
-	       << "substituted with the current minerule name (as it appear in the minerule text" << endl;
+	       << "{<stdin>,<stdout>,anyStringRepresentingAFileName}" << std::endl
+	       << "Note you can also use file names having the modifier %i or %m inside." << std::endl
+	       << "In that case %i is expandended into the current value of the -i parameter" << std::endl
+	       << "(provided that the -i parameter is used instead of the -m one, otherwise, the" << std::endl
+	       << "default 'mr' value is assumed). Analogously, the %m parameter will be" << std::endl
+	       << "substituted with the current minerule name (as it appear in the minerule text" << std::endl;
 	  throw MineruleException(MR_ERROR_OPTION_PARSING,MINERULE_OPTIONS_PARSING_ERROR);
 	}
 
@@ -688,17 +688,17 @@ namespace minerule {
 		  +valueCopy+"' to int.");
       }
     } else {
-      cerr << "Error while parsing options, expecting a stream option in:" <<endl
-	   << "{stream} and: " << endl
-	   << "\"" << name << "\" found." << endl;
+      std::cerr << "Error while parsing options, expecting a stream option in:" <<std::endl
+	   << "{stream} and: " << std::endl
+	   << "\"" << name << "\" found." << std::endl;
       throw MineruleException(MR_ERROR_OPTION_PARSING,MINERULE_OPTIONS_PARSING_ERROR);
     }
   }
 
 
   void 
-  MineruleOptions::Parsers::setOption(const string& name, 
-					const string& value) 
+  MineruleOptions::Parsers::setOption(const std::string& name, 
+					const std::string& value) 
                                  throw(MineruleException) {
     if(name=="logfile") {
       if(value=="<stdout>")
@@ -720,9 +720,9 @@ namespace minerule {
       int max = stringToLong(value,name);
       setMaxHeadElems(max);
     } else {
-      cerr << "Error while parsing options, expecting a parser option in:" <<endl
-	   << "{logfile, minBodyElems, maxBodyElems, minHeadElems, maxHeadElems} and: " << endl
-	   << "\"" << name << "\" found." << endl;
+      std::cerr << "Error while parsing options, expecting a parser option in:" <<std::endl
+	   << "{logfile, minBodyElems, maxBodyElems, minHeadElems, maxHeadElems} and: " << std::endl
+	   << "\"" << name << "\" found." << std::endl;
       throw MineruleException(MR_ERROR_OPTION_PARSING, MINERULE_OPTIONS_PARSING_ERROR);
     }
   }

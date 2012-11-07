@@ -54,7 +54,7 @@ class sqlCoreConn  {
 
   class CachedDBInserter : public DBInserter {
    ofstream outR, outHB;
-   string filename;
+  std::string filename;
    public:
 	CachedDBInserter(sqlCoreConn& cc) : DBInserter(cc) {};
    virtual void insert_DB(const HeadBodyType&, 
@@ -68,7 +68,7 @@ class sqlCoreConn  {
    virtual void finalize();
   };
 
-  string outTableName;
+ std::string outTableName;
   //  const AlgorithmsOptions* algoOptions;
   MinMaxPair bodyCard;
   MinMaxPair headCard;
@@ -124,7 +124,7 @@ public:
 		      const SourceRowAttrCollectionDescriptor& body, 
 		      const SourceRowAttrCollectionDescriptor& head);
 
-   void setOutTableName(const string& str) {
+   void setOutTableName(const std::string& str) {
      outTableName=str;
    }
 
@@ -135,7 +135,7 @@ public:
    void finalize() { dbInserter->finalize(); }
 
    // name of the table where rules will be written
-   const string& getOutTableName() const {
+   const std::string& getOutTableName() const {
      return outTableName;
    }
 
@@ -144,7 +144,7 @@ public:
    // idBody and idHead are foreign (non unique) keys of the table whose
    // name can be retrieved using the following procedure.
 
-   string getElemsOutTableName() const {
+  std::string getElemsOutTableName() const {
      return outTableName + "_elems";
    }
   // void closeQuery();

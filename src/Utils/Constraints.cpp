@@ -3,11 +3,11 @@
 
 namespace minerule {
 
-using namespace std;
 
-bool SumLessThan::check (BodyMap& itemMap, vector<ItemType>& items) {
+
+bool SumLessThan::check (BodyMap& itemMap, std::vector<ItemType>& items) {
 	int sum = 0;
-	for (vector<ItemType>::iterator i = items.begin(); i != items.end() && sum < value; i++)
+	for(std::vector<ItemType>::iterator i = items.begin(); i != items.end() && sum < value; i++)
 		sum += itemMap[*i].attribute[attributeIndex].minValue();
 	return sum < value;
 }
@@ -20,9 +20,9 @@ bool SumLessThan::check (Transaction& items) {
 	return sum < value;
 }
 
-bool SumLessEq::check (BodyMap& itemMap, vector<ItemType>& items) {
+bool SumLessEq::check (BodyMap& itemMap, std::vector<ItemType>& items) {
 	int sum = 0;
-	for (vector<ItemType>::iterator i = items.begin(); i != items.end() && sum <= value; i++)
+	for (std::vector<ItemType>::iterator i = items.begin(); i != items.end() && sum <= value; i++)
 		sum += itemMap[*i].attribute[attributeIndex].minValue();
 	return sum <= value;
 }
@@ -35,9 +35,9 @@ bool SumLessEq::check (Transaction& items) {
 	return sum <= value;
 }
 
-bool SumGreaterThan::check (BodyMap& itemMap, vector<ItemType>& items) {
+bool SumGreaterThan::check (BodyMap& itemMap, std::vector<ItemType>& items) {
 	int sum = 0;
-	for (vector<ItemType>::iterator i = items.begin(); i != items.end() && sum <= value; i++)
+	for (std::vector<ItemType>::iterator i = items.begin(); i != items.end() && sum <= value; i++)
 		sum += itemMap[*i].attribute[attributeIndex].maxValue();
 	return sum > value;
 }
@@ -50,9 +50,9 @@ bool SumGreaterThan::check (Transaction& items) {
 	return sum > value;
 }
 
-bool SumGreaterEq::check (BodyMap& itemMap, vector<ItemType>& items) {
+bool SumGreaterEq::check (BodyMap& itemMap, std::vector<ItemType>& items) {
 	int sum = 0;
-	for (vector<ItemType>::iterator i = items.begin(); i != items.end() && sum <= value; i++)
+	for (std::vector<ItemType>::iterator i = items.begin(); i != items.end() && sum <= value; i++)
 		sum += itemMap[*i].attribute[attributeIndex].maxValue();
 	return sum >= value;
 }

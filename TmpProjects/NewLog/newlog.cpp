@@ -26,7 +26,7 @@ namespace minerule {
     os=&ostr;
     LogInfo li(CONT_SEPARATOR);
     logStack.push_back(li);
-    *os<<START_SEPARATOR<<"MRLogger starting..."<<endl;
+    *os<<START_SEPARATOR<<"MRLogger starting..."<<std::endl;
     updateIntentString();
   };
 
@@ -46,13 +46,13 @@ namespace minerule {
 
   void MRLogger::push(const string& descr) {
     indent();
-    *os<<endl;
+    *os<<std::endl;
 
     LogInfo li(indentInset+CONT_SEPARATOR);
     logStack.push_back(li);
 
     indent();
-    *os<<indentInset<<"+"<<descr<<endl;
+    *os<<indentInstd::set<<"+"<<descr<<std::endl;
     updateIntentString();
   }
 
@@ -67,12 +67,12 @@ namespace minerule {
     indent();
 
     if(!logStack.empty())
-      *os<<indentInset<<END_SEPARATOR<<timeMemInfo<<endl;
+      *os<<indentInstd::set<<END_SEPARATOR<<timeMemInfo<<std::endl;
     else
-      *os<<END_SEPARATOR<<"MRLogger terminated:"<<timeMemInfo<<endl;
+      *os<<END_SEPARATOR<<"MRLogger terminated:"<<timeMemInfo<<std::endl;
 
     indent();
-    *os<<endl;
+    *os<<std::endl;
   }
 
 

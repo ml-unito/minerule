@@ -9,7 +9,7 @@
 #include "Utils/SQLUtils.h"
 #include <odbc++/resultsetmetadata.h>
 
-using namespace std;
+
 using namespace minerule;
 
 
@@ -42,7 +42,7 @@ std::string MIndex::concatenate(std::vector<int>& v) {
 void showFile(const char *table){
 
 
-  cout <<"GLI ELEMENTI DEL FILE "<< table << " sono: " << endl;
+  std::cout <<"GLI ELEMENTI DEL FILE "<< table << " sono: " << std::endl;
 
   ifstream fin( table , ios::binary);
 
@@ -52,13 +52,13 @@ void showFile(const char *table){
     if(!fin)
       break;
 
-    cout << group;
+    std::cout << group;
 
     fin.read((char*)&pt,sizeof(int));
     if(!fin)
       break;
 
-    cout << " : " << pt << endl;
+    std::cout << " : " << pt << std::endl;
   }
 
 
@@ -81,13 +81,13 @@ void MIndex::showIndex() {
   //OPEN TABLE
   gist *gindex = new gist;
 
-  cout <<"GLI ELEMENTI DI " << priIdx << " SONO:" <<endl;
+  std::cout <<"GLI ELEMENTI DI " << priIdx << " SONO:" <<std::endl;
 
   rc_t status = gindex->open(priIdx.c_str()); //, extension);
 
   if (status != RCOK) {
     delete gindex;
-    cout << "Error2 opening table." << endl;
+    std::cout << "Error2 opening table." << std::endl;
     return;
   }
 
@@ -96,7 +96,7 @@ void MIndex::showIndex() {
   query = new bt_query_t(bt_query_t::bt_nooper, NULL, NULL);
 
   if (gindex->fetch_init(cursor, query) != RCOK) {
-      cerr << "can't initialize cursor" << endl;
+      std::cerr << "can't initialize cursor" << std::endl;
       return;
   }
 
@@ -111,16 +111,16 @@ void MIndex::showIndex() {
       klen = gist_p::max_tup_sz;
       dlen = gist_p::max_tup_sz;
       if (gindex->fetch(cursor, (void *) key, klen, (void *) data, dlen, eof) != RCOK) {
-          cerr << "can't fetch from cursor" << endl;
+          std::cerr << "can't fetch from cursor" << std::endl;
 			break;
       }
       if (eof) break;
 
-      cout << (char*) key;
-      cout <<" : " << (char*) data <<endl;
+      std::cout << (char*) key;
+      std::cout <<" : " << (char*) data <<std::endl;
       cnt++;
   }
-  cout << "Retrieved " << cnt << " items" << endl;
+  std::cout << "Retrieved " << cnt << " items" << std::endl;
 
   gindex->close();
 
@@ -142,7 +142,7 @@ bool MIndex::createIndex() {
     odbc::Connection* connection=
       mrOpts.getOdbc_db().getConnection();
 
-  //MRLog() << "Connessione ok!" << endl;
+  //MRLog() << "Connessione ok!" << std::endl;
   odbc::Statement* state = connection->createStatement(
 			    odbc::ResultSet::TYPE_SCROLL_INSENSITIVE,
 			    odbc::ResultSet::CONCUR_READ_ONLY);
@@ -150,10 +150,10 @@ bool MIndex::createIndex() {
   q += name;
   rs = state->executeQuery(q.c_str());
 
-  //MRLog() << "Fine!" << endl;
+  //MRLog() << "Fine!" << std::endl;
 
   } catch (odbc::SQLException& e) {
-    MRErr() << e.getMessage() << endl;
+    MRErr() << e.getMessage() << std::endl;
     throw;
   }
   //CREATE TABLE
@@ -172,12 +172,12 @@ bool MIndex::createIndex() {
     status = gindex->create(priIdx.c_str(), str_extension);
   gindex->flush();
   if (status != RCOK) {
-    cout << "Error opening table: " << priIdx << endl;
+    std::cout << "Error opening table: " << priIdx << std::endl;
     delete gindex;
     return false;
   }
 
-  cout << "Creating index " << priIdx << " as type " << (typeIsNum ? "MR_bt_int" : "MR_bt_str") << endl;
+  std::cout << "Creating index " << priIdx << " as type " << (typeIsNum ? "MR_bt_int" : "MR_bt_str") << std::endl;
 
   int howMany = 0;
 
@@ -200,19 +200,19 @@ bool MIndex::createIndex() {
     if (typeIsNum) {
       if (gindex->insert((void* )&intItem, sizeof(intItem),
 			 (void *) group.c_str(), group.length()+1) != RCOK) {
-	cerr << "can't insert" << endl;
+	std::cerr << "can't insert" << std::endl;
       }
     }
     else {
       if (gindex->insert((void* )item.c_str(), item.length()+1,
 			 (void *) group.c_str(), group.length()+1) != RCOK) {
-	cerr << "can't insert" << endl;
+	std::cerr << "can't insert" << std::endl;
       }
     }
     howMany++;
-    if (howMany % 1000 == 0) cout << "." << flush;
+    if (howMany % 1000 == 0) std::cout << "." << flush;
   }//while
-  cout << "done" << endl;
+  std::cout << "done" << std::endl;
   
   gindex->close();
   
@@ -235,9 +235,9 @@ void MIndex::removeIndex(){
 
     //DROP TABLE
   if (unlink(priIdx.c_str()))
-    cout << "There is no index for table " << name << endl;
+    std::cout << "There is no index for table " << name << std::endl;
   else
-    cout << "Index " << priIdx << " dropped." << endl;
+    std::cout << "Index " << priIdx << " dropped." << std::endl;
 
 }
 
@@ -258,7 +258,7 @@ bool MIndex::existIndex() {
 }
 /************************************************/
 
-bool MIndex::fetchInit(set<std::string>& groups, void *query){
+bool MIndex::fetchInit(std::set<std::string>& groups, void *query){
 
   gist *gindex = new gist;
 
@@ -266,14 +266,14 @@ bool MIndex::fetchInit(set<std::string>& groups, void *query){
 
   if (status != RCOK) {
     delete gindex;
-    cout << "Error opening table " << priIdx << endl;
+    std::cout << "Error opening table " << priIdx << std::endl;
     return false;
    }
 
   gist_cursor_t cursor;
 
   if (gindex->fetch_init(cursor, (const gist_query_t*) query) != RCOK) {
-      cerr << "can't initialize cursor" << endl;
+      std::cerr << "can't initialize cursor" << std::endl;
       return false;
   }
  // groups.erase(groups.begin(),groups.end());
@@ -290,7 +290,7 @@ bool MIndex::fetchInit(set<std::string>& groups, void *query){
       klen = gist_p::max_tup_sz;
       dlen = gist_p::max_tup_sz;
       if (gindex->fetch(cursor, (void *) key, klen, (void *) data, dlen, eof) != RCOK) {
-          cerr << "Can't fetch from cursor" << endl;
+          std::cerr << "Can't fetch from cursor" << std::endl;
           gindex->close();
 	       return false;
       }
@@ -298,14 +298,14 @@ bool MIndex::fetchInit(set<std::string>& groups, void *query){
 			//groups[*(int*)data] = *(int*) data;
 			std::string group((char*)data);
 			groups.insert(group);
-//		  	cout << *(int*)key << " : " << *(int*)data << endl;
+//		  	std::cout << *(int*)key << " : " << *(int*)data << std::endl;
 		   howMany++;
 		}
 		} while (!eof);
 
   gindex->close();
   
-		cout << "Size: " << groups.size() << " su " << howMany << endl;
+		std::cout << "Size: " << groups.size() << " su " << howMany << std::endl;
 //		current = groups.begin();
   return true;
 }
@@ -337,9 +337,9 @@ MIndexIterator::MIndexIterator(MIndex& mi, bt_query_t * query) {
 }
 
 void MIndexIterator::intersect(MIndex& mi, bt_query_t * query) {
-	set<std::string> miGroups,newGroups;
+	std::set<std::string> miGroups,newGroups;
 	mi.fetchInit(miGroups,query);
-	insert_iterator<set<std::string> > ii(newGroups, newGroups.begin());
+	insert_iterator<std::set<std::string> > ii(newGroups, newGroups.begin());
 	set_intersection(groups.begin(),groups.end(),miGroups.begin(),miGroups.end(),ii);
 	groups = newGroups;
 	cur= groups.begin();
@@ -351,8 +351,8 @@ void MIndexIterator::unify(MIndex& mi, bt_query_t * query) {
 }
 
 void MIndexIterator::unify(MIndexIterator& mii) {
-	set<std::string> newGroups;
-	insert_iterator<set<std::string> > ii(newGroups, newGroups.begin());
+	std::set<std::string> newGroups;
+	insert_iterator<std::set<std::string> > ii(newGroups, newGroups.begin());
 	set_intersection(groups.begin(),groups.end(),mii.groups.begin(),mii.groups.end(),ii);
 	groups = newGroups;
 	cur= groups.begin();
@@ -364,7 +364,7 @@ int main(int argc, char** argv) {
 
 	 MineruleOptions& mrOpts =  MineruleOptions::getSharedOptions();
 	 mrOpts.readFromFile(MROPTIONFILE);
-	 vector<int> groupCols;
+	 std::vector<int> groupCols;
 	 groupCols.insert(groupCols.end(), 8);
 
 	MIndex MIR("sales_facts","product_key",groupCols);
@@ -375,8 +375,8 @@ int main(int argc, char** argv) {
   bt_query_t::bt_oper oper = bt_query_t::bt_nooper;
 
   if (argc != 2 && argc != 3) {
-	  cerr << "Usage: mindex [bt_operator] key" << endl;
-	  cerr << "Usage example: mindex lt 33" << endl;
+	  std::cerr << "Usage: mindex [bt_operator] key" << std::endl;
+	  std::cerr << "Usage example: mindex lt 33" << std::endl;
 	  return -1;
   }
 
@@ -416,7 +416,7 @@ int main(int argc, char** argv) {
 	  current = mr.getResultSet()->getInt(8);
 	  if (prev != current) {
 		  prev = current;
-		  cout << "DATA MAIN: " << current <<endl;
+		  std::cout << "DATA MAIN: " << current <<std::endl;
 	  }
   }
 

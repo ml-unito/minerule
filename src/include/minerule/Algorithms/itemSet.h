@@ -115,7 +115,7 @@ private:
 
 
     void cancellaRef(list<itemSet<NODETYPE>* >* listPtr);
-// Ricorsiva che scende giù in modo ricorsivo.
+// Ricorsiva che scende giÃ¹ in modo ricorsivo.
 // Non si possono cancallare le gid immediatamente
     void createNewItemSet(double,double,int);
 
@@ -634,7 +634,7 @@ void itemSet< NODETYPE >::mergeItemSet(
    level=0;
    size_t lastElem;
 
-   // Il db del minerule è connesso!
+   // Il db del minerule Ã¨ connesso!
 
    Qry="select level,"
      +srd.getBody().getSQLColumnNames()+" from tmp_Rule_Base order by id;";

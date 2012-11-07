@@ -47,7 +47,7 @@ namespace minerule {
   SourceRowElement::serializeElementToString(const SourceRowElement& elem,
 					     std::string& strRepr) 
     throw(MineruleException) {
-    ostringstream sstream;
+    std::ostringstream sstream;
     sstream << elem.getElementType();
     elem.serialize(sstream);
     strRepr = sstream.str();
@@ -57,7 +57,7 @@ namespace minerule {
   SourceRowElement*
   SourceRowElement::deserializeElementFromString(const std::string& strRepr) 
     throw(MineruleException){
-    istringstream sstream(strRepr);
+    std::istringstream sstream(strRepr);
     assert(sstream);
     ElementType elType;
     sstream>>elType;

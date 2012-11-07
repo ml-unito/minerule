@@ -56,7 +56,7 @@ public:
    void printItemSetRecursive(int lev);
    void save_Large_ItemSet(int lev,int isPart);
    void cancellaRef(list<itemSet<NODETYPE>* >* listPtr);
-   // Ricorsiva che scende gi˘ in modo ricorsivo.
+   // Ricorsiva che scende gi√π in modo ricorsivo.
    // Non si possono cancallare le gid immediatamente
    void createNewItemSet(double,double,int);
 
@@ -463,7 +463,7 @@ int lev)
  }
 
 
-//IMPORTante propriet‡ della map
+//IMPORTante propriet√† della map
 //Erasing an element from a map also does not invalidate any iterators, except,
 //of course, for iterators that actually point to the element that is being erased.
 template< class NODETYPE >
@@ -515,7 +515,7 @@ void itemSet< NODETYPE >::cancellaRef( list<itemSet<NODETYPE>* >* listPtr)
      listPtr->erase(riferimento);
  }
 
-//IMPORTante propriet‡ della map
+//IMPORTante propriet√† della map
 //Erasing an element from a map also does not invalidate any iterators, except,
 //of course, for iterators that actually point to the element that is being erased.
 
@@ -735,7 +735,7 @@ int itemSet< NODETYPE >::mergeItemSetHelper(String& nToken,ifstream&in,NODETYPE 
               if ((ptrList.vect.size()-1)>=level)
                 {
                   listPtr=ptrList.getList(level);
-                  //cout<<"utilizzo una lista gi‡ esistente "<<listPtr<<endl;
+                  //cout<<"utilizzo una lista gi√† esistente "<<listPtr<<endl;
                   listPtr->push_back(prttNew);
 		  riferimento=listPtr->end();
 		  riferimento--;
@@ -843,7 +843,7 @@ boolean itemSet< NODETYPE >::gen_final_count(itemSetList<NODETYPE>& ptrList,doub
    return toContinue;
 }
 
-// importante : va in profondit‡ e allo stesso tempo sfrutta apriori.
+// importante : va in profondit√† e allo stesso tempo sfrutta apriori.
 
 // Rivedere e compattare questa procedura.
 //
@@ -876,7 +876,7 @@ boolean itemSet< NODETYPE >::gen_final_countHelper(itemSetList<NODETYPE>& ptrLis
        tList=i->second.getGidList();
 
        oneOK=false;
-       // il controllo su tList non dovrebbe pi˘ servire.
+       // il controllo su tList non dovrebbe pi√π servire.
        if ( (prttNew!=NULL) && (!tList.empty()) )
        {
          myAncestor=prttNew->getAncestor();

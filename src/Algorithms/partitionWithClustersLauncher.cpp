@@ -254,9 +254,9 @@ void partitionWithClusters( const minerule::AlgorithmsOptions& options )
    // A questo punto vado in pronfondita' a livelli.
    // Genero il livello 2 del body, controllando l'esistenza delle head e l'espolosione della
    // stessa head
-   // Genero il livello 3 etc... per far ciò uso la lista prtList che contiene gli indirizzi
+   // Genero il livello 3 etc... per far ciÃ² uso la lista prtList che contiene gli indirizzi
    // fisici dei livelli.
-   // Finisco quando non posso più estendere il body
+   // Finisco quando non posso piÃ¹ estendere il body
    levelIn=1;
    toContinue=true;
    while(toContinue && levelIn<options.getBodyCardinalities().getMax() )
@@ -275,7 +275,7 @@ void partitionWithClusters( const minerule::AlgorithmsOptions& options )
   // kItem.printToDesign("BodyExt",isPart);
   // Salvo tutta la struttura in due db temporanei.
   // allo stesso tempo dealloco le strutture
-  // Il tracciato del salvataggio è nel solito file lyx
+  // Il tracciato del salvataggio Ã¨ nel solito file lyx
    //  cout<<"Save_Large_ItemSet"<<endl;
    //  cout << "Num Attr. allocati (prima di saveLarge):" << 
    //    MemDebugGenericSourceRowAttribute::getInstanceCounter() << endl;
@@ -333,7 +333,7 @@ void partitionWithClusters( const minerule::AlgorithmsOptions& options )
  delete statement;
  // kItem.printToDesign("lista",99);
 
- // A questo punto ho una struttura su più livelli ma solo il primo livello delle body
+ // A questo punto ho una struttura su piÃ¹ livelli ma solo il primo livello delle body
  // e delle head ha le gid,cid a posto.
 
  //  cout<<"Gruppi Totali "<<totGroups<<" Supporto "<<support<<endl;

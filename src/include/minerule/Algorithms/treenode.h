@@ -1,7 +1,7 @@
 /* TREENODE.H
 In questo file si definisce la classe del nodo.
 Gli elementi sono tutti privati e per accedervi si sono scritti dei metodi.
-Si è usato il prefisso set per i metodi che impostano un valore e il prefisso get per
+Si Ã¨ usato il prefisso set per i metodi che impostano un valore e il prefisso get per
 i metodi che richiedono un valore.
 Di seguito sono commentati i campi e i metodi.
 Vedi file treenode.doc per esempi e immagini di spiegazioni.
@@ -54,7 +54,7 @@ class TreeNode
     void setFather(TreeNode<NODETYPE>* fath) { father=fath; }
     TreeNode<NODETYPE>* getFather() { return father; }
 
-// Imposta e ritorna il valore dell'antenato più lontano. Vedi descrizione più in basso
+// Imposta e ritorna il valore dell'antenato piÃ¹ lontano. Vedi descrizione piÃ¹ in basso
 // haveSameAncestor controlla se hanno lo stesso antenato comune.
     void setAncestor(TreeNode<NODETYPE>* anc)  { ancestor=anc; }
     TreeNode<NODETYPE>* getAncestor() { return ancestor;}
@@ -76,13 +76,13 @@ class TreeNode
     int getCount() const { return count; }
     void decCount(int value) { count=count-value; }
 
-// Valore boolo per sapere su un nodo è marcato o no. Vedere quando serve più avanti.
+// Valore boolo per sapere su un nodo Ã¨ marcato o no. Vedere quando serve piÃ¹ avanti.
     bool isMarked() { return hasMarked; }
     void setMarked() { hasMarked=true; }
 
-// Ogni nodo può avere da 0 a n figli. I ptr sono memorizzati in una map!
-// La getMap è importantissima torna la mappa ovvero tutte le coppie di valori
-// nodo,ptr dei figli del nodo in cui è richiamata questa funzione
+// Ogni nodo puÃ² avere da 0 a n figli. I ptr sono memorizzati in una map!
+// La getMap Ã¨ importantissima torna la mappa ovvero tutte le coppie di valori
+// nodo,ptr dei figli del nodo in cui Ã¨ richiamata questa funzione
     MapType& getMap() { return mapChild; }
 
 // Cerca all'interno della mappa (ovvero dei figli) un valore
@@ -94,13 +94,13 @@ class TreeNode
 // tipo del dato e dato stesso.
     NODETYPE data;
 
-// Ogni nodo può avere da 0 a n figli. I ptr sono memorizzati in una map!
+// Ogni nodo puÃ² avere da 0 a n figli. I ptr sono memorizzati in una map!
     MapType  mapChild;
 
 // Ptr al padre diretto.
     TreeNode<NODETYPE>* father;
 
-// Ptr all'antenato più lontano diverso da ROOTNODE (eccezione: per i 
+// Ptr all'antenato piÃ¹ lontano diverso da ROOTNODE (eccezione: per i 
 // nodi a livello 1 (i.e., i figli di ROOTNODE), l'ancestor e' ROOTNODE)
     TreeNode<NODETYPE>* ancestor;
 
@@ -110,7 +110,7 @@ class TreeNode
 // Contatore del nodo.
     int count;
 
-// Bool che indica se questo nodo è stato marcato o no questo nodo.
+// Bool che indica se questo nodo Ã¨ stato marcato o no questo nodo.
     bool hasMarked;
 };
 
@@ -129,7 +129,7 @@ TreeNode< NODETYPE >::TreeNode(const Counter<NODETYPE>& counter, const NODETYPE 
 
 // Inserisce nella map dei figli il nuovo figlio con i riferimenti.
 // Potevo anche usare la primitiva mapChild.insert(make_pair(nt,node))
-// Questa scrittura risulta più immediata.
+// Questa scrittura risulta piÃ¹ immediata.
 template< class NODETYPE >
 void TreeNode< NODETYPE >::insertNode(const NODETYPE nt,TreeNode<NODETYPE> * node) {
   mapChild[nt]=node;

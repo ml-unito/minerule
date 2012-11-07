@@ -1,3 +1,4 @@
+.DS_Store
 build
 ExtLibs/galib245
 ExtLibs/libgist

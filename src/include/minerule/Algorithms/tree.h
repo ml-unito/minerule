@@ -1,6 +1,6 @@
 /* TREE.H
 In questo file si definisce la classe TREE [ALBERO].
-Esso Ë composto dalle istanze di TREENODE.
+Esso √® composto dalle istanze di TREENODE.
 Gli elementi sono tutti privati e per accedervi si sono scritti dei metodi.
 Di seguito sono commentati i campi e i metodi.
 Ci sono molte funzioni xxxHelper. Servono per la ricorsione.
@@ -44,7 +44,7 @@ class Tree
 // Aggiunge la root all'albero.
     void addRoot(const Counter<NODETYPE>&, const NODETYPE &);
 
-// Legge e stampa l'albero in profondit‡ da sinistra a destra. [Ricorsiva]
+// Legge e stampa l'albero in profondit√† da sinistra a destra. [Ricorsiva]
     void preOrderTraversal();
 
 // Legge l'albero e genera i file di testo per disegnare con il tool ViZuale
@@ -57,8 +57,8 @@ class Tree
 // Ordina l'albero seguendo i valori del contatore generale.
     void makeOrdina(Tree <NODETYPE> *,Counter <NODETYPE>*,bool );
 
-// Taglio anticipato. So che l'antenato Ë cambiato. Posso fare un taglio definitivo
-// che coinvolge l'ancestor (antenato pi˘ lontano)
+// Taglio anticipato. So che l'antenato √® cambiato. Posso fare un taglio definitivo
+// che coinvolge l'ancestor (antenato pi√π lontano)
     void cut(NODETYPE ancestor,double nSup);
 
 // Taglio dei cammini che non hanno supporto sufficiente
@@ -85,7 +85,7 @@ class Tree
 // Root
     TreeNode< NODETYPE > *rootPtr;
 
-// Funzioni di Utilit‡. _Funzioni Helper leggi considerazione iniziale.
+// Funzioni di Utilit√†. _Funzioni Helper leggi considerazione iniziale.
 //    void insertNodeHelper( TreeNode< NODETYPE > *, StringTokenizer&, int, bool, TreeNode< NODETYPE > *  );
     
     
@@ -140,7 +140,7 @@ Tree< NODETYPE >::Tree() { rootPtr = NULL; }
 // Aggiunge la root all'albero.
 template< class NODETYPE >
 void Tree< NODETYPE >::addRoot( const Counter<NODETYPE>& counter, const NODETYPE &value ) {
-// Il valore di default per la root Ë 0.
+// Il valore di default per la root √® 0.
   rootPtr = new TreeNode < NODETYPE > (counter, value,0);
   rootPtr->setFather(NULL);
   rootPtr->setAncestor(NULL);
@@ -226,7 +226,7 @@ void Tree< NODETYPE >::insertNodeHelper(
 }
 
 
-// Legge e stampa a video l'albero. Lettura in profondit‡ da sx a dx
+// Legge e stampa a video l'albero. Lettura in profondit√† da sx a dx
 template< class NODETYPE >
 void Tree< NODETYPE >::preOrderTraversal() {
   cout<<" --------------------- "<<endl;
@@ -459,7 +459,7 @@ int Tree< NODETYPE >::makeOrdinaHelper(TreeNode< NODETYPE > *ptr,
 /*
 // Funzione di ordinamento della stringa letta dall'albero non ordinato.
 // la ordina e restituisce in ordine i token da inserire.
-// Funziona di utilit‡. E' possibile in futuro inserirla in un file di utilit‡
+// Funziona di utilit√†. E' possibile in futuro inserirla in un file di utilit√†
 template< class NODETYPE >
 string Tree< NODETYPE >::ordinaSequenza(string value,Counter <NODETYPE>* linkCount) {
   typedef multimap <int, NODETYPE> mmap;
@@ -515,18 +515,18 @@ void Tree< NODETYPE >::cut(NODETYPE ancestor,double nSup) {
 
   i=m1.find(ancestor);
   assert(i!=m1.end());
-// cout<<"Non ho pi˘ lo stesso antenato"<<endl;
+// cout<<"Non ho pi√π lo stesso antenato"<<endl;
 // cout<<i->first<<endl;
 // cout<<"entro in cutHelper standard ma con ptr di ancestor"<<endl;
   if (i->second->getCount()<nSup) {
-// Il mio ancestor non ha supporto sufficiente. SicchË anche i miei successori
+// Il mio ancestor non ha supporto sufficiente. Sicch√® anche i miei successori
 // non avranno supp. suff. -> dealloco tutto ed elimino tutto.
     deallocaErase(i->second);
     m1.erase(i);
   }
   else {
 // Ancestor ha supporto sufficiente. Controllo i supporti degli eredi e poi
-// lo marco cosÏ nel taglio finale non devo ricontrollare di nuovo tutto.
+// lo marco cos√¨ nel taglio finale non devo ricontrollare di nuovo tutto.
     cutHelper(i->second,nSup);
     i->second->setMarked();
   }
@@ -534,7 +534,7 @@ void Tree< NODETYPE >::cut(NODETYPE ancestor,double nSup) {
 
 
 // Controlla e taglia i nodi con supporto insufficiente.
-// Controlla se il nodo Ë marcato. Se fosse marcato indicherebbe che Ë gi‡
+// Controlla se il nodo √® marcato. Se fosse marcato indicherebbe che √® gi√†
 // stato controllato in precedenza quando !haveSameAncestor.
 // Vedi dettagli in file osservazioni.doc
 template< class NODETYPE >
@@ -623,7 +623,7 @@ TreeNode< NODETYPE > *ptr, deque<NODETYPE>& path, int sum) {
 }
 
 
-// Funzione di utilit‡. Crea diversi file a secondo della radice passata.
+// Funzione di utilit√†. Crea diversi file a secondo della radice passata.
 // Questi file vengono dati in input al programma vizuale.exe scritto in Vbasic
 // permette di disegnare o salvare una gif con tutta la struttura ad albero.
 template< class NODETYPE >
@@ -683,7 +683,7 @@ void Tree< NODETYPE >::preOrderToDesignHelper( TreeNode< NODETYPE > *ptr, int le
 
 
 // Legge l'albero in ordine e crea la lista nel contatore generale.
-// La lista Ë creata in base al nodetype data.
+// La lista √® creata in base al nodetype data.
 // Ci serve per garantire che la lista si sposti da sinistra verso destra.
 // Con questa assunzione e controllando gli ancestor possiamo fare tagli prima
 // di terminare la lettura della lista.

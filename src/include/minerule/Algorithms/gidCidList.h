@@ -170,7 +170,7 @@ void gidCidList< NODETYPELIST >::insertValue(NODETYPELIST gid,NODETYPELIST cid)
    {
      if (i->second.find(cid)==i->second.end())
          i->second.insert(make_pair(cid,1));
-     //else cout<<"l'elemento esiste già"<<endl;
+     //else cout<<"l'elemento esiste giÃ "<<endl;
 
    }
 

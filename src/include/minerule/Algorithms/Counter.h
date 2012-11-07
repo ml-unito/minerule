@@ -52,8 +52,8 @@ class Counter
 // Aggiunge un nodo nella struttura. [MAP]
     void add(NODETYPE nt, unsigned int counterVal=0);
     void print();
-// Esiste la possibilit‡ di inserire i valori sia indicando un peso che non indicando nulla
-// Il valore di default Ë 1
+// Esiste la possibilit√† di inserire i valori sia indicando un peso che non indicando nulla
+// Il valore di default √® 1
     void addValues(deque<NODETYPE>&);
     void addValue(NODETYPE&);
     //    void addValues(StringTokenizer& mytoken, int peso);
@@ -67,7 +67,7 @@ class Counter
 // Stampa a video la tabella con nodo, valore, ordine. Importante per debug
     void leggiCounter();
 
-// Incrementa il contatore o di una unit‡ o del peso passato.
+// Incrementa il contatore o di una unit√† o del peso passato.
     void incrCount(NODETYPE nt);
     void incrCount(NODETYPE nt,int peso);
 
@@ -117,7 +117,7 @@ Counter< NODETYPE >::Counter() { }
 /*
 // Serve per inizializzare la tabella contatore generale.
 // Apre il file ncoppie.txt e legge tutti gli id che esistono e li inserisce nella struttura.
-// Simulo quello che dovr‡ essere fatto da una query.
+// Simulo quello che dovr√† essere fatto da una query.
 template< class NODETYPE >
 void Counter< NODETYPE >::pushElements() {
   NODETYPE elem;
@@ -125,7 +125,7 @@ void Counter< NODETYPE >::pushElements() {
   FILE *infile2;
   string tokenT;
 
-// Qui ci vorr‡ la query SQL per vedere quanti n sono presenti nella tavola
+// Qui ci vorr√† la query SQL per vedere quanti n sono presenti nella tavola
 
   if ( (infile2=fopen("example/ncoppie.txt","r"))==NULL)
     { cout << "Error opening file ncoppie"; exit (0); }
@@ -217,7 +217,7 @@ void Counter< NODETYPE >::addValues(StringTokenizer& mytoken,int peso) {
 }
 */
 
-// In questa procedura nessun controllo poichË so che le posizioni esistono tutte
+// In questa procedura nessun controllo poich√® so che le posizioni esistono tutte
 // Incremento il contatore assoluto
 template< class NODETYPE >
 void Counter< NODETYPE >::incrCount(NODETYPE nt) { 
@@ -399,7 +399,7 @@ void Counter< NODETYPE >::estrai_cammini_lazy(TreeNode<NODETYPE>* tnd, vector<NO
 }
 
 
-// Legge tutte le liste partendo da quelle con il nodo con il contatore pi˘ basso
+// Legge tutte le liste partendo da quelle con il nodo con il contatore pi√π basso
 // Terminata la lista fa il cut finale del fp-tree conditional.
 template< class NODETYPE >
 void Counter< NODETYPE >::esplodi(sqlCoreConn& coreConn,double nSup, double totGroups, bool originalFPGrowth) {

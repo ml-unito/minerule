@@ -10,8 +10,6 @@
 #include "Algorithms/CCSMiner.h"
 #include "Algorithms/PrepareDataUtils.h"
 
-using namespace std;
-
 namespace minerule {
 
 	void

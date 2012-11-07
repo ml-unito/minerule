@@ -10,19 +10,14 @@
 #include "sourcerowcommon.h"
 
 
-using namespace std;
-
 namespace minerule {
-
-
-
 /* This class is an helper of class SourceRow. It helps in 
  * maintaining parts of items.
  */
 
   class SourceRowAttributeCollection : public SourceRowElement {
   private:
-    typedef vector<SourceRowAttribute*> CollectionType;
+    typedef std::vector<SourceRowAttribute*> CollectionType;
     // storage
     CollectionType attributes;
 
@@ -38,7 +33,7 @@ namespace minerule {
     SourceRowAttributeCollection(
 				 odbc::ResultSetMetaData* rsmd,
 				 odbc::ResultSet* rs,
-				 vector<int> elems);
+				 std::vector<int> elems);
     
     // copy constructor
     SourceRowAttributeCollection(const SourceRowAttributeCollection& rhs);

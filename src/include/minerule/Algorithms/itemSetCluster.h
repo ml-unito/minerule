@@ -431,7 +431,7 @@ void itemSetCluster< NODETYPE >::setItemSet(
      isc[value]=entry;
      }
     else {
-     // Il valore gi‡ esiste, aggiungo solo le info sulla lista
+     // Il valore gi√† esiste, aggiungo solo le info sulla lista
      i->second.getGidCidList().insertValue(gid,cid);
 
     }
@@ -507,7 +507,7 @@ void itemSetCluster< NODETYPE >::setItemSet(const NODETYPE& value )
  }
 
 // Bisogna fare attenzione. Se elimino tutti gli elementi della head devo segnalarlo.
-// Se la head Ë vuota il body non puÚ esistere.
+// Se la head √® vuota il body non pu√≤ esistere.
 template< class NODETYPE >
 bool itemSetCluster< NODETYPE >::gen_Large_Rule_Base_Head(double nSup)
  {
@@ -546,7 +546,7 @@ bool itemSetCluster< NODETYPE >::gen_Large_Rule_Base_Head(double nSup)
 
 // controllo che nell'insieme AR11 gli item con support suff.
 // Prima controllo che il body sia a supp ok.
-// Nel caso in cui body Ë ok allora controllo la head. Vedi
+// Nel caso in cui body √® ok allora controllo la head. Vedi
 // gen_Large_Rule_base_Head per spiegazioni ulteriori.
 template< class NODETYPE >
 void itemSetCluster< NODETYPE >::gen_Large_Rule_Base(double nSup, const MinMaxPair& hcards)
@@ -579,7 +579,7 @@ void itemSetCluster< NODETYPE >::gen_Large_Rule_Base(double nSup, const MinMaxPa
             {
               headOK=(i->second.getHead())->gen_Large_Rule_Base_Head(nSup);
               //tutti gli elementi della head sono stati cancellati.
-              // -> non c'Ë head -> no body!
+              // -> non c'√® head -> no body!
               //cout<<"ptr head "<<(i->second.getHead())<<endl;
               if (!headOK)
               {
@@ -814,7 +814,7 @@ itemSetCluster<NODETYPE>* itemSetCluster< NODETYPE >::gen_New_Head(typename MapT
 
 
 
-// Extend le head  - Cardinalit‡ ancora da fissare... :-)
+// Extend le head  - Cardinalit√† ancora da fissare... :-)
 template< class NODETYPE >
 void itemSetCluster< NODETYPE >::extend_Head(double nSup, const MinMaxPair& hcards)
 {
@@ -1151,7 +1151,7 @@ void itemSetCluster< NODETYPE >::mergeItemSet(
 
    string idHead("");
 
-   // Il db del minerule Ë connesso!
+   // Il db del minerule √® connesso!
 
    Qry = "create index id_head on tmp_Rule_Head_Ext (id_head);";
    statement->execute(Qry);
@@ -1295,7 +1295,7 @@ void itemSetCluster< NODETYPE >::mergeItemSetHead(
    odbc::ResultSet* resultHead;
    size_t lastElem;
 
-   // Il db del minerule Ë connesso!
+   // Il db del minerule √® connesso!
 
    statement->setString(1,fHead);
    
@@ -1476,7 +1476,7 @@ void itemSetCluster< NODETYPE >::checkSupportBaseDef(
 
 
 
-// Nota : non puÚ esistere body senza head. PerciÚ non controllo se Head!=null
+// Nota : non pu√≤ esistere body senza head. Perci√≤ non controllo se Head!=null
 template< class NODETYPE >
 void itemSetCluster< NODETYPE >::remove(itemSetListCluster<NODETYPE>& ptrList)
  {

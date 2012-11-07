@@ -5,7 +5,7 @@
 
 using namespace minerule;
 
-#define YYSTYPE string	
+#define YYSTYPE std::string	
 #include "OptionParser_parser.hpp"
 
 // #define LEXDBG(a) a

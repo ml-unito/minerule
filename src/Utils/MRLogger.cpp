@@ -1,8 +1,7 @@
+#include <cassert>
+
 #include "Utils/MRLogger.h"
 
-
-
-#include <cassert>
 namespace minerule {
 
   const std::string MRLogger::START_SEPARATOR="+";

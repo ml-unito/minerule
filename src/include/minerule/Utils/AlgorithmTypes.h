@@ -36,20 +36,17 @@ namespace minerule {
     ATCare,
     ATConstrainedItemsets,
     ATEnd // dummy algorithm type do not add algorithms
-                      // below this element
+          // below this element
   } AlgorithmTypes;
 
   const std::string& miningTaskToString(MiningTasks mt);
   const std::string& stringWithListOfMiningTasks();
 
-  const std::string& 
-    algorithmTypeToString(AlgorithmTypes t);
+  const std::string& algorithmTypeToString(AlgorithmTypes t);
 
-  AlgorithmTypes 
-    stringToAlgorithmType(const std::string& s)
-    throw(MineruleException);
+  AlgorithmTypes stringToAlgorithmType(const std::string& s) throw(MineruleException);
 
-  const std::string& stringWithListOfAlgorithmTypes();
+  std::string stringWithListOfAlgorithmTypes();
 }
 
 #endif

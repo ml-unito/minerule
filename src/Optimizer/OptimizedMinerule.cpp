@@ -375,25 +375,25 @@ momento body e head sono "fusi" in ra.
   }
 
   OptimizedMinerule::MineruleRelationship
-  OptimizedMinerule::getMineruleRelationship(const ParsedMinerule& mr1,
-					     const ParsedMinerule& mr2) {
+  OptimizedMinerule::getMineruleRelationship(const ParsedMinerule& mr1, const ParsedMinerule& mr2) {
     if( MineruleOptions::getSharedOptions().getOptimizations().getAvoidDominanceDetection() )
       return None;
+
 #ifdef MRUSERWARNING
 #warning Bisognerebbe controllare anche body==head, ma in questo \
 momento body e head sono "fusi" in ra.
 #endif
+
     if(!(mr1.ga==mr2.ga &&
-	 mr1.ca==mr2.ca &&
-	 mr1.ra==mr2.ra &&
-	 mr1.ba==mr2.ba &&
-	 mr1.ha==mr2.ha &&
-	 mr1.c_aggr_list == mr2.c_aggr_list &&
-	 mr1.sup<=mr2.sup &&
-	 //	 mr1.conf<=mr2.conf &&
-	 mr1.bodyCardinalities.contains(mr2.bodyCardinalities) &&
-	 mr1.headCardinalities.contains(mr2.headCardinalities) && 
-	 mr1.tab_source==mr2.tab_source))
+		 mr1.ca==mr2.ca &&
+		 mr1.ra==mr2.ra &&
+		 mr1.ba==mr2.ba &&
+		 mr1.ha==mr2.ha &&
+		 mr1.c_aggr_list == mr2.c_aggr_list &&
+		 mr1.sup<=mr2.sup &&
+		 mr1.bodyCardinalities.contains(mr2.bodyCardinalities) &&
+		 mr1.headCardinalities.contains(mr2.headCardinalities) && 
+		 mr1.tab_source==mr2.tab_source))
       return None;
 
     Predicate mr1pmc(mr1.mc);
@@ -414,14 +414,14 @@ momento body e head sono "fusi" in ra.
     for(size_t i=0; i<3; i++) {
       switch( relations[i] ) {
       case EncodedNF::FirstMoreGeneral:
-	current=Dominance;
-	break;
+		current=Dominance;
+		break;
       case EncodedNF::Equivalent:
-	// Nothing to do, just avoid to select the default
-	// label
-	break;
+		// Nothing to do, just avoid to select the default
+		// label
+		break;
       default:
-	return None;
+		return None;
       };
     }
 

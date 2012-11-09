@@ -11,7 +11,7 @@
 #include <cmath>
 #include "Algorithms/tree.h"
 #include "Algorithms/Counter.h"
-#include "Algorithms/sqlCoreConn.h"
+#include "Database/Connection.h"
 
 #include "Database/SourceRow.h" // defines, among other things, which is the ItemType
 #include "Algorithms/AlgorithmsOptions.h"

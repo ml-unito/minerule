@@ -1,4 +1,4 @@
-#include "Algorithms/sqlCoreConn.h"
+#include "Database/Connection.h"
 
 #include <sstream>
 #include <fstream>

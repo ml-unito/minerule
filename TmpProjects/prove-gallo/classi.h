@@ -7,7 +7,7 @@
 #include <vector>
 #include <iostream>
 #include <map>
-#include "Algorithms/sqlCoreConn.h"
+#include "Database/Connection.h"
 
 namespace minerule {
 

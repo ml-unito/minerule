@@ -3,7 +3,7 @@
 #include "Algorithms/IDIncrementalAlgorithm.h"
 #include "Utils/MineruleOptions.h"
 #include "Utils/SQLUtils.h"
-#include "Algorithms/sqlCoreConn.h"
+#include "Database/Connection.h"
 #include "PredicateUtils/HeadBodyPredicatesSeparator.h"
 
 

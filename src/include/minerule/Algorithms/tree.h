@@ -17,7 +17,7 @@ Ci sono molte funzioni xxxHelper. Servono per la ricorsione.
 
 #include "treenode.h"
 #include "Counter.h"
-#include "sqlCoreConn.h"
+#include "Database/Connection.h"
 
 
 

@@ -21,7 +21,7 @@
 #include "Algorithms/itemSetListCluster.h"
 
 #include "Algorithms/newItemSetHashMap.h"
-#include "Algorithms/sqlCoreConn.h"
+#include "Database/Connection.h"
 #include "Algorithms/AlgorithmsOptions.h"
 
 #include "Utils/MinMaxPair.h"
@@ -183,7 +183,7 @@ void partitionWithClusters( const minerule::AlgorithmsOptions& options )
   double support,conf,totGroups;
   double nSup;
   bool toContinue;
-  // Connessione e ResultSet Vedi classe sqlCoreConn.h e cpp
+  // Connessione e ResultSet Vedi classe Database/Connection.h e cpp
   sqlCoreConn coreConn;
 
 

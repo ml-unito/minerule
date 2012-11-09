@@ -2,7 +2,7 @@
 #define __BFSWITHGIDSNOCROSS_H__
 
 #include "Algorithms/MiningAlgorithmBase.h"
-#include "Algorithms/sqlCoreConn.h"
+#include "Database/Connection.h"
 
 namespace minerule {
 

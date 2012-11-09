@@ -3,7 +3,7 @@
 #include <iostream>
 
 #include "Optimizer/OptimizerCatalogue.h"
-#include "Algorithms/sqlCoreConn.h"
+#include "Database/Connection.h"
 
 
 

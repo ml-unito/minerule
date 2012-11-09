@@ -1,4 +1,4 @@
-/* sqlCoreConn.h*/
+/* Database/Connection.h*/
 
 #ifndef SQLCORECONN_H
 #define SQLCORECONN_H
@@ -18,7 +18,7 @@
 #include <iostream>
 #include <stdio.h>
 
-#include "Algorithms.h"
+#include "Algorithms/Algorithms.h"
 
 namespace minerule {
 

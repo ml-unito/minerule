@@ -16,7 +16,7 @@
 #include "newItemSetHashMap.h"
 using namespace minerule;
 
-#include "sqlCoreConn.h"
+#include "Database/Connection.h"
 
 
 #include "Database/SourceRow.h"

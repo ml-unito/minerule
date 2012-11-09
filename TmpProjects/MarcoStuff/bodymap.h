@@ -21,7 +21,7 @@
 #include "MRResultSet.h"
 #include "Database/ItemType.h"
 #include "Utils/Converter.h"
-#include "Algorithms/sqlCoreConn.h"
+#include "Database/Connection.h"
 #include "bitstring.h"
 
 using namespace minerule;

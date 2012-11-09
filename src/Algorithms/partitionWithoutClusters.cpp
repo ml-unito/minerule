@@ -18,7 +18,7 @@
 #include "Algorithms/itemSetList.h"
 
 #include "Algorithms/newItemSetHashMap.h"
-#include "Algorithms/sqlCoreConn.h"
+#include "Database/Connection.h"
 
 #include "Algorithms/AlgorithmsOptions.h"
 
@@ -187,7 +187,7 @@ void partitionWithoutClusters( const minerule::AlgorithmsOptions& options  )
                // in future versions).
   double nSup;
   bool toContinue;
-  // Connessione e ResultSet Vedi classe sqlCoreConn.h e cpp
+  // Connessione e ResultSet Vedi classe Database/Connection.h e cpp
   sqlCoreConn coreConn;
 
 

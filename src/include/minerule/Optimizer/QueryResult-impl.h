@@ -2,8 +2,8 @@
 #define __QUERY_RESULT_IMPL_H__
 
 #include "Database/QueryResult.h"
+#include "Database/Connection.h"
 #include "Optimizer/OptimizerCatalogue.h"
-#include "Algorithms/sqlCoreConn.h"
 
 namespace minerule {
 

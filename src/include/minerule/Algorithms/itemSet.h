@@ -17,7 +17,7 @@
 #include "itemSetEntry.h"
 #include "itemSetList.h"
 #include "newItemSetHashMap.h"
-#include "sqlCoreConn.h"
+#include "Database/Connection.h"
 
 #include "utils.h"
 

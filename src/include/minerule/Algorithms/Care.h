@@ -2,7 +2,7 @@
 #define __CARE_H
 
 #include "Algorithms/MiningAlgorithmBase.h"
-#include "Algorithms/sqlCoreConn.h"
+#include "Database/Connection.h"
 //#include "bodymap.h"
 #include "Algorithms/Bodymap.h"
 

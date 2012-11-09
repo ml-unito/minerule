@@ -13,7 +13,7 @@
 #include "Database/MRResultSet.h"
 #include "Database/ItemType.h"
 #include "Utils/Converter.h"
-#include "Algorithms/sqlCoreConn.h"
+#include "Database/Connection.h"
 #include "Algorithms/BFSWithGidsAndCross.h"
 #include "PredicateUtils/HeadBodyPredicatesSeparator.h"
 #include "Algorithms/PrepareDataUtils.h"

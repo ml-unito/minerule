@@ -7,136 +7,22 @@
 #include <unistd.h>
 
 
-/*
-bool Connection::connect()
- {
-  bool connOK;
-  std::cout<<"Connect..."<<std::endl;
-
-  connOK=false;
-  connection = odbc::DriverManager::getConnection("test", "root", "mysql");
-  if (connection!= NULL)
-      connOK=true;
-
-  return connOK;
- }
-*/
-
 void
 Connection::useODBCConnection(odbc::Connection* newConnection) {
   connection = newConnection;
 }
-/*
-bool Connection::isConnected()
- {
-  bool connOK;
 
-  connOK=false;
-  if (connection!= NULL)
-      connOK=true;
-
-  return connOK;
- }
-*/
-/*
-void Connection::disconnect()
- {
-  std::cout<<"Disconnect"<<std::endl;
-  delete connection;
-  odbc::DriverManager::shutdown();
- }
-*/
-/*
-odbc::ResultSet* Connection::openQuery()
- {
-    odbc::Statement* statement=connection->createStatement();
-    odbc::ResultSet* result;
-    if( statement->execute("select tr,item from MRPROVA" ) ) {
-      //cout << "Result set available..." << std::endl;
-      result =statement->getResultSet();
-    } else
-    {
-      result =NULL;
-    }
-
-    return result;
- }
-*/
-odbc::ResultSet* Connection::openQuery(const char* Qry)
- {
-    odbc::Statement* statement=connection->createStatement();
-    odbc::ResultSet* result;
-
-    //cout<<"Sono in openQuery"<<std::endl;
-    if( statement->execute(Qry) ) {
-      // std::cout << "Result set available..." << std::endl;
-      result =statement->getResultSet();
-    } else
-    {
-      result =NULL;
-    }
-  
-    return result;
-
- }
-odbc::ResultSet* Connection::openQuery(char* Qry)
- {
-    odbc::Statement* statement=connection->createStatement();
-    odbc::ResultSet* result;
-
-    if( statement->execute(Qry) ) {
-      std::cout << "Result set available..." << std::endl;
-      result =statement->getResultSet();
-    } else
-    {
-      result =NULL;
-    }
-    
-    return result;
-
- }
-/*
-int Connection::getNumCols(odbc::ResultSet* result)
- {
-    odbc::ResultSetMetaData* metaData = result->getMetaData();
-    int numCols = metaData->getColumnCount();
-
-    return numCols;
- }
-
-int Connection::getNumRows()
- {
-    odbc::Statement* statement=connection->createStatement();
-    odbc::ResultSet* result;
-    int numRows=0;
-
-    if( statement->execute("select  distinct gidb from InputPartition;" ) )
-    {
-      std::cout << "Result set available..." << std::endl;
-      result =statement->getResultSet();
-    } else
-    {
-      result =NULL;
-    }
-    if (result!=NULL)
-    {
-      //odbc::ResultSetMetaData* metaData = result->getMetaData();
-      numRows = result->getRow();
-    }
-    //cout<<"sqlCoreconn.h NumRows "<<numRows<<std::endl;
-    return numRows;
- }
-*/
-
-bool Connection::existTable(const char * tableName)
+bool Connection::tableExists(const char * tableName)
 {
-
 	try {
 		odbc::DatabaseMetaData* md;
 		md=connection->getMetaData();
 		odbc::ResultSet* rs;
 		rs=md->getColumns("","",tableName,"");
-	} catch (odbc::SQLException& e) { return false; }
+	} catch (odbc::SQLException& e) { 
+		return false; 
+	}
+	
 	return true;
 }
 
@@ -148,7 +34,7 @@ void Connection::deleteDestTable() {
 void Connection::deleteTable(const char * tableName)
 {
    odbc::Statement* stmt=connection->createStatement();
-   if (existTable(tableName))
+   if (tableExists(tableName))
    {
  	std::string Qry;
 	Qry = "DROP TABLE ";
@@ -203,35 +89,6 @@ void Connection::DirectDBInserter::insertHeadBodyElems(const HeadBodyType& elems
   delete state;
 }
 
-/*
-void Connection::insert(const std::set<ItemType>& body,
-			    const std::set<ItemType>& head,
-			    double support,
-			    double confidence,
-			    bool checkCard=false) {
-  if( checkCard &&
-      !bodyCard.validate(body.size()) 
-      || !headCard.validate(head.size()))
-    return;
-
-  static size_t counter=0;
-
-  odbc::Statement* state = connection->createStatement();
-
-  size_t bodyId = counter++;
-  insertHeadBodyElems(body, bodyId);
-  
-  size_t headId = counter++;
-  insertHeadBodyElems(head, headId);
-
-  stringstream query;
-  query << "INSERT INTO " << getOutTableName() 
-	<< " VALUES (" << bodyId << "," << headId << "," 
-	<< support << "," << confidence << "," << body.size() << "," << head.size() << ")" ;
-
-  state->execute(query.str());
-  delete state;
-  } */
 
 void Connection::CachedDBInserter::insertHeadBodyElems(const HeadBodyType& elems, size_t counter) {
 //  assert( !elems.empty() );
@@ -284,12 +141,9 @@ void Connection::CachedDBInserter::insert(const HeadBodyType& body,
 			    double confidence,
 			    bool saveBody) {
 
-  //  assert(algoOptions!=NULL);
-
-  // if either body or head, is too big, too low with respect to
-  // the allowed cardinalities we simply return back to the caller.
-  if( !connection.bodyCard.validate(body.size()) 
-      || !connection.headCard.validate(head.size()))
+  // if either body or head elements are too many or too few with respect to
+  // the allowed cardinalities, we simply return back to the caller.
+  if( !connection.bodyCard.validate(body.size()) || !connection.headCard.validate(head.size()))
     return;
 
   static size_t counter=0;
@@ -304,7 +158,6 @@ void Connection::CachedDBInserter::insert(const HeadBodyType& body,
   insertHeadBodyElems(head, headId);
 
   outR << bodyId << "\t" << headId << "\t" << support << "\t" << confidence << "\t" << body.size() << "\t" << head.size() << std::endl;
-
 }
 
 void Connection::DirectDBInserter::insert(const HeadBodyType& body,
@@ -312,12 +165,9 @@ void Connection::DirectDBInserter::insert(const HeadBodyType& body,
 			    double support,
 			    double confidence,
                             bool saveBody) {
-  //  assert(algoOptions!=NULL);
-
   // if either body or head, is too big, too low with respect to
   // the allowed cardinalities we simply return back to the caller.
-  if( !connection.bodyCard.validate(body.size()) 
-      || !connection.headCard.validate(head.size()))
+  if( !connection.bodyCard.validate(body.size()) || !connection.headCard.validate(head.size()))
     return;
 
   static size_t counter=0;
@@ -335,8 +185,8 @@ void Connection::DirectDBInserter::insert(const HeadBodyType& body,
 
   stringstream query;
   query << "INSERT INTO " << connection.getOutTableName() 
-	<< " VALUES (" << bodyId << "," << headId << "," 
-	<< support << "," << confidence << "," << body.size() << "," << head.size() << ")" ;
+		<< " VALUES (" << bodyId << "," << headId << "," 
+		<< support << "," << confidence << "," << body.size() << "," << head.size() << ")" ;
 
   state->execute(query.str());
   //delete state;
@@ -345,51 +195,15 @@ void Connection::DirectDBInserter::insert(const HeadBodyType& body,
 void Connection::insert(const char * what)
  {
     static odbc::Statement* statement=connection->createStatement();
-    //    odbc::ResultSet* result;
 
-    //    std::cerr << "000" << what << std::endl;
-
-    if( statement->execute(what)==0 ) {
-      //cout << "insert eseguita" << std::endl;
-      //result =statement->getResultSet();
-    } else
-    {
+    if( statement->execute(what)!=0 ) {
       std::cout<<"insert fallita!"<<std::endl;
     }
-    //delete statement;
+
+    delete statement;
  }
 
-/*
-odbc::ResultSet* Connection::getPartition(int begin,int end)
- {
-    odbc::Statement* statement=connection->createStatement();
-    odbc::ResultSet* result;
-    //    int numRows=0;
-    std::string Qry;
-    char beg[16],en[16];
 
-    sprintf(beg,"%d",begin);
-    sprintf(en,"%d",end);
-
-    Qry="select * from InputPartition where (gidb>";
-    Qry+=beg;
-    Qry+=") and ( gidb<=";
-    Qry+=en;
-    Qry+=");";
-
-    //cout<<"query: "<<Qry<<std::endl;
-    if( statement->execute(Qry) )
-    {
-      std::cout << "Result set available..." << std::endl;
-      result =statement->getResultSet();
-    } else
-    {
-      result =NULL;
-    }
-
-    return result;
- }
-*/
 void Connection::create_tmp_db(int sintax, 
 				const SourceRowAttrCollectionDescriptor& body, 
 				const SourceRowAttrCollectionDescriptor& head)

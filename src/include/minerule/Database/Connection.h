@@ -80,10 +80,8 @@ namespace minerule {
 		void useODBCConnection(odbc::Connection* newConnection);
 
 		odbc::Connection* getConnection() { return connection; }
-		odbc::ResultSet* openQuery(char* Qry);
-		odbc::ResultSet* openQuery(const char* Qry);
 
-		bool existTable(const char * tableName);
+		bool tableExists(const char * tableName);
 		void deleteTable(const char * tableName);
 		void deleteDestTable();
 

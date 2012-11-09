@@ -17,7 +17,7 @@ include_directories(${CMAKE_SOURCE_DIR}/include/minerule ${CMAKE_SOURCE_DIR}/../
 add_definitions(-DMR_VERSION=\"2.0a\")
 
 add_subdirectory(Algorithms)
-add_subdirectory(MRDatabase)
+add_subdirectory(Database)
 add_subdirectory(Optimizer)
 add_subdirectory(PredicateUtils)
 add_subdirectory(Utils)

@@ -13,7 +13,7 @@
 #include "Algorithms/Counter.h"
 #include "Algorithms/sqlCoreConn.h"
 
-#include "MRDatabase/sourcerow.h" // defines, among other things, which is the ItemType
+#include "Database/SourceRow.h" // defines, among other things, which is the ItemType
 #include "Algorithms/AlgorithmsOptions.h"
 
 

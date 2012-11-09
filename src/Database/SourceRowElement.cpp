@@ -1,6 +1,6 @@
-#include "MRDatabase/sourcerowelement.h"
-#include "MRDatabase/sourcerowattribute.h"
-#include "MRDatabase/sourcerowattributecollection.h"
+#include "Database/SourceRowElement.h"
+#include "Database/SourceRowAttribute.h"
+#include "Database/SourceRowAttributeCollection.h"
 
 namespace minerule {
 

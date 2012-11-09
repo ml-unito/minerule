@@ -1,8 +1,8 @@
 #include "Algorithms/FSTreeSequence.h"
 
 #include <iostream>
-#include "MRDatabase/sourcerowcommon.h"
-#include "MRDatabase/sourcerow.h"
+#include "Database/SourceRowCommon.h"
+#include "Database/SourceRow.h"
 #include "Utils/MineruleLogs.h"
 
 

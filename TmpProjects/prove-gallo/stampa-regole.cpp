@@ -12,7 +12,7 @@
 #include "Utils/MineruleOptions.h"
 #include "Optimizer/OptimizerCatalogue.h"
 #include "TmpProjects/PrintRules/RuleFormatter.h"
-#include "MRDatabase/sourcerowelement.h"
+#include "Database/SourceRowElement.h"
 
 /* stampa a video le regole con relativo supporto e confidenza*/
 /* basta dare in input la tabella risultato IMP:qui non ci sono controlli sull'esistenza della tabella*/

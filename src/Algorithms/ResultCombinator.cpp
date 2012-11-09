@@ -1,5 +1,5 @@
 #include "Algorithms/ResultCombinator.h"
-#include "MRDatabase/QueryResult.h"
+#include "Database/QueryResult.h"
 
 namespace minerule {
 

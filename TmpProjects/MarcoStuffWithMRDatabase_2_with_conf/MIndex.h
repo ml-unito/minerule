@@ -3,9 +3,9 @@
 #ifndef MINDEX_H
 #define MINDEX_H
 #include "Utils/MineruleOptions.h"
-#include "MRDatabase/sourcerowattribute.h"
-#include "MRDatabase/sourcerowcommon.h"
-#include "MRDatabase/sourcerowattributecollection.h"
+#include "Database/SourceRowAttribute.h"
+#include "Database/SourceRowCommon.h"
+#include "Database/SourceRowAttributeCollection.h"
 using namespace minerule;
 #include <ansidecl.h>
 #include <odbc++/connection.h>

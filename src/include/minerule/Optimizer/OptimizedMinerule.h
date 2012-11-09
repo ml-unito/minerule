@@ -2,7 +2,7 @@
 #define __MROPTIMIZER_H__
 
 #include "Parsers/ParsedMinerule.h"
-#include "MRDatabase/sourcerow.h"
+#include "Database/SourceRow.h"
 #include "Optimizer/GAQueryCombinator.h"
 
 

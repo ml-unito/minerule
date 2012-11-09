@@ -1,5 +1,5 @@
 #include <typeinfo>
-#include "MRDatabase/sourcerowattributecollection.h"
+#include "Database/SourceRowAttributeCollection.h"
 #include "Utils/MineruleOptions.h"
 
 /* ******************************* */

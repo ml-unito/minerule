@@ -1,4 +1,4 @@
-#include "MRDatabase/sourcerowcommon.h"
+#include "Database/SourceRowCommon.h"
 
 using namespace minerule;
 

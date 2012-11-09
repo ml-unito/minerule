@@ -1,5 +1,5 @@
 // GO.CPP
-// Main. Per ora non c'è il collegamento con i db ed uso file di testo per simulare
+// Main. Per ora non c'Ã¨ il collegamento con i db ed uso file di testo per simulare
 // i dati in input
 
 #include <iostream>
@@ -13,7 +13,7 @@
 #include "Algorithms/Counter.h"
 #include "Algorithms/sqlCoreConn.h"
 
-#include "MRDatabase/sourcerow.h" // defines, among other things, which is the ItemType
+#include "Database/SourceRow.h" // defines, among other things, which is the ItemType
 #include "Algorithms/AlgorithmsOptions.h"
 
 

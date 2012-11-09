@@ -1,8 +1,8 @@
 #ifndef __MINERULE_ALGORITHMS_H__
 #define __MINERULE_ALGORITHMS_H__
 
-#include "MRDatabase/sourcerow.h"
-#include "MRDatabase/itemtype.h"
+#include "Database/SourceRow.h"
+#include "Database/ItemType.h"
 
 namespace minerule {
   // in different point of the algorithms the ItemSetType

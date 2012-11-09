@@ -1,7 +1,7 @@
 #ifndef __QUERY_RESULT_IMPL_H__
 #define __QUERY_RESULT_IMPL_H__
 
-#include "MRDatabase/QueryResult.h"
+#include "Database/QueryResult.h"
 #include "Optimizer/OptimizerCatalogue.h"
 #include "Algorithms/sqlCoreConn.h"
 

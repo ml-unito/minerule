@@ -2,7 +2,7 @@
 #define UTILS_H
 //#include "StringTokenizer.h"
 //#include "options.h"
-#include "MRDatabase/sourcerow.h"
+#include "Database/SourceRow.h"
 
 #include<odbc++/drivermanager.h>
 #include<odbc++/connection.h>

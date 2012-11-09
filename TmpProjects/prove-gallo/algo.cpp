@@ -1,7 +1,7 @@
 #include "Optimizer/QueryResultIterator.h"
 #include "classi.h"
 #include "algo.h"
-#include "MRDatabase/itemtype.h"
+#include "Database/ItemType.h"
 #include <iostream>
 #include "Optimizer/OptimizerCatalogue.h"
 #include <odbc++/resultset.h>
@@ -12,7 +12,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include "Utils/MineruleOptions.h"
-#include "MRDatabase/sourcerowelement.h"
+#include "Database/SourceRowElement.h"
 #include "MRDatabase/MIndex.h"
 #include "SubsetIterator.h"
 #include <iterator>

@@ -13,7 +13,7 @@
 #include "Utils/MineruleOptions.h"
 #include "Optimizer/OptimizerCatalogue.h"
 #include "TmpProjects/PrintRules/RuleFormatter.h"
-#include "MRDatabase/sourcerowelement.h"
+#include "Database/SourceRowElement.h"
 
 
 

@@ -3,7 +3,7 @@
 
 #include <string>
 #include "Parsers/ParsedMinerule.h"
-#include "MRDatabase/sourcerowcommon.h"
+#include "Database/SourceRowCommon.h"
 #include "Optimizer/OptimizedMinerule.h"
 #include "Algorithms/MiningAlgorithmBase.h"
 

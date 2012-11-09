@@ -1,5 +1,5 @@
-#include "MRDatabase/sourcerowdescriptor.h"
-#include "MRDatabase/sourcerowcommon.h"
+#include "Database/SourceRowDescriptor.h"
+#include "Database/SourceRowCommon.h"
 #include <odbc++/resultsetmetadata.h>
 #include <iostream>
 #include <string.h>

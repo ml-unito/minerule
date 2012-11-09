@@ -1,4 +1,4 @@
-#include "MRDatabase/sourcerow.h"
+#include "Database/SourceRow.h"
 #include "Utils/MineruleLogs.h"
 
 namespace minerule {

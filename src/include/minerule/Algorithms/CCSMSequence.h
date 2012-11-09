@@ -5,8 +5,8 @@
 #include <list>
 #include <string>
 #include <iostream>
-#include "MRDatabase/itemtype.h"
-#include "MRDatabase/sourcerowcommon.h"
+#include "Database/ItemType.h"
+#include "Database/SourceRowCommon.h"
 
 #define PRESENT 1
 #define ABSENT 0

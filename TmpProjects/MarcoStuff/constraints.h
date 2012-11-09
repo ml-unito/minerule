@@ -2,7 +2,7 @@
 #define _CONSTRAINTS_H
 #include "AlgorithmsOptions.h"
 #include "Utils/MineruleOptions.h"
-#include "MRDatabase/MRResultSet.h"
+#include "Database/MRResultSet.h"
 #include "bitstring.h"
 
 class BodyMap;

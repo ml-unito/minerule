@@ -4,10 +4,10 @@
 #include <string.h>
 #include<odbc++/preparedstatement.h>
 #include<odbc++/connection.h>
-#include"MRDatabase/sourcerow.h"
+#include"Database/SourceRow.h"
 #include"Utils/MineruleOptions.h"
 #include"Parsers/ParsedMinerule.h"
-#include"MRDatabase/MRResultSet.h"
+#include"Database/MRResultSet.h"
 
 namespace minerule {
 

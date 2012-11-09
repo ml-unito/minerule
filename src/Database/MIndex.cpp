@@ -5,7 +5,7 @@
 #include<fstream>
 #include<algorithm>
 #include <unistd.h>
-#include "MRDatabase/MRResultSet.h"
+#include "Database/MRResultSet.h"
 #include "Utils/SQLUtils.h"
 #include <odbc++/resultsetmetadata.h>
 

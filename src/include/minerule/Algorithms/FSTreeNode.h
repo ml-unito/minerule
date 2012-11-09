@@ -2,7 +2,7 @@
 #define NODE_H
 
 #include <vector>
-#include "MRDatabase/itemtype.h"
+#include "Database/ItemType.h"
 
 
 namespace minerule {

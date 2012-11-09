@@ -12,8 +12,8 @@
 #include<odbc++/databasemetadata.h>
 #include<odbc++/preparedstatement.h>
 
-#include "MRDatabase/sourcerow.h"
-#include "MRDatabase/sourcerowdescriptor.h"
+#include "Database/SourceRow.h"
+#include "Database/SourceRowDescriptor.h"
 
 #include <iostream>
 #include <stdio.h>

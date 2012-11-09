@@ -15,7 +15,7 @@ Vedi file Counter.doc per la struttura ed esempio
 #include "utils.h"
 #include "sqlCoreConn.h"
 #include "Utils/MineruleOptions.h"
-#include "MRDatabase/sourcerowattribute.h"
+#include "Database/SourceRowAttribute.h"
 
 
 template< class NODETYPE > class Tree;            // dichiarazione succ.

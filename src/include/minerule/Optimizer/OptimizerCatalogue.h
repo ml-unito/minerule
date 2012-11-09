@@ -10,7 +10,7 @@
 #include <odbc++/types.h>
 #include "Utils/MineruleException.h"
 #include "Parsers/ParsedMinerule.h"
-#include "MRDatabase/itemtype.h"
+#include "Database/ItemType.h"
 #include "Optimizer/QueryResult-header.h"
 
 

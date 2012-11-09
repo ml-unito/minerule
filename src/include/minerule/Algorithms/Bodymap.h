@@ -12,8 +12,8 @@
 
 #include "Algorithms/AlgorithmsOptions.h"
 #include "Utils/MineruleOptions.h"
-#include "MRDatabase/MRResultSet.h"
-#include "MRDatabase/itemtype.h"
+#include "Database/MRResultSet.h"
+#include "Database/ItemType.h"
 #include "Utils/Converter.h"
 #include "Algorithms/sqlCoreConn.h"
 #include "Utils/Bitstring.h"

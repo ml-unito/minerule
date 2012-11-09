@@ -3,7 +3,7 @@
 
 #ifndef CLASSI_H
 #define CLASSI_H
-#include "MRDatabase/itemtype.h"
+#include "Database/ItemType.h"
 #include <vector>
 #include <iostream>
 #include <map>

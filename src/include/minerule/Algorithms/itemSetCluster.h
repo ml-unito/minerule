@@ -19,8 +19,8 @@ using namespace minerule;
 #include "sqlCoreConn.h"
 
 
-#include "MRDatabase/sourcerow.h"
-#include "MRDatabase/sourcerowdescriptor.h"
+#include "Database/SourceRow.h"
+#include "Database/SourceRowDescriptor.h"
 
 
 

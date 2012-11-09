@@ -257,7 +257,7 @@ namespace minerule {
 
 void Head::extractRules(const vector<ItemType>& body,
                   vector<ItemType>& head,
-		  double thrR, double thrB, double suppB, int ngroups,sqlCoreConn* pcoreConn){
+		  double thrR, double thrB, double suppB, int ngroups,Connection* pconnection){
  typedef std::map<ItemType,NodeRow*> RowContainer;
 
  RowContainer::iterator it;
@@ -270,7 +270,7 @@ void Head::extractRules(const vector<ItemType>& body,
    //se ha figli richiamo la funzione
    if (htmp!=NULL){
       head.push_back(it->first);
-      htmp->extractRules(body,head,thrR,thrB,suppB,ngroups,pcoreConn);
+      htmp->extractRules(body,head,thrR,thrB,suppB,ngroups,pconnection);
       s=it->second->getSupp();
       double sup=s/ngroups;
       tmp=(s/suppB);
@@ -290,7 +290,7 @@ void Head::extractRules(const vector<ItemType>& body,
 	  }
         cout<<"suppr: "<<sup<<std::endl;*/
 
-	pcoreConn->insert_DB(body,head,tmp,sup);
+	pconnection->insert(body,head,tmp,sup);
       }
    }//se invece non ne ha stampo la regola se conf e supp sono sufficienti
    else {
@@ -313,7 +313,7 @@ void Head::extractRules(const vector<ItemType>& body,
 	  itv++;
 	  }
         cout<<"suppr: "<<sup<<std::endl;*/
-	pcoreConn->insert_DB(body,head,tmp,sup);
+	pconnection->insert(body,head,tmp,sup);
       }
     }
    head.pop_back();
@@ -325,7 +325,7 @@ void Head::extractRules(const vector<ItemType>& body,
 
 
 void Body::extractRules(vector<ItemType>& body,
-	       double thrR, double thrB, int ngroups,sqlCoreConn* pcoreConn){
+	       double thrR, double thrB, int ngroups,Connection* pconnection){
  typedef std::map<ItemType,NodeRowB*> RowBContainer;
  
 
@@ -339,11 +339,11 @@ void Body::extractRules(vector<ItemType>& body,
    body.push_back(itB->first);
    Head* h=itB->second->getHead();
    if (h!=NULL){
-	itB->second->getHead()->extractRules(body,head,thrR,thrB,suppb,ngroups,pcoreConn);
+	itB->second->getHead()->extractRules(body,head,thrR,thrB,suppb,ngroups,pconnection);
    }
    btmp=itB->second->getChild();
    if (btmp!=NULL){
-     btmp->extractRules(body,thrR,thrB,ngroups,pcoreConn);
+     btmp->extractRules(body,thrR,thrB,ngroups,pconnection);
    }
    body.pop_back();
    itB++;

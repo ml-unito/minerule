@@ -149,13 +149,13 @@ class itemSetCluster {
 			 const int cidB, 
 			 const NODETYPE& valueH, 
 			 const int cidH);
-  void save_Large_ItemSet(int lev,int isPart,sqlCoreConn&);
+  void save_Large_ItemSet(int lev,int isPart,Connection&);
   // modificato da esposito@di.unito.it -- la procedura qui sotto
   // restituiva un const char* allocato localmente alla procedura stessa...
   // nell'uscire dalla procedura, la variabile da cui il const char* era
   // stato preso veniva deallocata con le ovvie conseguenze...
-  //   const char* save_Large_ItemSet_Head(int lev,int isPart,sqlCoreConn&);
-  std::string save_Large_ItemSet_Head(int lev,int isPart,sqlCoreConn&);
+  //   const char* save_Large_ItemSet_Head(int lev,int isPart,Connection&);
+  std::string save_Large_ItemSet_Head(int lev,int isPart,Connection&);
   void printItemSetRecursive(int lev);
   void printToDesign(std::string , int );
   void gen_Large_Rule_Base(double nSup, const MinMaxPair&);
@@ -167,27 +167,27 @@ class itemSetCluster {
   void checkSupportBaseDef(double nSup,newItemSetHashMap<NODETYPE>& pHashMap,itemSetListCluster<NODETYPE>& ptrList);
   void printItemSetRecursiveHead(int lev);
   bool gen_final_count(itemSetListCluster<NODETYPE>& ptrList,double nSup,int lev,newItemSetHashMap<NODETYPE>& pHashMap);
-  void extractRule(sqlCoreConn&,const std::vector<NODETYPE>&,double totGroups);
+  void extractRule(Connection&,const std::vector<NODETYPE>&,double totGroups);
 
   void printToDesign_2(std::string nome,int isPart);
   
   void mergeItemSet(
-		    sqlCoreConn& coreConn,
+		    Connection& connection,
 		    itemSetListCluster<NODETYPE>& ptrList,
 		    const SourceRowDescriptor& srd);
 
 
   // --- PRIVATE MEMBERS ---
  private:
-  void saveIn_DB_Body(int lev,int isPart,const NODETYPE& node,const char* id_head,sqlCoreConn& coreConn);
-  void saveIn_DB_Head(int lev,const NODETYPE& node,const char* id_head,int isPart,sqlCoreConn& coreConn);
+  void saveIn_DB_Body(int lev,int isPart,const NODETYPE& node,const char* id_head,Connection& connection);
+  void saveIn_DB_Head(int lev,const NODETYPE& node,const char* id_head,int isPart,Connection& connection);
   bool gen_Large_Rule_Base_Head(double nSup);
-  void save_Large_ItemSet_HeadHelper(int lev,int isPart,const char* id_head_father,sqlCoreConn& coreConn);
+  void save_Large_ItemSet_HeadHelper(int lev,int isPart,const char* id_head_father,Connection& connection);
   bool gen_Large_ItemSetHelper(itemSetListCluster<NODETYPE>& ptrList,double nSup,double totGroups,unsigned int lev, const MinMaxPair&);
   void printToDesignHelper(std::string here,std::string padre,ofstream& f1,int isPart);
   void extend_Head(double, const MinMaxPair&);
   bool gen_Large_ItemSet_Head(itemSetListCluster<NODETYPE>& ptrListHead,double nSup,int lev);
-  void save_Large_ItemSetHelper(int lev,int isPart,sqlCoreConn&);
+  void save_Large_ItemSetHelper(int lev,int isPart,Connection&);
   bool gen_Large_ItemSet_HeadHelper(itemSetListCluster<NODETYPE>& ptrList,double nSup,unsigned int lev);
   
   void updatePtrList(				     
@@ -203,7 +203,7 @@ class itemSetCluster {
 			  size_t lastElem,
 			  // The following parameters will be passed to the
 			  // mergeItemSetHead function
-			  sqlCoreConn& coreConn,
+			  Connection& connection,
 			  const SourceRowDescriptor& srd);
   
   void mergeItemSetHeadBase(
@@ -257,7 +257,7 @@ class itemSetCluster {
               itemSetListCluster<NODETYPE>& ptrList,
 	      double nSup);
 
-   void printRule(sqlCoreConn& coreConn,
+   void printRule(Connection& connection,
 		  const std::vector<NODETYPE>& body,
 		  double denomBody,
 		  const std::vector<NODETYPE>& head,
@@ -949,23 +949,23 @@ template< class NODETYPE >
 void itemSetCluster< NODETYPE >::save_Large_ItemSet(
 				 int lev,
 				 int isPart,
-				 sqlCoreConn& coreConn)  {
+				 Connection& connection)  {
     typename MapType::iterator i;
     std::string id_head;
 
     //cout<<"itemSetCluter.h _ Dentro alla procedura"<<std::endl;
     for( i=isc.begin( ) ; i != isc.end( ) ; i++ ) {
 
-       id_head=i->second.getHead()->save_Large_ItemSet_Head(1,isPart,coreConn);
+       id_head=i->second.getHead()->save_Large_ItemSet_Head(1,isPart,connection);
        // !!! bobo 030603
        i->second.releaseHead();
        // !!! end
 
-       saveIn_DB_Body(lev,isPart,i->first,id_head.c_str(),coreConn);
+       saveIn_DB_Body(lev,isPart,i->first,id_head.c_str(),connection);
        
 
        if (i->second.getItemSet()!=NULL) {
-	 i->second.getItemSet()->save_Large_ItemSetHelper(lev+1,isPart,coreConn);
+	 i->second.getItemSet()->save_Large_ItemSetHelper(lev+1,isPart,connection);
 	 // !!! bobo 030603
 	 i->second.releaseItemSet();
 	 // !!! end
@@ -977,7 +977,7 @@ void itemSetCluster< NODETYPE >::save_Large_ItemSet(
 
 
 template< class NODETYPE >
-std::string itemSetCluster< NODETYPE >::save_Large_ItemSet_Head(int lev,int isPart,sqlCoreConn& coreConn)
+std::string itemSetCluster< NODETYPE >::save_Large_ItemSet_Head(int lev,int isPart,Connection& connection)
  {
     typename MapType::iterator i;
     std::string id_head;
@@ -991,9 +991,9 @@ std::string itemSetCluster< NODETYPE >::save_Large_ItemSet_Head(int lev,int isPa
      {
 
       //cout<<lev<<":::"<<i->first<<std::endl;
-      saveIn_DB_Head(lev,i->first,id_head.c_str(),isPart,coreConn);
+      saveIn_DB_Head(lev,i->first,id_head.c_str(),isPart,connection);
       if (i->second.getItemSet()!=NULL) {
-           i->second.getItemSet()->save_Large_ItemSet_HeadHelper(lev+1,isPart,id_head.c_str(),coreConn);
+           i->second.getItemSet()->save_Large_ItemSet_HeadHelper(lev+1,isPart,id_head.c_str(),connection);
 	   // !!! bobo 030603
 	   i->second.releaseItemSet();
 	   // !!! end
@@ -1008,7 +1008,7 @@ std::string itemSetCluster< NODETYPE >::save_Large_ItemSet_Head(int lev,int isPa
   }
 
 template< class NODETYPE >
-void itemSetCluster< NODETYPE >::save_Large_ItemSetHelper(int lev,int isPart,sqlCoreConn& coreConn)
+void itemSetCluster< NODETYPE >::save_Large_ItemSetHelper(int lev,int isPart,Connection& connection)
  {
     typename MapType::iterator i;
     std::string id_head;
@@ -1017,15 +1017,15 @@ void itemSetCluster< NODETYPE >::save_Large_ItemSetHelper(int lev,int isPart,sql
      for( i=isc.begin( ) ; i != isc.end( ) ; i++ )
      {
 
-      id_head=i->second.getHead()->save_Large_ItemSet_Head(1,isPart,coreConn);
+      id_head=i->second.getHead()->save_Large_ItemSet_Head(1,isPart,connection);
       // !!! bobo 030603
       i->second.releaseHead();
       // !!! end
 
-      saveIn_DB_Body(lev,isPart,i->first,id_head.c_str(),coreConn);
+      saveIn_DB_Body(lev,isPart,i->first,id_head.c_str(),connection);
       if (i->second.getItemSet()!=NULL)
       {
-         i->second.getItemSet()->save_Large_ItemSetHelper(lev+1,isPart,coreConn);
+         i->second.getItemSet()->save_Large_ItemSetHelper(lev+1,isPart,connection);
          //Quando esco dealloco il puntatore
          i->second.releaseItemSet();
       }
@@ -1034,7 +1034,7 @@ void itemSetCluster< NODETYPE >::save_Large_ItemSetHelper(int lev,int isPart,sql
  }
 
 template< class NODETYPE >
-void itemSetCluster< NODETYPE >::save_Large_ItemSet_HeadHelper(int lev,int isPart,const char* id_head_father,sqlCoreConn& coreConn)
+void itemSetCluster< NODETYPE >::save_Large_ItemSet_HeadHelper(int lev,int isPart,const char* id_head_father,Connection& connection)
  {
     typename MapType::iterator i;
     //    const char* id_head;
@@ -1042,11 +1042,11 @@ void itemSetCluster< NODETYPE >::save_Large_ItemSet_HeadHelper(int lev,int isPar
     
      for( i=isc.begin( ) ; i != isc.end( ) ; i++ )
      {
-      saveIn_DB_Head(lev,i->first,id_head_father,isPart,coreConn);
+      saveIn_DB_Head(lev,i->first,id_head_father,isPart,connection);
 
       if (i->second.getItemSet()!=NULL)
       {
-         i->second.getItemSet()->save_Large_ItemSet_HeadHelper(lev+1,isPart,id_head_father,coreConn);
+         i->second.getItemSet()->save_Large_ItemSet_HeadHelper(lev+1,isPart,id_head_father,connection);
          //Quando esco dealloco il puntatore
          i->second.releaseItemSet();
       }
@@ -1059,7 +1059,7 @@ void itemSetCluster< NODETYPE >::saveIn_DB_Body(
 			     int isPart,
 			     const NODETYPE& node,
 			     const char* id_head,
-			     sqlCoreConn& coreConn)
+			     Connection& connection)
  {
     char inter[10],intPart[10];
     //const char* bid;
@@ -1078,14 +1078,14 @@ void itemSetCluster< NODETYPE >::saveIn_DB_Body(
     QryDef=Qry+inter+","+node.getSQLData()+",'"+id_head+intPart+"');";
     //    std::cout<<QryDef<<std::endl;
     const char * dains=QryDef.c_str();
-    coreConn.insert_DB(dains);
+    connection.insert(dains);
 
     //cout << ".";
 }
 
 
 template< class NODETYPE >
-void itemSetCluster< NODETYPE >::saveIn_DB_Head(int lev,const NODETYPE& node,const char* id_head,int isPart,sqlCoreConn& coreConn)
+void itemSetCluster< NODETYPE >::saveIn_DB_Head(int lev,const NODETYPE& node,const char* id_head,int isPart,Connection& connection)
  {
     char inter[10],intPart[10];
     //    const char* hid;
@@ -1101,7 +1101,7 @@ void itemSetCluster< NODETYPE >::saveIn_DB_Head(int lev,const NODETYPE& node,con
     QryDef=Qry+id_head+intPart+"',"+inter+","+node.getSQLData()+");";
     //cout<<QryDef<<std::endl;
     const char * dains=QryDef.c_str();
-    coreConn.insert_DB(dains);
+    connection.insert(dains);
 }
 
 
@@ -1136,14 +1136,14 @@ void itemSetCluster< NODETYPE >::updatePtrList(
 
 template< class NODETYPE >
 void itemSetCluster< NODETYPE >::mergeItemSet(
-				     sqlCoreConn& coreConn,
+				     Connection& connection,
 				     itemSetListCluster<NODETYPE>& ptrList,
 				     const SourceRowDescriptor& srd) {
    std::string Qry;
    HASHTYPE anc;
    NODETYPE temp;
    int level;
-   odbc::Statement* statement=coreConn.getConnection()->createStatement();
+   odbc::Statement* statement=connection.getConnection()->createStatement();
    odbc::ResultSet* resultAllBody;
    level=0;
    size_t lastElem;
@@ -1170,7 +1170,7 @@ void itemSetCluster< NODETYPE >::mergeItemSet(
 			resultAllBody,
 			srDescription,
 			lastElem,
-			coreConn,
+			connection,
 			srd);
      delete resultAllBody;
    } else std::cout<<"ResultAllBody == NULL"<<std::endl;
@@ -1186,7 +1186,7 @@ void itemSetCluster< NODETYPE >::mergeItemSetHelper(
 			size_t lastElem,
 			// The following parameters will be passed to the
 			// mergeItemSetHead function
-			sqlCoreConn& coreConn,
+			Connection& connection,
 			const SourceRowDescriptor& srd) {
   LevelInfoStack levelStack;
   //  levelStack.push_back(NODETYPE(), this);
@@ -1200,7 +1200,7 @@ void itemSetCluster< NODETYPE >::mergeItemSetHelper(
  std::string head; 
  std::string QrySt="select level,"+srd.getHead().getSQLColumnNames()+
      " from tmp_Rule_Head_Ext where id_head=? order by id;";
-  odbc::PreparedStatement* statement=coreConn.getConnection()->prepareStatement(QrySt);
+  odbc::PreparedStatement* statement=connection.getConnection()->prepareStatement(QrySt);
   
   while( resultAllBody->next() ) {
     
@@ -1957,7 +1957,7 @@ void itemSetCluster< NODETYPE >::fillGidCidList(
 
 template< class NODETYPE >
 void itemSetCluster< NODETYPE >::printRule(
-			 sqlCoreConn& coreConn,
+			 Connection& connection,
 			 const std::vector<NODETYPE>& body,
 			 double denomBody,
 			 const std::vector<NODETYPE>& head,
@@ -1975,10 +1975,10 @@ void itemSetCluster< NODETYPE >::printRule(
        sup=(numHead/totGroups);
        conf=(numHead/denomBody);
 
-       coreConn.insert_DB(body,curHead,sup,conf);
+       connection.insert(body,curHead,sup,conf);
 
        if (i->second.getItemSet()!=NULL) {
-         i->second.getItemSet()->printRule(coreConn,body,denomBody,curHead,totGroups);
+         i->second.getItemSet()->printRule(connection,body,denomBody,curHead,totGroups);
        }
      }
 }
@@ -1987,7 +1987,7 @@ void itemSetCluster< NODETYPE >::printRule(
 
 
 template< class NODETYPE >
-void itemSetCluster< NODETYPE >::extractRule(sqlCoreConn& coreConn,const std::vector<NODETYPE>& body, double totGroups)
+void itemSetCluster< NODETYPE >::extractRule(Connection& connection,const std::vector<NODETYPE>& body, double totGroups)
  {
    typename MapType::iterator i;
 
@@ -1998,10 +1998,10 @@ void itemSetCluster< NODETYPE >::extractRule(sqlCoreConn& coreConn,const std::ve
 
        double denom=i->second.getCountGid();
        
-       i->second.getHead()->printRule(coreConn,curBody,denom,std::vector<NODETYPE>(),totGroups);
+       i->second.getHead()->printRule(connection,curBody,denom,std::vector<NODETYPE>(),totGroups);
 
        if (i->second.getItemSet()!=NULL) {
-         i->second.getItemSet()->extractRule(coreConn,curBody,totGroups);
+         i->second.getItemSet()->extractRule(connection,curBody,totGroups);
        }
     }
  }
@@ -2010,7 +2010,7 @@ void itemSetCluster< NODETYPE >::extractRule(sqlCoreConn& coreConn,const std::ve
 
 #if 0 // deprecated
 template< class NODETYPE >
-void itemSetCluster< NODETYPE >::extractRule(sqlCoreConn& coreConnstd::string regola,int lev,double totGroups)
+void itemSetCluster< NODETYPE >::extractRule(Connection& connectionstd::string regola,int lev,double totGroups)
  {
    typename MapType::iterator i;
   std::string rule;
@@ -2033,12 +2033,12 @@ void itemSetCluster< NODETYPE >::extractRule(sqlCoreConn& coreConnstd::string re
        //if (lev!=1) combina2(regola);
        //cout<<"BODY : "<<lev<<std::endl;
        double denom=i->second.getCountGid();
-       i->second.getHead()->printRule(coreConn,regola,lev,denom,"",1,totGroups);
+       i->second.getHead()->printRule(connection,regola,lev,denom,"",1,totGroups);
        if (i->second.getItemSet()!=NULL)
        {
          //cout<<"Address "<<i->second.getItemSet()<<std::endl;
 
-         i->second.getItemSet()->extractRule(coreConn,regola,lev+1,totGroups);
+         i->second.getItemSet()->extractRule(connection,regola,lev+1,totGroups);
 	 //         std::cout<<std::endl;
        }
      regola="";

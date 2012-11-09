@@ -407,15 +407,15 @@ void BodyMap::createHeads (NewRuleSet& rs, NewRuleSet& rs1, float threshold, int
 
 void insertRules( const NewRuleSet& rs, double totGroups ) {
   #warning settare bene c
-  sqlCoreConn coreConn;
-  coreConn.useConnection(MineruleOptions::getSharedOptions().getOdbc_db().getConnection());
-  coreConn.setOutTableName("prova");
-  //  coreConn.setBodyCardinalities(options.getBodyCardinalities());
-  //  coreConn.setHeadCardinalities(options.getHeadCardinalities());
+  Connection connection;
+  connection.useODBCConnection(MineruleOptions::getSharedOptions().getOdbc_db().getConnection());
+  connection.setOutTableName("prova");
+  //  connection.setBodyCardinalities(options.getBodyCardinalities());
+  //  connection.setHeadCardinalities(options.getHeadCardinalities());
 
   NewRuleSet::const_iterator it;
   for(it=rs.begin(); it!=rs.end(); it++) {
-    coreConn.insert_DB( it->body, 
+    connection.insert( it->body, 
 			    it->head, 
 			    it->gids.size()/totGroups, 
 			    it->conf );

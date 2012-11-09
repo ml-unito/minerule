@@ -157,7 +157,7 @@ readSourceTable(
 
 void partitionWithoutClusters( const minerule::AlgorithmsOptions& options  )
 {
-  odbc::Connection* connection = options.getConnection();
+  odbc::Connection* odbc_connection = options.getConnection();
   odbc::PreparedStatement* statement = options.getStatement();
   const minerule::HeadBodySourceRowDescription& 
     rowDes = options.getSourceRowDescription();
@@ -188,7 +188,7 @@ void partitionWithoutClusters( const minerule::AlgorithmsOptions& options  )
   double nSup;
   bool toContinue;
   // Connessione e ResultSet Vedi classe Database/Connection.h e cpp
-  sqlCoreConn coreConn;
+  Connection connection;
 
 
 // parametri da passare.
@@ -197,10 +197,10 @@ void partitionWithoutClusters( const minerule::AlgorithmsOptions& options  )
   //  std::cout <<std::endl<<"+ Supporto: "<<support<<"% Confidenza: "<< conf<<"%"<<std::endl;
 
   // Apertura della connessione e cancellazione db_temporanei
-  coreConn.useConnection(connection);
-  coreConn.setOutTableName(options.getOutTableName());
-  coreConn.setBodyCardinalities(options.getBodyCardinalities());
-  coreConn.setHeadCardinalities(options.getHeadCardinalities());
+  connection.useODBCConnection(odbc_connection);
+  connection.setOutTableName(options.getOutTableName());
+  connection.setBodyCardinalities(options.getBodyCardinalities());
+  connection.setHeadCardinalities(options.getHeadCardinalities());
 
 
   // Ciclo fino alla fine delle partizioni
@@ -211,7 +211,7 @@ void partitionWithoutClusters( const minerule::AlgorithmsOptions& options  )
   bool readMorePartitions=result->next();
   SourceRowDescriptor srDescriptor(result, rowDes);
 
-  coreConn.create_tmp_db(0, srDescriptor.getBody(), srDescriptor.getHead());
+  connection.create_tmp_db(0, srDescriptor.getBody(), srDescriptor.getHead());
 
   MRLogPush("Reading the database (first phase)...");
   int gid = 1;
@@ -247,7 +247,7 @@ void partitionWithoutClusters( const minerule::AlgorithmsOptions& options  )
       }
 
     MRLog() << "  Saving large itmeset of current partition" << std::endl;
-    kItem.save_Large_ItemSet(1,isPart,coreConn);
+    kItem.save_Large_ItemSet(1,isPart,connection);
   
     // Svuoto la lista dei livelli per il ciclo successivo.
     prtList.removeAll();  
@@ -261,7 +261,7 @@ void partitionWithoutClusters( const minerule::AlgorithmsOptions& options  )
  prtList.init();
 
  MRLog() << "Merge phase" << std::endl;
- kItem.mergeItemSet(coreConn,prtList, srDescriptor);
+ kItem.mergeItemSet(connection,prtList, srDescriptor);
  totGroups=0;
 
  result = statement->executeQuery();
@@ -301,10 +301,10 @@ void partitionWithoutClusters( const minerule::AlgorithmsOptions& options  )
      toContinue=kItem.gen_final_count(prtList,nSup,levelIn,pHashMap);
  }
 
- coreConn.deleteDestTable();
- coreConn.create_db_rule(0);
+ connection.deleteDestTable();
+ connection.create_db_rule(0);
  
  MRLogPush("Extracting rules...");
- kItem.extractRule(coreConn, options.getTotGroups(), kItem);
+ kItem.extractRule(connection, options.getTotGroups(), kItem);
  MRLogPop();
 }

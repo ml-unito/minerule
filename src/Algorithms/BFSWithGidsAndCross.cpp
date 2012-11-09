@@ -100,7 +100,7 @@ namespace minerule {
     }
   */
   void BFSWithGidsAndCross::BodyMap::pruneMap (float threshold) {
-    BodyMap newMap(*coreConn);
+    BodyMap newMap(*connection);
     for (iterator i = begin(); i != end(); i++)
       if (i->second.pruneMap(threshold)) newMap[i->first] = i->second;
     (*this) = newMap;
@@ -224,7 +224,7 @@ namespace minerule {
 			     double totGroups ) {
     NewRuleSet::const_iterator it;
     for(it=rs.begin(); it!=rs.end(); it++) {
-      coreConn->insert_DB( it->body, 
+      connection->insert( it->body, 
 			  it->head, 
 			  it->gids.size()/totGroups, 
 			  it->conf );
@@ -319,12 +319,12 @@ namespace minerule {
 
     MRLog() << "Executing queries" << std::endl;
 i*/
-    coreConn.useConnection(MineruleOptions::getSharedOptions().getOdbc_db().getConnection());
-    coreConn.setOutTableName(minerule.getParsedMinerule().tab_result);
-    coreConn.setBodyCardinalities(minerule.getParsedMinerule().bodyCardinalities);
-    coreConn.setHeadCardinalities(minerule.getParsedMinerule().headCardinalities);
-    coreConn.create_db_rule(0);
-    coreConn.init();
+    connection.useODBCConnection(MineruleOptions::getSharedOptions().getOdbc_db().getConnection());
+    connection.setOutTableName(minerule.getParsedMinerule().tab_result);
+    connection.setBodyCardinalities(minerule.getParsedMinerule().bodyCardinalities);
+    connection.setHeadCardinalities(minerule.getParsedMinerule().headCardinalities);
+    connection.create_db_rule(0);
+    connection.init();
 
     MRDebug() << "Preparing data sources..." << std::endl;
 rowDes.setGroupBodyElems(1,minerule.getParsedMinerule().ga.size());
@@ -332,10 +332,10 @@ rowDes.setGroupBodyElems(1,minerule.getParsedMinerule().ga.size());
     pdu.buildSourceTableQuery( queryText, rowDes );
 
     MRDebug() << "BFSWithGidsAndCross: query:" << queryText.c_str() << std::endl;
-    statement= coreConn.getConnection()->prepareStatement(queryText.c_str());
+    statement= connection.getConnection()->prepareStatement(queryText.c_str());
 
-//    statement = coreConn.getConnection()->prepareStatement(bodyQry.c_str());
-//    stmt1 = coreConn.getConnection()->prepareStatement(headQry.c_str());
+//    statement = connection.getConnection()->prepareStatement(bodyQry.c_str());
+//    stmt1 = connection.getConnection()->prepareStatement(headQry.c_str());
   }
 
 
@@ -357,7 +357,7 @@ rowDes.setGroupBodyElems(1,minerule.getParsedMinerule().ga.size());
     ItemType gid1;
 //    bool found = Transaction::findGid(gid1,result1, rowDes, true);
 //    found = found && Transaction::findGid(gid1,result,rowDes,true);
-    BodyMap bodyMap(coreConn);
+    BodyMap bodyMap(connection);
 
     int totalGroups = options.getTotGroups();
     int howManyRows = 0;
@@ -398,7 +398,7 @@ rowDes.setGroupBodyElems(1,minerule.getParsedMinerule().ga.size());
     MRLog() << "After extracting rules, rules: " << nrules << std::endl;
 
     MRLogPop();
-    coreConn.finalize();
+    connection.finalize();
 
     delete statement;
     delete stmt1;

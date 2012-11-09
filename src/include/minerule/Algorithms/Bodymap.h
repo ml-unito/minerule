@@ -186,7 +186,7 @@ class NewRuleSet : public std::vector<NewRule> {};
 class BodyMap : public std::map<ItemType, BodyMapElement> {
 	static int nextid;
 std::string outfile;
-	sqlCoreConn * coreConn;
+	Connection * connection;
 	double totGroups;
 	ofstream outR;
 	ofstream outHB;
@@ -196,7 +196,7 @@ std::string outfile;
   public:
 	int nextID() { return nextid++; }
 	BodyMap(std::string f, double totG) : outfile(f), totGroups(totG) {};
-	BodyMap(sqlCoreConn& cc, double totG) : coreConn(&cc), totGroups(totG) {};
+	BodyMap(Connection& cc, double totG) : connection(&cc), totGroups(totG) {};
 	void openOutputFiles() {
 	std::string filename = outfile + ".r";
 		outR.open(filename.c_str());

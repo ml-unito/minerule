@@ -78,7 +78,7 @@ readDataBase(odbc::ResultSet* result,
 
 void newFPGrowth( const minerule::AlgorithmsOptions& options ) {
 
-  odbc::Connection* connection = options.getConnection();
+  odbc::Connection* odbc_connection = options.getConnection();
   odbc::PreparedStatement* statement = options.getStatement();
   const minerule::HeadBodySourceRowDescription& rowDes =
     options.getSourceRowDescription();
@@ -95,7 +95,7 @@ void newFPGrowth( const minerule::AlgorithmsOptions& options ) {
 
   double totGroups,nSup;
   ItemType gid,gidOld;
-  sqlCoreConn coreConn;
+  Connection connection;
   odbc::ResultSet* result;
 
   totGroups=0;
@@ -103,10 +103,10 @@ void newFPGrowth( const minerule::AlgorithmsOptions& options ) {
 // gCount.pushElements();
 //  gCount.print();
   tree.addRoot( gCount, Tree<ItemType>::ROOTNODE );
-  coreConn.useConnection(connection);
-  coreConn.setOutTableName(options.getOutTableName());
-  coreConn.setBodyCardinalities(options.getBodyCardinalities());
-  coreConn.setHeadCardinalities(options.getHeadCardinalities());  
+  connection.useODBCConnection(odbc_connection);
+  connection.setOutTableName(options.getOutTableName());
+  connection.setBodyCardinalities(options.getBodyCardinalities());
+  connection.setHeadCardinalities(options.getHeadCardinalities());  
   result= statement->executeQuery();
 
   MRLogPush("Reading the database...");
@@ -136,15 +136,15 @@ void newFPGrowth( const minerule::AlgorithmsOptions& options ) {
   nSup=ceil(totGroups*(support/100));
   //  cout<<"nSup: "<<nSup<<std::endl;
 
-  coreConn.deleteDestTable();
-  coreConn.create_db_rule(0);
+  connection.deleteDestTable();
+  connection.create_db_rule(0);
 
 // Genera tutti i fp-tree conditional. 
 // Eliminando quelli relativi a itemset a supporto non sufficiente
 // Per ognuno di essi si occupa, infine, di salvare i risultati sul DB
   MRLog()<<"Building the conditional fptrees..."<<std::endl;
-  gCount.esplodi(coreConn, nSup, totGroups);
+  gCount.esplodi(connection, nSup, totGroups);
 
   MRLog()<<"Building rules..."<<std::endl;;
-  gCount.extractRule(coreConn,nSup,totGroups);
+  gCount.extractRule(connection,nSup,totGroups);
 }

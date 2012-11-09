@@ -249,11 +249,11 @@ namespace minerule {
     MRLog() << "Preparing the data structures..." << std::endl;
     insertRulesInStructure();
     MRLog() << "Done!" << std::endl;
-    sqlCoreConn coreConn;
-    coreConn.setOutTableName(minerule->getParsedMinerule().tab_result);
-    coreConn.useConnection(
+    Connection connection;
+    connection.setOutTableName(minerule->getParsedMinerule().tab_result);
+    connection.useODBCConnection(
        MineruleOptions::getSharedOptions().getOdbc_db().getConnection());
-    coreConn.create_db_rule(0);
+    connection.create_db_rule(0);
 
     if (mb1!=NULL  &&  mh1!=NULL) {
       adjustSuppMIndex();
@@ -262,7 +262,7 @@ namespace minerule {
 			      minerule->getParsedMinerule().sup,
 			      minerule->getParsedMinerule().conf,
 			      ngroups,
-			      &coreConn);
+			      &connection);
     }
     else {
       if (rb1!=NULL  &&  rh1!=NULL) {
@@ -276,7 +276,7 @@ namespace minerule {
 				minerule->getParsedMinerule().sup,
 				minerule->getParsedMinerule().conf,
 				ngroups,
-				&coreConn);
+				&connection);
 	MRLog() << "Done!" << std::endl;
       } else 
 	throw MineruleException (MR_ERROR_INTERNAL,

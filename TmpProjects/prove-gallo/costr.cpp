@@ -100,14 +100,14 @@ main(int argc, char** argv) {
     constr->adjustSupp(b2,h2);
 
     string tabResult="mrBB4_from_mrArianna5";
-    sqlCoreConn coreConn;
+    Connection connection;
     //tab_result me lo passera' l'ottimizzatore, per il momento mi invento io un nome
-    //coreConn.setOutTableName(minerule->tab_result);
-    coreConn.setOutTableName(tabResult);
-    coreConn.useConnection(MineruleOptions::getSharedOptions().getOdbc_db().getConnection());
-    coreConn.create_db_rule(0);
+    //connection.setOutTableName(minerule->tab_result);
+    connection.setOutTableName(tabResult);
+    connection.useODBCConnection(MineruleOptions::getSharedOptions().getOdbc_db().getConnection());
+    connection.create_db_rule(0);
 
-    r->extractRules(body,0.012,0.96,constr->getNGroups(),&coreConn);
+    r->extractRules(body,0.012,0.96,constr->getNGroups(),&connection);
     
     delete h2;
     delete b2;

@@ -8,7 +8,7 @@
 
 
 /*
-bool sqlCoreConn::connect()
+bool Connection::connect()
  {
   bool connOK;
   std::cout<<"Connect..."<<std::endl;
@@ -23,11 +23,11 @@ bool sqlCoreConn::connect()
 */
 
 void
-sqlCoreConn::useConnection(odbc::Connection* newConnection) {
+Connection::useODBCConnection(odbc::Connection* newConnection) {
   connection = newConnection;
 }
 /*
-bool sqlCoreConn::isConnected()
+bool Connection::isConnected()
  {
   bool connOK;
 
@@ -39,7 +39,7 @@ bool sqlCoreConn::isConnected()
  }
 */
 /*
-void sqlCoreConn::disconnect()
+void Connection::disconnect()
  {
   std::cout<<"Disconnect"<<std::endl;
   delete connection;
@@ -47,7 +47,7 @@ void sqlCoreConn::disconnect()
  }
 */
 /*
-odbc::ResultSet* sqlCoreConn::openQuery()
+odbc::ResultSet* Connection::openQuery()
  {
     odbc::Statement* statement=connection->createStatement();
     odbc::ResultSet* result;
@@ -62,7 +62,7 @@ odbc::ResultSet* sqlCoreConn::openQuery()
     return result;
  }
 */
-odbc::ResultSet* sqlCoreConn::openQuery(const char* Qry)
+odbc::ResultSet* Connection::openQuery(const char* Qry)
  {
     odbc::Statement* statement=connection->createStatement();
     odbc::ResultSet* result;
@@ -79,7 +79,7 @@ odbc::ResultSet* sqlCoreConn::openQuery(const char* Qry)
     return result;
 
  }
-odbc::ResultSet* sqlCoreConn::openQuery(char* Qry)
+odbc::ResultSet* Connection::openQuery(char* Qry)
  {
     odbc::Statement* statement=connection->createStatement();
     odbc::ResultSet* result;
@@ -96,7 +96,7 @@ odbc::ResultSet* sqlCoreConn::openQuery(char* Qry)
 
  }
 /*
-int sqlCoreConn::getNumCols(odbc::ResultSet* result)
+int Connection::getNumCols(odbc::ResultSet* result)
  {
     odbc::ResultSetMetaData* metaData = result->getMetaData();
     int numCols = metaData->getColumnCount();
@@ -104,7 +104,7 @@ int sqlCoreConn::getNumCols(odbc::ResultSet* result)
     return numCols;
  }
 
-int sqlCoreConn::getNumRows()
+int Connection::getNumRows()
  {
     odbc::Statement* statement=connection->createStatement();
     odbc::ResultSet* result;
@@ -128,7 +128,7 @@ int sqlCoreConn::getNumRows()
  }
 */
 
-bool sqlCoreConn::existTable(const char * tableName)
+bool Connection::existTable(const char * tableName)
 {
 
 	try {
@@ -140,12 +140,12 @@ bool sqlCoreConn::existTable(const char * tableName)
 	return true;
 }
 
-void sqlCoreConn::deleteDestTable() {
+void Connection::deleteDestTable() {
   deleteTable(getOutTableName().c_str());
   deleteTable(getElemsOutTableName().c_str());
 }
 
-void sqlCoreConn::deleteTable(const char * tableName)
+void Connection::deleteTable(const char * tableName)
 {
    odbc::Statement* stmt=connection->createStatement();
    if (existTable(tableName))
@@ -162,7 +162,7 @@ void sqlCoreConn::deleteTable(const char * tableName)
 
 // Bisogna controllare che non esista già la tabella
 // altrimenti va in errore !!
-void sqlCoreConn::create_db_rule(int sintax)
+void Connection::create_db_rule(int sintax)
  {
     odbc::Statement* statement=connection->createStatement();
     std::string create, create_index;
@@ -183,12 +183,12 @@ void sqlCoreConn::create_db_rule(int sintax)
  }
 
 
-void sqlCoreConn::DirectDBInserter::insert_DB_HBelems(const HeadBodyType& elems, size_t counter) {
+void Connection::DirectDBInserter::insert_HBelems(const HeadBodyType& elems, size_t counter) {
 //  assert( !elems.empty() );
 
   std::string query = 
-    "INSERT INTO " + coreConn.getElemsOutTableName() + " VALUES (?,?)";
-  odbc::PreparedStatement* state = coreConn.connection->prepareStatement(query);
+    "INSERT INTO " + connection.getElemsOutTableName() + " VALUES (?,?)";
+  odbc::PreparedStatement* state = connection.connection->prepareStatement(query);
 
 
   HeadBodyType::const_iterator it = elems.begin();
@@ -204,7 +204,7 @@ void sqlCoreConn::DirectDBInserter::insert_DB_HBelems(const HeadBodyType& elems,
 }
 
 /*
-void sqlCoreConn::insert_DB(const std::set<ItemType>& body,
+void Connection::insert(const std::set<ItemType>& body,
 			    const std::set<ItemType>& head,
 			    double support,
 			    double confidence,
@@ -219,10 +219,10 @@ void sqlCoreConn::insert_DB(const std::set<ItemType>& body,
   odbc::Statement* state = connection->createStatement();
 
   size_t bodyId = counter++;
-  insert_DB_HBelems(body, bodyId);
+  insert_HBelems(body, bodyId);
   
   size_t headId = counter++;
-  insert_DB_HBelems(head, headId);
+  insert_HBelems(head, headId);
 
   stringstream query;
   query << "INSERT INTO " << getOutTableName() 
@@ -233,7 +233,7 @@ void sqlCoreConn::insert_DB(const std::set<ItemType>& body,
   delete state;
   } */
 
-void sqlCoreConn::CachedDBInserter::insert_DB_HBelems(const HeadBodyType& elems, size_t counter) {
+void Connection::CachedDBInserter::insert_HBelems(const HeadBodyType& elems, size_t counter) {
 //  assert( !elems.empty() );
 
   HeadBodyType::const_iterator it = elems.begin();
@@ -245,7 +245,7 @@ void sqlCoreConn::CachedDBInserter::insert_DB_HBelems(const HeadBodyType& elems,
 
 }
 
-void sqlCoreConn::CachedDBInserter::init() {
+void Connection::CachedDBInserter::init() {
   filename = tmpnam(NULL);
   std::string temp = filename + ".r";
   outR.open(temp.c_str());
@@ -253,7 +253,7 @@ void sqlCoreConn::CachedDBInserter::init() {
   outHB.open(temp.c_str());
 }
 
-void sqlCoreConn::CachedDBInserter::finalize() {
+void Connection::CachedDBInserter::finalize() {
   outR.close();
   outHB.close();
   std::string loadstr1 = filename + ".r";
@@ -263,12 +263,12 @@ void sqlCoreConn::CachedDBInserter::finalize() {
   loadstr1 = "LOAD DATA INFILE '";
   loadstr1 += filename;
   loadstr1 += ".r' INTO TABLE ";
-  loadstr1 += coreConn.getOutTableName();
+  loadstr1 += connection.getOutTableName();
   loadstr2 = "LOAD DATA INFILE '";
   loadstr2 += filename;
   loadstr2 += ".hb' INTO TABLE ";
-  loadstr2 += coreConn.getElemsOutTableName();
-  odbc::Statement* state = coreConn.getConnection()->createStatement();
+  loadstr2 += connection.getElemsOutTableName();
+  odbc::Statement* state = connection.getConnection()->createStatement();
   state->execute(loadstr1.c_str());
   state->execute(loadstr2.c_str());
   delete state;
@@ -278,7 +278,7 @@ void sqlCoreConn::CachedDBInserter::finalize() {
   unlink(loadstr2.c_str());
 }
 
-void sqlCoreConn::CachedDBInserter::insert_DB(const HeadBodyType& body,
+void Connection::CachedDBInserter::insert(const HeadBodyType& body,
 			    const HeadBodyType& head,
 			    double support,
 			    double confidence,
@@ -288,8 +288,8 @@ void sqlCoreConn::CachedDBInserter::insert_DB(const HeadBodyType& body,
 
   // if either body or head, is too big, too low with respect to
   // the allowed cardinalities we simply return back to the caller.
-  if( !coreConn.bodyCard.validate(body.size()) 
-      || !coreConn.headCard.validate(head.size()))
+  if( !connection.bodyCard.validate(body.size()) 
+      || !connection.headCard.validate(head.size()))
     return;
 
   static size_t counter=0;
@@ -297,17 +297,17 @@ void sqlCoreConn::CachedDBInserter::insert_DB(const HeadBodyType& body,
   static size_t bodyId = counter;
   if (saveBody) {
 	bodyId = counter++;
-	insert_DB_HBelems(body, bodyId);
+	insert_HBelems(body, bodyId);
   }
   
   size_t headId = counter++;
-  insert_DB_HBelems(head, headId);
+  insert_HBelems(head, headId);
 
   outR << bodyId << "\t" << headId << "\t" << support << "\t" << confidence << "\t" << body.size() << "\t" << head.size() << std::endl;
 
 }
 
-void sqlCoreConn::DirectDBInserter::insert_DB(const HeadBodyType& body,
+void Connection::DirectDBInserter::insert(const HeadBodyType& body,
 			    const HeadBodyType& head,
 			    double support,
 			    double confidence,
@@ -316,25 +316,25 @@ void sqlCoreConn::DirectDBInserter::insert_DB(const HeadBodyType& body,
 
   // if either body or head, is too big, too low with respect to
   // the allowed cardinalities we simply return back to the caller.
-  if( !coreConn.bodyCard.validate(body.size()) 
-      || !coreConn.headCard.validate(head.size()))
+  if( !connection.bodyCard.validate(body.size()) 
+      || !connection.headCard.validate(head.size()))
     return;
 
   static size_t counter=0;
 
-  static odbc::Statement* state = coreConn.connection->createStatement();
+  static odbc::Statement* state = connection.connection->createStatement();
 
   static size_t bodyId = counter;
   if (saveBody) {
 	bodyId = counter++;
-	insert_DB_HBelems(body, bodyId);
+	insert_HBelems(body, bodyId);
   }
   
   size_t headId = counter++;
-  insert_DB_HBelems(head, headId);
+  insert_HBelems(head, headId);
 
   stringstream query;
-  query << "INSERT INTO " << coreConn.getOutTableName() 
+  query << "INSERT INTO " << connection.getOutTableName() 
 	<< " VALUES (" << bodyId << "," << headId << "," 
 	<< support << "," << confidence << "," << body.size() << "," << head.size() << ")" ;
 
@@ -342,7 +342,7 @@ void sqlCoreConn::DirectDBInserter::insert_DB(const HeadBodyType& body,
   //delete state;
 }
 
-void sqlCoreConn::insert_DB(const char * what)
+void Connection::insert(const char * what)
  {
     static odbc::Statement* statement=connection->createStatement();
     //    odbc::ResultSet* result;
@@ -360,7 +360,7 @@ void sqlCoreConn::insert_DB(const char * what)
  }
 
 /*
-odbc::ResultSet* sqlCoreConn::getPartition(int begin,int end)
+odbc::ResultSet* Connection::getPartition(int begin,int end)
  {
     odbc::Statement* statement=connection->createStatement();
     odbc::ResultSet* result;
@@ -390,7 +390,7 @@ odbc::ResultSet* sqlCoreConn::getPartition(int begin,int end)
     return result;
  }
 */
-void sqlCoreConn::create_tmp_db(int sintax, 
+void Connection::create_tmp_db(int sintax, 
 				const SourceRowAttrCollectionDescriptor& body, 
 				const SourceRowAttrCollectionDescriptor& head)
  {
@@ -428,7 +428,7 @@ void sqlCoreConn::create_tmp_db(int sintax,
     delete statement;
  }
 
-void sqlCoreConn::delete_tmp_db()
+void Connection::delete_tmp_db()
  {
 
   deleteTable("tmp_Rule_Base");

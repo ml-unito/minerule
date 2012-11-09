@@ -171,7 +171,7 @@ void partitionWithoutClusters( const minerule::AlgorithmsOptions& options  )
   double nSup;
   bool toContinue;
   // Connessione e ResultSet Vedi classe Database/Connection.h e cpp
-  sqlCoreConn coreConn;
+  Connection connection;
 
 
 // parametri da passare.
@@ -180,9 +180,9 @@ void partitionWithoutClusters( const minerule::AlgorithmsOptions& options  )
   //  cout <<std::endl<<"+ Supporto: "<<support<<"% Confidenza: "<< conf<<"%"<<std::endl;
 
   // Apertura della connessione e cancellazione db_temporanei
-  coreConn.useConnection(connection);
-  coreConn.setOutTableName(options.getOutTableName());
-  coreConn.setAlgorithmOptions(options);
+  connection.useODBCConnection(connection);
+  connection.setOutTableName(options.getOutTableName());
+  connection.setAlgorithmOptions(options);
 
 
   // Ciclo fino alla fine delle partizioni
@@ -197,7 +197,7 @@ void partitionWithoutClusters( const minerule::AlgorithmsOptions& options  )
   if (readMorePartitions) {
   SourceRowDescriptor srDescriptor(result->getResultSet(), rowDes);
 
-  coreConn.create_tmp_db(0, srDescriptor.getBody(), srDescriptor.getHead());
+  connection.create_tmp_db(0, srDescriptor.getBody(), srDescriptor.getHead());
 
 
   MRLog(logId)<< "Reading the database (first phase)..." << endl;
@@ -236,7 +236,7 @@ void partitionWithoutClusters( const minerule::AlgorithmsOptions& options  )
 		     << endl;
 
     MRLog(logPartId) << "  Saving large itmeset of current partition" << endl;
-    kItem.save_Large_ItemSet(1,isPart,coreConn);
+    kItem.save_Large_ItemSet(1,isPart,connection);
     MRLog(logPartId) << "  Done! (Saving large itmeset...)" << endl;
     
   
@@ -251,7 +251,7 @@ void partitionWithoutClusters( const minerule::AlgorithmsOptions& options  )
  prtList.init();
 
  MRLog(logId) << "Merge phase" << endl;
- kItem.mergeItemSet(coreConn,prtList, srDescriptor);
+ kItem.mergeItemSet(connection,prtList, srDescriptor);
  MRLog(logId) << "Done! (Merge phase)" << endl;
   } 
  totGroups=0;
@@ -293,10 +293,10 @@ void partitionWithoutClusters( const minerule::AlgorithmsOptions& options  )
  }
  MRLog(logId) << "Done! (Pruning)" << endl;
 
- coreConn.deleteDestTable();
- coreConn.create_db_rule(0);
+ connection.deleteDestTable();
+ connection.create_db_rule(0);
  
  MRLog(logId) << "Extracting rules..." << endl;
- kItem.extractRule(coreConn, totGroups, kItem);
+ kItem.extractRule(connection, totGroups, kItem);
  MRLog(logId) << "Done! (extracting rules)"<<std::endl;
 }

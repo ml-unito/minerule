@@ -71,7 +71,7 @@ class Tree
     void insertAddWalk( deque<NODETYPE>& path, int peso);
 
 // Stampa tutte le regole da ogni Fp-tree Conditional
-    void printRules(const NODETYPE&, sqlCoreConn&, double, Counter<NODETYPE>&);
+    void printRules(const NODETYPE&, Connection&, double, Counter<NODETYPE>&);
 
 // Funzione che dealloca e cancella i ptr e i nodi. [Distruttore]
     void clearTree() {
@@ -109,11 +109,11 @@ class Tree
     void cutHelper(TreeNode< NODETYPE > *, double );
     void printRulesHelper(TreeNode< NODETYPE > *,
 			  std::vector<NODETYPE>,
-			  sqlCoreConn&, 
+			  Connection&, 
 			  const NODETYPE&, 
 			  double totGroups,
 			  Counter<NODETYPE>&);
-    void explodeRules( sqlCoreConn& coreConn, 
+    void explodeRules( Connection& connection, 
 		       std::vector<NODETYPE>& curElem,
 		       double myGroups,
 		       double totGroups ,
@@ -267,7 +267,7 @@ void Tree< NODETYPE >::preOrderHelper( TreeNode< NODETYPE > *ptr, int lev ) {
 // Vedi printRuleHelper. Funziona Ricorsiva.
 template< class NODETYPE >
 void Tree< NODETYPE >::printRules(const NODETYPE& node, 
-				  sqlCoreConn& saveRules, 
+				  Connection& saveRules, 
 				  double totGroups,
 				  Counter<NODETYPE>& gCounter) {
   std::vector<NODETYPE> rule;
@@ -282,7 +282,7 @@ template< class NODETYPE >
 void Tree< NODETYPE >::printRulesHelper( 
 					TreeNode< NODETYPE > *ptr, 
 				 std::vector<NODETYPE> curElem, 
-					sqlCoreConn& saveRules,
+					Connection& saveRules,
 					const NODETYPE& elem,
 					double totGroups,
 					Counter<NODETYPE>& gCounter) {
@@ -304,7 +304,7 @@ void Tree< NODETYPE >::printRulesHelper(
 
   // temp="INSERT INTO "+saveRules.getOutTableName()+" VALUES ('"+rule+","+node+"','0')";
   //const char * dains=temp.c_str();
-  //  saveRules.insert_DB(dains);
+  //  saveRules.insert(dains);
 }
 
 template< class NODETYPE >
@@ -321,7 +321,7 @@ double Tree< NODETYPE >::getSupportForItemSet(deque<NODETYPE>& body) {
 }
 
 template< class NODETYPE > 
-void Tree< NODETYPE >::explodeRules( sqlCoreConn& coreConn, 
+void Tree< NODETYPE >::explodeRules( Connection& connection, 
 				     std::vector<NODETYPE>& curElem,
 				     double myGroups,
 				     double totGroups,
@@ -395,11 +395,11 @@ void Tree< NODETYPE >::explodeRules( sqlCoreConn& coreConn,
     //cout << std::endl << "Regola:" << regola << std::endl;
 
     /*    stringstream strbuf;
-    strbuf << "INSERT INTO "+coreConn.getOutTableName()+" VALUES ('"
+    strbuf << "INSERT INTO "+connection.getOutTableName()+" VALUES ('"
 	   <<regola<<"',"
 	   <<cSupp<<","
 	   <<cConf<<");"; */
-    coreConn.insert_DB(body, head, cSupp, cConf);
+    connection.insert(body, head, cSupp, cConf);
   }
 
   //  MRErr() << "Finito!!!!" << std::endl;

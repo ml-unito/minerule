@@ -80,10 +80,10 @@ class Counter
 
 // Legge le liste dei nodi e cerca di tagliare anticipatamente ed effettua il taglio finale
 // tramite la procedure cut su albero.
-    void esplodi(sqlCoreConn&, double, double, bool originalFPGrowth=false );
+    void esplodi(Connection&, double, double, bool originalFPGrowth=false );
 
 // Estrae le rule
-    void extractRule(sqlCoreConn&, double, double);
+    void extractRule(Connection&, double, double);
 
 // Ritorna la map. Ovvero il ptr  alla struttura
     MapType& getMap() { return generalCount; }
@@ -328,19 +328,19 @@ void Counter< NODETYPE >::addWalk(NODETYPE nt,const std::vector<NODETYPE>& trans
 
 // Ciclo su tutta la struttura e leggo gli alberelli.
 template< class NODETYPE >
-void Counter< NODETYPE >::extractRule(sqlCoreConn& coreConn, double nSup, double totGroups) {
+void Counter< NODETYPE >::extractRule(Connection& connection, double nSup, double totGroups) {
   MapType& m1 = getMap();
   typename MapType::iterator i;
   //  odbc::ResultSet* result;
 
-  //coreConn.deleteDestTable();
-  //coreConn.create_db_rule(0);
+  //connection.deleteDestTable();
+  //connection.create_db_rule(0);
 
   //  MRLog() <<" ---- RULE WITH SUPPORT OK ----" <<std::endl;
   for( i=m1.begin( ) ; i !=m1.end( ) ; i++ ) {
     if(i->second.count>=nSup) {
       //      std::cout << "prima di printRules ord:"<< i->second.count <<"elem:" << i->first << std::endl;
-      i->second.fptree.printRules(i->first,coreConn, totGroups, *this);
+      i->second.fptree.printRules(i->first,connection, totGroups, *this);
       //      std::cout << "dopo printRules" << std::endl;
     }
   }
@@ -402,7 +402,7 @@ void Counter< NODETYPE >::estrai_cammini_lazy(TreeNode<NODETYPE>* tnd, std::vect
 // Legge tutte le liste partendo da quelle con il nodo con il contatore più basso
 // Terminata la lista fa il cut finale del fp-tree conditional.
 template< class NODETYPE >
-void Counter< NODETYPE >::esplodi(sqlCoreConn& coreConn,double nSup, double totGroups, bool originalFPGrowth) {
+void Counter< NODETYPE >::esplodi(Connection& connection,double nSup, double totGroups, bool originalFPGrowth) {
   MapType& m1 = getMap();
   typename MapType::reverse_iterator i;
   typename MapType::iterator j;
@@ -441,7 +441,7 @@ void Counter< NODETYPE >::esplodi(sqlCoreConn& coreConn,double nSup, double totG
       }
       
       j->second.fptree.cut(nSup);
-      //      j->second.fptree.printRules(node, coreConn, totGroups);
+      //      j->second.fptree.printRules(node, connection, totGroups);
       //      #warning abilitato clearTree...
       //      j->second.fptree.clearTree();
     }

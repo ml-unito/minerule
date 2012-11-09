@@ -1,7 +1,7 @@
 /* Database/Connection.h*/
 
-#ifndef SQLCORECONN_H
-#define SQLCORECONN_H
+#ifndef CONNECTION_H_3H6SFDND
+#define CONNECTION_H_3H6SFDND
 
 #include <string.h>
 #include<odbc++/drivermanager.h>
@@ -22,9 +22,9 @@
 
 namespace minerule {
 
-	class sqlCoreConn  {
+	class Connection  {
 		
-		class DBInserter; // forward declaration
+	class DBInserter; // forward declaration
 	private:
 		std::string outTableName;
 		MinMaxPair bodyCard;
@@ -34,11 +34,11 @@ namespace minerule {
   
 		class DBInserter {
 		protected:
-			sqlCoreConn& coreConn;
+			Connection& connection;
 		public:
-			DBInserter(sqlCoreConn& cc) : coreConn(cc) {};
-			virtual void insert_DB(const HeadBodyType&, const HeadBodyType&, double support,  double confidence, bool saveBody = true) =0;
-			virtual void insert_DB_HBelems(const HeadBodyType& elems, size_t counter) =0;
+			DBInserter(Connection& cc) : connection(cc) {};
+			virtual void insert(const HeadBodyType&, const HeadBodyType&, double support,  double confidence, bool saveBody = true) =0;
+			virtual void insert_HBelems(const HeadBodyType& elems, size_t counter) =0;
 			virtual ~DBInserter() {};
 			virtual void init() {};
 			virtual void finalize() {};
@@ -46,9 +46,9 @@ namespace minerule {
 
 		class DirectDBInserter : public DBInserter {
 		public:
-			DirectDBInserter(sqlCoreConn& cc) : DBInserter(cc) {};
-			virtual void insert_DB(const HeadBodyType&, const HeadBodyType&, double support, double confidence,	bool saveBody = true);
-			virtual void insert_DB_HBelems(const HeadBodyType& elems, size_t counter);
+			DirectDBInserter(Connection& cc) : DBInserter(cc) {};
+			virtual void insert(const HeadBodyType&, const HeadBodyType&, double support, double confidence,	bool saveBody = true);
+			virtual void insert_HBelems(const HeadBodyType& elems, size_t counter);
 			virtual ~DirectDBInserter() {};
 		};
 
@@ -57,9 +57,9 @@ namespace minerule {
 			ofstream outR, outHB;
 			std::string filename;
 		public:
-			CachedDBInserter(sqlCoreConn& cc) : DBInserter(cc) {};
-			virtual void insert_DB(const HeadBodyType&, const HeadBodyType&, double support, double confidence,	bool saveBody = true);
-			virtual void insert_DB_HBelems(const HeadBodyType& elems, size_t counter);
+			CachedDBInserter(Connection& cc) : DBInserter(cc) {};
+			virtual void insert(const HeadBodyType&, const HeadBodyType&, double support, double confidence,	bool saveBody = true);
+			virtual void insert_HBelems(const HeadBodyType& elems, size_t counter);
 			virtual ~CachedDBInserter() {};
 			virtual void init();
 			virtual void finalize();
@@ -67,17 +67,17 @@ namespace minerule {
 
 	public:
 		// Costruttore
-		sqlCoreConn() : bodyCard(1,1000), headCard(1,1000)  /*algoOptions(NULL)*/ {
+		Connection() : bodyCard(1,1000), headCard(1,1000)  /*algoOptions(NULL)*/ {
 			if (MineruleOptions::getSharedOptions().getOdbc_db().getCacheWrites()) 
 				dbInserter = new CachedDBInserter(*this);
 			else dbInserter = new DirectDBInserter(*this);
 		}
 		// Distruttore
-		~sqlCoreConn() { delete dbInserter; }
+		~Connection() { delete dbInserter; }
 
 		void setBodyCardinalities( const MinMaxPair& rhs) { bodyCard=rhs; }
 		void setHeadCardinalities( const MinMaxPair& rhs) { headCard=rhs; }
-		void useConnection(odbc::Connection* newConnection);
+		void useODBCConnection(odbc::Connection* newConnection);
 
 		odbc::Connection* getConnection() { return connection; }
 		odbc::ResultSet* openQuery(char* Qry);
@@ -87,14 +87,14 @@ namespace minerule {
 		void deleteTable(const char * tableName);
 		void deleteDestTable();
 		void create_db_rule(int sintax);
-		void insert_DB(const char * what);
+		void insert(const char * what);
 
 		// this function should be systematically used in order to
 		// write acquired rules to the DB
 		// It uses algorithmOptions.get????Cardinalities() to filter rules
 		// having wrong cardinalities
-		void insert_DB(const HeadBodyType& body,  const HeadBodyType& head, double support, double confidence, bool saveBody = true) {
-			dbInserter->insert_DB(body, head, support, confidence, saveBody);
+		void insert(const HeadBodyType& body,  const HeadBodyType& head, double support, double confidence, bool saveBody = true) {
+			dbInserter->insert(body, head, support, confidence, saveBody);
 		}
 
 		void delete_tmp_db();
@@ -115,7 +115,7 @@ namespace minerule {
 			return outTableName;
 		}
 
-		// when rules are written on the DB, the sqlCoreConn uses the 
+		// when rules are written on the DB, the Connection uses the 
 		// following format: idBody, idHead, supp, conf, cardBody, cardHead
 		// idBody and idHead are foreign (non unique) keys of the table whose
 		// name can be retrieved using the following procedure.
@@ -127,5 +127,4 @@ namespace minerule {
 	};
 } // end namespace
 
-#endif
-
+#endif /* end of include guard: CONNECTION_H_3H6SFDND */

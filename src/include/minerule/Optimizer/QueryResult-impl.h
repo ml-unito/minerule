@@ -80,16 +80,16 @@ namespace minerule {
 
   template <class Sorter>
 	void QueryResult::ResultSet<Sorter>::save(const ParsedMinerule& mr) const {
-		sqlCoreConn coreConn;
-		coreConn.setOutTableName(mr.tab_result);
-		coreConn.setBodyCardinalities(mr.bodyCardinalities);
-		coreConn.setHeadCardinalities(mr.headCardinalities);
-		coreConn.useConnection( MineruleOptions::getSharedOptions().getOdbc_db().getConnection());
-		coreConn.create_db_rule(0);
+		Connection connection;
+		connection.setOutTableName(mr.tab_result);
+		connection.setBodyCardinalities(mr.bodyCardinalities);
+		connection.setHeadCardinalities(mr.headCardinalities);
+		connection.useODBCConnection( MineruleOptions::getSharedOptions().getOdbc_db().getConnection());
+		connection.create_db_rule(0);
 
 		typename ResultSet<Sorter>::const_iterator it;
 		for(it=this->begin();it!=this->end();it++) {
-			coreConn.insert_DB( *it->body, *it->head, it->support, it->confidence );
+			connection.insert( *it->body, *it->head, it->support, it->confidence );
 		}
 	}
 }

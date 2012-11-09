@@ -10,7 +10,7 @@ namespace minerule {
   class ConstrItemSetsExtraction : public MiningAlgorithm {
   private:
     AlgorithmsOptions options;
-    sqlCoreConn coreConn;
+    Connection connection;
     HeadBodySourceRowDescription rowDes;
     odbc::PreparedStatement* statement;
     odbc::PreparedStatement* stmt1;

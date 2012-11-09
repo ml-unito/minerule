@@ -50,7 +50,7 @@ namespace minerule {
     options.setConfidence( minerule.getParsedMinerule().conf );
     options.setBodyCardinalities( minerule.getParsedMinerule().bodyCardinalities);
     options.getBodyCardinalities().applyConstraints(mrOptions.getParsers().getBodyCardinalities());
-    //coreConn.setHeadCardinalities(minerule.getParsedMinerule().headCardinalities);
+    //connection.setHeadCardinalities(minerule.getParsedMinerule().headCardinalities);
     options.getHeadCardinalities().applyConstraints(mrOptions.getParsers().getHeadCardinalities());
 
     PrepareDataUtils pdu(minerule, *this);
@@ -85,16 +85,16 @@ namespace minerule {
 
     MRLog() << "Executing queries" << std::endl;
 
-    coreConn.useConnection(MineruleOptions::getSharedOptions().getOdbc_db().getConnection());
-    coreConn.setOutTableName(minerule.getParsedMinerule().tab_result);
-    coreConn.setBodyCardinalities(minerule.getParsedMinerule().bodyCardinalities);
-    //coreConn.setHeadCardinalities(minerule.getParsedMinerule().headCardinalities);
-    coreConn.setHeadCardinalities(MinMaxPair(0,1000));
-    coreConn.create_db_rule(0);
-    coreConn.init();
+    connection.useODBCConnection(MineruleOptions::getSharedOptions().getOdbc_db().getConnection());
+    connection.setOutTableName(minerule.getParsedMinerule().tab_result);
+    connection.setBodyCardinalities(minerule.getParsedMinerule().bodyCardinalities);
+    //connection.setHeadCardinalities(minerule.getParsedMinerule().headCardinalities);
+    connection.setHeadCardinalities(MinMaxPair(0,1000));
+    connection.create_db_rule(0);
+    connection.init();
 
     MRDebug() << "ConstrainedItemsets: body queries:" << bodyQry.c_str() << std::endl;
-    statement = coreConn.getConnection()->prepareStatement(bodyQry.c_str());
+    statement = connection.getConnection()->prepareStatement(bodyQry.c_str());
   }
 
   void ConstrItemSetsExtraction::execute() {
@@ -114,7 +114,7 @@ namespace minerule {
 //    bool found = Transaction::findGid(gid1,result,rowDes,true);
 //   std::string resultfile = tmpnam(NULL);
 //    BodyMap bodyMap(resultfile.c_str(),1);
-    BodyMap bodyMap(coreConn,1);
+    BodyMap bodyMap(connection,1);
 
     int howManyGroups = 0;
     int totalGroups = options.getTotGroups();
@@ -161,7 +161,7 @@ namespace minerule {
     MRLog() << "After extracting itemsets: " << nrules << std::endl;
     MRLogPop();
 
-    coreConn.finalize();
+    connection.finalize();
 /*
    std::string loadstr1 = "LOAD DATA INFILE '";
     loadstr1 += resultfile;
@@ -175,8 +175,8 @@ namespace minerule {
 */
     delete statement;
 /*
-    statement = coreConn.getConnection()->prepareStatement(loadstr1);
-    stmt1 = coreConn.getConnection()->prepareStatement(loadstr2);
+    statement = connection.getConnection()->prepareStatement(loadstr1);
+    stmt1 = connection.getConnection()->prepareStatement(loadstr2);
 
     MRLogPush("Loading result into Database...");
     loadstr1 = resultfile + ".r";

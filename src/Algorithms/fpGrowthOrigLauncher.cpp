@@ -90,7 +90,7 @@ readDataBaseOrig(odbc::ResultSet* result,
 
 void origFPGrowth( const minerule::AlgorithmsOptions& options ) {
 
-  odbc::Connection* connection = options.getConnection();
+  odbc::Connection* odbc_connection = options.getConnection();
   odbc::PreparedStatement* statement = options.getStatement();
   const minerule::HeadBodySourceRowDescription& rowDes =
     options.getSourceRowDescription();
@@ -104,7 +104,7 @@ void origFPGrowth( const minerule::AlgorithmsOptions& options ) {
 
   double totGroups,nSup;
   ItemType gid,gidOld;
-  sqlCoreConn coreConn;
+  Connection connection;
   odbc::ResultSet* result;
 
   totGroups=0;
@@ -112,8 +112,8 @@ void origFPGrowth( const minerule::AlgorithmsOptions& options ) {
 // gCount.pushElements();
 
   tree.addRoot( gCount, Tree<ItemType>::ROOTNODE );
-  coreConn.useConnection(connection);
-  coreConn.setOutTableName(options.getOutTableName());
+  connection.useODBCConnection(odbc_connection);
+  connection.setOutTableName(options.getOutTableName());
   
 
   int logId = MRLogGetNewID();
@@ -149,17 +149,17 @@ void origFPGrowth( const minerule::AlgorithmsOptions& options ) {
   nSup=ceil(totGroups*(support/100));
   //  cout<<"nSup: "<<nSup<<endl;
 
-  coreConn.deleteDestTable();
-  coreConn.create_db_rule(0);
+  connection.deleteDestTable();
+  connection.create_db_rule(0);
 
   MRLog(logId) << "  Inflating conditional FPTrees..." << endl;
 // Genera tutti i fp-tree conditional. 
 // Eliminando quelli relativi a itemset a supporto non sufficiente
 // Per ognuno di essi si occupa, infine, di salvare i risultati sul DB
-  gCount.esplodi(coreConn, nSup, totGroups,true);
+  gCount.esplodi(connection, nSup, totGroups,true);
   MRLog(logId) << "  Done! (Inflating conditional FPTrees)" << endl;
 
   MRLog(logId) << "  Extracting rules..." << endl;
-  gCount.extractRule(coreConn,nSup,totGroups);
+  gCount.extractRule(connection,nSup,totGroups);
   MRLog(logId) << "  Done! (Extracting rules)" << endl;
 }

@@ -111,7 +111,7 @@ private:
     void printItemSet();
     void printToDesign(int isPart);
     void printItemSetRecursive(int lev);
-    void save_Large_ItemSet( int lev, int isPart,sqlCoreConn& coreConn);
+    void save_Large_ItemSet( int lev, int isPart,Connection& connection);
 
 
     void cancellaRef(list<itemSet<NODETYPE>* >* listPtr);
@@ -127,12 +127,12 @@ private:
     void gen_Large_ItemSet_Base(double);
 
     void checkSupportBaseDef(double, newItemSetHashMap<NODETYPE>&,itemSetList<NODETYPE>& );
-    void mergeItemSet(sqlCoreConn& coreConn,
+    void mergeItemSet(Connection& connection,
 		      itemSetList<NODETYPE>& ptrList,
 		      const SourceRowDescriptor& srd);
     void remove(itemSetList<NODETYPE>& ptrList);
     bool existEntry(NODETYPE item);
-    void extractRule(sqlCoreConn& coreConn, double totGroups, itemSet<NODETYPE>& root);
+    void extractRule(Connection& connection, double totGroups, itemSet<NODETYPE>& root);
 
     void removeEntry(NODETYPE elem);
     MapType& getMap() {return prtt;}
@@ -148,8 +148,8 @@ private:
 
     void deleteElemsFromPrtt(std::vector<NODETYPE>& elVec);
     void printToDesignHelper(std::string here, std::string padre,ofstream& f1);
-    void saveIn_DB_Body( int lev, int isPart, NODETYPE node,sqlCoreConn& coreConn);
-    void save_Large_ItemSetHelper(int lev,int isPart,sqlCoreConn& coreConn);
+    void saveIn_DB_Body( int lev, int isPart, NODETYPE node,Connection& connection);
+    void save_Large_ItemSetHelper(int lev,int isPart,Connection& connection);
 
     void mergeItemSetHelper(
 			    itemSetList<NODETYPE>& ptrList, 
@@ -159,7 +159,7 @@ private:
 			    size_t lastElem,
 			    // The following parameters will be passed to the
 			    // mergeItemSetHead function
-			    sqlCoreConn& coreConn,
+			    Connection& connection,
 			    const SourceRowDescriptor& srd);
 
     void updatePtrList(				     
@@ -188,7 +188,7 @@ private:
       getSupportForItemSet(deque<NODETYPE>& itset);
 
 
-    void extractRuleHelper( sqlCoreConn& coreConn, 
+    void extractRuleHelper( Connection& connection, 
 			    HASHTYPE& curElem,
 			    double myGroups,
 			    double totGroups,
@@ -567,14 +567,14 @@ template< class NODETYPE >
 void itemSet< NODETYPE >::save_Large_ItemSet(
 				 int lev,
 				 int isPart,
-				 sqlCoreConn& coreConn)  {
+				 Connection& connection)  {
     typename MapType::iterator i;
 
     for( i=prtt.begin( ) ; i != prtt.end( ) ; i++ ) {
-       saveIn_DB_Body(lev,isPart,i->first,coreConn);
+       saveIn_DB_Body(lev,isPart,i->first,connection);
 
        if (i->second.getItemSet()!=NULL) {
-	 i->second.getItemSet()->save_Large_ItemSetHelper(lev+1,isPart,coreConn);
+	 i->second.getItemSet()->save_Large_ItemSetHelper(lev+1,isPart,connection);
 	 i->second.releaseItemSet();
        }
     }
@@ -583,15 +583,15 @@ void itemSet< NODETYPE >::save_Large_ItemSet(
  }
 
 template< class NODETYPE >
-void itemSet< NODETYPE >::save_Large_ItemSetHelper(int lev,int isPart,sqlCoreConn& coreConn)
+void itemSet< NODETYPE >::save_Large_ItemSetHelper(int lev,int isPart,Connection& connection)
  {
     typename MapType::iterator i;
     
      for( i=prtt.begin( ) ; i != prtt.end( ) ; i++ ) {
-       saveIn_DB_Body(lev,isPart,i->first,coreConn);
+       saveIn_DB_Body(lev,isPart,i->first,connection);
        if (i->second.getItemSet()!=NULL)
 	 {
-	   i->second.getItemSet()->save_Large_ItemSetHelper(lev+1,isPart,coreConn);
+	   i->second.getItemSet()->save_Large_ItemSetHelper(lev+1,isPart,connection);
 	   //Quando esco dealloco il puntatore
 	   i->second.releaseItemSet();
 	 }
@@ -603,7 +603,7 @@ void itemSet< NODETYPE >::saveIn_DB_Body(
 			     int lev,
 			     int isPart,
 			     NODETYPE node,
-			     sqlCoreConn& coreConn)
+			     Connection& connection)
  {
     char inter[10],intPart[10];
     //const char* bid;
@@ -616,20 +616,20 @@ void itemSet< NODETYPE >::saveIn_DB_Body(
     sprintf(intPart,"%d",isPart);
     QryDef=Qry+inter+","+node.getSQLData()+");";
     const char * dains=QryDef.c_str();
-    coreConn.insert_DB(dains);
+    connection.insert(dains);
     //cout << ".";
 }
 
 template< class NODETYPE >
 void itemSet< NODETYPE >::mergeItemSet(
-				     sqlCoreConn& coreConn,
+				     Connection& connection,
 				     itemSetList<NODETYPE>& ptrList,
 				     const SourceRowDescriptor& srd) {
    std::string Qry;
    HASHTYPE anc;
    NODETYPE temp;
    int level;
-   odbc::Statement* statement=coreConn.getConnection()->createStatement();
+   odbc::Statement* statement=connection.getConnection()->createStatement();
    odbc::ResultSet* resultAllBody;
    level=0;
    size_t lastElem;
@@ -651,7 +651,7 @@ void itemSet< NODETYPE >::mergeItemSet(
 			resultAllBody,
 			srDescription,
 			lastElem,
-			coreConn,
+			connection,
 			srd);
      delete resultAllBody;
    } else std::cout<<"ResultAllBody == NULL"<<std::endl;
@@ -674,7 +674,7 @@ void itemSet< NODETYPE >::mergeItemSetHelper(
 			size_t lastElem,
 			// The following parameters will be passed to the
 			// mergeItemSetHead function
-			sqlCoreConn& coreConn,
+			Connection& connection,
 			const SourceRowDescriptor& srd) {
   LevelInfoStack levelStack;
   levelStack.push_back(this);
@@ -914,7 +914,7 @@ void itemSet< NODETYPE >::removeEntry(NODETYPE elem) {
 
 
 template< class NODETYPE >
-void itemSet< NODETYPE >::extractRule(sqlCoreConn& coreConn, double totGroups, itemSet<NODETYPE>& root)
+void itemSet< NODETYPE >::extractRule(Connection& connection, double totGroups, itemSet<NODETYPE>& root)
  {
    typename MapType::iterator i;
 
@@ -922,10 +922,10 @@ void itemSet< NODETYPE >::extractRule(sqlCoreConn& coreConn, double totGroups, i
      HASHTYPE curElems = getAncestor();
      curElems.push_back(i->first);
 
-     extractRuleHelper(coreConn, curElems, i->second.getCountGid(), totGroups,root);
+     extractRuleHelper(connection, curElems, i->second.getCountGid(), totGroups,root);
 
      if (i->second.getItemSet()!=NULL){
-       i->second.getItemSet()->extractRule(coreConn, totGroups, root);
+       i->second.getItemSet()->extractRule(connection, totGroups, root);
      }
    }
  }
@@ -959,7 +959,7 @@ itemSet< NODETYPE >::getSupportForItemSet(deque<NODETYPE>& itset) {
 }
 
 template< class NODETYPE > 
-void itemSet< NODETYPE >::extractRuleHelper( sqlCoreConn& coreConn, 
+void itemSet< NODETYPE >::extractRuleHelper( Connection& connection, 
 					     HASHTYPE& curElem,
 					     double myGroups,
 					     double totGroups,
@@ -1019,7 +1019,7 @@ void itemSet< NODETYPE >::extractRuleHelper( sqlCoreConn& coreConn,
 #endif
   
     float  cConf = myGroups/root.getSupportForItemSet(bodyCopy); 
-    coreConn.insert_DB(body,head,cSupp,cConf);
+    connection.insert(body,head,cSupp,cConf);
 
     /*
     // Building up thestd::string representation of the generated rule...
@@ -1054,12 +1054,12 @@ void itemSet< NODETYPE >::extractRuleHelper( sqlCoreConn& coreConn,
     // Inserting the new rule into the db.
 
     stringstream strbuf;
-    strbuf << "INSERT INTO "+coreConn.getOutTableName()+" VALUES ('"
+    strbuf << "INSERT INTO "+connection.getOutTableName()+" VALUES ('"
 	   <<regola<<"',"
 	   <<cSupp<<","
 	   <<cConf<<");";
     const char * dains=strbuf.str().c_str();
-    coreConn.insert_DB(dains);*/
+    connection.insert(dains);*/
   }
 }
 

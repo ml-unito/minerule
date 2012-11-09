@@ -11,7 +11,7 @@ namespace minerule {
   private:
     AlgorithmsOptions options;
 
-    sqlCoreConn coreConn;
+    Connection connection;
     HeadBodySourceRowDescription rowDes;
     odbc::PreparedStatement* statement;
 

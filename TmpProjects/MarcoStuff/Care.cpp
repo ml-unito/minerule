@@ -91,16 +91,16 @@ namespace minerule {
 
     MRLog() << "Executing queries" << endl;
 
-    coreConn.useConnection(MineruleOptions::getSharedOptions().getOdbc_db().getConnection());
-    coreConn.setOutTableName(minerule.getParsedMinerule().tab_result);
-    coreConn.setBodyCardinalities(minerule.getParsedMinerule().bodyCardinalities);
-    coreConn.setHeadCardinalities(minerule.getParsedMinerule().headCardinalities);
-    coreConn.create_db_rule(0);
+    connection.useODBCConnection(MineruleOptions::getSharedOptions().getOdbc_db().getConnection());
+    connection.setOutTableName(minerule.getParsedMinerule().tab_result);
+    connection.setBodyCardinalities(minerule.getParsedMinerule().bodyCardinalities);
+    connection.setHeadCardinalities(minerule.getParsedMinerule().headCardinalities);
+    connection.create_db_rule(0);
 
     MRDebug() << "CARE: body queries:" << bodyQry.c_str() << endl;
     MRDebug() << "CARE: head queries:" << headQry.c_str() << endl;
-    statement = coreConn.getConnection()->prepareStatement(bodyQry.c_str());
-    stmt1 = coreConn.getConnection()->prepareStatement(headQry.c_str());
+    statement = connection.getConnection()->prepareStatement(bodyQry.c_str());
+    stmt1 = connection.getConnection()->prepareStatement(headQry.c_str());
   }
 
   void CARE::execute() {

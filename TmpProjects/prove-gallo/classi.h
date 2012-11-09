@@ -42,7 +42,7 @@ namespace minerule {
   NodeRowB* findBodyInTree(ItemSetType* itemset_body);
   NodeRow* findRuleInTree(ItemSetType* itemset_body,ItemSetType* itemset_head);
   void extractRules(std::vector<ItemType>& body,
-	       double thrR, double thrB,int ngroups,sqlCoreConn* pcoreConn);
+	       double thrR, double thrB,int ngroups,Connection* pconnection);
 
  };
 
@@ -68,7 +68,7 @@ namespace minerule {
 		      double s);
    void extractRules(const std::vector<ItemType>& body,
                   std::vector<ItemType>& head,
-		  double thrR, double thrB, double suppB, int ngroups,sqlCoreConn* pcoreConn);
+		  double thrR, double thrB, double suppB, int ngroups,Connection* pconnection);
    NodeRow* findHead(ItemSetType:: iterator ite,
                      ItemSetType:: iterator itend);
  };

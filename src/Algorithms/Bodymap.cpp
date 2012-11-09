@@ -406,7 +406,7 @@ void BodyMap::howManyItemsets () {
 void BodyMap::saveItemset( const NewRule& r,
                            double bodySupp ) {
     int c = r.gids.count();	
-    coreConn->insert_DB( r.body,
+    connection->insert( r.body,
                          r.head,
                          c/totGroups,
                          1, true );
@@ -419,7 +419,7 @@ void BodyMap::saveRules( const NewRuleSet& rs,
     int c;
     for(it=rs.begin(); it!=rs.end(); it++) {
       c = it->gids.count();	
-      coreConn->insert_DB( it->body,
+      connection->insert( it->body,
                           it->head,
                           c/totGroups,
                           c/bodySupp, bodyID );
@@ -435,7 +435,7 @@ void BodyMap::saveItemsets( const NewRuleSet& rs,
     int c;
     for(it=rs.begin(); it!=rs.end(); it++) {
 	c = it->gids.count();	
-        coreConn->insert_DB( it->body,
+        connection->insert( it->body,
                             it->head,
                             c/totGroups,
                             1, true );

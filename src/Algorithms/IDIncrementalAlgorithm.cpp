@@ -131,29 +131,29 @@ IDIncrementalAlgorithm::filterQueries(const ValidRules& validRules)
   MRLog() << "Orig conf:" 
 	  << minerule->getOptimizationInfo().minerule.conf << std::endl;
 
-  MRLog() << "sqlCoreConn ..."<<std::endl;
-  sqlCoreConn coreConn;
-  coreConn.setOutTableName(minerule->getParsedMinerule().tab_result);
-  //  MRLog() << "ok coreConn.setOutTableName" << std::endl;
+  MRLog() << "Connection ..."<<std::endl;
+  Connection connection;
+  connection.setOutTableName(minerule->getParsedMinerule().tab_result);
+  //  MRLog() << "ok connection.setOutTableName" << std::endl;
  
-  coreConn.setBodyCardinalities(minerule->getParsedMinerule().bodyCardinalities);
-  //MRLog() << "ok coreConn.setBodyCardinalities" << std::endl;
+  connection.setBodyCardinalities(minerule->getParsedMinerule().bodyCardinalities);
+  //MRLog() << "ok connection.setBodyCardinalities" << std::endl;
 
-  coreConn.setHeadCardinalities(minerule->getParsedMinerule().headCardinalities);
-  //MRLog() << "ok coreConn.setHeadCardinalities" << std::endl;
+  connection.setHeadCardinalities(minerule->getParsedMinerule().headCardinalities);
+  //MRLog() << "ok connection.setHeadCardinalities" << std::endl;
 
-  coreConn.useConnection( MineruleOptions::getSharedOptions().getOdbc_db().getConnection());
-  //MRLog() << "ok coreConn.useConnection" << std::endl; 
+  connection.useODBCConnection( MineruleOptions::getSharedOptions().getOdbc_db().getConnection());
+  //MRLog() << "ok connection.useODBCConnection" << std::endl; 
 
-  coreConn.create_db_rule(0);
-  //MRLog() << "ok coreConn.create_db_rule" << std::endl;
+  connection.create_db_rule(0);
+  //MRLog() << "ok connection.create_db_rule" << std::endl;
 
   size_t rcount = 0;
   while(qri.next()) {
     QueryResult::Rule r;
     qri.getRule(r);
     if(checkInValidRules(validRules, r))
-      coreConn.insert_DB(*r.body, *r.head, r.support, r.confidence);
+      connection.insert(*r.body, *r.head, r.support, r.confidence);
 
     rcount++;
   }

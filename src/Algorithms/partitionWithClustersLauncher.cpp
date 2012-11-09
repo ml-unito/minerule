@@ -157,7 +157,7 @@ readSourceTable(
 
 void partitionWithClusters( const minerule::AlgorithmsOptions& options )
 {
-  odbc::Connection* connection = options.getConnection();
+  odbc::Connection* odbc_connection = options.getConnection();
   odbc::PreparedStatement* statement = options.getStatement();
   const minerule::HeadBodySourceRowDescription& 
     rowDes = options.getSourceRowDescription();
@@ -184,7 +184,7 @@ void partitionWithClusters( const minerule::AlgorithmsOptions& options )
   double nSup;
   bool toContinue;
   // Connessione e ResultSet Vedi classe Database/Connection.h e cpp
-  sqlCoreConn coreConn;
+  Connection connection;
 
 
 // parametri da passare.
@@ -193,10 +193,10 @@ void partitionWithClusters( const minerule::AlgorithmsOptions& options )
   //  std::cout <<std::endl<<"+ Supporto: "<<support<<"% Confidenza: "<< conf<<"%"<<std::endl;
 
   // Apertura della connessione e cancellazione db_temporanei
-  coreConn.useConnection(connection);
-  coreConn.setOutTableName(options.getOutTableName());
-  coreConn.setBodyCardinalities(options.getBodyCardinalities());
-  coreConn.setHeadCardinalities(options.getHeadCardinalities());
+  connection.useODBCConnection(odbc_connection);
+  connection.setOutTableName(options.getOutTableName());
+  connection.setBodyCardinalities(options.getBodyCardinalities());
+  connection.setHeadCardinalities(options.getHeadCardinalities());
 
   // Ciclo fino alla fine delle partizioni
 
@@ -207,7 +207,7 @@ void partitionWithClusters( const minerule::AlgorithmsOptions& options )
   SourceRowDescriptor srDescriptor(result, rowDes);
 
 
-  coreConn.create_tmp_db(1, srDescriptor.getBody(), srDescriptor.getHead());
+  connection.create_tmp_db(1, srDescriptor.getBody(), srDescriptor.getHead());
 
   MRLog() << "Starting to read the Data Base" << std::endl;   
   int gid = 1;
@@ -281,7 +281,7 @@ void partitionWithClusters( const minerule::AlgorithmsOptions& options )
    //    MemDebugGenericSourceRowAttribute::getInstanceCounter() << std::endl;
    
    MRLog() << "Saving large large itemsets for this partition" << std::endl;
-   kItem.save_Large_ItemSet(1,isPart,coreConn);
+   kItem.save_Large_ItemSet(1,isPart,connection);
    MRLog() << "Done! (Saving large ...)" << std::endl;
   // std::cout << "Num Attr. allocati: (dopo)" << 
   //    MemDebugGenericSourceRowAttribute::getInstanceCounter() << std::endl;
@@ -303,7 +303,7 @@ void partitionWithClusters( const minerule::AlgorithmsOptions& options )
 
 
  MRLog() << "Reading back saved informations... (merge phase)" << std::endl;
- kItem.mergeItemSet(coreConn,prtList, srDescriptor);
+ kItem.mergeItemSet(connection,prtList, srDescriptor);
  MRLog() << "Done! (Reading back saved informations...)" << std::endl;
 
  totGroups=0;
@@ -314,7 +314,7 @@ void partitionWithClusters( const minerule::AlgorithmsOptions& options )
  MRLog() << "Reading again the Data Base" << std::endl;   
  delete statement;   // trashing the trashable 
 std::string qry = "SELECT * FROM "+options.getOutTableName()+"_tmpSource";
- statement = connection->prepareStatement(qry);
+ statement = odbc_connection->prepareStatement(qry);
  result = statement->executeQuery();
  readMorePartitions = result->next();
  gid = 1;
@@ -380,16 +380,16 @@ std::string qry = "SELECT * FROM "+options.getOutTableName()+"_tmpSource";
   //  kItem.printToDesign("final",1);
   //  std::cout<<"FINE GEN_FINAL_COUNT"<<std::endl;
   //kItem.printToDesign("Body",numPartition+3);
-  coreConn.deleteDestTable();
-  coreConn.create_db_rule(1);
-  coreConn.init();
+  connection.deleteDestTable();
+  connection.create_db_rule(1);
+  connection.init();
 
   // Salvo nel db le regole. Vedi struttura nel file lyx
   MRLog() << "Extracting rules and saving in the DB" << std::endl;
-  kItem.extractRule(coreConn,std::vector<ItemType>(),options.getTotGroups());
+  kItem.extractRule(connection,std::vector<ItemType>(),options.getTotGroups());
   MRLog() << "Done! (Extracting rules and saving in the DB)" << std::endl;
 
-  coreConn.finalize();
+  connection.finalize();
   //  kItem.printToDesign("check",98);
   MRLogPop();
 }

@@ -83,7 +83,7 @@ namespace minerule {
     }
   */
   void BFSWithGidsNoCross::BodyMap::pruneMap (float threshold) {
-    BodyMap newMap(*coreConn);
+    BodyMap newMap(*connection);
     for (iterator i = begin(); i != end(); i++)
       if (i->second.pruneMap(threshold)) newMap[i->first] = i->second;
     (*this) = newMap;
@@ -212,7 +212,7 @@ namespace minerule {
 			     double totGroups ) {
     NewRuleSet::const_iterator it;
     for(it=rs.begin(); it!=rs.end(); it++) {
-      coreConn->insert_DB( it->body, 
+      connection->insert( it->body, 
 			  it->head, 
 			  it->gids.size()/totGroups, 
 			  it->conf );
@@ -306,18 +306,18 @@ namespace minerule {
 
     MRLog() << "Executing queries" << std::endl;
 
-    coreConn.useConnection(MineruleOptions::getSharedOptions().getOdbc_db().getConnection());
-    coreConn.setOutTableName(minerule.getParsedMinerule().tab_result);
-    coreConn.setBodyCardinalities(minerule.getParsedMinerule().bodyCardinalities);
-    coreConn.setHeadCardinalities(minerule.getParsedMinerule().headCardinalities);
-    coreConn.create_db_rule(0);
-    coreConn.init();
+    connection.useODBCConnection(MineruleOptions::getSharedOptions().getOdbc_db().getConnection());
+    connection.setOutTableName(minerule.getParsedMinerule().tab_result);
+    connection.setBodyCardinalities(minerule.getParsedMinerule().bodyCardinalities);
+    connection.setHeadCardinalities(minerule.getParsedMinerule().headCardinalities);
+    connection.create_db_rule(0);
+    connection.init();
 
     MRDebug() << "BFSWithGids: body queries:" << bodyQry.c_str() << std::endl;
     MRDebug() << "BFSWithGids: head queries:" << headQry.c_str() << std::endl;
 
-    statementBody = coreConn.getConnection()->prepareStatement(bodyQry.c_str());
-    statementHead = coreConn.getConnection()->prepareStatement(headQry.c_str());
+    statementBody = connection.getConnection()->prepareStatement(bodyQry.c_str());
+    statementHead = connection.getConnection()->prepareStatement(headQry.c_str());
   }
 
 
@@ -343,7 +343,7 @@ namespace minerule {
     if(!Transaction::findGid(gid1,resultBody,rowDes,true))
 		throw new MineruleException(MR_ERROR_INTERNAL,"Cannot find initial GID for head elements");
 		
-    BodyMap bodyMap(coreConn);
+    BodyMap bodyMap(connection);
 
     int totalGroups = options.getTotGroups();
     int howManyRows = 0;
@@ -397,7 +397,7 @@ namespace minerule {
     MRLog() << "After extracting rules, rules: " << nrules << std::endl;
 
     MRLogPop();
-    coreConn.finalize();
+    connection.finalize();
 
     delete statementBody;
     delete statementHead;

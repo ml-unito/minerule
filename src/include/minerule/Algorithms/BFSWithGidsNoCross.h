@@ -127,10 +127,10 @@ namespace minerule {
 			class NewRuleSet : public std::vector<NewRule> {};
 
 			class BodyMap : public std::map<ItemType, BodyMapElement> {
-				sqlCoreConn* coreConn;
+				Connection* connection;
 				void insertRules( const NewRuleSet& rs, double totGroups );
 			public:
-				BodyMap(sqlCoreConn& cc) : coreConn(&cc) {};
+				BodyMap(Connection& cc) : connection(&cc) {};
     //int add(ItemType& gid, Transaction& t1, Transaction& t2, bool secondPass = false);
 				int add(int gid, Transaction& t1, Transaction& t2, bool secondPass = false);
     //	void saveMap(std::ostream& out, bool withGids = true);
@@ -146,7 +146,7 @@ namespace minerule {
 			};
 		private:
 			AlgorithmsOptions options;
-			sqlCoreConn coreConn;
+			Connection connection;
 			HeadBodySourceRowDescription rowDes;
 			odbc::PreparedStatement* statementBody;
 			odbc::PreparedStatement* statementHead;

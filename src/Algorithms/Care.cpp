@@ -94,17 +94,17 @@ namespace minerule {
 
     MRLog() << "Executing queries" << std::endl;
 
-    coreConn.useConnection(MineruleOptions::getSharedOptions().getOdbc_db().getConnection());
-    coreConn.setOutTableName(minerule.getParsedMinerule().tab_result);
-    coreConn.setBodyCardinalities(minerule.getParsedMinerule().bodyCardinalities);
-    coreConn.setHeadCardinalities(minerule.getParsedMinerule().headCardinalities);
-    coreConn.create_db_rule(0);
-    coreConn.init();
+    connection.useODBCConnection(MineruleOptions::getSharedOptions().getOdbc_db().getConnection());
+    connection.setOutTableName(minerule.getParsedMinerule().tab_result);
+    connection.setBodyCardinalities(minerule.getParsedMinerule().bodyCardinalities);
+    connection.setHeadCardinalities(minerule.getParsedMinerule().headCardinalities);
+    connection.create_db_rule(0);
+    connection.init();
 
     MRDebug() << "CARE: body queries:" << bodyQry.c_str() << std::endl;
     MRDebug() << "CARE: head queries:" << headQry.c_str() << std::endl;
-    statement = coreConn.getConnection()->prepareStatement(bodyQry.c_str());
-    stmt1 = coreConn.getConnection()->prepareStatement(headQry.c_str());
+    statement = connection.getConnection()->prepareStatement(bodyQry.c_str());
+    stmt1 = connection.getConnection()->prepareStatement(headQry.c_str());
   }
 
   void CARE::execute() {
@@ -128,8 +128,8 @@ namespace minerule {
     // std::string resultfile = tmpnam(NULL);
     //BodyMap bodyMap(resultfile.c_str(),1);
     //BodyMap headMap(resultfile.c_str(),1);
-    BodyMap bodyMap(coreConn,1);
-    BodyMap headMap(coreConn,1);
+    BodyMap bodyMap(connection,1);
+    BodyMap headMap(connection,1);
 
     int howManyGroups = 0;
     int totalGroups = options.getTotGroups();
@@ -184,7 +184,7 @@ namespace minerule {
     //bodyMap.closeOutputFiles();
     MRLog() << "After extracting rules: " << nrules << std::endl;
     MRLogPop();
-    coreConn.finalize();
+    connection.finalize();
 /*
    std::string loadstr1 = "LOAD DATA INFILE '";
     loadstr1 += resultfile;
@@ -199,8 +199,8 @@ namespace minerule {
     delete statement;
     delete stmt1;
 /*
-    statement = coreConn.getConnection()->prepareStatement(loadstr1);
-    stmt1 = coreConn.getConnection()->prepareStatement(loadstr2);
+    statement = connection.getConnection()->prepareStatement(loadstr1);
+    stmt1 = connection.getConnection()->prepareStatement(loadstr2);
     
     MRLogPush("Loading result into Database...");
     loadstr1 = resultfile + ".r";

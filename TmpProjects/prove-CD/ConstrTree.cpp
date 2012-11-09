@@ -107,11 +107,11 @@ namespace minerule {
   void ConstrTree::adjustSupp(){
 
     insertRulesInStructure();
-    sqlCoreConn coreConn;
-    coreConn.setOutTableName(minerule->getParsedMinerule().tab_result);
-    coreConn.useConnection(
+    Connection connection;
+    connection.setOutTableName(minerule->getParsedMinerule().tab_result);
+    connection.useODBCConnection(
        MineruleOptions::getSharedOptions().getOdbc_db().getConnection());
-    coreConn.create_db_rule(0);
+    connection.create_db_rule(0);
 
     if (mb2!=NULL  &&  mh2!=NULL) {
       adjustSuppMIndex();
@@ -120,7 +120,7 @@ namespace minerule {
 			      minerule->getParsedMinerule().sup,
 			      minerule->getParsedMinerule().conf,
 			      ngroups,
-			      &coreConn);
+			      &connection);
     }
     else {
       if (rb2!=NULL  &&  rh2!=NULL) {
@@ -130,7 +130,7 @@ namespace minerule {
 				minerule->getParsedMinerule().sup,
 				minerule->getParsedMinerule().conf,
 				ngroups,
-				&coreConn);
+				&connection);
       } else 
 	throw MineruleException (MR_ERROR_INTERNAL,
 				 " cannot create rules ");

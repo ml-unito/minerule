@@ -428,7 +428,7 @@ void BodyMap::saveRules( const NewRuleSet& rs,
     	outR << rid << "\t" << bodyID << "\t" << headID << "\t" << c/totGroups << "\t" << c/bodySupp << endl;
     for (int i = 0; i < it->head.size(); i++) outHB << headID << "\t" << it->head[i] << endl;
 /*
-      coreConn.insert_DB( it->body,
+      connection.insert( it->body,
                           it->head,
                           c/totGroups,
                           c/bodySupp );

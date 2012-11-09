@@ -33,7 +33,7 @@ public:
 
   // at least for the sharedOptions, this
   // object is set by init()
-  odbc::Connection* getConnection() const throw(MineruleException) {
+  odbc::Connection* getODBCConnection() const throw(MineruleException) {
 	if( connection==NULL ) {
 	  throw MineruleException(MR_ERROR_DATABASE_ERROR,
 				  (std::string) 

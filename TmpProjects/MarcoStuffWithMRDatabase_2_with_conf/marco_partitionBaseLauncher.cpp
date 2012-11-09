@@ -150,7 +150,7 @@ readSourceTable(
 
 void partitionWithoutClusters( const minerule::AlgorithmsOptions& options  )
 {
-  odbc::Connection* connection = options.getConnection();
+  odbc::Connection* connection = options.getODBCConnection();
   odbc::PreparedStatement* statement = options.getStatement();
   const minerule::HeadBodySourceRowDescription& 
     rowDes = options.getSourceRowDescription();

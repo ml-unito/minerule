@@ -1143,7 +1143,7 @@ void itemSetCluster< NODETYPE >::mergeItemSet(
    HASHTYPE anc;
    NODETYPE temp;
    int level;
-   odbc::Statement* statement=connection.getConnection()->createStatement();
+   odbc::Statement* statement=connection.getODBCConnection()->createStatement();
    odbc::ResultSet* resultAllBody;
    level=0;
    size_t lastElem;
@@ -1200,7 +1200,7 @@ void itemSetCluster< NODETYPE >::mergeItemSetHelper(
  std::string head; 
  std::string QrySt="select level,"+srd.getHead().getSQLColumnNames()+
      " from tmp_Rule_Head_Ext where id_head=? order by id;";
-  odbc::PreparedStatement* statement=connection.getConnection()->prepareStatement(QrySt);
+  odbc::PreparedStatement* statement=connection.getODBCConnection()->prepareStatement(QrySt);
   
   while( resultAllBody->next() ) {
     

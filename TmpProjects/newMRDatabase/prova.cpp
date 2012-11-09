@@ -10,7 +10,7 @@
 
 int main() {
   odbc::Connection* conn = 
-      odbc::DriverManager::getConnection("test",
+      odbc::DriverManager::getODBCConnection("test",
 					 "root",
 					 "mysql");
 

@@ -28,7 +28,8 @@ bool Connection::tableExists(const char * tableName)
 
 void Connection::deleteDestTable() {
   deleteTable(getOutTableName().c_str());
-  deleteTable(getElemsOutTableName().c_str());
+  deleteTable(getHeadsTableName().c_str());
+  deleteTable(getBodiesTableName().c_str());
 }
 
 void Connection::deleteTable(const char * tableName)
@@ -48,23 +49,29 @@ void Connection::deleteTable(const char * tableName)
 
 // Bisogna controllare che non esista già la tabella
 // altrimenti va in errore !!
-void Connection::createResultTables()
+void Connection::createResultTables(const SourceRowDescriptor& srd)
  {
     odbc::Statement* statement=connection->createStatement();
     std::string create, create_index;
 
-    // nb sintax is a deprecated parameter...
-
-    create=string("CREATE TABLE ")+getOutTableName()+
-	    " (bodyId int, headId int, supp float, con float, cardBody int, cardHead int );";
+	// Creating the rules table
+    create=string("CREATE TABLE ")+getOutTableName()+" (bodyId int, headId int, supp float, con float, cardBody int, cardHead int );";	
+    statement->execute(create);	
 	
-    statement->execute(create);
-
-    create=string("CREATE TABLE ")+ getElemsOutTableName() + " (id int, elem varchar(255));";
-	create_index = " CREATE INDEX "+getElemsOutTableName()+"_index ON " + getElemsOutTableName() + " (id);";
+	// Creating the body elements table
+    create=string("CREATE TABLE ")+ getBodiesTableName() + " (id int, elem varchar(255));";
+	create_index = " CREATE INDEX "+getBodiesTableName()+"_index ON " + getBodiesTableName() + " (id);";
 
     statement->execute(create);
 	statement->execute(create_index);
+
+	// Creating the head elements table
+    create=string("CREATE TABLE ")+ getHeadsTableName() + " (id int, elem varchar(255));";
+	create_index = " CREATE INDEX "+getHeadsTableName()+"_index ON " + getHeadsTableName() + " (id);";
+
+    statement->execute(create);
+	statement->execute(create_index);
+
     delete statement;
  }
 
@@ -125,7 +132,7 @@ void Connection::CachedDBInserter::finalize() {
   loadstr2 += filename;
   loadstr2 += ".hb' INTO TABLE ";
   loadstr2 += connection.getElemsOutTableName();
-  odbc::Statement* state = connection.getConnection()->createStatement();
+  odbc::Statement* state = connection.getODBCConnection()->createStatement();
   state->execute(loadstr1.c_str());
   state->execute(loadstr2.c_str());
   delete state;
@@ -164,7 +171,7 @@ void Connection::DirectDBInserter::insert(const HeadBodyType& body,
 			    const HeadBodyType& head,
 			    double support,
 			    double confidence,
-                            bool saveBody) {
+                bool saveBody) {
   // if either body or head, is too big, too low with respect to
   // the allowed cardinalities we simply return back to the caller.
   if( !connection.bodyCard.validate(body.size()) || !connection.headCard.validate(head.size()))

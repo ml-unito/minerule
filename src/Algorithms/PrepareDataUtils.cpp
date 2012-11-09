@@ -244,7 +244,7 @@ string
 std::string createIndexQuery = "CREATE INDEX "+clusteredTable+"_index " + " ON " + clusteredTable + " ("+buildAttrListAlias(mr.getParsedMinerule().ga,aliasA,true)+");";
 
     odbc::Connection* conn = 
-      MineruleOptions::getSharedOptions().getOdbc_db().getConnection();
+      MineruleOptions::getSharedOptions().getOdbc_db().getODBCConnection();
 
     dropTableIfExists(conn, clusteredTable);
 
@@ -300,7 +300,7 @@ std::string createIndexQuery = "CREATE INDEX "+clusteredTable+"_index " + " ON "
       "FROM " + pmr.tab_source;
     
     odbc::Connection* conn = 
-      MineruleOptions::getSharedOptions().getOdbc_db().getConnection();
+      MineruleOptions::getSharedOptions().getOdbc_db().getODBCConnection();
 
     std::auto_ptr<odbc::Statement> state(conn->createStatement());
     std::auto_ptr<odbc::ResultSet> rs(state->executeQuery(qry));

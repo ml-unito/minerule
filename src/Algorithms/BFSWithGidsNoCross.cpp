@@ -306,18 +306,18 @@ namespace minerule {
 
     MRLog() << "Executing queries" << std::endl;
 
-    connection.useODBCConnection(MineruleOptions::getSharedOptions().getOdbc_db().getConnection());
+    connection.useODBCConnection(MineruleOptions::getSharedOptions().getOdbc_db().getODBCConnection());
     connection.setOutTableName(minerule.getParsedMinerule().tab_result);
     connection.setBodyCardinalities(minerule.getParsedMinerule().bodyCardinalities);
     connection.setHeadCardinalities(minerule.getParsedMinerule().headCardinalities);
-    connection.createResultTables();
+    connection.createResultTables(SourceRowDescriptor(connection.getODBCConnection(), minerule.getParsedMinerule()));
     connection.init();
 
     MRDebug() << "BFSWithGids: body queries:" << bodyQry.c_str() << std::endl;
     MRDebug() << "BFSWithGids: head queries:" << headQry.c_str() << std::endl;
 
-    statementBody = connection.getConnection()->prepareStatement(bodyQry.c_str());
-    statementHead = connection.getConnection()->prepareStatement(headQry.c_str());
+    statementBody = connection.getODBCConnection()->prepareStatement(bodyQry.c_str());
+    statementHead = connection.getODBCConnection()->prepareStatement(headQry.c_str());
   }
 
 

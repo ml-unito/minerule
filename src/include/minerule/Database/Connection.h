@@ -79,13 +79,13 @@ namespace minerule {
 		void setHeadCardinalities( const MinMaxPair& rhs ) { headCard=rhs; }
 		void useODBCConnection(odbc::Connection* newConnection);
 
-		odbc::Connection* getConnection() { return connection; }
+		odbc::Connection* getODBCConnection() { return connection; }
 
 		bool tableExists(const char * tableName);
 		void deleteTable(const char * tableName);
 		void deleteDestTable();
 
-		void createResultTables();
+		void createResultTables(const SourceRowDescriptor&);
 		void insert(const char * what);
 
 		// this function should be systematically used in order to
@@ -117,11 +117,16 @@ namespace minerule {
 		// when rules are written on the DB, the Connection uses the 
 		// following format: idBody, idHead, supp, conf, cardBody, cardHead
 		// idBody and idHead are foreign (non unique) keys of the table whose
-		// name can be retrieved using the following procedure.
-
-		std::string getElemsOutTableName() const {
-			return outTableName + "_elems";
+		// names can be retrieved using getBodiesTableName and getHeadsTableName.
+		
+		std::string getHeadsTableName() const {
+			return outTableName + "_head_elems";
 		}
+
+		std::string getBodiesTableName() const {
+			return outTableName + "_body_elems";
+		}
+
 		// void closeQuery();
 	};
 } // end namespace

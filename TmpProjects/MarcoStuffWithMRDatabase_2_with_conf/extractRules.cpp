@@ -408,7 +408,7 @@ void BodyMap::createHeads (NewRuleSet& rs, NewRuleSet& rs1, float threshold, int
 void insertRules( const NewRuleSet& rs, double totGroups ) {
   #warning settare bene c
   Connection connection;
-  connection.useODBCConnection(MineruleOptions::getSharedOptions().getOdbc_db().getConnection());
+  connection.useODBCConnection(MineruleOptions::getSharedOptions().getOdbc_db().getODBCConnection());
   connection.setOutTableName("prova");
   //  connection.setBodyCardinalities(options.getBodyCardinalities());
   //  connection.setHeadCardinalities(options.getHeadCardinalities());
@@ -442,7 +442,7 @@ int main(int argc, char *argv[]) {
   MineruleOptions& mrOpts =  MineruleOptions::getSharedOptions();
   mrOpts.readFromFile(MROPTIONFILE);
 
-  connection = mrOpts.getOdbc_db().getConnection();
+  connection = mrOpts.getOdbc_db().getODBCConnection();
 
   options.setSupport(Converter(argv[1]).toDouble());
   options.setConfidence(96.0);

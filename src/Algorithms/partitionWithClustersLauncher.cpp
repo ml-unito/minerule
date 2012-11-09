@@ -12,6 +12,7 @@
 
 #include <string>
 #include <vector>
+#include <stdexcept>
 
 //#include "utils.h"
 
@@ -157,7 +158,7 @@ readSourceTable(
 
 void partitionWithClusters( const minerule::AlgorithmsOptions& options )
 {
-  odbc::Connection* odbc_connection = options.getConnection();
+  odbc::Connection* odbc_connection = options.getODBCConnection();
   odbc::PreparedStatement* statement = options.getStatement();
   const minerule::HeadBodySourceRowDescription& 
     rowDes = options.getSourceRowDescription();
@@ -211,8 +212,7 @@ void partitionWithClusters( const minerule::AlgorithmsOptions& options )
 
   MRLog() << "Starting to read the Data Base" << std::endl;   
   int gid = 1;
-  while( readMorePartitions )
-  {
+  while( readMorePartitions ) {
     isPart++;
     
     totGroups=1;
@@ -222,7 +222,7 @@ void partitionWithClusters( const minerule::AlgorithmsOptions& options )
     MRLog() << "Reading partition number: " << isPart << std::endl;
     readMorePartitions = readSourceTable(kItem,result,rowDes,options,false,gid,totGroups);
     MRLog() << "Done! (Reading partition number: " << isPart << ")" << std::endl;
-   MRLog() << "Items in this partition: " << kItem.size() << std::endl;
+    MRLog() << "Items in this partition: " << kItem.size() << std::endl;
 
    // A questo punto ho inserito tutte le tuple nel livello 1 della
    // struttura kItem.
@@ -259,8 +259,7 @@ void partitionWithClusters( const minerule::AlgorithmsOptions& options )
    // Finisco quando non posso più estendere il body
    levelIn=1;
    toContinue=true;
-   while(toContinue && levelIn<options.getBodyCardinalities().getMax() )
-   {
+   while(toContinue && levelIn<options.getBodyCardinalities().getMax() ) {
       levelIn=levelIn+1;
       toContinue=kItem.gen_Large_ItemSet(prtList,
 					 nSup,
@@ -283,11 +282,11 @@ void partitionWithClusters( const minerule::AlgorithmsOptions& options )
    MRLog() << "Saving large large itemsets for this partition" << std::endl;
    kItem.save_Large_ItemSet(1,isPart,connection);
    MRLog() << "Done! (Saving large ...)" << std::endl;
-  // std::cout << "Num Attr. allocati: (dopo)" << 
-  //    MemDebugGenericSourceRowAttribute::getInstanceCounter() << std::endl;
-
-  // Svuoto la lista dei livelli per il ciclo successivo.
-  prtList.removeAll();  
+   // std::cout << "Num Attr. allocati: (dopo)" << 
+   //    MemDebugGenericSourceRowAttribute::getInstanceCounter() << std::endl;
+   
+   // Svuoto la lista dei livelli per il ciclo successivo.
+   prtList.removeAll();  
 
  } // fine WHILE
 
@@ -381,7 +380,11 @@ std::string qry = "SELECT * FROM "+options.getOutTableName()+"_tmpSource";
   //  std::cout<<"FINE GEN_FINAL_COUNT"<<std::endl;
   //kItem.printToDesign("Body",numPartition+3);
   connection.deleteDestTable();
-  connection.createResultTables();
+
+  throw std::runtime_error("Algorithm to be updated to use new createResiltTables API");
+  // connection.createResultTables(SourceRowDescriptor(connection.getODBCConnection(), minerule.getParsedMinerule()));
+
+
   connection.init();
 
   // Salvo nel db le regole. Vedi struttura nel file lyx

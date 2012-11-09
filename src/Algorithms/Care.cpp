@@ -94,17 +94,17 @@ namespace minerule {
 
     MRLog() << "Executing queries" << std::endl;
 
-    connection.useODBCConnection(MineruleOptions::getSharedOptions().getOdbc_db().getConnection());
+    connection.useODBCConnection(MineruleOptions::getSharedOptions().getOdbc_db().getODBCConnection());
     connection.setOutTableName(minerule.getParsedMinerule().tab_result);
     connection.setBodyCardinalities(minerule.getParsedMinerule().bodyCardinalities);
     connection.setHeadCardinalities(minerule.getParsedMinerule().headCardinalities);
-    connection.createResultTables();
+    connection.createResultTables(SourceRowDescriptor(connection.getODBCConnection(), minerule.getParsedMinerule()));
     connection.init();
 
     MRDebug() << "CARE: body queries:" << bodyQry.c_str() << std::endl;
     MRDebug() << "CARE: head queries:" << headQry.c_str() << std::endl;
-    statement = connection.getConnection()->prepareStatement(bodyQry.c_str());
-    stmt1 = connection.getConnection()->prepareStatement(headQry.c_str());
+    statement = connection.getODBCConnection()->prepareStatement(bodyQry.c_str());
+    stmt1 = connection.getODBCConnection()->prepareStatement(headQry.c_str());
   }
 
   void CARE::execute() {
@@ -199,8 +199,8 @@ namespace minerule {
     delete statement;
     delete stmt1;
 /*
-    statement = connection.getConnection()->prepareStatement(loadstr1);
-    stmt1 = connection.getConnection()->prepareStatement(loadstr2);
+    statement = connection.getODBCConnection()->prepareStatement(loadstr1);
+    stmt1 = connection.getODBCConnection()->prepareStatement(loadstr2);
     
     MRLogPush("Loading result into Database...");
     loadstr1 = resultfile + ".r";

@@ -104,7 +104,7 @@ main(int argc, char** argv) {
     //tab_result me lo passera' l'ottimizzatore, per il momento mi invento io un nome
     //connection.setOutTableName(minerule->tab_result);
     connection.setOutTableName(tabResult);
-    connection.useODBCConnection(MineruleOptions::getSharedOptions().getOdbc_db().getConnection());
+    connection.useODBCConnection(MineruleOptions::getSharedOptions().getOdbc_db().getODBCConnection());
     connection.createResultTables();
 
     r->extractRules(body,0.012,0.96,constr->getNGroups(),&connection);

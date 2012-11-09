@@ -2,6 +2,7 @@
 #include "Algorithms/FSTree.h"
 #include "Utils/MineruleLogs.h"
 #include "Algorithms/PrepareDataUtils.h"
+#include <stdexcept>
 
 //#include "sequence.h"
 
@@ -27,14 +28,16 @@ namespace minerule {
 
 		rowDes.setBodyElems(last_elem+1, pm.ba.size());
 
-		connection.useODBCConnection(MineruleOptions::getSharedOptions().getOdbc_db().getConnection());
+		connection.useODBCConnection(MineruleOptions::getSharedOptions().getOdbc_db().getODBCConnection());
 		connection.setOutTableName(minerule.getParsedMinerule().tab_result);
 		connection.setBodyCardinalities(minerule.getParsedMinerule().bodyCardinalities);
-		connection.createResultTables();
+
+	    throw std::runtime_error("Algorithm to be updated to use new createResiltTables API");
+	    // connection.createResultTables(SourceRowDescriptor(connection.getODBCConnection(), minerule.getParsedMinerule()));
 
 		MRDebug() << "FSMiner query:" << sqlQuery.c_str() << std::endl;
 
-		statement = connection.getConnection()->prepareStatement(sqlQuery.c_str());
+		statement = connection.getODBCConnection()->prepareStatement(sqlQuery.c_str());
 
 	}
 

@@ -252,8 +252,8 @@ namespace minerule {
     Connection connection;
     connection.setOutTableName(minerule->getParsedMinerule().tab_result);
     connection.useODBCConnection(
-       MineruleOptions::getSharedOptions().getOdbc_db().getConnection());
-    connection.createResultTables();
+       MineruleOptions::getSharedOptions().getOdbc_db().getODBCConnection());
+    connection.createResultTables(SourceRowDescriptor(connection.getODBCConnection(), minerule->getParsedMinerule()));
 
     if (mb1!=NULL  &&  mh1!=NULL) {
       adjustSuppMIndex();
@@ -409,7 +409,7 @@ namespace minerule {
 
     MRLog() << "Executing queries" << std::endl;
     odbc::Connection* con =
-      MineruleOptions::getSharedOptions().getOdbc_db().getConnection();
+      MineruleOptions::getSharedOptions().getOdbc_db().getODBCConnection();
 
     odbc::Statement* stateb1, *stateb1nb2;
     odbc::Statement* stateh1, *stateh1nh2;

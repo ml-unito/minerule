@@ -85,16 +85,16 @@ namespace minerule {
 
     MRLog() << "Executing queries" << std::endl;
 
-    connection.useODBCConnection(MineruleOptions::getSharedOptions().getOdbc_db().getConnection());
+    connection.useODBCConnection(MineruleOptions::getSharedOptions().getOdbc_db().getODBCConnection());
     connection.setOutTableName(minerule.getParsedMinerule().tab_result);
     connection.setBodyCardinalities(minerule.getParsedMinerule().bodyCardinalities);
     //connection.setHeadCardinalities(minerule.getParsedMinerule().headCardinalities);
     connection.setHeadCardinalities(MinMaxPair(0,1000));
-    connection.createResultTables();
+    connection.createResultTables(SourceRowDescriptor(connection.getODBCConnection(), minerule.getParsedMinerule()));
     connection.init();
 
     MRDebug() << "ConstrainedItemsets: body queries:" << bodyQry.c_str() << std::endl;
-    statement = connection.getConnection()->prepareStatement(bodyQry.c_str());
+    statement = connection.getODBCConnection()->prepareStatement(bodyQry.c_str());
   }
 
   void ConstrItemSetsExtraction::execute() {
@@ -175,8 +175,8 @@ namespace minerule {
 */
     delete statement;
 /*
-    statement = connection.getConnection()->prepareStatement(loadstr1);
-    stmt1 = connection.getConnection()->prepareStatement(loadstr2);
+    statement = connection.getODBCConnection()->prepareStatement(loadstr1);
+    stmt1 = connection.getODBCConnection()->prepareStatement(loadstr2);
 
     MRLogPush("Loading result into Database...");
     loadstr1 = resultfile + ".r";

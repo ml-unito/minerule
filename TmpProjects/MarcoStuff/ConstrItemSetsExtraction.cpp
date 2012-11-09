@@ -83,14 +83,14 @@ namespace minerule {
 
     MRLog() << "Executing queries" << endl;
 
-    connection.useODBCConnection(MineruleOptions::getSharedOptions().getOdbc_db().getConnection());
+    connection.useODBCConnection(MineruleOptions::getSharedOptions().getOdbc_db().getODBCConnection());
     connection.setOutTableName(minerule.getParsedMinerule().tab_result);
     connection.setBodyCardinalities(minerule.getParsedMinerule().bodyCardinalities);
     connection.createResultTables();
     connection.init();
 
     MRDebug() << "CARE: body queries:" << bodyQry.c_str() << endl;
-    statement = connection.getConnection()->prepareStatement(bodyQry.c_str());
+    statement = connection.getODBCConnection()->prepareStatement(bodyQry.c_str());
   }
 
   void ConstrItemSetsExtraction::execute() {
@@ -170,8 +170,8 @@ namespace minerule {
 */
     delete statement;
 /*
-    statement = connection.getConnection()->prepareStatement(loadstr1);
-    stmt1 = connection.getConnection()->prepareStatement(loadstr2);
+    statement = connection.getODBCConnection()->prepareStatement(loadstr1);
+    stmt1 = connection.getODBCConnection()->prepareStatement(loadstr2);
 
     MRLogPush("Loading result into Database...");
     loadstr1 = resultfile + ".r";

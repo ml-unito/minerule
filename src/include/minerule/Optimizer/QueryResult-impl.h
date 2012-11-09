@@ -84,8 +84,9 @@ namespace minerule {
 		connection.setOutTableName(mr.tab_result);
 		connection.setBodyCardinalities(mr.bodyCardinalities);
 		connection.setHeadCardinalities(mr.headCardinalities);
-		connection.useODBCConnection( MineruleOptions::getSharedOptions().getOdbc_db().getConnection());
-		connection.createResultTables();
+		connection.useODBCConnection( MineruleOptions::getSharedOptions().getOdbc_db().getODBCConnection());
+		
+		connection.createResultTables(SourceRowDescriptor(connection.getODBCConnection(), mr));
 
 		typename ResultSet<Sorter>::const_iterator it;
 		for(it=this->begin();it!=this->end();it++) {

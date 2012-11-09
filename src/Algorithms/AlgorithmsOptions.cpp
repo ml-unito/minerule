@@ -49,7 +49,7 @@ AlgorithmsOptions::getRowsPerPartition() const {
   }*/
 
 odbc::Connection* 
-AlgorithmsOptions::getConnection() const {
+AlgorithmsOptions::getODBCConnection() const {
   return connection;
 }
 

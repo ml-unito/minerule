@@ -110,7 +110,7 @@ namespace minerule {
     Connection connection;
     connection.setOutTableName(minerule->getParsedMinerule().tab_result);
     connection.useODBCConnection(
-       MineruleOptions::getSharedOptions().getOdbc_db().getConnection());
+       MineruleOptions::getSharedOptions().getOdbc_db().getODBCConnection());
     connection.createResultTables();
 
     if (mb2!=NULL  &&  mh2!=NULL) {
@@ -228,7 +228,7 @@ namespace minerule {
 
     MRLog() << "Executing queries" << endl;
     odbc::Connection* con =
-      MineruleOptions::getSharedOptions().getOdbc_db().getConnection();
+      MineruleOptions::getSharedOptions().getOdbc_db().getODBCConnection();
 
     odbc::Statement* stateb2;
     odbc::Statement* stateh2;

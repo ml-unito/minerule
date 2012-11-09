@@ -162,7 +162,7 @@ main(int argc, char** argv) {
 
     //parseOptions(argc, argv, mr, rf);
     connection=
-	odbc::DriverManager::getConnection("test", "root", "mysql");
+	odbc::DriverManager::getODBCConnection("test", "root", "mysql");
 
     string resultsetname;
 

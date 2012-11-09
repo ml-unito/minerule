@@ -12,6 +12,7 @@
 #include "Algorithms/tree.h"
 #include "Algorithms/Counter.h"
 #include "Database/Connection.h"
+#include <stdexcept>
 
 #include "Database/SourceRow.h" // defines, among other things, which is the ItemType
 #include "Algorithms/AlgorithmsOptions.h"
@@ -90,7 +91,7 @@ readDataBaseOrig(odbc::ResultSet* result,
 
 void origFPGrowth( const minerule::AlgorithmsOptions& options ) {
 
-  odbc::Connection* odbc_connection = options.getConnection();
+  odbc::Connection* odbc_connection = options.getODBCConnection();
   odbc::PreparedStatement* statement = options.getStatement();
   const minerule::HeadBodySourceRowDescription& rowDes =
     options.getSourceRowDescription();
@@ -149,8 +150,8 @@ void origFPGrowth( const minerule::AlgorithmsOptions& options ) {
   nSup=ceil(totGroups*(support/100));
   //  cout<<"nSup: "<<nSup<<endl;
 
-  connection.deleteDestTable();
-  connection.createResultTables();
+  throw std::runtime_error("Algorithm to be updated to use new createResiltTables API");
+  // connection.createResultTables(SourceRowDescriptor(connection.getODBCConnection(), minerule.getParsedMinerule()));
 
   MRLog(logId) << "  Inflating conditional FPTrees..." << endl;
 // Genera tutti i fp-tree conditional. 

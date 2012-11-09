@@ -58,7 +58,7 @@ main(int argc, char** argv) {
     assert( infile );
     size_t ngroup=0;
 
-    DBInserter inserter( mr.getOdbc_db().getConnection(), argv[2] );
+    DBInserter inserter( mr.getOdbc_db().getODBCConnection(), argv[2] );
 
     while( infile ) {
       ngroup++;

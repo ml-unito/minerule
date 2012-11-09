@@ -190,7 +190,7 @@ namespace minerule {
     MRDebug() << "Minerule text after normalization:" << minerule.getText() << std::endl;
 
     odbc::Connection* connection = 
-      MineruleOptions::getSharedOptions().getOdbc_db().getConnection();
+      MineruleOptions::getSharedOptions().getOdbc_db().getODBCConnection();
 
     odbc::Statement* statement = NULL;
     ResultSet* rs = NULL;

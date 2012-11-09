@@ -12,7 +12,7 @@ int main() {
   try {
     cout << "1";
     Connection* connection = 
-      DriverManager::getConnection("test","root","mysql");
+      DriverManager::getODBCConnection("test","root","mysql");
     
     cout << "2";
     DatabaseMetaData* dbmd =

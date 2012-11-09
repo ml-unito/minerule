@@ -30,7 +30,7 @@ QueryResult::Iterator::init( const std::string& rulesTable,
 			   double support,
 			   double confidence ) throw( MineruleException, odbc::SQLException ) {
   odbc::Connection* conn =
-    MineruleOptions::getSharedOptions().getOdbc_db().getConnection();
+    MineruleOptions::getSharedOptions().getOdbc_db().getODBCConnection();
   state=conn->createStatement();
  std::string query = 
     "SELECT bodyId, headId, supp, con "

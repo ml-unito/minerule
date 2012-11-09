@@ -12,7 +12,7 @@
 
 #include <string>
 #include <vector>
-
+#include <stdexcept>
 
 #include "Algorithms/itemSet.h"
 #include "Algorithms/itemSetList.h"
@@ -157,7 +157,7 @@ readSourceTable(
 
 void partitionWithoutClusters( const minerule::AlgorithmsOptions& options  )
 {
-  odbc::Connection* odbc_connection = options.getConnection();
+  odbc::Connection* odbc_connection = options.getODBCConnection();
   odbc::PreparedStatement* statement = options.getStatement();
   const minerule::HeadBodySourceRowDescription& 
     rowDes = options.getSourceRowDescription();
@@ -302,7 +302,9 @@ void partitionWithoutClusters( const minerule::AlgorithmsOptions& options  )
  }
 
  connection.deleteDestTable();
- connection.createResultTables();
+
+ throw std::runtime_error("Algorithm to be updated to use new createResiltTables API");
+ // connection.createResultTables(SourceRowDescriptor(connection.getODBCConnection(), minerule.getParsedMinerule()));
  
  MRLogPush("Extracting rules...");
  kItem.extractRule(connection, options.getTotGroups(), kItem);

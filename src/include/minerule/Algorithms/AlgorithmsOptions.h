@@ -100,7 +100,7 @@ class AlgorithmsOptions {
     totGroups=groups;
   }
   
-  odbc::Connection* getConnection() const;
+  odbc::Connection* getODBCConnection() const;
   odbc::PreparedStatement* getStatement() const;
   const HeadBodySourceRowDescription& 
     getSourceRowDescription() const;

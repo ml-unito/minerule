@@ -9,7 +9,7 @@ using namespace std;
 int main(int argc, char** argv) {
   try {
     odbc::Connection* conn = 
-      odbc::DriverManager::getConnection("test",
+      odbc::DriverManager::getODBCConnection("test",
 					    "root",
 					    "mysql");
 

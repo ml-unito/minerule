@@ -319,11 +319,11 @@ namespace minerule {
 
     MRLog() << "Executing queries" << std::endl;
 i*/
-    connection.useODBCConnection(MineruleOptions::getSharedOptions().getOdbc_db().getConnection());
+    connection.useODBCConnection(MineruleOptions::getSharedOptions().getOdbc_db().getODBCConnection());
     connection.setOutTableName(minerule.getParsedMinerule().tab_result);
     connection.setBodyCardinalities(minerule.getParsedMinerule().bodyCardinalities);
     connection.setHeadCardinalities(minerule.getParsedMinerule().headCardinalities);
-    connection.createResultTables();
+    connection.createResultTables(SourceRowDescriptor(connection.getODBCConnection(), minerule.getParsedMinerule()));
     connection.init();
 
     MRDebug() << "Preparing data sources..." << std::endl;
@@ -332,10 +332,10 @@ rowDes.setGroupBodyElems(1,minerule.getParsedMinerule().ga.size());
     pdu.buildSourceTableQuery( queryText, rowDes );
 
     MRDebug() << "BFSWithGidsAndCross: query:" << queryText.c_str() << std::endl;
-    statement= connection.getConnection()->prepareStatement(queryText.c_str());
+    statement= connection.getODBCConnection()->prepareStatement(queryText.c_str());
 
-//    statement = connection.getConnection()->prepareStatement(bodyQry.c_str());
-//    stmt1 = connection.getConnection()->prepareStatement(headQry.c_str());
+//    statement = connection.getODBCConnection()->prepareStatement(bodyQry.c_str());
+//    stmt1 = connection.getODBCConnection()->prepareStatement(headQry.c_str());
   }
 
 

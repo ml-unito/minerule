@@ -51,7 +51,7 @@ IDIncrementalAlgorithm::fillValidItems(const std::string& constraints) const thr
     "WHERE "+constraints : "");
   
   odbc::Connection* con = 
-    MineruleOptions::getSharedOptions().getOdbc_db().getConnection();
+    MineruleOptions::getSharedOptions().getOdbc_db().getODBCConnection();
 
   std::auto_ptr<odbc::Statement> state(con->createStatement());
   std::auto_ptr<odbc::ResultSet> rs(state->executeQuery(query.c_str()));
@@ -142,10 +142,10 @@ IDIncrementalAlgorithm::filterQueries(const ValidRules& validRules)
   connection.setHeadCardinalities(minerule->getParsedMinerule().headCardinalities);
   //MRLog() << "ok connection.setHeadCardinalities" << std::endl;
 
-  connection.useODBCConnection( MineruleOptions::getSharedOptions().getOdbc_db().getConnection());
+  connection.useODBCConnection( MineruleOptions::getSharedOptions().getOdbc_db().getODBCConnection());
   //MRLog() << "ok connection.useODBCConnection" << std::endl; 
 
-  connection.createResultTables();
+  connection.createResultTables(SourceRowDescriptor(connection.getODBCConnection(), minerule->getParsedMinerule()));
   //MRLog() << "ok connection.createResultTables" << std::endl;
 
   size_t rcount = 0;

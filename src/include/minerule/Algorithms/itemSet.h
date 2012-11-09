@@ -629,7 +629,7 @@ void itemSet< NODETYPE >::mergeItemSet(
    HASHTYPE anc;
    NODETYPE temp;
    int level;
-   odbc::Statement* statement=connection.getConnection()->createStatement();
+   odbc::Statement* statement=connection.getODBCConnection()->createStatement();
    odbc::ResultSet* resultAllBody;
    level=0;
    size_t lastElem;

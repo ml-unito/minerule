@@ -34,14 +34,14 @@ namespace minerule {
 
 		rowDes.setBodyElems(last_elem+1, pm.ba.size());
 
-		connection.useODBCConnection(MineruleOptions::getSharedOptions().getOdbc_db().getConnection());
+		connection.useODBCConnection(MineruleOptions::getSharedOptions().getOdbc_db().getODBCConnection());
 		//connection.setOutTableName(minerule.getParsedMinerule().tab_result);
 		//connection.setBodyCardinalities(minerule.getParsedMinerule().bodyCardinalities);
 		//connection.createResultTables();
 
 		MRDebug() << "FSMiner query:" << sqlQuery.c_str() << std::endl;
 
-		statement = connection.getConnection()->prepareStatement(sqlQuery.c_str());
+		statement = connection.getODBCConnection()->prepareStatement(sqlQuery.c_str());
 	}
 
 	bool CCSMiner::find(std::vector<CCSMSequence*>* vec, CCSMSequence* elem){

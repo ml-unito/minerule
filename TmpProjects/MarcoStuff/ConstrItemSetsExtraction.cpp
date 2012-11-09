@@ -86,7 +86,7 @@ namespace minerule {
     connection.useODBCConnection(MineruleOptions::getSharedOptions().getOdbc_db().getConnection());
     connection.setOutTableName(minerule.getParsedMinerule().tab_result);
     connection.setBodyCardinalities(minerule.getParsedMinerule().bodyCardinalities);
-    connection.create_db_rule(0);
+    connection.createResultTables();
     connection.init();
 
     MRDebug() << "CARE: body queries:" << bodyQry.c_str() << endl;

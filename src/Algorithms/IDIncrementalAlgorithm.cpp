@@ -145,8 +145,8 @@ IDIncrementalAlgorithm::filterQueries(const ValidRules& validRules)
   connection.useODBCConnection( MineruleOptions::getSharedOptions().getOdbc_db().getConnection());
   //MRLog() << "ok connection.useODBCConnection" << std::endl; 
 
-  connection.create_db_rule(0);
-  //MRLog() << "ok connection.create_db_rule" << std::endl;
+  connection.createResultTables();
+  //MRLog() << "ok connection.createResultTables" << std::endl;
 
   size_t rcount = 0;
   while(qri.next()) {

@@ -162,7 +162,7 @@ void Connection::deleteTable(const char * tableName)
 
 // Bisogna controllare che non esista già la tabella
 // altrimenti va in errore !!
-void Connection::create_db_rule(int sintax)
+void Connection::createResultTables()
  {
     odbc::Statement* statement=connection->createStatement();
     std::string create, create_index;
@@ -183,7 +183,7 @@ void Connection::create_db_rule(int sintax)
  }
 
 
-void Connection::DirectDBInserter::insert_HBelems(const HeadBodyType& elems, size_t counter) {
+void Connection::DirectDBInserter::insertHeadBodyElems(const HeadBodyType& elems, size_t counter) {
 //  assert( !elems.empty() );
 
   std::string query = 
@@ -219,10 +219,10 @@ void Connection::insert(const std::set<ItemType>& body,
   odbc::Statement* state = connection->createStatement();
 
   size_t bodyId = counter++;
-  insert_HBelems(body, bodyId);
+  insertHeadBodyElems(body, bodyId);
   
   size_t headId = counter++;
-  insert_HBelems(head, headId);
+  insertHeadBodyElems(head, headId);
 
   stringstream query;
   query << "INSERT INTO " << getOutTableName() 
@@ -233,7 +233,7 @@ void Connection::insert(const std::set<ItemType>& body,
   delete state;
   } */
 
-void Connection::CachedDBInserter::insert_HBelems(const HeadBodyType& elems, size_t counter) {
+void Connection::CachedDBInserter::insertHeadBodyElems(const HeadBodyType& elems, size_t counter) {
 //  assert( !elems.empty() );
 
   HeadBodyType::const_iterator it = elems.begin();
@@ -297,11 +297,11 @@ void Connection::CachedDBInserter::insert(const HeadBodyType& body,
   static size_t bodyId = counter;
   if (saveBody) {
 	bodyId = counter++;
-	insert_HBelems(body, bodyId);
+	insertHeadBodyElems(body, bodyId);
   }
   
   size_t headId = counter++;
-  insert_HBelems(head, headId);
+  insertHeadBodyElems(head, headId);
 
   outR << bodyId << "\t" << headId << "\t" << support << "\t" << confidence << "\t" << body.size() << "\t" << head.size() << std::endl;
 
@@ -327,11 +327,11 @@ void Connection::DirectDBInserter::insert(const HeadBodyType& body,
   static size_t bodyId = counter;
   if (saveBody) {
 	bodyId = counter++;
-	insert_HBelems(body, bodyId);
+	insertHeadBodyElems(body, bodyId);
   }
   
   size_t headId = counter++;
-  insert_HBelems(head, headId);
+  insertHeadBodyElems(head, headId);
 
   stringstream query;
   query << "INSERT INTO " << connection.getOutTableName() 

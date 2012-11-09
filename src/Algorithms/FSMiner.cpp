@@ -30,7 +30,7 @@ namespace minerule {
 		connection.useODBCConnection(MineruleOptions::getSharedOptions().getOdbc_db().getConnection());
 		connection.setOutTableName(minerule.getParsedMinerule().tab_result);
 		connection.setBodyCardinalities(minerule.getParsedMinerule().bodyCardinalities);
-		connection.create_db_rule(0);
+		connection.createResultTables();
 
 		MRDebug() << "FSMiner query:" << sqlQuery.c_str() << std::endl;
 

@@ -38,7 +38,7 @@ namespace minerule {
 		public:
 			DBInserter(Connection& cc) : connection(cc) {};
 			virtual void insert(const HeadBodyType&, const HeadBodyType&, double support,  double confidence, bool saveBody = true) =0;
-			virtual void insert_HBelems(const HeadBodyType& elems, size_t counter) =0;
+			virtual void insertHeadBodyElems(const HeadBodyType& elems, size_t counter) =0;
 			virtual ~DBInserter() {};
 			virtual void init() {};
 			virtual void finalize() {};
@@ -48,7 +48,7 @@ namespace minerule {
 		public:
 			DirectDBInserter(Connection& cc) : DBInserter(cc) {};
 			virtual void insert(const HeadBodyType&, const HeadBodyType&, double support, double confidence,	bool saveBody = true);
-			virtual void insert_HBelems(const HeadBodyType& elems, size_t counter);
+			virtual void insertHeadBodyElems(const HeadBodyType& elems, size_t counter);
 			virtual ~DirectDBInserter() {};
 		};
 
@@ -59,7 +59,7 @@ namespace minerule {
 		public:
 			CachedDBInserter(Connection& cc) : DBInserter(cc) {};
 			virtual void insert(const HeadBodyType&, const HeadBodyType&, double support, double confidence,	bool saveBody = true);
-			virtual void insert_HBelems(const HeadBodyType& elems, size_t counter);
+			virtual void insertHeadBodyElems(const HeadBodyType& elems, size_t counter);
 			virtual ~CachedDBInserter() {};
 			virtual void init();
 			virtual void finalize();
@@ -75,8 +75,8 @@ namespace minerule {
 		// Distruttore
 		~Connection() { delete dbInserter; }
 
-		void setBodyCardinalities( const MinMaxPair& rhs) { bodyCard=rhs; }
-		void setHeadCardinalities( const MinMaxPair& rhs) { headCard=rhs; }
+		void setBodyCardinalities( const MinMaxPair& rhs ) { bodyCard=rhs; }
+		void setHeadCardinalities( const MinMaxPair& rhs ) { headCard=rhs; }
 		void useODBCConnection(odbc::Connection* newConnection);
 
 		odbc::Connection* getConnection() { return connection; }
@@ -86,7 +86,8 @@ namespace minerule {
 		bool existTable(const char * tableName);
 		void deleteTable(const char * tableName);
 		void deleteDestTable();
-		void create_db_rule(int sintax);
+
+		void createResultTables();
 		void insert(const char * what);
 
 		// this function should be systematically used in order to

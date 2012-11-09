@@ -98,7 +98,7 @@ namespace minerule {
     connection.setOutTableName(minerule.getParsedMinerule().tab_result);
     connection.setBodyCardinalities(minerule.getParsedMinerule().bodyCardinalities);
     connection.setHeadCardinalities(minerule.getParsedMinerule().headCardinalities);
-    connection.create_db_rule(0);
+    connection.createResultTables();
     connection.init();
 
     MRDebug() << "CARE: body queries:" << bodyQry.c_str() << std::endl;

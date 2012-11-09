@@ -137,7 +137,7 @@ void newFPGrowth( const minerule::AlgorithmsOptions& options ) {
   //  cout<<"nSup: "<<nSup<<std::endl;
 
   connection.deleteDestTable();
-  connection.create_db_rule(0);
+  connection.createResultTables();
 
 // Genera tutti i fp-tree conditional. 
 // Eliminando quelli relativi a itemset a supporto non sufficiente

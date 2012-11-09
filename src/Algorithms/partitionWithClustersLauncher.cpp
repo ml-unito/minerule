@@ -381,7 +381,7 @@ std::string qry = "SELECT * FROM "+options.getOutTableName()+"_tmpSource";
   //  std::cout<<"FINE GEN_FINAL_COUNT"<<std::endl;
   //kItem.printToDesign("Body",numPartition+3);
   connection.deleteDestTable();
-  connection.create_db_rule(1);
+  connection.createResultTables();
   connection.init();
 
   // Salvo nel db le regole. Vedi struttura nel file lyx

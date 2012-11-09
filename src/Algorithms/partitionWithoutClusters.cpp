@@ -302,7 +302,7 @@ void partitionWithoutClusters( const minerule::AlgorithmsOptions& options  )
  }
 
  connection.deleteDestTable();
- connection.create_db_rule(0);
+ connection.createResultTables();
  
  MRLogPush("Extracting rules...");
  kItem.extractRule(connection, options.getTotGroups(), kItem);

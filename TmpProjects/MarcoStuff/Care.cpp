@@ -95,7 +95,7 @@ namespace minerule {
     connection.setOutTableName(minerule.getParsedMinerule().tab_result);
     connection.setBodyCardinalities(minerule.getParsedMinerule().bodyCardinalities);
     connection.setHeadCardinalities(minerule.getParsedMinerule().headCardinalities);
-    connection.create_db_rule(0);
+    connection.createResultTables();
 
     MRDebug() << "CARE: body queries:" << bodyQry.c_str() << endl;
     MRDebug() << "CARE: head queries:" << headQry.c_str() << endl;

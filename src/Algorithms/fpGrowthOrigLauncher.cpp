@@ -150,7 +150,7 @@ void origFPGrowth( const minerule::AlgorithmsOptions& options ) {
   //  cout<<"nSup: "<<nSup<<endl;
 
   connection.deleteDestTable();
-  connection.create_db_rule(0);
+  connection.createResultTables();
 
   MRLog(logId) << "  Inflating conditional FPTrees..." << endl;
 // Genera tutti i fp-tree conditional. 

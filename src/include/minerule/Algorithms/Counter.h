@@ -334,7 +334,7 @@ void Counter< NODETYPE >::extractRule(Connection& connection, double nSup, doubl
   //  odbc::ResultSet* result;
 
   //connection.deleteDestTable();
-  //connection.create_db_rule(0);
+  //connection.createResultTables();
 
   //  MRLog() <<" ---- RULE WITH SUPPORT OK ----" <<std::endl;
   for( i=m1.begin( ) ; i !=m1.end( ) ; i++ ) {

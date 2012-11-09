@@ -90,7 +90,7 @@ namespace minerule {
     connection.setBodyCardinalities(minerule.getParsedMinerule().bodyCardinalities);
     //connection.setHeadCardinalities(minerule.getParsedMinerule().headCardinalities);
     connection.setHeadCardinalities(MinMaxPair(0,1000));
-    connection.create_db_rule(0);
+    connection.createResultTables();
     connection.init();
 
     MRDebug() << "ConstrainedItemsets: body queries:" << bodyQry.c_str() << std::endl;

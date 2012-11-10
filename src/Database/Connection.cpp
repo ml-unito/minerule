@@ -77,14 +77,14 @@ void Connection::createResultTables(const SourceRowDescriptor& srd)
     statement->execute(create);	
 	
 	// Creating the body elements table
-    create=string("CREATE TABLE ")+ getTableName(BodiesTable) + " (id int, elem varchar(255));";
+    create=string("CREATE TABLE ")+ getTableName(BodiesTable) + " (id int, " + srd.getBody().getSQLDataDefinition() +")";
 	create_index = " CREATE INDEX "+getTableName(BodiesTable)+"_index ON " + getTableName(BodiesTable) + " (id);";
 
     statement->execute(create);
 	statement->execute(create_index);
 
 	// Creating the head elements table
-    create=string("CREATE TABLE ")+ getTableName(HeadsTable) + " (id int, elem varchar(255));";
+    create=string("CREATE TABLE ")+ getTableName(HeadsTable) +  " (id int, " + srd.getHead().getSQLDataDefinition() +")";
 	create_index = " CREATE INDEX "+getTableName(HeadsTable)+"_index ON " + getTableName(HeadsTable) + " (id);";
 
     statement->execute(create);

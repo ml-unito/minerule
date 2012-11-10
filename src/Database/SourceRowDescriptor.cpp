@@ -110,18 +110,18 @@ SourceRowDescriptor::SourceRowDescriptor(odbc::ResultSet* rs, const HeadBodySour
  public:
 	 AttributesUtil() : curr_attr_pos(0) {}
 	 
-	 std::vector<int> generatePositions(const ListType& attrs) {
+	 std::vector<int> generatePositions(const ParsedMinerule::AttrVector& attrs) {
 		 std::vector<int> result;
-		 for( ListType::const_iterator it = attrs.begin(); it!=attrs.end(); ++it ) {
+		 for( ParsedMinerule::AttrVector::const_iterator it = attrs.begin(); it!=attrs.end(); ++it ) {
 			 result.push_back(curr_attr_pos++);
 		 }
 		 return result;
 	 }
 	 
-	 static std::string names_to_string(const ListType& attrs) {
+	 static std::string names_to_string(const ParsedMinerule::AttrVector& attrs) {
 		 std::string result;
-		 for( ListType::const_iterator it = attrs.begin(); it!=attrs.end(); ++it ) {
-			 if( *it != attrs.begin()) result += ",";
+		 for( ParsedMinerule::AttrVector::const_iterator it = attrs.begin(); it!=attrs.end(); ++it ) {
+			 if( it != attrs.begin() ) result += ",";
 			 result += *it;
 		 }
 		 
@@ -130,20 +130,26 @@ SourceRowDescriptor::SourceRowDescriptor(odbc::ResultSet* rs, const HeadBodySour
  };
  
  SourceRowDescriptor::SourceRowDescriptor(odbc::Connection* odbc_connection, const ParsedMinerule& minerule) {
-	 ListType attr_list  = minerule.ga minerule.ca + minerule.ba + minerule.ca + minerule.ha; 
+	 ParsedMinerule::AttrVector attr_list;
+	 attr_list.insert(attr_list.end(), minerule.ga.begin(), minerule.ga.end());
+	 attr_list.insert(attr_list.end(), minerule.ca.begin(), minerule.ca.end()); 
+     attr_list.insert(attr_list.end(), minerule.ba.begin(), minerule.ba.end()); 
+     attr_list.insert(attr_list.end(), minerule.ca.begin(), minerule.ca.end());
+	 attr_list.insert(attr_list.end(), minerule.ha.begin(), minerule.ha.end());
+	 
 	 std::string query = 
 		 "SELECT " + AttributesUtil::names_to_string(attr_list) +
 		 " FROM " + minerule.tab_source + " LIMIT 1";
 				 
 	 odbc::Statement* state = odbc_connection->createStatement();
-	 odbc::ResultSet* rs = state->execute(query);
+	 odbc::ResultSet* rs = state->executeQuery(query);
 	 
-	 AttributesUtil positions;
-	 groupBody.init(rs, position.generatePositions(minerule.ga) );
-	 clusterBody.init(rs, position.generatePositions(minerule.ca) );
-	 body.init(rs, position.generatePositions(ba));
-	 clusterHead.init(rs, positions.generatePositions(ca));
-	 head.init(rs.init(rs,positions.generatePositions(ha));
+	 AttributesUtil attrUtils;
+	 groupBody.init(rs, attrUtils.generatePositions(minerule.ga) );
+	 clusterBody.init(rs, attrUtils.generatePositions(minerule.ca) );
+	 body.init(rs, attrUtils.generatePositions(minerule.ba));
+	 clusterHead.init(rs, attrUtils.generatePositions(minerule.ca));
+	 head.init(rs,attrUtils.generatePositions(minerule.ha));
 	 
 	 delete rs;
 	 delete state;

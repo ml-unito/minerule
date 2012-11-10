@@ -155,7 +155,7 @@ namespace minerule {
 
 
 			void insertRules( const NewRuleSet& rs, double totGroups );
-			size_t buildAttrStr(const ParsedMinerule::ListType& attr,
+			size_t buildAttrStr(const ParsedMinerule::AttrVector& attr,
 				size_t startIndex,
 					std::string& attrStr, 
 						std::vector<int>& des) const;

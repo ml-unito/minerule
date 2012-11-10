@@ -135,7 +135,7 @@ std::string op;             // the operator involved
 			  const std::string& prefix) const;
 
     void substituteInAttrList( 
-                ParsedMinerule::ListType& l,
+                ParsedMinerule::AttrVector& l,
 		const OptimizerCatalogue::CatalogueEntry& catEntry
 		) const;
 

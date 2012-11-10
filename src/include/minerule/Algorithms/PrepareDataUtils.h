@@ -27,12 +27,12 @@ class PrepareDataUtils {
       createSourceTable() const;
 
    static std::string
-      buildAttrListDescription(const ParsedMinerule::ListType& attrs,
+      buildAttrListDescription(const ParsedMinerule::AttrVector& attrs,
 			       const std::string& alias="", 
 			       bool addColAlias=false);
 
    static std::string
-      buildAttrListAlias(const ParsedMinerule::ListType& attrs,
+      buildAttrListAlias(const ParsedMinerule::AttrVector& attrs,
 			       const std::string& alias="", 
 			       bool addColAlias=false);
 

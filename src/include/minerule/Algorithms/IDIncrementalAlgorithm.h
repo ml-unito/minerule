@@ -25,7 +25,7 @@ class IDIncrementalAlgorithm : public IncrementalAlgorithm {
   typedef std::pair< std::set<ItemType>*, std::set<ItemType>* > ValidRule;
   typedef std::vector< ValidRule > ValidRules;
  protected:
-  const ParsedMinerule::ListType* attrList;
+  const ParsedMinerule::AttrVector* attrList;
 
   std::set<ItemType>*
     fillValidItems(const std::string& constraints) const 

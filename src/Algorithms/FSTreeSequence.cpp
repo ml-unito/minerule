@@ -9,9 +9,9 @@
 
 namespace minerule {
 
-  FSTreeSequence::ListType* FSTreeSequence::getFSTreeSequence(){
+  FSTreeSequence::ItemVector* FSTreeSequence::getFSTreeSequence(){
 #warning CONTROLLARE CHE LA COPIA SIA VERAMENTE UTILE (NON SI PUO SEMPLICEMENTE RESTITUIRE seq?).
-    return new ListType(*seq);
+    return new ItemVector(*seq);
   }
 
   FSTreeSequence::~FSTreeSequence(){	
@@ -23,8 +23,8 @@ namespace minerule {
   }
 
   FSTreeSequence::FSTreeSequence(const FSTreeSequence &in, size_t start, size_t n_item){
-    seq= new ListType();
-    ListType::const_iterator it = in.seq->begin();
+    seq= new ItemVector();
+    ItemVector::const_iterator it = in.seq->begin();
 
     for(size_t i=0; i<start; ++i) {
       ++it;
@@ -38,7 +38,7 @@ namespace minerule {
   }
 
   void FSTreeSequence::stampa(){
-    ListType::const_iterator it;
+    ItemVector::const_iterator it;
     for(it=seq->begin(); it!=seq->end(); ++it) {
       MRLog() << *it << std::endl;
     }
@@ -59,7 +59,7 @@ namespace minerule {
   }
 
  std::string FSTreeSequence::toStdString(){
-    ListType::const_iterator it;
+    ItemVector::const_iterator it;
    std::string ris="";
     for (it=seq->begin();it!=seq->end();it++)
       ris = ris+" "+(*it).getSQLData();
@@ -74,7 +74,7 @@ namespace minerule {
 
   void FSTreeSequence::svuota(){
     delete seq;
-    seq=new ListType();
+    seq=new ItemVector();
   }
 
   bool FSTreeSequence::operator==(FSTreeSequence& s){
@@ -84,7 +84,7 @@ namespace minerule {
     if (seq->size()!=s.size())
       return false;
 
-    ListType* vec = s.getFSTreeSequence();
+    ItemVector* vec = s.getFSTreeSequence();
     for (size_t i=0; i < vec->size();i++)
       if ((*vec)[i]!=(*seq)[i]){
 	delete vec;
@@ -114,8 +114,8 @@ namespace minerule {
 				   seq->end(),
 				   in.seq->begin(),
 				   in.seq->end());
-/*    ListType* vec1 =seq;
-    ListType* vec2 = in.seq;
+/*    ItemVector* vec1 =seq;
+    ItemVector* vec2 = in.seq;
     if (vec1->size()<vec2->size())
       return true;
     if (vec1->size()>vec2->size())

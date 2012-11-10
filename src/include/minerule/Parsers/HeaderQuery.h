@@ -15,8 +15,8 @@ private:
     std::string name;
     MinMaxPair* cardB;
     MinMaxPair* cardH;
-    ParsedMinerule::ListType* attrB;
-    ParsedMinerule::ListType* attrH;
+    ParsedMinerule::AttrVector* attrB;
+    ParsedMinerule::AttrVector* attrH;
   
  public:     
     
@@ -26,8 +26,8 @@ private:
     HeaderQuery(std::string& na, 
 		MinMaxPair* cB, 
 		MinMaxPair* cH, 
-		ParsedMinerule::ListType* aB,
-		ParsedMinerule::ListType* aH) : 
+		ParsedMinerule::AttrVector* aB,
+		ParsedMinerule::AttrVector* aH) : 
                     name(na), 
                     cardB(cB), 
                     cardH(cH), 
@@ -39,7 +39,7 @@ private:
      */
     HeaderQuery(std::string& na,
                 MinMaxPair* cB,
-                ParsedMinerule::ListType* aB) :
+                ParsedMinerule::AttrVector* aB) :
       name(na),
       cardB(cB),
       cardH(NULL),
@@ -63,11 +63,11 @@ private:
       return cardH;
     }
     
-    ParsedMinerule::ListType* getAttrBody(){
+    ParsedMinerule::AttrVector* getAttrBody(){
       return attrB;
     }
     
-    ParsedMinerule::ListType* getAttrHead(){
+    ParsedMinerule::AttrVector* getAttrHead(){
       return attrH;
     }
     

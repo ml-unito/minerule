@@ -37,7 +37,7 @@ extern void yyerror(char*); */
 
 
 
-bool find_in_list(std::string s,minerule::ParsedMinerule::ListType l);
+bool find_in_list(std::string s,minerule::ParsedMinerule::AttrVector l);
 
 //int init_analisi_minerule(int ,char **);
 int init_analisi_minerule(const std::string&);
@@ -224,7 +224,7 @@ namespace minerule {
 
   /*
   void
-  ParsedMinerule::fillAttrList(ListType& dest, struct att_list* source) {
+  ParsedMinerule::fillAttrList(AttrVector& dest, struct att_list* source) {
     struct att_list* it=source;
     while( it!=NULL ) {
       dest.push_back(it->attrname);
@@ -300,7 +300,7 @@ namespace minerule {
     sort(ga.begin(), ga.end()); 
     sort(ca.begin(), ca.end());
     set_union(ba.begin(),ba.end(),ha.begin(),ha.end(),
-	      std::insert_iterator<ListType>(ra, ra.begin()));
+	      std::insert_iterator<AttrVector>(ra, ra.begin()));
 
 
   
@@ -356,9 +356,9 @@ namespace minerule {
 
 
       // S E Z I O N E   D I   O T T I M I Z Z A Z I O N E
-      ListType::iterator li;
-      ListType list_in;
-      ListType list_out;
+      AttrVector::iterator li;
+      AttrVector list_in;
+      AttrVector list_out;
      std::string query;
      std::string key_id;
       for (li=ga.begin();li!=ga.end(); li++) {
@@ -426,9 +426,9 @@ namespace minerule {
   } 
 }
 #endif
-  std::string ParsedMinerule::getAttrText(const ListType& l) const {
+  std::string ParsedMinerule::getAttrText(const AttrVector& l) const {
  std::string result;
-  ListType::const_iterator it = l.begin();
+  AttrVector::const_iterator it = l.begin();
   assert(it!=l.end());
 
   result = *it;
@@ -584,7 +584,7 @@ bool ParsedMinerule::hasIDConstraints() const throw(MineruleException) {
     for(;it_and!=NULL; it_and=it_and->next) {
       bool attr1 = SQLUtils::isAttribute(it_and->sp->val1);
       bool attr2 = SQLUtils::isAttribute(it_and->sp->val2);
-      const ListType* attrList;
+      const AttrVector* attrList;
      std::string theAttr;
 
       if(attr1) {
@@ -648,11 +648,11 @@ bool ParsedMinerule::hasCrossConditions(const list_OR_node* cond) const {
 }
  
 /*
-  void ParsedMinerule::substituteInList(ListType& l,
+  void ParsedMinerule::substituteInList(AttrVector& l,
   const std::string& attr,
   const SubstitutionInfo& info) const {
   // attr was == info.getAttribute() 
-  ListType::const_iterator it;
+  AttrVector::const_iterator it;
   for(it=l.begin(); it!=l.end(); it++) {
   if( *it == attr ) {
   *it = substitute;

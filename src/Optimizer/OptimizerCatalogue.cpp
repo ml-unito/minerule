@@ -285,7 +285,7 @@ namespace minerule {
     return idstr;
   }
 
- std::string OptimizerCatalogue::addMineruleAttributeList(const ParsedMinerule::ListType& l) 
+ std::string OptimizerCatalogue::addMineruleAttributeList(const ParsedMinerule::AttrVector& l) 
     throw (odbc::SQLException, MineruleException) {
     if( l.empty() )
       return "NULL";
@@ -297,7 +297,7 @@ namespace minerule {
    std::string query =
       "INSERT INTO mr_att_lists (att_list_id, col_name) VALUES ";
     
-    ParsedMinerule::ListType::const_iterator it;
+    ParsedMinerule::AttrVector::const_iterator it;
     for(it=l.begin(); it!=l.end(); it++) {
       if(it!=l.begin()) query+=",";
       
@@ -476,7 +476,7 @@ namespace minerule {
 
   bool
   OptimizerCatalogue::isIDAttribute(const std::string& table,
-		const ParsedMinerule::ListType& itemCols,
+		const ParsedMinerule::AttrVector& itemCols,
 		const std::string& attribute) const throw(MineruleException)  {
     std::set<std::string> itemColsSet;
     copy( itemCols.begin(),

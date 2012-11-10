@@ -13,12 +13,12 @@ namespace minerule {
    */
   class FSTreeSequence{
   public:
-    typedef std::list<ItemType> ListType;
+    typedef std::list<ItemType> ItemVector;
   private:
       /**
        * The vector that represent a FSTreeSequence
        */
-      ListType* seq;
+      ItemVector* seq;
   public:
     /**
      * this struct define the order between two FSTreeSequence
@@ -33,7 +33,7 @@ namespace minerule {
      * the constructor of an object of type FSTreeSequence
      */
     FSTreeSequence() {
-      seq=new ListType();
+      seq=new ItemVector();
     };
 
     /**
@@ -41,7 +41,7 @@ namespace minerule {
      *      @param in a FSTreeSequence object
      */
     FSTreeSequence(const FSTreeSequence &in){
-      seq=new ListType();
+      seq=new ItemVector();
       *seq = *in.seq;
     };
 		
@@ -63,7 +63,7 @@ namespace minerule {
      * this method return a pointer to the vector that contains the items as string
      * @return a pointer of a vector ofstd::string that contains items
      */
-    ListType* getFSTreeSequence();
+    ItemVector* getFSTreeSequence();
 
     /**
      *  with this method you can add an item at the bottom of a FSTreeSequence

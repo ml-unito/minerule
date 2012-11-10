@@ -14,7 +14,7 @@ void
 IDIncrementalAlgorithm::getItemInfos( std::string& itemDescr, 
 				      HeadBodySourceRowDescription& hbsr ) const {
   assert(attrList!=NULL);
-  ParsedMinerule::ListType::const_iterator it;
+  ParsedMinerule::AttrVector::const_iterator it;
   int n;
   for(it=attrList->begin(), n=1; it!=attrList->end(); it++,n++) {
     if(itemDescr!="")

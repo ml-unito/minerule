@@ -70,13 +70,13 @@ namespace minerule {
 class ParsedMinerule
 {
  public:
-  typedef std::vector<std::string> ListType;
+  typedef std::vector<std::string> AttrVector;
 
 
  private:
-  void fillAttrList(ListType& dest, struct att_list* source);
+  void fillAttrList(AttrVector& dest, struct att_list* source);
 
- std::string getAttrText(const ListType& l) const;
+ std::string getAttrText(const AttrVector& l) const;
  std::string getSimplePredText(const simple_pred* pred) const;
  std::string getAndListText(const list_AND_node* cond)const;
  std::string getCondText(const list_OR_node* cond)const;
@@ -84,13 +84,13 @@ class ParsedMinerule
 
  public:
 
-  ListType  ga;  // group attr list 
-  ListType  oa;  // ordering attr list (useful for mining sequences).
-  ListType  ca;  // cluster attr list
-  ListType  ra;  // rule attr list
+  AttrVector  ga;  // group attr list 
+  AttrVector  oa;  // ordering attr list (useful for mining sequences).
+  AttrVector  ca;  // cluster attr list
+  AttrVector  ra;  // rule attr list
   
-  ListType  ba;  // body attr list
-  ListType  ha;  // head attr list
+  AttrVector  ba;  // body attr list
+  AttrVector  ha;  // head attr list
 
   /* le seguenti liste dovrebbero essere sostituite
      da oggetti c++ (come quelle sopra per intenderci)*/
@@ -98,7 +98,7 @@ class ParsedMinerule
   list_OR_node* gc;  // group condition
   list_OR_node* cc;  // cluster condition
   
-  ListType  c_aggr_list; // cluster aggregate list
+  AttrVector  c_aggr_list; // cluster aggregate list
 
   float     sup;
   float     conf;

@@ -143,11 +143,11 @@ namespace minerule {
   }
 
 
-  size_t ConstrTree::buildAttrStr(const ParsedMinerule::ListType& attr,
+  size_t ConstrTree::buildAttrStr(const ParsedMinerule::AttrVector& attr,
 							size_t startIndex,
 							std::string& attrStr, 
 							std::vector<int>& des) const {
-    ParsedMinerule::ListType::const_iterator it = attr.begin();
+    ParsedMinerule::AttrVector::const_iterator it = attr.begin();
     for( ; it!=attr.end(); it++ ) {
       if(it!=attr.begin()) {
 	attrStr+=",";

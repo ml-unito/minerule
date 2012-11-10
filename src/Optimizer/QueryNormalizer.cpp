@@ -603,7 +603,7 @@ std::string new_aiVal = prefix+aiVal;
    * belongs to S. The normalized l is defined as (l-SHead) Union
    * Stail
    */
-  void QueryNormalizer::substituteInAttrList( ParsedMinerule::ListType& l,
+  void QueryNormalizer::substituteInAttrList( ParsedMinerule::AttrVector& l,
 					      const OptimizerCatalogue::CatalogueEntry& catEntry
 					      ) const {
     // each element of catEntry is a relation A->B, we call A the head and B the tail
@@ -656,7 +656,7 @@ std::string new_aiVal = prefix+aiVal;
     l.clear();
     set_union( tmp.begin(), tmp.end(), 
 	       tails.begin(), tails.end(),
-	       std::insert_iterator< ParsedMinerule::ListType >( l, l.begin() ) );
+	       std::insert_iterator< ParsedMinerule::AttrVector >( l, l.begin() ) );
     
 #undef HEAD
 #undef TAIL

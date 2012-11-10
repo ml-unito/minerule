@@ -23,8 +23,13 @@
 namespace minerule {
 
 	class Connection  {
+		typedef enum {
+			RulesTable,
+			HeadsTable,
+			BodiesTable
+		} TableKind;
 		
-	class DBInserter; // forward declaration
+		class DBInserter; // forward declaration
 	private:
 		std::string outTableName;
 		MinMaxPair bodyCard;
@@ -38,7 +43,7 @@ namespace minerule {
 		public:
 			DBInserter(Connection& cc) : connection(cc) {};
 			virtual void insert(const HeadBodyType&, const HeadBodyType&, double support,  double confidence, bool saveBody = true) =0;
-			virtual void insertHeadBodyElems(const HeadBodyType& elems, size_t counter) =0;
+			virtual void insertHeadBodyElems(TableKind,const HeadBodyType& elems, size_t counter) =0;
 			virtual ~DBInserter() {};
 			virtual void init() {};
 			virtual void finalize() {};
@@ -48,7 +53,7 @@ namespace minerule {
 		public:
 			DirectDBInserter(Connection& cc) : DBInserter(cc) {};
 			virtual void insert(const HeadBodyType&, const HeadBodyType&, double support, double confidence,	bool saveBody = true);
-			virtual void insertHeadBodyElems(const HeadBodyType& elems, size_t counter);
+			virtual void insertHeadBodyElems(TableKind, const HeadBodyType& elems, size_t counter);
 			virtual ~DirectDBInserter() {};
 		};
 
@@ -59,7 +64,7 @@ namespace minerule {
 		public:
 			CachedDBInserter(Connection& cc) : DBInserter(cc) {};
 			virtual void insert(const HeadBodyType&, const HeadBodyType&, double support, double confidence,	bool saveBody = true);
-			virtual void insertHeadBodyElems(const HeadBodyType& elems, size_t counter);
+			virtual void insertHeadBodyElems(TableKind, const HeadBodyType& elems, size_t counter);
 			virtual ~CachedDBInserter() {};
 			virtual void init();
 			virtual void finalize();
@@ -108,26 +113,8 @@ namespace minerule {
 		}
 
 		void finalize() { dbInserter->finalize(); }
-
-		// name of the table where rules will be written
-		const std::string& getOutTableName() const {
-			return outTableName;
-		}
-
-		// when rules are written on the DB, the Connection uses the 
-		// following format: idBody, idHead, supp, conf, cardBody, cardHead
-		// idBody and idHead are foreign (non unique) keys of the table whose
-		// names can be retrieved using getBodiesTableName and getHeadsTableName.
 		
-		std::string getHeadsTableName() const {
-			return outTableName + "_head_elems";
-		}
-
-		std::string getBodiesTableName() const {
-			return outTableName + "_body_elems";
-		}
-
-		// void closeQuery();
+		std::string getTableName(TableKind kind) const;
 	};
 } // end namespace
 

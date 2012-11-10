@@ -12,6 +12,24 @@ Connection::useODBCConnection(odbc::Connection* newConnection) {
   connection = newConnection;
 }
 
+string Connection::getTableName(TableKind kind) const {
+	switch(kind) {
+		case RulesTable:
+			return outTableName;	
+			break;
+		case HeadsTable:
+			return outTableName + "_head_elems";
+			break;
+		case BodiesTable:
+			return outTableName + "_body_elems";
+			break;
+		default:
+			throw MineruleException(MR_ERROR_INTERNAL, "Unknown TableKind -- this is a bug, please report it!");
+	}
+}
+
+
+
 bool Connection::tableExists(const char * tableName)
 {
 	try {
@@ -27,9 +45,9 @@ bool Connection::tableExists(const char * tableName)
 }
 
 void Connection::deleteDestTable() {
-  deleteTable(getOutTableName().c_str());
-  deleteTable(getHeadsTableName().c_str());
-  deleteTable(getBodiesTableName().c_str());
+  deleteTable(getTableName(RulesTable).c_str());
+  deleteTable(getTableName(HeadsTable).c_str());
+  deleteTable(getTableName(BodiesTable).c_str());
 }
 
 void Connection::deleteTable(const char * tableName)
@@ -55,19 +73,19 @@ void Connection::createResultTables(const SourceRowDescriptor& srd)
     std::string create, create_index;
 
 	// Creating the rules table
-    create=string("CREATE TABLE ")+getOutTableName()+" (bodyId int, headId int, supp float, con float, cardBody int, cardHead int );";	
+    create=string("CREATE TABLE ")+getTableName(RulesTable)+" (bodyId int, headId int, supp float, con float, cardBody int, cardHead int );";	
     statement->execute(create);	
 	
 	// Creating the body elements table
-    create=string("CREATE TABLE ")+ getBodiesTableName() + " (id int, elem varchar(255));";
-	create_index = " CREATE INDEX "+getBodiesTableName()+"_index ON " + getBodiesTableName() + " (id);";
+    create=string("CREATE TABLE ")+ getTableName(BodiesTable) + " (id int, elem varchar(255));";
+	create_index = " CREATE INDEX "+getTableName(BodiesTable)+"_index ON " + getTableName(BodiesTable) + " (id);";
 
     statement->execute(create);
 	statement->execute(create_index);
 
 	// Creating the head elements table
-    create=string("CREATE TABLE ")+ getHeadsTableName() + " (id int, elem varchar(255));";
-	create_index = " CREATE INDEX "+getHeadsTableName()+"_index ON " + getHeadsTableName() + " (id);";
+    create=string("CREATE TABLE ")+ getTableName(HeadsTable) + " (id int, elem varchar(255));";
+	create_index = " CREATE INDEX "+getTableName(HeadsTable)+"_index ON " + getTableName(HeadsTable) + " (id);";
 
     statement->execute(create);
 	statement->execute(create_index);
@@ -76,11 +94,11 @@ void Connection::createResultTables(const SourceRowDescriptor& srd)
  }
 
 
-void Connection::DirectDBInserter::insertHeadBodyElems(const HeadBodyType& elems, size_t counter) {
+void Connection::DirectDBInserter::insertHeadBodyElems(TableKind kind, const HeadBodyType& elems, size_t counter) {
 //  assert( !elems.empty() );
 
   std::string query = 
-    "INSERT INTO " + connection.getElemsOutTableName() + " VALUES (?,?)";
+    "INSERT INTO " + connection.getTableName(kind) + " VALUES (?,?)";
   odbc::PreparedStatement* state = connection.connection->prepareStatement(query);
 
 
@@ -97,7 +115,7 @@ void Connection::DirectDBInserter::insertHeadBodyElems(const HeadBodyType& elems
 }
 
 
-void Connection::CachedDBInserter::insertHeadBodyElems(const HeadBodyType& elems, size_t counter) {
+void Connection::CachedDBInserter::insertHeadBodyElems(TableKind kind, const HeadBodyType& elems, size_t counter) {
 //  assert( !elems.empty() );
 
   HeadBodyType::const_iterator it = elems.begin();
@@ -118,6 +136,8 @@ void Connection::CachedDBInserter::init() {
 }
 
 void Connection::CachedDBInserter::finalize() {
+	throw MineruleException(MR_ERROR_INTERNAL, "cached inserts not supported yet");
+	
   outR.close();
   outHB.close();
   std::string loadstr1 = filename + ".r";
@@ -127,11 +147,11 @@ void Connection::CachedDBInserter::finalize() {
   loadstr1 = "LOAD DATA INFILE '";
   loadstr1 += filename;
   loadstr1 += ".r' INTO TABLE ";
-  loadstr1 += connection.getOutTableName();
+  loadstr1 += connection.getTableName(RulesTable);
   loadstr2 = "LOAD DATA INFILE '";
   loadstr2 += filename;
   loadstr2 += ".hb' INTO TABLE ";
-  loadstr2 += connection.getElemsOutTableName();
+  loadstr2 += connection.getTableName(BodiesTable);
   odbc::Statement* state = connection.getODBCConnection()->createStatement();
   state->execute(loadstr1.c_str());
   state->execute(loadstr2.c_str());
@@ -158,11 +178,11 @@ void Connection::CachedDBInserter::insert(const HeadBodyType& body,
   static size_t bodyId = counter;
   if (saveBody) {
 	bodyId = counter++;
-	insertHeadBodyElems(body, bodyId);
+	insertHeadBodyElems(BodiesTable, body, bodyId);
   }
   
   size_t headId = counter++;
-  insertHeadBodyElems(head, headId);
+  insertHeadBodyElems(HeadsTable, head, headId);
 
   outR << bodyId << "\t" << headId << "\t" << support << "\t" << confidence << "\t" << body.size() << "\t" << head.size() << std::endl;
 }
@@ -184,14 +204,14 @@ void Connection::DirectDBInserter::insert(const HeadBodyType& body,
   static size_t bodyId = counter;
   if (saveBody) {
 	bodyId = counter++;
-	insertHeadBodyElems(body, bodyId);
+	insertHeadBodyElems(BodiesTable, body, bodyId);
   }
   
   size_t headId = counter++;
-  insertHeadBodyElems(head, headId);
+  insertHeadBodyElems(HeadsTable, head, headId);
 
   stringstream query;
-  query << "INSERT INTO " << connection.getOutTableName() 
+  query << "INSERT INTO " << connection.getTableName(RulesTable) 
 		<< " VALUES (" << bodyId << "," << headId << "," 
 		<< support << "," << confidence << "," << body.size() << "," << head.size() << ")" ;
 

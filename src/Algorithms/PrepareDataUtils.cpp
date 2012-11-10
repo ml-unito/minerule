@@ -8,12 +8,12 @@
 namespace minerule {
 
 string
-  PrepareDataUtils::buildAttrListDescription( const ParsedMinerule::ListType& attrs,
+  PrepareDataUtils::buildAttrListDescription( const ParsedMinerule::AttrVector& attrs,
 					      const std::string& alias, 
 					      bool addColAlias)  {
 #define ADDCOLALIAS (addColAlias?(" AS " + alias+*it):"")
 
-    ParsedMinerule::ListType::const_iterator it;
+    ParsedMinerule::AttrVector::const_iterator it;
    std::string result;
     it=attrs.begin();
 
@@ -39,12 +39,12 @@ string
   }
 
 string
-  PrepareDataUtils::buildAttrListAlias( const ParsedMinerule::ListType& attrs,
+  PrepareDataUtils::buildAttrListAlias( const ParsedMinerule::AttrVector& attrs,
 					      const std::string& alias, 
 					      bool addColAlias)  {
 #define ADDCOLALIAS (addColAlias?(alias+*it):"")
 
-    ParsedMinerule::ListType::const_iterator it;
+    ParsedMinerule::AttrVector::const_iterator it;
    std::string result;
     it=attrs.begin();
 
@@ -73,7 +73,7 @@ string
   PrepareDataUtils::buildAttrListEquiJoin( const std::string& alias1,
 					    const std::string& alias2) const {
   
-    ParsedMinerule::ListType::const_iterator it;
+    ParsedMinerule::AttrVector::const_iterator it;
    std::string result;
     it=mr.getParsedMinerule().ga.begin();
 

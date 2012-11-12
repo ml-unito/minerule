@@ -97,6 +97,8 @@ namespace minerule {
  
 
   void MRLogger::pop() {
+    if(logStack.empty()) return;
+	
     if(curLogLevel>logLevel) {
       curLogLevel--;
       return;
@@ -104,9 +106,8 @@ namespace minerule {
       curLogLevel--;
     }
     assert(os!=NULL);
-    assert(!logStack.empty());
     LogInfo curInfo("");
-   std::string timeMemInfo=evalTimeMemInfo(curInfo);
+    std::string timeMemInfo=evalTimeMemInfo(curInfo);
 
     logStack.pop_back();
     updateIndentString();
@@ -115,7 +116,7 @@ namespace minerule {
     if(!logStack.empty())
       *os<<indentInset<<END_SEPARATOR<<timeMemInfo<<std::endl;
     else
-      *os<<END_SEPARATOR<<timeMemInfo<<std::endl;
+	  *os<<END_SEPARATOR<<timeMemInfo<<std::endl;
 
     indent();
     *os<<std::endl;

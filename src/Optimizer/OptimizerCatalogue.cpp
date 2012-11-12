@@ -374,24 +374,24 @@ namespace minerule {
   }
 
   void 
-  OptimizerCatalogue::getMRQueryInfos(
-			    std::vector<CatalogueInfo>& catInfoVec) 
+  OptimizerCatalogue::getMRQueryInfos(std::vector<CatalogueInfo>& catInfoVec, bool includeResultSize) 
     throw(odbc::SQLException, MineruleException) {
     odbc::Connection* connection =
       MineruleOptions::getSharedOptions().getOdbc_db().getODBCConnection();
 
     std::auto_ptr<odbc::Statement> statement(connection->createStatement());
-    std::auto_ptr<odbc::ResultSet> rs(
-	       statement->executeQuery("SELECT query_name,query_text, "
-				       "  tab_results_name, source_tab_name "
-				       "FROM mr_query"));
+    std::auto_ptr<odbc::ResultSet> rs(statement->executeQuery(
+		"SELECT query_name,query_text, "
+		"  tab_results_name, source_tab_name "
+		"FROM mr_query"));
 
     while( rs->next() ) {
       CatalogueInfo info;
       info.qryName = rs->getString(1);
       info.qryText = rs->getString(2);
       info.resName = rs->getString(3);
-      info.updateQrySize();
+      if(includeResultSize)
+		  info.updateQrySize();
 
       catInfoVec.push_back(info);
     }
@@ -399,8 +399,7 @@ namespace minerule {
 
 
   void 
-  OptimizerCatalogue::getMRQueryInfo(const std::string& qryName,
-				     CatalogueInfo& info) 
+  OptimizerCatalogue::getMRQueryInfo(const std::string& qryName, CatalogueInfo& info, bool includeResultSize) 
     throw(odbc::SQLException, MineruleException) {
     odbc::Connection* connection =
       MineruleOptions::getSharedOptions().getOdbc_db().getODBCConnection();
@@ -416,7 +415,8 @@ namespace minerule {
       info.qryName = rs->getString(1);
       info.qryText = rs->getString(2);
       info.resName = rs->getString(3);
-      info.updateQrySize();
+      if(includeResultSize) 
+		  info.updateQrySize();
     } else {
       throw MineruleException(MR_ERROR_CATALOGUE_ERROR,
 			      "Cannot find the query named:" + qryName +" "

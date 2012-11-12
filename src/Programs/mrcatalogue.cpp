@@ -301,7 +301,7 @@ int checkQueryName(const ProgramOptions& options) {
 
   try {
     CatalogueInfo info;
-    OptimizerCatalogue::getMRQueryInfo(tablename,info);
+    OptimizerCatalogue::getMRQueryInfo(tablename,info, options.getListFormat().size);
     printQueryInfo(std::cout, info, options);
   } catch (MineruleException& mr) {
     std::cout << "The query you specified is NOT present in the catalogue." << std::endl;
@@ -315,7 +315,7 @@ int checkQueryName(const ProgramOptions& options) {
 
 void printMRQueryList(const ProgramOptions& options) {
   std::vector<CatalogueInfo> mrqlist;
-  OptimizerCatalogue::getMRQueryInfos(mrqlist);
+  OptimizerCatalogue::getMRQueryInfos(mrqlist, options.getListFormat().size );
   std::vector<CatalogueInfo>::const_iterator it;
   for(it=mrqlist.begin(); it!=mrqlist.end(); it++) {
     printQueryInfo(std::cout, *it, options);

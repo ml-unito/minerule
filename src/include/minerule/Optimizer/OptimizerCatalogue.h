@@ -222,14 +222,14 @@ namespace minerule {
      * It behaves as getMRQueryNames, but provide more information to the
      * caller.
      */
-    static void getMRQueryInfos(std::vector<CatalogueInfo>& catInfoVec)
+    static void getMRQueryInfos(std::vector<CatalogueInfo>& catInfoVec, bool includeResultSize=true)
       throw(odbc::SQLException, MineruleException);
 
     /**
      * As getMRQueryInfos, but the user specify a single qryName to be searched.
      */
     static void getMRQueryInfo(const std::string& qryName, 
-			       CatalogueInfo& catInfo)
+			       CatalogueInfo& catInfo, bool includeResultSize=true)
       throw(odbc::SQLException, MineruleException);
 
     /**

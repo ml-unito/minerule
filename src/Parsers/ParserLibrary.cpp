@@ -15,7 +15,7 @@ namespace minerule {
     extern void init_mrparser();
     ParsedMinerule * outputObj;
   
-void pars_minerule(std::string minerule_text, ParsedMinerule& output) {
+void parseMinerule(std::string minerule_text, ParsedMinerule& output) {
     outputObj = &output;
 
     const FILE* logfile = 
@@ -25,7 +25,7 @@ void pars_minerule(std::string minerule_text, ParsedMinerule& output) {
     YY_BUFFER_STATE buf = mr_scan_string(minerule_text.c_str());
 
     init_mrparser();
-    std::cout<<minerule_text<<std::endl;
+
     try {
        mrparse();
     } catch (MineruleException& m) {

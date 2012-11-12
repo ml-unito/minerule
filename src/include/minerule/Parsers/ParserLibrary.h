@@ -5,7 +5,7 @@
 
 namespace minerule {
 
-void pars_minerule(std::string minerule_text, ParsedMinerule& output);
+void parseMinerule(std::string minerule_text, ParsedMinerule& output);
 ParsedMinerule& getParserOutputObj();
 
 }

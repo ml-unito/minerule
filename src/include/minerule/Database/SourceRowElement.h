@@ -53,6 +53,9 @@ namespace minerule {
     virtual bool empty() const =0;
 
     virtual std::string asString() const=0;
+	
+	virtual void setPreparedStatementParameters(odbc::PreparedStatement* state, size_t start_index) const = 0;
+	
 
     // This function should return astd::string having the sql
     // representation of the data in the object (it is used
@@ -104,6 +107,11 @@ namespace minerule {
     virtual SourceRowElement* copy() const {
       return new SourceRowEmptyElement();
     }
+	
+	virtual void setPreparedStatementParameters(odbc::PreparedStatement* state, size_t start_index) const {
+		throw MineruleException(MR_ERROR_INTERNAL, "setPreparedStatementParameters callled on an empty element. This is a bug! Please report it!");
+	}
+	
   
     // Returns true if s1<s2
     virtual bool operator()(const SourceRowElement& s1, 

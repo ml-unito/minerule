@@ -54,6 +54,10 @@ namespace minerule {
     virtual bool empty() const {
       return attributes.empty();
     }
+	
+	virtual void setPreparedStatementParameters(odbc::PreparedStatement* state, size_t start_index) const;
+	
+	
     
     virtual std::string 
       getSQLData() const;

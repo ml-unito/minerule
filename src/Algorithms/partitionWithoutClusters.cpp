@@ -301,7 +301,7 @@ void partitionWithoutClusters( const minerule::AlgorithmsOptions& options  )
      toContinue=kItem.gen_final_count(prtList,nSup,levelIn,pHashMap);
  }
 
- connection.deleteDestTable();
+ connection.deleteDestTables();
 
  throw std::runtime_error("Algorithm to be updated to use new createResiltTables API");
  // connection.createResultTables(SourceRowDescriptor(connection.getODBCConnection(), minerule.getParsedMinerule()));

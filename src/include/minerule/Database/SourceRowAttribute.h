@@ -3,6 +3,7 @@
 
 #include <string.h>
 #include <odbc++/resultset.h>
+#include <odbc++/preparedstatement.h>
 #include <odbc++/resultsetmetadata.h>
 #include <string>
 #include <iostream>
@@ -154,6 +155,11 @@ namespace minerule {
       SourceRowAttribute* newRow= new GenericSourceRowAttribute(*this);
       return newRow;
     }
+	
+	virtual void setPreparedStatementParameters(odbc::PreparedStatement* state, size_t start_index) const {
+		state->setString(start_index, value);
+	}
+	
 
     virtual odbc::Types::SQLType 
       getType() const;
@@ -227,7 +233,7 @@ namespace minerule {
     virtual ~MemDebugGenericSourceRowAttribute() {
       decCounter();
     }
-
+	
     
     virtual SourceRowElement* copy() const {
       SourceRowAttribute* newRow= new MemDebugGenericSourceRowAttribute(*this);
@@ -274,6 +280,11 @@ namespace minerule {
       SourceRowAttribute* newRow= new NumericSourceRowAttribute(*this);
       return newRow;
     }
+	
+	virtual void setPreparedStatementParameters(odbc::PreparedStatement* state, size_t start_index) const {
+		state->setLong(start_index, value);
+	}
+	
 
     virtual odbc::Types::SQLType 
       getType() const {

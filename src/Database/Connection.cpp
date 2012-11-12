@@ -44,7 +44,7 @@ bool Connection::tableExists(const char * tableName)
 	return true;
 }
 
-void Connection::deleteDestTable() {
+void Connection::deleteDestTables() {
   deleteTable(getTableName(RulesTable).c_str());
   deleteTable(getTableName(HeadsTable).c_str());
   deleteTable(getTableName(BodiesTable).c_str());
@@ -53,15 +53,8 @@ void Connection::deleteDestTable() {
 void Connection::deleteTable(const char * tableName)
 {
    odbc::Statement* stmt=connection->createStatement();
-   if (tableExists(tableName))
-   {
- 	std::string Qry;
-	Qry = "DROP TABLE ";
-	Qry += tableName;
-	try {
-	   stmt->execute(Qry);
-	} catch (odbc::SQLException& e) { std::cerr << "Wrong statement " << Qry << std::endl; }
-   }
+   MRLog() << "Dropping table " << tableName << std::endl;
+   stmt->execute(std::string("DROP TABLE IF EXISTS ")+tableName);
    delete stmt;
 }
 
@@ -90,28 +83,36 @@ void Connection::createResultTables(const SourceRowDescriptor& srd)
     statement->execute(create);
 	statement->execute(create_index);
 
+	std::string headInserterQuery = "INSERT INTO " + getTableName(HeadsTable) + " VALUES (?,"+ srd.getHead().questionMarks() +")";
+	dbInserter->setHeadInserter(connection->prepareStatement(headInserterQuery));
+
+	std::string bodyInserterQuery = "INSERT INTO " + getTableName(BodiesTable) + " VALUES (?," + srd.getBody().questionMarks() + ")";
+	dbInserter->setBodyInserter(connection->prepareStatement(bodyInserterQuery));
+
     delete statement;
  }
 
 
 void Connection::DirectDBInserter::insertHeadBodyElems(TableKind kind, const HeadBodyType& elems, size_t counter) {
-//  assert( !elems.empty() );
-
-  std::string query = 
-    "INSERT INTO " + connection.getTableName(kind) + " VALUES (?,?)";
-  odbc::PreparedStatement* state = connection.connection->prepareStatement(query);
-
+  assert( !elems.empty() );
+  odbc::PreparedStatement* state;
+  switch(kind) {
+	  case BodiesTable:
+		  state = bodyInserter;
+		  break;
+	  case HeadsTable:
+		  state = headInserter;
+		  break;
+	  default:
+		  throw MineruleException(MR_ERROR_INTERNAL, "bad call to insertHeadBodyElems. This is a bug! Please report it!");
+  }
 
   HeadBodyType::const_iterator it = elems.begin();
   for(; it!=elems.end() ; it++ ) {
-    std::string str;
-    SourceRowElement::serializeElementToString(it->getElement(), str);
     state->setLong(1,counter);
-    state->setString(2,str);
+	it->setPreparedStatementParameters(state,2);
     state->execute();
   }
-
-  delete state;
 }
 
 

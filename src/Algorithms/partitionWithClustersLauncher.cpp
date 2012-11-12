@@ -379,7 +379,7 @@ std::string qry = "SELECT * FROM "+options.getOutTableName()+"_tmpSource";
   //  kItem.printToDesign("final",1);
   //  std::cout<<"FINE GEN_FINAL_COUNT"<<std::endl;
   //kItem.printToDesign("Body",numPartition+3);
-  connection.deleteDestTable();
+  connection.deleteDestTables();
 
   throw std::runtime_error("Algorithm to be updated to use new createResiltTables API");
   // connection.createResultTables(SourceRowDescriptor(connection.getODBCConnection(), minerule.getParsedMinerule()));

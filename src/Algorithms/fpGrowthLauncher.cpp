@@ -137,7 +137,7 @@ void newFPGrowth( const minerule::AlgorithmsOptions& options ) {
   nSup=ceil(totGroups*(support/100));
   //  cout<<"nSup: "<<nSup<<std::endl;
 
-  connection.deleteDestTable();
+  connection.deleteDestTables();
   
   throw std::runtime_error("Algorithm to be updated to use new createResiltTables API");
   // connection.createResultTables(SourceRowDescriptor(connection.getODBCConnection(), minerule.getParsedMinerule()));

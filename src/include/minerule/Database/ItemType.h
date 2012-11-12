@@ -45,6 +45,10 @@ namespace minerule {
 			el = srel.copy();
 		}
 		
+		virtual void setPreparedStatementParameters(odbc::PreparedStatement* state, size_t start_index) const {
+			el->setPreparedStatementParameters(state, start_index);
+		}
+		
 		std::string getFullElementType() const { return el->getFullElementType(); }
     
 

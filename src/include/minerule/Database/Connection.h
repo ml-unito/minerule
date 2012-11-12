@@ -40,11 +40,18 @@ namespace minerule {
 		class DBInserter {
 		protected:
 			Connection& connection;
+			odbc::PreparedStatement* headInserter; 
+			odbc::PreparedStatement* bodyInserter; 
 		public:
-			DBInserter(Connection& cc) : connection(cc) {};
+			DBInserter(Connection& cc) : connection(cc), headInserter(NULL), bodyInserter(NULL) {};
+			virtual ~DBInserter() { 
+				if(headInserter) delete headInserter;
+				if(bodyInserter) delete bodyInserter;
+			}
+			virtual void setHeadInserter(odbc::PreparedStatement* inserter) { headInserter = inserter; }
+			virtual void setBodyInserter(odbc::PreparedStatement* inserter) { bodyInserter = inserter; }
 			virtual void insert(const HeadBodyType&, const HeadBodyType&, double support,  double confidence, bool saveBody = true) =0;
 			virtual void insertHeadBodyElems(TableKind,const HeadBodyType& elems, size_t counter) =0;
-			virtual ~DBInserter() {};
 			virtual void init() {};
 			virtual void finalize() {};
 		};
@@ -78,7 +85,7 @@ namespace minerule {
 			else dbInserter = new DirectDBInserter(*this);
 		}
 		// Distruttore
-		~Connection() { delete dbInserter; }
+		~Connection() {	delete dbInserter; }
 
 		void setBodyCardinalities( const MinMaxPair& rhs ) { bodyCard=rhs; }
 		void setHeadCardinalities( const MinMaxPair& rhs ) { headCard=rhs; }
@@ -88,7 +95,7 @@ namespace minerule {
 
 		bool tableExists(const char * tableName);
 		void deleteTable(const char * tableName);
-		void deleteDestTable();
+		void deleteDestTables();
 
 		void createResultTables(const SourceRowDescriptor&);
 		void insert(const char * what);

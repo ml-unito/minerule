@@ -97,6 +97,14 @@ namespace minerule {
   }
   
 
+
+  void SourceRowAttributeCollection::setPreparedStatementParameters(odbc::PreparedStatement* state, size_t start_index) const {
+	  size_t count = start_index;
+	  for( CollectionType::const_iterator it = attributes.begin(); it!=attributes.end(); ++it ) {
+		  (*it)->setPreparedStatementParameters(state, count++);
+	  }
+  }
+
 	
 
   std::string 

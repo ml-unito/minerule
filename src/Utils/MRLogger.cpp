@@ -59,7 +59,7 @@ namespace minerule {
 
   MRLogger::~MRLogger(void) {
     while(!logStack.empty()) {
-      pop();
+      logStack.pop_back();
     }
   }
 

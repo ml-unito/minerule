@@ -293,7 +293,7 @@ void partitionWithoutClusters( const minerule::AlgorithmsOptions& options  )
  }
  MRLog(logId) << "Done! (Pruning)" << endl;
 
- connection.deleteDestTable();
+ connection.deleteDestTables();
  connection.createResultTables();
  
  MRLog(logId) << "Extracting rules..." << endl;

@@ -16,16 +16,18 @@ using namespace minerule;
 void
 SourceRowAttrCollectionDescriptor::
 setColumnNames(odbc::ResultSet* rs, const std::vector<int>& collectionElems) {
+  odbc::ResultSetMetaData* rsmd = rs->getMetaData();
+  
   std::vector<int>::const_iterator it = collectionElems.begin();
   columnNames = "";
 
   if(it!=collectionElems.end()) {
-    columnNames += getCodedColumnName(*it);
+    columnNames += rsmd->getColumnName(*it);
     it++;
   }
 
   for(; it!=collectionElems.end(); it++ ) {
-    columnNames += "," + getCodedColumnName(*it);
+    columnNames += "," + rsmd->getColumnName(*it);
   }
 }
 
@@ -50,9 +52,21 @@ SourceRowAttrCollectionDescriptor::dataDefinitionForElem(odbc::ResultSet* rs, in
     strcpy(buf,"");
   
   return 
-    getCodedColumnName(elem) + " " +
+    rsmd->getColumnName(elem) + " " +
     std::string(rsmd->getColumnTypeName(elem)) + " " + 
     std::string(buf);
+}
+
+std::string SourceRowAttrCollectionDescriptor::questionMarks() const {
+	std::string result;
+	for( size_t i=0; i<columnsCount; ++i) {
+		if( i!=0 ) 
+			result += ",?";
+		else
+			result += "?";
+	}
+	
+	return result;
 }
 
 void
@@ -108,7 +122,7 @@ SourceRowDescriptor::SourceRowDescriptor(odbc::ResultSet* rs, const HeadBodySour
  class AttributesUtil {	 
 	 int curr_attr_pos;
  public:
-	 AttributesUtil() : curr_attr_pos(0) {}
+	 AttributesUtil() : curr_attr_pos(1) {}
 	 
 	 std::vector<int> generatePositions(const ParsedMinerule::AttrVector& attrs) {
 		 std::vector<int> result;

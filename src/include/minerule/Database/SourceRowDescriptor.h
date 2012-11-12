@@ -32,6 +32,7 @@ namespace minerule {
 		const std::string& getSQLDataDefinition() const;
 		const std::string& getSQLColumnNames() const;
 		unsigned int       getColumnsCount() const { return columnsCount; }
+		std::string questionMarks() const;
 	};
 
 	class SourceRowDescriptor {

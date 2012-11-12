@@ -349,28 +349,11 @@ namespace minerule {
     int howManyRows = 0;
     int howManyGroups = 0;
 
-	// MRDebug() << "rsb(2)a" << resultBody->getString(2) << std::endl;
-	// MRDebug() << "rsb(2)a*" << resultBody->getString(2) << std::endl;
-	// MRDebug() << "rsh(2)a" << resultHead->getString(2) << std::endl;
-
-	// MRDebug() << "rsb(2)a'" << resultBody->getString(2) << std::endl;
-	// MRDebug() << "rsh(2)a'" << resultHead->getString(2) << std::endl;
-
-    while (!resultBody->isAfterLast()) {
-
-  	// MRDebug() << "rsb(2)b" << resultBody->getString(2) << std::endl;
-  	// MRDebug() << "rsh(2)b" << resultHead->getString(2) << std::endl;
-		
+    while (!resultBody->isAfterLast()) {		
       HeadBodySourceRow hbsr(resultBody, rowDes);
       ItemType gid = hbsr.getGroupBody();
       
-  	// MRDebug() << "rsb(2)c" << resultBody->getString(2) << std::endl;
-  	// MRDebug() << "rsh(2)c" << resultHead->getString(2) << std::endl;
-
 	  Transaction t1(rowDes), t2(rowDes);
-
-	// MRDebug() << "rsb(2)d" << resultBody->getString(2) << std::endl;
-	// MRDebug() << "rsh(2)d" << resultHead->getString(2) << std::endl;
       t1.loadBody(gid,resultBody);
 
       bool found2 = t2.findGid(gid,resultHead,rowDes);

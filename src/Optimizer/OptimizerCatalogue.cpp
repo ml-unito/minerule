@@ -4,6 +4,7 @@
 #include "Utils/SQLUtils.h"
 #include "Optimizer/OptimizerCatalogue.h"
 #include "Parsers/ParsedMinerule.h"
+#include "Database/Connection.h"
 #include <memory>
 #include <iterator>
 #include <algorithm>
@@ -59,10 +60,11 @@ namespace minerule {
     throw(MineruleException, odbc::SQLException) {
     std::vector<std::string> qryNames;
 
-    MRLogPush("Deleting past minerules...");
+    MRLogPusher _("Deleting past minerules...");
 
-    odbc::Connection* conn = 
-      MineruleOptions::getSharedOptions().getOdbc_db().getODBCConnection();
+    Connection conn;
+	conn.useODBCConnection(MineruleOptions::getSharedOptions().getOdbc_db().getODBCConnection());
+	conn.setOutTableName(mrname);
 
    std::string query = (std::string)
       "SELECT query_id "
@@ -70,7 +72,7 @@ namespace minerule {
       "WHERE query_name="+SQLUtils::quote(mrname)+
       " OR tab_results_name="+SQLUtils::quote(mrname);
 
-    std::auto_ptr<odbc::Statement> stat(conn->createStatement());
+    std::auto_ptr<odbc::Statement> stat(conn.getODBCConnection()->createStatement());
     odbc::ResultSet* rs=stat->executeQuery(query);
 
     while(rs->next()) {
@@ -84,8 +86,7 @@ namespace minerule {
 	    << std::endl;
 
     assert(qryNames.size()>0);
-    if( qryNames.size()>1 && 
-	!MineruleOptions::getSharedOptions().getSafety().getAllowCascadeDeletes() ) {
+    if( qryNames.size()>1 && !MineruleOptions::getSharedOptions().getSafety().getAllowCascadeDeletes() ) {
       throw MineruleException( MR_ERROR_SAFETY_PROBLEM, "Requested the delete of" 
 			     " a minerule having dependent minerules, but option"
 			     " safety::allowsCascadeDeletes is not set");
@@ -97,18 +98,12 @@ namespace minerule {
 
      std::string delQry = "DELETE FROM mr_query WHERE query_id="+SQLUtils::quote(*it);
       if(stat->execute(delQry)) {
-	throw MineruleException( MR_ERROR_INTERNAL, "Cannot delete query "+*it );
+		  throw MineruleException( MR_ERROR_INTERNAL, "Cannot delete query "+*it );
       }
     }
 
     MRLog() << "Dropping tables connected to query named:" << mrname << std::endl;
-
-   std::string dropQry = 
-      "DROP TABLE IF EXISTS "+mrname+","+mrname+"_elems,"+mrname+"_tmpSource";
-    
-    stat->execute(dropQry);
-
-    MRLogPop();
+	conn.deleteDestTables();
   }
 
   void

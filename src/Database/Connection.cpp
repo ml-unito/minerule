@@ -236,7 +236,6 @@ void Connection::create_tmp_db(int sintax,
 				const SourceRowAttrCollectionDescriptor& head)
  {
     odbc::Statement* statement=connection->createStatement();
-    odbc::ResultSet* result;
     std::string create;
 
     delete_tmp_db();
@@ -252,18 +251,11 @@ void Connection::create_tmp_db(int sintax,
 	         break;
     }
 
-    if( statement->execute(create) ) {
-      //cout << "Result set available..." << std::endl;
-      result =statement->getResultSet();
-    } else
-    {
-      result =NULL;
-    }
-
+    statement->execute(create);
+     
     if (sintax==1)
     {
-      create="CREATE TABLE tmp_Rule_Head_Ext(id int AUTO_INCREMENT PRIMARY KEY,id_head char(13),level int,"
-	+ head.getSQLDataDefinition()+");";
+      create="CREATE TABLE tmp_Rule_Head_Ext(id int AUTO_INCREMENT PRIMARY KEY,id_head char(13),level int," + head.getSQLDataDefinition()+");";
       statement->execute(create);
     }
     delete statement;

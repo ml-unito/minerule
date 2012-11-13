@@ -87,6 +87,12 @@ namespace minerule {
     static SourceRowElement* 
       deserializeElementFromString(const std::string& strRepr) 
       throw(MineruleException);
+	
+    static SourceRowElement* 
+      deserializeElementFromResultSet(odbc::ResultSet* rs, size_t start_index) 
+      throw(MineruleException);
+	
+	
     static void 
       serializeElementToString(const SourceRowElement& elem, 
 			       std::string& strRepr) throw(MineruleException);

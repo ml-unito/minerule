@@ -24,14 +24,16 @@
 namespace minerule {
 
 	class Connection  {
+	public:
 		typedef enum {
 			RulesTable,
 			HeadsTable,
 			BodiesTable
 		} TableKind;
 		
-		class DBInserter; // forward declaration
 	private:
+		class DBInserter; // forward declaration
+
 		std::string outTableName;
 		MinMaxPair bodyCard;
 		MinMaxPair headCard;

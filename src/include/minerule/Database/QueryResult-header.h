@@ -99,12 +99,13 @@ namespace minerule {
 		private:
 			odbc::Statement* state;
 			odbc::ResultSet* rs_rules;
-			odbc::PreparedStatement* ps_elems;
+			odbc::PreparedStatement* body_elems;
+			odbc::PreparedStatement* head_elems;
 
-			void readElems(int id, ItemSetType& elems)
+			void readElems(int id, ItemSetType& elems, odbc::PreparedStatement* elems_rs)
 				throw ( MineruleException, odbc::SQLException, std::exception);
 		public:
-			Iterator() : state(NULL), rs_rules(NULL), ps_elems(NULL) {}
+			Iterator() : state(NULL), rs_rules(NULL), body_elems(NULL), head_elems(NULL) {}
 
 			~Iterator() {
 				if(rs_rules!=NULL)
@@ -113,8 +114,11 @@ namespace minerule {
 				if(state!=NULL)
 					delete state;
 
-				if( ps_elems!=NULL ) 
-					delete ps_elems;
+				if( body_elems!=NULL ) 
+					delete body_elems;
+
+				if( head_elems!=NULL ) 
+					delete head_elems;
 			}
 
 

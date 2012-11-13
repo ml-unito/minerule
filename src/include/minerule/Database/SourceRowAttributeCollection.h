@@ -6,8 +6,8 @@
 #include <odbc++/resultset.h>
 #include <odbc++/resultsetmetadata.h>
 
-#include "sourcerowattribute.h"
-#include "sourcerowcommon.h"
+#include "Database/SourceRowAttribute.h"
+#include "Database/SourceRowCommon.h"
 
 
 namespace minerule {

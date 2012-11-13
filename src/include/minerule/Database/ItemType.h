@@ -2,7 +2,7 @@
 #define __ITEMTYPE_H__
 
 #include <iostream>
-#include "sourcerowelement.h"
+#include "Database/SourceRowElement.h"
 
 namespace minerule {
   /**

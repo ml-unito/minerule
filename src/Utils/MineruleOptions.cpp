@@ -12,6 +12,7 @@ const std::string MINERULE_OPTIONS_PARSING_ERROR = "Parsing Error while parsing 
 #include "Utils/OptionParserLib.h"
 
 namespace minerule {
+  const std::string MineruleOptions::DEFAULT_FILE_NAME("options.txt");
 
   MineruleOptions MineruleOptions::sharedOptions;
 

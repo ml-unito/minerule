@@ -1,5 +1,7 @@
 class MineruleOptions : public OptionBase {
 public:
+	static const std::string DEFAULT_FILE_NAME;
+	
   /* ==============================
    * Inner classes
    * ============================== */

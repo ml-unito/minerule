@@ -206,20 +206,20 @@ printHelp(int argc, char** argv) {
 void 
 doLoadOptions(const char* fname, MineruleOptions& opt) {
   
-  if( fileExists(fname) ) {
-    opt.readFromFile(fname);
-  } else {
-   std::string errstr;
-    if(errno==0) {
-      errstr = "Not a regular file!";
-    } else {
-      errstr = strerror(errno);
-    }
+	if( fileExists(fname) ) {
+		opt.readFromFile(fname);
+	} else {
+		std::string errstr;
+		if(errno==0) {
+			errstr = "Not a regular file!";
+		} else {
+			errstr = strerror(errno);
+		}
     
-    throw MRCException(ERROR_CANNOT_OPEN_OPTION_FILE,
-		       std::string("Could not open file:") + fname +
-		       ". The reason is:" + errstr);
-  }
+		throw MRCException(ERROR_CANNOT_OPEN_OPTION_FILE,
+			std::string("Could not open file:") + fname +
+				". The reason is:" + errstr);
+	}
 }
 
 void printVersion() {
@@ -269,9 +269,11 @@ parseOptions(int argc, char** argv,
 			  " the help message" );
     }
   }
-  if( !didLoadOptions ) {
-    throw MRCException( ERROR_OPTION_PARSING,
-			"You should specify at least one -f option");
+  if( !didLoadOptions  ) {
+	  if( !fileExists(MineruleOptions::DEFAULT_FILE_NAME) )
+	    throw MRCException( ERROR_OPTION_PARSING,"You should specify at least one -f option or provide ./"+MineruleOptions::DEFAULT_FILE_NAME);
+	  else
+        doLoadOptions(MineruleOptions::DEFAULT_FILE_NAME.c_str(), mopt);
   }
 }
 

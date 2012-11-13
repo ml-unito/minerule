@@ -16,8 +16,7 @@
 
 namespace minerule {
 
-	MiningAlgorithm*
-	Algorithms::getBestRulesMiningAlgorithm(const OptimizedMinerule& mr) {
+	MiningAlgorithm* Algorithms::getBestRulesMiningAlgorithm(const OptimizedMinerule& mr) {
 		MRDebugPusher pusher("Choosing the best algorithm for the given MR");
 
 		AlgorithmTypes userChoiceOfAT = 
@@ -121,22 +120,16 @@ namespace minerule {
 // 	Remember that the informations stored in HeadBodySourceRowDescription
 // 	depends upon mr.mineruleRequiresClusters(). 
 //  
-	MiningAlgorithm* 
-	Algorithms::newAlgorithm(const OptimizedMinerule& mr) {
+	MiningAlgorithm* Algorithms::newAlgorithm(const OptimizedMinerule& mr) {
 		switch( mr.getParsedMinerule().miningTask ) {
-			case MTMineRules:
-			return getBestRulesMiningAlgorithm(mr);
-			case MTMineItemsets:
-			return getBestItemsetsMiningAlgorithm(mr);
-			case MTMineSequences:
-			return getBestSequencesMiningAlgorithm(mr);
-			default:
-			throw MineruleException( MR_ERROR_INTERNAL, "Cannot handle "+miningTaskToString(mr.getParsedMinerule().miningTask)+" mining task");
+			case MTMineRules: 		return getBestRulesMiningAlgorithm(mr);
+			case MTMineItemsets:  	return getBestItemsetsMiningAlgorithm(mr);
+			case MTMineSequences: 	return getBestSequencesMiningAlgorithm(mr);
+			default: throw MineruleException( MR_ERROR_INTERNAL, "Cannot handle "+miningTaskToString(mr.getParsedMinerule().miningTask)+" mining task");
 		}
 	}
 
-	bool
-	Algorithms::executeIncrementalAlgorithm(OptimizedMinerule& mr) throw(MineruleException,odbc::SQLException, std::exception){
+	bool Algorithms::executeIncrementalAlgorithm(OptimizedMinerule& mr) throw(MineruleException,odbc::SQLException, std::exception){
  
 		IncrementalAlgorithm* incrAlgo = IncrementalAlgorithm::newIncrementalAlgorithm(mr);
   
@@ -147,25 +140,20 @@ namespace minerule {
 			return true;
 		} else {
 			MRLog() << "The needed incremental algorithms has not been integrated" << std::endl
-				<< " to the system yet." << std::endl;
+					<< " to the system yet." << std::endl;
 			return false;
 		}
 	}
 
 
 
-	void
-	Algorithms::executeExtractionAlgorithm(OptimizedMinerule& mr) throw(MineruleException,odbc::SQLException, std::exception) {
-		MiningAlgorithm* algo;
-
-		algo =  Algorithms::newAlgorithm(mr);
-
+	void Algorithms::executeExtractionAlgorithm(OptimizedMinerule& mr) throw(MineruleException,odbc::SQLException, std::exception) {
+		MiningAlgorithm* algo =  Algorithms::newAlgorithm(mr);
 		algo->execute();
 		delete algo;
 	}
 
-	void
-	Algorithms::executeMinerule(OptimizedMinerule& mr) throw(MineruleException,odbc::SQLException, std::exception) {
+	void Algorithms::checkAndHandleHomonymMinerules(OptimizedMinerule& mr) throw(MineruleException, odbc::SQLException, std::exception) {
 		if( OptimizerCatalogue::existsMinerule(mr.getParsedMinerule().tab_result) ) {
 			if( MineruleOptions::getSharedOptions().getSafety().getOverwriteHomonymMinerules() ) {
 				MRLog() << "The optimizer Catalogue reports that a minerule " << std::endl;
@@ -184,28 +172,27 @@ namespace minerule {
 					"safety::overwriteHomonymMinerules "
 					"to true in your configuration file");
 			}
-		}
-  
-
+		}		
+	}
+	
+	void Algorithms::showDebugInfo(const std::string& msg, OptimizedMinerule& mr) {
 		MRDebugPush("Unoptimized Minerule info");
 		MRDebug() << "Optimized Minerule:[" << mr.getParsedMinerule().getText()<< "]" << std::endl;
 		MRDebug() << "Body attribute list size:" << mr.getParsedMinerule().ba.size() << std::endl;
 		MRDebug() << "Head attribute list size:" << mr.getParsedMinerule().ha.size() << std::endl;
 		MRDebug() << "Rule attribute list size:" << mr.getParsedMinerule().ra.size() << std::endl;
 		MRDebugPop();
+	}
 
-		mr.optimize(); // internally it will check if the optimization option
-                 // is set.
+	void Algorithms::executeMinerule(OptimizedMinerule& mr) throw(MineruleException,odbc::SQLException, std::exception) {
+		checkAndHandleHomonymMinerules(mr);
 
-		MRDebugPush("Optimized Minerule info");
-		MRDebug() << "Optimized Minerule:[" << mr.getParsedMinerule().getText()<< "]" << std::endl;
-		MRDebug() << "Body attribute list size:" << mr.getParsedMinerule().ba.size() << std::endl;
-		MRDebug() << "Head attribute list size:" << mr.getParsedMinerule().ha.size() << std::endl;
-		MRDebug() << "Rule attribute list size:" << mr.getParsedMinerule().ra.size() << std::endl;
-		MRDebugPop();
+		showDebugInfo("Unoptimized Minerule info", mr);
+		mr.optimize(); // internally it will check if the optimization option is set.
+		showDebugInfo("Optimized Minerule info", mr);
 
 
-	std::string unsupportedRelation = "";
+		std::string unsupportedRelation = "";
 		OptimizerCatalogue::MineruleResultInfo result(mr.getParsedMinerule());
 
 		switch(mr.getOptimizationInfo().relationship) {
@@ -232,8 +219,7 @@ namespace minerule {
 				if(unsupportedRelation=="") {
 					unsupportedRelation="Combination";
       
-					if(executeIncrementalAlgorithm(mr)) {
-	 
+					if(executeIncrementalAlgorithm(mr)) {	 
 						OptimizerCatalogue::addMineruleResult(result);
 						break;
 					} else {
@@ -256,8 +242,7 @@ namespace minerule {
 						<< "not supported and hence I will switch to the default algorithm" << std::endl;
 				}
 				executeExtractionAlgorithm(mr);
-				if( mr.getParsedMinerule().miningTask==MTMineRules ||
-					mr.getParsedMinerule().miningTask==MTMineItemsets)
+				if( mr.getParsedMinerule().miningTask==MTMineRules || mr.getParsedMinerule().miningTask==MTMineItemsets )
 						OptimizerCatalogue::addMineruleResult(result);
 				break;
 				

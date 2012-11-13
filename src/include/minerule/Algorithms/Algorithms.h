@@ -27,24 +27,24 @@ class Algorithms {
   // using some criteria. One constraint it respects is that it returns
   // an algorithm which is able to handle clustering whenever the minerule
   // requires it
-  static MiningAlgorithm* 
-    newAlgorithm(const OptimizedMinerule& mr);
+  static MiningAlgorithm* newAlgorithm(const OptimizedMinerule& mr);
 
   // It execute the provided minerule and stores the results in the database
   static void executeMinerule(OptimizedMinerule& mr) throw(MineruleException,odbc::SQLException,std::exception);
 
   static void executeExtractionAlgorithm(OptimizedMinerule& mr) throw(MineruleException,odbc::SQLException,std::exception);
+  
   static bool executeIncrementalAlgorithm(OptimizedMinerule& mr) throw(MineruleException,odbc::SQLException,std::exception);
 
-  static MiningAlgorithm*
-    getBestRulesMiningAlgorithm(const OptimizedMinerule& mr);
+  static MiningAlgorithm* getBestRulesMiningAlgorithm(const OptimizedMinerule& mr);
 
-  static MiningAlgorithm*
-    getBestItemsetsMiningAlgorithm(const OptimizedMinerule& mr);
+  static MiningAlgorithm* getBestItemsetsMiningAlgorithm(const OptimizedMinerule& mr);
 
-  static MiningAlgorithm*
-    getBestSequencesMiningAlgorithm( const OptimizedMinerule& mr );
-
+  static MiningAlgorithm* getBestSequencesMiningAlgorithm( const OptimizedMinerule& mr );
+  
+private:
+	static void checkAndHandleHomonymMinerules(OptimizedMinerule& mr) throw(MineruleException, odbc::SQLException, std::exception);
+	static void showDebugInfo(const std::string& msg, OptimizedMinerule& mr);
 };
 
 }

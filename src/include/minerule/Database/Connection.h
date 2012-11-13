@@ -12,6 +12,7 @@
 #include<odbc++/databasemetadata.h>
 #include<odbc++/preparedstatement.h>
 
+#include "Utils/MineruleOptions.h"
 #include "Database/SourceRow.h"
 #include "Database/SourceRowDescriptor.h"
 

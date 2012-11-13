@@ -2,12 +2,13 @@
 #define __ALGORITHMS_OPTIONS_H__
 
 #include <string.h>
-#include<odbc++/preparedstatement.h>
-#include<odbc++/connection.h>
-#include"Database/SourceRow.h"
-#include"Utils/MineruleOptions.h"
-#include"Parsers/ParsedMinerule.h"
-#include"Database/MRResultSet.h"
+#include <odbc++/preparedstatement.h>
+#include <odbc++/connection.h>
+
+#include "Database/SourceRow.h"
+#include "Parsers/ParsedMinerule.h"
+#include "Database/MRResultSet.h"
+#include "Utils/MineruleOptions.h"
 
 namespace minerule {
 

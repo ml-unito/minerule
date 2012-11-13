@@ -18,34 +18,6 @@
 
 using namespace minerule;
 
-
-/*
-void
-readElems( odbc::PreparedStatement* state,
-	   int id,
-	   std::vector<std::string>& elems ) {
-  state->setInt(1,id);
-  odbc::ResultSet* rs = state->executeQuery();
-
-  while( rs->next() ) {
-   std::string str = rs->getString(1);
-    try {
-      SourceRowElement* elem = SourceRowElement::deserializeElementFromString(str);
-      elems.push_back(elem->asString());
-      delete elem;
-    } catch (MineruleException& e) {
-      elems.push_back(str);
-    }
-  }
-
-  sort(elems.begin(), elems.end());
-
-  delete rs;
-  }*/
-
-
-
-
 void
 printRules(std::string queryname,
 	    RuleFormatter& formatter,

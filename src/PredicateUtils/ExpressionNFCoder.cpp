@@ -74,7 +74,7 @@ namespace minerule {
       } 
     }
 
-    buf = (EncodingBaseType*) realloc(buf,sizeof(EncodingBaseType[cellCounter+1]));
+    buf = (EncodingBaseType*) realloc(buf,sizeof(EncodingBaseType) * (cellCounter+1));
     EncodedNF result;
     result.encVector = buf;
     result.vecSize = cellCounter+1;

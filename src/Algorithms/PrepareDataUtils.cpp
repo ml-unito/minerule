@@ -141,7 +141,7 @@ string
 					      
     unsigned int lastElem;
     lastElem= rowDes.setGroupBodyElems(1,mr.getParsedMinerule().ga.size());
-    lastElem= rowDes.setBodyElems(lastElem+1,mr.getParsedMinerule().ba.size());
+    rowDes.setBodyElems(lastElem+1,mr.getParsedMinerule().ba.size());
   }
 
   string
@@ -277,7 +277,7 @@ std::string createIndexQuery = "CREATE INDEX "+clusteredTable+"_index " + " ON "
     lastElem= rowDes.setClusterBodyElems(lastElem+1,mr.getParsedMinerule().ca.size());
     lastElem= rowDes.setBodyElems(lastElem+1,mr.getParsedMinerule().ba.size());
     lastElem= rowDes.setClusterHeadElems(lastElem+1,mr.getParsedMinerule().ca.size());
-    lastElem= rowDes.setHeadElems(lastElem+1, mr.getParsedMinerule().ha.size());
+    rowDes.setHeadElems(lastElem+1, mr.getParsedMinerule().ha.size());
   }
 
 

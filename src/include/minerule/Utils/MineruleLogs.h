@@ -11,13 +11,12 @@ namespace minerule {
    * They are the preferred way of accessing such streams since
    * they provide time and memory logging (they output the informations
    * on the required stream before returning it).
-   * The functions below are defined in MineruleOptions.cpp
    */
 
-  std::ostream& MRLog(int id=0);
-  std::ostream& MRErr(int id=0);
-  std::ostream& MRWarn(int id=0);
-  std::ostream& MRDebug(int id=0);
+  std::ostream& MRLog();
+  std::ostream& MRErr();
+  std::ostream& MRWarn();
+  std::ostream& MRDebug();
   void MRLogPush(const std::string& descr);
   void MRLogPop();
   void MRErrPush(const std::string& descr);

@@ -2,26 +2,22 @@
 #include "Utils/MineruleOptions.h"
 
 namespace minerule {
-    std::ostream& MRLog(int id) {
+    std::ostream& MRLog() {
       return MineruleOptions::getSharedOptions().getLogStream();
     }
 
-    std::ostream& MRErr(int id) {
+    std::ostream& MRErr() {
       return MineruleOptions::getSharedOptions().getErrStream();
     }
 
-    std::ostream& MRWarn(int id) {
+    std::ostream& MRWarn() {
       return MineruleOptions::getSharedOptions().getWarnStream();
     }
 
-    std::ostream& MRDebug(int id) {
+    std::ostream& MRDebug() {
       return MineruleOptions::getSharedOptions().getDebugStream();
     }
 
-    int MRLogGetNewID() {
-      static int logId = 4;
-      return logId++;
-    }
 
     void MRLogPush(const std::string& descr) {
       MineruleOptions::getSharedOptions().getLogStreamObj().getLogger().push(descr);

@@ -117,9 +117,7 @@ void origFPGrowth( const minerule::AlgorithmsOptions& options ) {
   connection.setOutTableName(options.getOutTableName());
   
 
-  int logId = MRLogGetNewID();
-
-  MRLog(logId) << "  Reading database (first phase)" << endl;
+  MRLog() << "  Reading database (first phase)" << endl;
   // First read (only to fill the Counter)
   result= statement->executeQuery();
     
@@ -127,7 +125,7 @@ void origFPGrowth( const minerule::AlgorithmsOptions& options ) {
     fillCounterFromDB(result, rowDes,  gCount);
 
   delete result;
-  MRLog(logId) << "  Done! (Reading database - first phase)" << endl;
+  MRLog() << "  Done! (Reading database - first phase)" << endl;
 
 
   //IMPORTANTISSIMO : supponiamo questo sia l'albero da ordinare
@@ -136,12 +134,12 @@ void origFPGrowth( const minerule::AlgorithmsOptions& options ) {
 
   result= statement->executeQuery();
 
-  MRLog(logId) << "  Reading database (second phase)" << endl;
+  MRLog() << "  Reading database (second phase)" << endl;
   if( result->next() ) 
     readDataBaseOrig(result, rowDes, tree, gCount, totGroups);
 
   delete result;
-  MRLog(logId) << "  Done! (Reading database - second phase)" << endl;
+  MRLog() << "  Done! (Reading database - second phase)" << endl;
 
   //  gCount.print();
   //  tree.preOrderTraversalToDesign("bobo");
@@ -153,14 +151,14 @@ void origFPGrowth( const minerule::AlgorithmsOptions& options ) {
   throw std::runtime_error("Algorithm to be updated to use new createResiltTables API");
   // connection.createResultTables(SourceRowDescriptor(connection.getODBCConnection(), minerule.getParsedMinerule()));
 
-  MRLog(logId) << "  Inflating conditional FPTrees..." << endl;
+  MRLog() << "  Inflating conditional FPTrees..." << endl;
 // Genera tutti i fp-tree conditional. 
 // Eliminando quelli relativi a itemset a supporto non sufficiente
 // Per ognuno di essi si occupa, infine, di salvare i risultati sul DB
   gCount.esplodi(connection, nSup, totGroups,true);
-  MRLog(logId) << "  Done! (Inflating conditional FPTrees)" << endl;
+  MRLog() << "  Done! (Inflating conditional FPTrees)" << endl;
 
-  MRLog(logId) << "  Extracting rules..." << endl;
+  MRLog() << "  Extracting rules..." << endl;
   gCount.extractRule(connection,nSup,totGroups);
-  MRLog(logId) << "  Done! (Extracting rules)" << endl;
+  MRLog() << "  Done! (Extracting rules)" << endl;
 }

@@ -25,6 +25,7 @@ set(utils_src
 	${BISON_OPTPARSER_OUTPUTS}
 	${FLEX_OPTLEXER_OUTPUTS}
 	OptionParserLib.cpp
+	MineruleLogs.cpp
 	SQLUtils.cpp)
 	
 

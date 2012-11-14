@@ -187,7 +187,7 @@ namespace minerule {
     normalizer.normalize();
     optInfo.minerule = minerule;
     optInfo.relationship = None;
-    MRDebug() << "Minerule text after normalization:" << minerule.getText() << std::endl;
+    MRDebug("Minerule text after normalization:" + minerule.getText());
 
     odbc::Connection* connection = 
       MineruleOptions::getSharedOptions().getOdbc_db().getODBCConnection();
@@ -206,7 +206,7 @@ namespace minerule {
 	while(rs->next()) {
 	  ParsedMinerule mr;
 	  mr.init(rs->getString(1).c_str());
-	  MRDebug() << "Optimize: trying minerule:" << mr.getText() << std::endl;
+	  MRDebug("Optimize: trying minerule:" + mr.getText());
 
 	  if( !avoidCombinationDetection && isACandidateQuery(mr,minerule) ) {
 	    optInfo.minerulesToCombine.push_back(mr);

@@ -177,7 +177,7 @@ namespace minerule {
 	
 	void Algorithms::showDebugInfo(const std::string& msg, OptimizedMinerule& mr) {
 		MRDebugPush("Unoptimized Minerule info");
-		MRDebug() << "Optimized Minerule:[" << mr.getParsedMinerule().getText()<< "]" << std::endl;
+		MRDebug("Optimized Minerule:[" + mr.getParsedMinerule().getText() + "]");
 		MRDebug() << "Body attribute list size:" << mr.getParsedMinerule().ba.size() << std::endl;
 		MRDebug() << "Head attribute list size:" << mr.getParsedMinerule().ha.size() << std::endl;
 		MRDebug() << "Rule attribute list size:" << mr.getParsedMinerule().ra.size() << std::endl;

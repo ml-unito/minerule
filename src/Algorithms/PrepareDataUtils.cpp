@@ -252,8 +252,7 @@ std::string createIndexQuery = "CREATE INDEX "+clusteredTable+"_index " + " ON "
     odbc::Statement* state = conn->createStatement();
 
     MRLog() << "Creating clustered table... " << std::endl;
-    MRDebug() << "Creating mining table, the query is:" 
-	      << createQuery << std::endl;
+    MRDebug("Creating mining table, the query is:" + createQuery);
     state->execute(createQuery);
 	state->execute(createIndexQuery);
 	

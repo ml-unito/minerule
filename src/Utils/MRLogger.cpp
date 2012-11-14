@@ -1,6 +1,7 @@
 #include <cassert>
 
 #include "Utils/MRLogger.h"
+#include "Utils/StringUtils.h"
 
 namespace minerule {
 
@@ -90,7 +91,7 @@ namespace minerule {
     logStack.push_back(li);
 
     indent();
-    *os<<insetSep<<"+"<<descr<<std::endl;
+    *os<<insetSep<<"+"<< StringUtils::to_bold(descr) <<std::endl;
     updateIndentString();
   }
 
@@ -114,7 +115,7 @@ namespace minerule {
     indent();
 
     if(!logStack.empty())
-      *os<<indentInset<<END_SEPARATOR<<timeMemInfo<<std::endl;
+      *os<<indentInset<<END_SEPARATOR<< StringUtils::to_bold(timeMemInfo) <<std::endl;
     else
 	  *os<<END_SEPARATOR<<timeMemInfo<<std::endl;
 

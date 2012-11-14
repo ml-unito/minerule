@@ -3,15 +3,6 @@
 
 #include "Database/SourceRow.h"
 #include "Database/ItemType.h"
-
-namespace minerule {
-  // in different point of the algorithms the ItemSetType
-  // is referred as HeadBodyType, we should clean this fact
-  // sometime in the future, by replacing HeadBodyType with
-  // ItemSetType everywhere.
-  typedef ItemSetType HeadBodyType;
-}
-
 #include "Algorithms/AlgorithmsOptions.h"
 #include "Algorithms/MiningAlgorithmBase.h"
 #include "Optimizer/OptimizedMinerule.h"
@@ -19,7 +10,6 @@ namespace minerule {
 #include <exception>
 
 namespace minerule {
-
 
 class Algorithms {
  public:

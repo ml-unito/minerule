@@ -2,3 +2,4 @@
 build*
 ExtLibs/galib245
 ExtLibs/libgist
+Docs/autodocs

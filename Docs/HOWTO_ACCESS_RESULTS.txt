@@ -15,11 +15,14 @@ La tavola "mr_query" contiene una riga per ogni minerule completata con successo
 | cal              | int(10)      |      |     | 0       |       |
 +------------------+--------------+------+-----+---------+-------+
 
-In particolare:
-   query_name - e' il nome della minerule come specificato nel testo della minerule stessa (i.e., nel caso della minerule "MINE RULE m1 AS SELECT ..." query_name sara' posto a "m1").
-   tab_results_name - si riferisce al nome della tavola contenente i risultati.
+In particolare: query_name - e' il nome della minerule come specificato nel
+testo della minerule stessa (i.e., nel caso della minerule "MINE RULE m1 AS
+SELECT ..." query_name sara' posto a "m1"). tab_results_name - si riferisce al
+nome della tavola contenente i risultati.
 
-Percio' se tab_results_name="exp1" dovrebbe esserci una tavola nel database usato dal sistema chiamata "exp1". Ogni tavola risultato, indipendentemente dalle opzioni date al sistema, avra' il seguente schema:
+Percio' se tab_results_name="exp1" dovrebbe esserci una tavola nel database
+usato dal sistema chiamata "exp1". Ogni tavola risultato, indipendentemente
+dalle opzioni date al sistema, avra' il seguente schema:
 
 +----------+---------+------+-----+---------+-------+
 | Field    | Type    | Null | Key | Default | Extra |
@@ -32,19 +35,24 @@ Percio' se tab_results_name="exp1" dovrebbe esserci una tavola nel database usat
 | cardHead | int(11) | YES  |     | NULL    |       |
 +----------+---------+------+-----+---------+-------+
 
-I campi supp e con fanno riferimento al supporto e alla confidenza della regola. Il campo cardBody e' il numero di elementi nel body della regola, mentre cardHead e' il numero di elementi nella testa della regola. I campi bodyId e headId sono identificatori di liste di valori appartenenti alla tavala 'exp1_elems' (assumendo che exp1 fosse il nome della tavola precedente).  
+I campi supp e con fanno riferimento al supporto e alla confidenza della
+regola. Il campo cardBody e' il numero di elementi nel body della regola,
+mentre cardHead e' il numero di elementi nella testa della regola. I campi
+bodyId e headId sono identificatori di liste di valori appartenenti alle tavole
+che descrivono gli itemsets nel body e nella head. Il nome delle tavole in 
+question può essere richiesto a mrcatalogue usando i parametri:
+	mrcatalogue -n exp1 -Fr
 
-Lo schema di tale tavola e':
+Lo schema delle tavole dipende dall mine rule, ma in linea di massima 
+esisterà il campo id e un campo per ogni elemento incluso nella descrizione
+dell'item.
 
-+-------+--------------+------+-----+---------+-------+
-| Field | Type         | Null | Key | Default | Extra |
-+-------+--------------+------+-----+---------+-------+
-| id    | int(11)      | YES  | MUL | NULL    |       |
-| elem  | varchar(255) | YES  |     | NULL    |       |
-+-------+--------------+------+-----+---------+-------+
+Per "costruire" il result set e' quindi necessario: 
+1) recuperare il nome della tavola risultato in mr_query 
 
-Per "costruire" il result set e' quindi necessario:
-1) andare a pescare il nome della tavola risultato in mr_query
-2) per ogni regola in mr_query, bisogna accedere due volte alla tavola contenente gli elementi per reperire i valori appartenenti al body e alla head. 
+2) per ogni regola in mr_query, bisogna accedere alle tavole
+contenente gli elementi del body e della head per reperirne i valori.
 
-.../minerule/new/TmpProjects/PrintRules.cpp e' un programmino che mostra a video i risultati di una minerule dato il nome della minerule stessa e puo' essere utilizzato per farsi un'idea dell'intero processo.
+
+mrprintrules mostra a video i risultati di una minerule dato il nome della 
+minerule stessa e puo' essere utilizzato per farsi un'idea dell'intero processo.

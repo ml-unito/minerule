@@ -220,15 +220,16 @@ parseOptions(int argc, char** argv, MineruleOptions& mrOpts, std::string& mrtext
 }
 
 int main (int argc, char *argv[])
-{
-	MineruleOptions& mrOpts =  MineruleOptions::getSharedOptions();
-	std::string mrtext;
-	
+{	
 	try {
+		MRLogPush("Initialization...");
+		MineruleOptions& mrOpts =  MineruleOptions::getSharedOptions();
+		std::string mrtext;
+		
 		parseOptions(argc, argv, mrOpts, mrtext);
 		MRLog() << "Minerule source text:" << std::endl;
 		MRLog(mrtext);
-		
+		MRLogPop();
 				
 		MRLogPush("Minerule system starting");
 		

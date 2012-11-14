@@ -124,7 +124,7 @@ namespace minerule {
   }
   
   void MRLogger::logMeasurement(const std::string& description, const MeasurementInfo& data) {	  
-	  log() << description << " cpu time:" << data.totCpu << " time:" << data.totTime << std::endl;
+	  log() << description << StringUtils::to_bold(" cpu time:") << data.totCpu << StringUtils::to_bold(" time:") << data.totTime << std::endl;
   }
   
   void MRLogger::logMeasurements() {

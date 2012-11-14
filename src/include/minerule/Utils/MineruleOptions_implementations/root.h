@@ -216,22 +216,22 @@ public:
     getLogStream() const {
     // the following is an example of color log entry....
     //      return logStream.getStream() << "\e[31;34mLog:\e[0m";
-    return logStream.getStream() << "Log:";
+    return logStream.getStream() << StringUtils::to_green("Log:");
   }
 
   std::ostream&
     getErrStream() const {
-    return errStream.getStream() << "ERROR:";
+    return errStream.getStream() << StringUtils::to_red("ERROR:");
   }
 
   std::ostream&
     getWarnStream() const {
-    return warnStream.getStream() << "WARNING:";
+    return warnStream.getStream() << StringUtils::to_yellow("WARNING:");
   }
 
   std::ostream&
     getDebugStream() const {
-    return debugStream.getStream() << "DEBUG:";
+    return debugStream.getStream() << StringUtils::to_orange("DEBUG:");
   }
 
   OutStream&

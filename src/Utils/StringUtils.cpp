@@ -1,6 +1,13 @@
 #include "Utils/StringUtils.h"
 
 namespace minerule {
+	const std::string StringUtils::BOLD 	= "\x1B[1m";
+	const std::string StringUtils::RED 		= "\x1B[31m";
+	const std::string StringUtils::GREEN 	= "\x1B[32m";
+	const std::string StringUtils::YELLOW 	= "\x1B[33m";
+	const std::string StringUtils::BLUE 	= "\x1B[34m";	
+	const std::string StringUtils::WHITE 	= "\x1B[37m";	
+	const std::string StringUtils::CLOSE 	= "\x1B[0m";	
 
 	std::vector<std::string>* StringUtils::split_to_length(const std::string& str, size_t out_len) {
 		std::vector<std::string>* result = new std::vector<std::string>;

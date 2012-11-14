@@ -17,6 +17,7 @@
 #include "Optimizer/OptimizerCatalogue.h"
 #include "Utils/MRLogger.h"
 #include "Utils/AlgorithmTypes.h"
+#include "Utils/StringUtils.h"
 
 namespace minerule {
 

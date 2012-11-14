@@ -89,4 +89,16 @@ namespace minerule {
     void MRDebugPop() {
       MineruleOptions::getSharedOptions().getDebugStreamObj().getLogger().pop();
     }
+	
+	
+    void MRLogStartMeasuring(const std::string& description) {
+    	MineruleOptions::getSharedOptions().getLogStreamObj().getLogger().startMeasuring(description);
+    }
+    void MRLogStopMeasuring(const std::string& description) {
+     	MineruleOptions::getSharedOptions().getLogStreamObj().getLogger().stopMeasuring(description);  	
+    }
+	
+	void MRLogShowMeasurements() {
+		MineruleOptions::getSharedOptions().getLogStreamObj().getLogger().logMeasurements();
+	}
 }

@@ -363,6 +363,8 @@ rowDes.setGroupBodyElems(1,minerule.getParsedMinerule().ga.size());
     int howManyRows = 0;
     int howManyGroups = 0;
 
+
+	MRLogPush("Reading data...");
     result->next();
     HeadBodySourceRow hbsr(result, rowDes);
     while (!result->isAfterLast()) {
@@ -384,7 +386,7 @@ rowDes.setGroupBodyElems(1,minerule.getParsedMinerule().ga.size());
     }
 
     MRLog() << "Total groups: " << totalGroups << std::endl;
-    MRLogPop();
+	MRLogPop();
 
     MRLogPush("Starting rule extraction...");
 
@@ -399,6 +401,8 @@ rowDes.setGroupBodyElems(1,minerule.getParsedMinerule().ga.size());
 
     MRLogPop();
     connection.finalize();
+
+    MRLogPop();
 
     delete statement;
     delete stmt1;

@@ -342,7 +342,8 @@ namespace minerule {
 		throw new MineruleException(MR_ERROR_INTERNAL,"Cannot find initial GID for body elements");
     if(!Transaction::findGid(gid1,resultBody,rowDes,true))
 		throw new MineruleException(MR_ERROR_INTERNAL,"Cannot find initial GID for head elements");
-		
+	
+	MRLogPush("Reading data");
     BodyMap bodyMap(connection);
 
     int totalGroups = options.getTotGroups();
@@ -366,7 +367,7 @@ namespace minerule {
     }
 
     MRLog() << "Total groups: " << totalGroups << std::endl;
-    MRLogPop();
+	MRLogPop();
 
     MRLogPush("Starting rule extraction...");
 
@@ -380,6 +381,9 @@ namespace minerule {
     MRLog() << "After extracting rules, rules: " << nrules << std::endl;
 
     MRLogPop();
+
+    MRLogPop();
+
     connection.finalize();
 
     delete statementBody;

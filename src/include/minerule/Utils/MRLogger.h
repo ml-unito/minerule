@@ -3,6 +3,7 @@
 #include <fstream>
 #include <sys/time.h>
 #include <sstream>
+#include <map>
 
 
 namespace minerule {
@@ -29,6 +30,16 @@ namespace minerule {
 				return *this;
 			}
 		}; // LogInfo
+		
+		class MeasurementInfo {
+		public:
+			LogInfo start;
+			double totCpu;
+			double totTime;
+			bool startIsValid;
+			
+			MeasurementInfo() : start(""), totCpu(0.0), totTime(0.0), startIsValid(false) {};
+		};
 
 
 		static const std::string START_SEPARATOR;
@@ -37,7 +48,11 @@ namespace minerule {
 		static std::ofstream nullLog;
 
 		typedef std::vector< LogInfo > LogStack;
+		typedef std::map< std::string, MeasurementInfo > Measurements;
+		
 		LogStack logStack;
+		Measurements measurements;
+		
 		std::string indentString;
 		std::string indentInset;
 		std::ostream* os;
@@ -59,6 +74,7 @@ namespace minerule {
 
 		std::string evalTimeMemInfo(const LogInfo& li) const;
 
+		void logMeasurement(const std::string& description, const MeasurementInfo& data);
 	public:
 		MRLogger(std::ostream& ostr);
 		MRLogger();
@@ -96,6 +112,27 @@ namespace minerule {
 		}
 		
 		size_t getIndentLen() { return indentString.size(); }
+		
+		void startMeasuring(std::string description) {
+			MeasurementInfo& m = measurements[description];
+			assert(!m.startIsValid);
+			
+			m.start = LogInfo(""); // saving start time
+			m.startIsValid = true;
+		}
+		
+		void stopMeasuring(std::string description) {
+			MeasurementInfo& m = measurements[description];
+			LogInfo stop("");
+			
+			assert(m.startIsValid);
+			
+			m.totCpu += getCpuSecs(stop, m.start);
+			m.totTime += getTimeSecs(stop, m.start);
+			m.startIsValid = false;			
+		}
+		
+		void logMeasurements();
 		
 	}; // MRLogger
 

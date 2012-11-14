@@ -235,7 +235,9 @@ int main (int argc, char *argv[])
 		OptimizedMinerule optMR(mrtext);
 		Algorithms::executeMinerule(optMR);
 		
-		MRLogPop();		
+		MRLogPop();
+		
+		MRLogShowMeasurements();
 	} catch (odbc::SQLException& e) {
 		MRErr() << "ODBC Exception:" << e.getMessage() << std::endl;
 		exit(MR_ERROR_DATABASE_ERROR);

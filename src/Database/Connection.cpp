@@ -94,6 +94,8 @@ void Connection::createResultTables(const SourceRowDescriptor& srd)
 
 
 void Connection::DirectDBInserter::insertHeadBodyElems(TableKind kind, const ItemSet& elems, size_t counter) {
+  MRLogStartMeasuring("Head/Body Insertion time:");
+	
   assert( !elems.empty() );
   odbc::PreparedStatement* state;
   switch(kind) {
@@ -113,6 +115,8 @@ void Connection::DirectDBInserter::insertHeadBodyElems(TableKind kind, const Ite
 	it->setPreparedStatementParameters(state,2);
     state->execute();
   }
+
+  MRLogStopMeasuring("Head/Body Insertion time:");
 }
 
 
@@ -168,7 +172,6 @@ void Connection::CachedDBInserter::insert(const ItemSet& body,
 			    double support,
 			    double confidence,
 			    bool saveBody) {
-
   // if either body or head elements are too many or too few with respect to
   // the allowed cardinalities, we simply return back to the caller.
   if( !connection.bodyCard.validate(body.size()) || !connection.headCard.validate(head.size()))
@@ -193,6 +196,8 @@ void Connection::DirectDBInserter::insert(const ItemSet& body,
 			    double support,
 			    double confidence,
                 bool saveBody) {
+  MRLogStartMeasuring("Rule Insertion");
+					
   // if either body or head, is too big, too low with respect to
   // the allowed cardinalities we simply return back to the caller.
   if( !connection.bodyCard.validate(body.size()) || !connection.headCard.validate(head.size()))
@@ -217,7 +222,9 @@ void Connection::DirectDBInserter::insert(const ItemSet& body,
 		<< support << "," << confidence << "," << body.size() << "," << head.size() << ")" ;
 
   state->execute(query.str());
-  //delete state;
+  
+  // delete state;
+  MRLogStopMeasuring("Rule Insertion");
 }
 
 void Connection::insert(const char * what)

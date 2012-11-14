@@ -33,6 +33,11 @@ namespace minerule {
   void MRWarnPop();
   void MRDebugPush(const std::string& descr);
   void MRDebugPop();
+  
+  
+  void MRLogStartMeasuring(const std::string& description);
+  void MRLogStopMeasuring(const std::string& description);
+  void MRLogShowMeasurements();
 
   /**
    * This is the safest way to call for MRLogPush & MRLogPop.

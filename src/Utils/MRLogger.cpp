@@ -121,6 +121,18 @@ namespace minerule {
     indent();
     *os<<std::endl;
   }
+  
+  void MRLogger::logMeasurement(const std::string& description, const MeasurementInfo& data) {	  
+	  log() << description << " cpu time:" << data.totCpu << " time:" << data.totTime << std::endl;
+  }
+  
+  void MRLogger::logMeasurements() {
+	  push("Showing measured execution times:");
+	  for( Measurements::const_iterator it=measurements.begin(); it!=measurements.end(); ++it ) {
+		  logMeasurement(it->first, it->second);
+	  }
+	  pop();
+  }
 
 
 } // minerule

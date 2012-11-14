@@ -1,0 +1,17 @@
+#ifndef ERRORCODES_H_307OH17
+#define ERRORCODES_H_307OH17
+
+namespace mrc {
+
+	typedef enum {
+	  SUCCESS=0,
+	  NOTHING_TO_DO,
+	  QUERY_NAME_FOUND,
+	  QUERY_NAME_NOT_FOUND,
+	  ERROR_OPTION_PARSING,
+	  ERROR_CANNOT_OPEN_OPTION_FILE,
+	  ERROR_EXCEPTION_THROWN
+	} Results;
+
+}
+#endif /* end of include guard: ERRORCODES_H_307OH17 */

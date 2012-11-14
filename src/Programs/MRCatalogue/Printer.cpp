@@ -12,6 +12,7 @@ namespace mrc {
 	void Printer::format(std::string header, std::string info) {
 		printIndex();
 		std::vector<std::string>* chunks = minerule::StringUtils::split_to_length(info, OUTPUT_MAX_LEN);
+		assert(chunks->size()!=0);
 		
 		std::vector<std::string>::const_iterator it = chunks->begin();
 		_out << header << "\t" << *it << std::endl;					
@@ -37,8 +38,8 @@ namespace mrc {
 			format("size:", info.resSize);
 		}
   
-		if(_options.getListFormat().result) {
-			format("tables:", info.resName);
+		if(_options.getListFormat().result) {			
+			format("tables:\n", minerule::StringUtils::join(info.resTables, ", "));
 		}
   
 		if(_options.getListFormat().text) {
@@ -47,7 +48,7 @@ namespace mrc {
 	}
 	
 	void Printer::print(const std::vector<minerule::CatalogueInfo>& list)  {
-		_out << "Found " << list.size() << "result sets:" << std::endl;
+		_out << "Found " << list.size() << " result sets:" << std::endl;
 		_result_index = 1;
 		std::vector<minerule::CatalogueInfo>::const_iterator it;
 		for(it=list.begin(); it!=list.end(); it++) {

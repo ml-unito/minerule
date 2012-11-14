@@ -8,6 +8,7 @@ namespace minerule {
 	class StringUtils {
 	public:
 		static std::vector<std::string>* split_to_length(const std::string& str, size_t len);
+		static std::string join(const std::vector<std::string>&, const std::string& sep );
 	};
 }
 

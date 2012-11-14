@@ -16,9 +16,7 @@ namespace minerule {
 			<< "\tmessage:";
 	
 		std::vector<std::string>* chunks = StringUtils::split_to_length(msg, 70);
-		for(std::vector<std::string>::const_iterator it = chunks->begin(); it!=chunks->end(); ++it) {
-			ss << "\n\t\t" << *it;
-		}
+		ss << StringUtils::join(*chunks, "\n\t\t");
 	
 		message = ss.str();
 		

@@ -46,7 +46,7 @@ namespace mrc {
 	       << "-F - Format specifiers for printing the list of queries (-l)" <<std::endl
 	       << "     Valid specifiers: s - Print the size of the result set" << std::endl
 	       << "                       t - Print the text of the original mr" <<std::endl
-	       << "                       r - Print the name of the result set" << std::endl
+	       << "                       r - Print the result set table names" << std::endl
 	       << "     the default is '', i.e.: print onlty the qry name" << std::endl
 	       << "Return values:" << std::endl
 	       << "      SUCCESS = " << mrc::SUCCESS << std::endl
@@ -130,20 +130,16 @@ namespace mrc {
 	  }
 	}
 
-	void printQueryInfo(std::ostream& out, const minerule::CatalogueInfo& info, const Options& options) {
-		Printer printer(out, options);
-		printer.print(info);
-	}
-
 
 	int checkQueryName(const Options& options) {
 	  const std::string& tablename = 
 	    options.getSearchParam(Options::QryName);
 
 	  try {
+    	Printer printer(std::cout, options);
 	    minerule::CatalogueInfo info;
 	    minerule::OptimizerCatalogue::getMRQueryInfo(tablename,info, options.getListFormat().size);
-	    printQueryInfo(std::cout, info, options);
+	    printer.print(info);
 	  } catch (minerule::MineruleException& mr) {
 	    std::cout << "The query you specified is NOT present in the catalogue." << std::endl;
 	    return mrc::QUERY_NAME_NOT_FOUND;
@@ -163,13 +159,6 @@ namespace mrc {
 	}
 
 	void deleteQuery(const Options& options) {
-	  if( !minerule::MineruleOptions::getSharedOptions().getSafety().getOverwriteHomonymMinerules() )
-	    throw minerule::MineruleException(minerule::MR_ERROR_OPTION_PARSING,
-				    "The settings in the option file do not allow for "
-				    "query deletions. If you really want to delete the "
-				    "given minerule, set safety::overwriteHomonymMinerules to "
-				    "True in your option file.");
-
 	  if( checkQueryName(options)==mrc::QUERY_NAME_FOUND )
 	    minerule::OptimizerCatalogue::deleteMinerule( options.getSearchParam(Options::QryName) );
 	}

@@ -35,7 +35,8 @@ namespace minerule {
   public:
     std::string qryName;
     std::string qryText;
-    std::string resName;
+	std::string resName;
+    std::vector<std::string> resTables; // name of the tables used by the result
     size_t resSize;
 
     void updateQrySize() throw( odbc::SQLException, MineruleException );
@@ -154,8 +155,7 @@ namespace minerule {
     EqKeysCatalogue eqKeysCatalogue;
     DepFunCatalogue depFunCatalogue;
 
-    //  OrderType getOrderType(unsigned long origKey, unsigned long refKey) const;
-
+	static void setMRQueryInfoFromResultSet( odbc::ResultSet* rs, CatalogueInfo& info, bool includeResultSize );
   public:
     /* ---------- Public Methods ---------- */
  

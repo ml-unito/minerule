@@ -1,8 +1,11 @@
 #ifndef EXCEPTION_H_U3CYE3H3
 #define EXCEPTION_H_U3CYE3H3
 
-namespace mrc {
 #include "ErrorCodes.h"
+#include <exception>
+#include <string>
+
+namespace mrc {
 
 	class Exception : public std::exception {
 		  mrc::Results result;

@@ -31,7 +31,8 @@ target_link_libraries(minerule ${LIBS})
 add_executable(mrcatalogue 
 	Programs/MRCatalogue/mrcatalogue.cpp 
 	Programs/MRCatalogue/MRCUtils.cpp
-	Programs/MRCatalogue/Printer.cpp)
+	Programs/MRCatalogue/Printer.cpp
+	Programs/MRCatalogue/Options.cpp)
 	
 target_link_libraries(mrcatalogue 
 	mrpredicateutils 

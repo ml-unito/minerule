@@ -128,6 +128,8 @@ parseOptions(int argc, char** argv, MineruleOptions& mrOpts, std::string& mrtext
 	int opt;
 	bool okMRText=false;
 	bool okMROptions=false;
+	std::vector<std::string> cmd_line_mr_options;
+	
 	while((opt=getopt(argc,argv,"hi:f:m:O:ev"))!=-1) {
 		switch(opt) {
 			case 'h':
@@ -174,10 +176,7 @@ parseOptions(int argc, char** argv, MineruleOptions& mrOpts, std::string& mrtext
 				okMROptions = true;
 				break;
 			case 'O':
-				mrOpts.readFromString(string(optarg));
-				MRLog() << "Setted options accordingly to command line paramenter:-O " 
-					<< optarg << std::endl;
-				okMROptions = true;
+				cmd_line_mr_options.push_back(string(optarg));
 				break;
 			case 'm':
 				if( okMRText ) {
@@ -210,7 +209,19 @@ parseOptions(int argc, char** argv, MineruleOptions& mrOpts, std::string& mrtext
 		if( fileExist(MineruleOptions::DEFAULT_FILE_NAME) ) {
 			mrOpts.readFromFile(MineruleOptions::DEFAULT_FILE_NAME);
 			MRLog() << "Options read from:" << MineruleOptions::DEFAULT_FILE_NAME << std::endl;
-		} else {
+			okMROptions = true;
+		} 
+		
+		if( !cmd_line_mr_options.empty() ) {
+			for(std::vector<std::string>::const_iterator it=cmd_line_mr_options.begin(); it!=cmd_line_mr_options.end(); ++it) {
+				mrOpts.readFromString(*it);
+				MRLog() << "Options set accordingly to command line paramenter:-O " << optarg << std::endl;
+			}
+			okMROptions = true;			
+		}
+		
+		
+		if(!okMROptions) {
 			MRErr() << "No option file specified or found.";
 			exit(MR_ERROR_NO_OPTIONFILE_SPECIFIED);
 		}
@@ -221,12 +232,13 @@ int main (int argc, char *argv[])
 {
 	MineruleOptions& mrOpts =  MineruleOptions::getSharedOptions();
 	std::string mrtext;
-	parseOptions(argc, argv, mrOpts, mrtext);
-	MRDebug() << "Minerule source text:[" << mrtext << "]" <<std::endl;
-
-	MRLogPush("Minerule system starting");
 	
 	try {
+		parseOptions(argc, argv, mrOpts, mrtext);
+		MRDebug() << "Minerule source text:[" << mrtext << "]" <<std::endl;
+
+		MRLogPush("Minerule system starting");
+		
 		OptimizedMinerule optMR(mrtext);
 		Algorithms::executeMinerule(optMR);
 	} catch (odbc::SQLException& e) {

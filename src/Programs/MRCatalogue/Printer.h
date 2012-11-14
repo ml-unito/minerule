@@ -12,7 +12,7 @@ namespace mrc {
 		size_t _result_index;
 		static const size_t OUTPUT_MAX_LEN;
 	public:
-		Printer(std::ostream& out, const Options& options) : _out(out), _options(options) {}
+		Printer(std::ostream& out, const Options& options) : _out(out), _options(options), _result_index(1) {}
 		
 		void print(const minerule::CatalogueInfo& info);
 		void print(const std::vector<minerule::CatalogueInfo>& list);

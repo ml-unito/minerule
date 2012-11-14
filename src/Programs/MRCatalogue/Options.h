@@ -15,9 +15,7 @@ namespace mrc {
 			bool text;
 			bool result;
 
-			ListFormat() : size(false),
-				text(false),
-					result(false) {}
+			ListFormat() : size(false),	text(false), result(false) {}
 		};
 
 		typedef enum {QryName=0,LastParam} QryParams;
@@ -32,32 +30,11 @@ namespace mrc {
 
 		Options():	command(NoCommand), sepString(" ")  {  }
 
-		void setListFormat(const char* format) throw (Exception) {
-			if(format==NULL)
-				return;
-
-			for(int i=0; format[i]!='\0'; i++) {
-				switch( format[i] ) {
-					case 's':
-					listFormat.size=true;
-					break;
-					case 't':
-					listFormat.text = true;
-					break;
-					case 'r':
-					listFormat.result = true;
-					break;
-					default:
-					throw Exception(mrc::ERROR_OPTION_PARSING,
-						std::string("Unknown flag:")+format[i]);
-				}
-			}
-		}
+		void setListFormat(const char* format) throw (Exception);
 
 		void setShowList() {
 			if(command!=NoCommand && command!=ShowList) {
-				throw Exception( mrc::ERROR_OPTION_PARSING,
-					"You can specify either -l or -n option, but not both!" );
+				throw Exception( mrc::ERROR_OPTION_PARSING,	"You can specify either -l or -n option, but not both!" );
 			}
 
 			command = ShowList;
@@ -65,8 +42,7 @@ namespace mrc {
 
 		void setSearchQry() {
 			if(command!=NoCommand && command!=SearchQry) {
-				throw Exception( mrc::ERROR_OPTION_PARSING,
-					"You can specify either -l or -n option, but not both!" );
+				throw Exception( mrc::ERROR_OPTION_PARSING, "You can specify either -l or -n option, but not both!" );
 			}
 
 			command = SearchQry;
@@ -74,8 +50,7 @@ namespace mrc {
 
 		void setDeleteQry() {
 			if(command!=NoCommand && command!=DeleteQry) {
-				throw Exception( mrc::ERROR_OPTION_PARSING,
-					"Too many different options have been given, check out the parameters");
+				throw Exception( mrc::ERROR_OPTION_PARSING, "Too many different options have been given, check out the parameters");
 			}
 
 			command = DeleteQry;

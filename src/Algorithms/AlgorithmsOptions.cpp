@@ -2,13 +2,11 @@
 
 using namespace minerule;
 
-void 
-AlgorithmsOptions::setSupport(double sup)  {
+void AlgorithmsOptions::setSupport(double sup)  {
   support = sup;
 }
 
-void 
-AlgorithmsOptions::setConfidence(double conf)  {
+void AlgorithmsOptions::setConfidence(double conf)  {
   confidence = conf;
 }
 
@@ -17,28 +15,23 @@ AlgorithmsOptions::setRowsPerPartition(unsigned int rowPerPart)  {
   rowsPerPartition = rowPerPart;
   }*/
 
-void
-AlgorithmsOptions::setConnection(odbc::Connection* conn) {
+void AlgorithmsOptions::setConnection(odbc::Connection* conn) {
   connection=conn;
 }
 
-void
-AlgorithmsOptions::setStatement(odbc::PreparedStatement* stat) {
+void AlgorithmsOptions::setStatement(odbc::PreparedStatement* stat) {
   statement=stat;
 }
 
-void
-AlgorithmsOptions::setSourceRowDescription(const HeadBodySourceRowDescription& srdes) {
+void AlgorithmsOptions::setSourceRowDescription(const HeadBodySourceRowDescription& srdes) {
   sourceRowDescription = srdes;
 }
 
-double 
-AlgorithmsOptions::getSupport() const {
+double AlgorithmsOptions::getSupport() const {
   return support;
 }
 
-double
-AlgorithmsOptions::getConfidence() const {
+double AlgorithmsOptions::getConfidence() const {
   return confidence;
 }
 
@@ -48,17 +41,14 @@ AlgorithmsOptions::getRowsPerPartition() const {
   return rowsPerPartition;
   }*/
 
-odbc::Connection* 
-AlgorithmsOptions::getODBCConnection() const {
+odbc::Connection* AlgorithmsOptions::getODBCConnection() const {
   return connection;
 }
 
-odbc::PreparedStatement* 
-AlgorithmsOptions::getStatement() const {
+odbc::PreparedStatement* AlgorithmsOptions::getStatement() const {
   return statement;
 }
 
-const HeadBodySourceRowDescription& 
-AlgorithmsOptions::getSourceRowDescription() const {
+const HeadBodySourceRowDescription& AlgorithmsOptions::getSourceRowDescription() const {
   return sourceRowDescription;
 }

@@ -11,8 +11,6 @@ include_directories(${LIBODBC++_INCLUDE_DIRS})
 find_package(LIBGA REQUIRED)
 include_directories(${LIBGA_INCLUDE_DIRS})
 
-
-
 include_directories(${CMAKE_SOURCE_DIR}/include/minerule ${CMAKE_SOURCE_DIR}/../ExtLibs/libgist/include)
 add_definitions(-DMR_VERSION=\"2.0a\")
 
@@ -35,12 +33,31 @@ add_executable(mrcatalogue
 	Programs/MRCatalogue/MRCUtils.cpp
 	Programs/MRCatalogue/Printer.cpp)
 	
-target_link_libraries(mrcatalogue mrpredicateutils mroptimizer mrdatabase mrutils mrparsers ${LIBODBC++_LIBRARIES})
+target_link_libraries(mrcatalogue 
+	mrpredicateutils 
+	mroptimizer
+	mrdatabase 
+	mrutils 
+	mrparsers 
+	${LIBODBC++_LIBRARIES})
 
-add_executable(mrprintrules Programs/MRPrintRules/PrintRules.cpp Programs/MRPrintRules/RuleFormatter.cpp)
-target_link_libraries(mrprintrules mroptimizer mrdatabase mrpredicateutils mrutils mrparsers ${LIBODBC++_LIBRARIES})
+add_executable(mrprintrules 
+	Programs/MRPrintRules/PrintRules.cpp 	
+	Programs/MRPrintRules/RuleFormatter.cpp)
+	
+target_link_libraries(mrprintrules 
+	mroptimizer 
+	mrdatabase 
+	mrpredicateutils 
+	mrutils 
+	mrparsers 
+	${LIBODBC++_LIBRARIES})
 
-add_executable(mrdefaultoptions Programs/MRDefaultOptions/MRDefaultOptions.cpp)
-target_link_libraries(mrdefaultoptions mrutils ${LIBODBC++_LIBRARIES})
+add_executable(mrdefaultoptions 
+	Programs/MRDefaultOptions/MRDefaultOptions.cpp)
+	
+target_link_libraries(mrdefaultoptions 
+	mrutils 
+	${LIBODBC++_LIBRARIES})
 
 

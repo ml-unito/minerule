@@ -12,18 +12,9 @@ class MineruleException : public std::exception {
   std::string message;
   size_t errorCode;
  public:
-  MineruleException(std::string file, int line,  size_t errCode, std::string msg) throw()  { 
-    errorCode=errCode;
-    std::stringstream ss;
-    ss << "MineruleException threw from "<< file << ":" << line << "\n"
-       << "   error number:" << errorCode  
-          << " - " << me_error_name((MineruleErrors) errorCode) << "\n"
-       << "  error message:" << msg;
-    message = ss.str();
-  }
+  MineruleException(std::string file, int line,  size_t errCode, std::string msg) throw(); 
 
-  virtual ~MineruleException() throw() {
-    
+  virtual ~MineruleException() throw() {    
   }
 
   virtual const char* what() const throw() {

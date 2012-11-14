@@ -69,7 +69,7 @@ void printVersion() {
 * Tries to parse mrtext in order to find the name of
 	* the current minerule. 
  */
-		std::string 
+std::string 
 parseMineruleName(const std::string& mrtext) {
 	std::string mrtextcopy = mrtext;
 	std::string spacechars = " \t\n";
@@ -225,26 +225,23 @@ int main (int argc, char *argv[])
 	MRDebug() << "Minerule source text:[" << mrtext << "]" <<std::endl;
 
 	MRLogPush("Minerule system starting");
+	
 	try {
 		OptimizedMinerule optMR(mrtext);
 		Algorithms::executeMinerule(optMR);
 	} catch (odbc::SQLException& e) {
 		MRErr() << "ODBC Exception:" << e.getMessage() << std::endl;
-		std::cout << "ODBC Exception:" << e.getMessage() << std::endl;
 		exit(MR_ERROR_DATABASE_ERROR);
 		throw;
 	} catch (MineruleException& e) {
 		MRErr() << "Minerule Exception:" << e.what() << std::endl;
-		std::cout << "Minerule Exception:" << e.what() << std::endl;
 		exit( e.getErrorCode() );
 	} catch (std::exception& e) {
 		MRErr() << "Exception:" << e.what() << std::endl;
-		std::cout << "Exception:" << e.what() << std::endl;
 		exit( MR_ERROR_UNKNOWN );
 	}
 	catch(...) {
 		MRErr() << "An unknown exception has been thrown..." << std::endl;
-		std::cout << "An unknown exception has been thrown..." << std::endl;
 		exit( MR_ERROR_UNKNOWN );
 	}
 

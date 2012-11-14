@@ -24,40 +24,7 @@ class AggregateMonoConstraint;
 class AggregateAntiMonoConstraint;
 class NewRule;
 
-//typedef int ItemType;
-/*
-class ItemType {
-  public:
-	int item;
-	ItemType () : item(-1) {}
-	ItemType (int i) : item(i) {}
-	ItemType (int i, int p) : item(i) {}
-	friend istream& operator>>(istream& in, ItemType& i1) {
-		in >> i1.item;
-		return in;
-	}
-	friend std::ostream& operator<<(std::ostream& out, const ItemType& i1) {
-		out << i1.item;
-		return out;
-	}
-	friend bool operator<(const ItemType& i1, const ItemType& i2) {
-		return i1.item < i2.item;
-	}
-	friend bool operator>(const ItemType& i1, int i) {
-		return i1.item > i;
-	}
-	friend bool operator!=(const ItemType& i1, const ItemType& i2) {
-		return i1.item != i2.item;
-	}
-	friend bool operator==(const ItemType& i1, const ItemType& i2) {
-		return i1.item == i2.item;
-	}
-	friend bool operator==(const ItemType& i1, int i) {
-		return i1.item == i;
-	}
-	ItemType& operator=(int value) { item = value; return *this; }
-};
-*/
+
 //class Transaction : public std::set<std::pair<ItemType, ItemType> > {
 class Transaction : public std::set<ItemType> {
   HeadBodySourceRowDescription srd;

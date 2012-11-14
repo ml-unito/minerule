@@ -20,7 +20,6 @@ namespace mrc {
 		void printIndex() const;
 		void format(std::string header, std::string info);				
 		void format(std::string header, size_t info);				
-		void split(const std::string& str, std::vector<std::string>& result);
 	};
 }
 

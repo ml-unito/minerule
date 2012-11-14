@@ -1,5 +1,5 @@
 #include "Printer.h"
-
+#include "Utils/StringUtils.h"
 
 namespace mrc {
 	const size_t  Printer::OUTPUT_MAX_LEN = 70;
@@ -8,31 +8,20 @@ namespace mrc {
 	void Printer::printIndex() const {
 		_out << "-" << _result_index << "- ";
 	}
-	
-	
-	void Printer::split(const std::string& str, std::vector<std::string>& result) {
-		size_t len = str.size();
-		size_t cur_pos = 0;
-		while( cur_pos < len ) {
-			std::string chunk;
-			size_t new_pos = std::min( cur_pos + OUTPUT_MAX_LEN, len );
-			result.push_back(str.substr(cur_pos, new_pos-cur_pos));
-			cur_pos = new_pos;
-		}
-	}
-	
+		
 	void Printer::format(std::string header, std::string info) {
 		printIndex();
-		std::vector<std::string> chunks;
-		split(info, chunks);
+		std::vector<std::string>* chunks = minerule::StringUtils::split_to_length(info, OUTPUT_MAX_LEN);
 		
-		std::vector<std::string>::const_iterator it = chunks.begin();
+		std::vector<std::string>::const_iterator it = chunks->begin();
 		_out << header << "\t" << *it << std::endl;					
 		++it;
 		
-		for(; it!=chunks.end(); ++it) {
+		for(; it!=chunks->end(); ++it) {
 			_out << "\t" << *it << std::endl;
 		}
+		
+		delete chunks;
 	}
 	
 	void Printer::format(std::string header, size_t info) {

@@ -26,7 +26,9 @@ set(utils_src
 	${FLEX_OPTLEXER_OUTPUTS}
 	OptionParserLib.cpp
 	MineruleLogs.cpp
-	SQLUtils.cpp)
+	SQLUtils.cpp
+	StringUtils.cpp
+	MineruleException.cpp)
 	
 
 add_library( mrutils ${utils_src})

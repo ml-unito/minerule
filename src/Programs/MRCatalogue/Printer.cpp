@@ -64,6 +64,7 @@ namespace mrc {
 		for(it=list.begin(); it!=list.end(); it++) {
 			print(*it);
 			_result_index++;
+			_out << std::endl;
 		}
 		
 		_out << std::endl;

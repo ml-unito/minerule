@@ -12,36 +12,6 @@
 
 
 namespace minerule {
-  
-  /*
-    OptimizerCatalogue::OrderType OptimizerCatalogue::getOrderType(unsigned long origKey, 
-    unsigned long refKey) const {
-    OrderType result=None;
-
-    odbc::Connection* connection =
-    MineruleOptions::getSharedOptions().getOdbc_db().getODBCConnection();
-    odbc::Statement* state = connection->createStatement();
-
-   std::string query =(std::string)
-    "SELECT * "
-    "FROM mr_eq_key_domains "
-    "WHERE key_id_ref="+Converter((long)refKey).toString() +
-    " AND key_id="+Converter((long)origKey).toString();
-    
-    odbc::ResultSet* rs = state->executeQuery(query);
-    if(rs->next()) {
-    if(rs->getString(3)=="e")
-    result=Equal;
-    else if( rs->getString(3)=="r" )
-    result= Reversed;
-    }
-    
-    delete rs;
-    delete state;
-
-    return result;
-    }
-  */
 
   bool OptimizerCatalogue::existsMinerule(const std::string& mrname) {
     odbc::Connection* conn = 
@@ -329,9 +299,7 @@ namespace minerule {
 			galid+","+
 			ralid+","+
 			calid+")");
-  
-    std::cout<<"DINO"<<std::endl;
-  }
+}
   
  std::string OptimizerCatalogue::getResultsetName(const std::string& queryname) 
     throw(odbc::SQLException, MineruleException){

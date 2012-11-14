@@ -10,8 +10,13 @@ namespace minerule {
 		
 		std::vector<std::string>* chunks = StringUtils::split_to_length(msg, MAX_LOG_LENGTH-indentLen);
 		
-		for( std::vector<std::string>::const_iterator it= chunks->begin(); it!=chunks->end(); ++it ) {
-			logger() << "  " << *it << std::endl;			
+		std::vector<std::string>::const_iterator it= chunks->begin();
+		if( it != chunks->end() ) {
+			logger() << *it << std::endl;						
+		}
+		
+		for( ; it!=chunks->end(); ++it ) {
+			logger() << StringUtils::to_green("  +") << *it << std::endl;			
 		}
 			
 		delete chunks;		

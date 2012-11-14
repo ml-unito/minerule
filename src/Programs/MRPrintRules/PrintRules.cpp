@@ -51,8 +51,9 @@ fileExists(const std::string& filename) {
 void
 printHelp(int argc, char** argv) {
     std::cout << "Usage:" << std::endl
-    << "   " << argv[0] << " [-c] [-h] [-s <order>] [-x <sepString>] [-f <optionfile>] resultsetname" << std::endl
-    << " -c do not filter out rules having low confidence" << std::endl
+    << "   " << argv[0] << " [-0] [-c] [-h] [-s <order>] [-x <sepString>] [-f <optionfile>] resultsetname" << std::endl
+	<< " -0 suppresses logging output " << std::endl
+    << " -c do not filter out rules having low confidence" << std::endl	
     << " Option -s can be used to sort the rules in a given order." << std::endl
     << "   supported orders are: " << std::endl
     << "     'no' -> no particular order (fastest display)" << std::endl
@@ -77,6 +78,8 @@ void
 parseOptions(int argc, char** argv, MineruleOptions& opt, RuleFormatter*& rf, double& conf) {
     bool didReadMROpts=false;
     std::string sepString="";
+	bool suppressLog = false;
+		
     rf=NULL;
     for( int i=0; i<argc; i++ ) {
         // checking -f options
@@ -131,24 +134,28 @@ parseOptions(int argc, char** argv, MineruleOptions& opt, RuleFormatter*& rf, do
         if(argv[i]==string("-c")) {
             conf=0;
         }
+		
+		if(argv[i]==string("-0")) {
+			suppressLog = true;
+		}
         
         if(argv[i]==string("-s")) {
             if((i+1)<argc) {
                 std::string arg = argv[i+1];
                 if(string(arg)=="no") {
-                    rf=new SimpleRuleFormatter(cout);
+                    rf=new SimpleRuleFormatter();
                 } else if(string(arg)=="scbh") {
-                    rf=new SortedRuleFormatter<QueryResult::SortSuppConfBodyHead>(cout);
+                    rf=new SortedRuleFormatter<QueryResult::SortSuppConfBodyHead>();
                 } else if(string(arg)=="bhsc") {
-                    rf=new SortedRuleFormatter<QueryResult::SortBodyHeadSuppConf>(cout);
+                    rf=new SortedRuleFormatter<QueryResult::SortBodyHeadSuppConf>();
                 } else if(string(arg)=="hbsc") {
-                    rf=new SortedRuleFormatter<QueryResult::SortHeadBodySuppConf>(cout);
+                    rf=new SortedRuleFormatter<QueryResult::SortHeadBodySuppConf>();
                 } else if(string(arg)=="csbh") {
-                    rf=new SortedRuleFormatter<QueryResult::SortConfSuppBodyHead>(cout);
+                    rf=new SortedRuleFormatter<QueryResult::SortConfSuppBodyHead>();
                 } else if(string(arg)=="cbhs") {
-                    rf=new SortedRuleFormatter<QueryResult::SortConfBodyHeadSupp>(cout);
+                    rf=new SortedRuleFormatter<QueryResult::SortConfBodyHeadSupp>();
                 } else if(string(arg)=="cbsh") {
-                    rf=new SortedRuleFormatter<QueryResult::SortConfBodySuppHead>(cout);
+                    rf=new SortedRuleFormatter<QueryResult::SortConfBodySuppHead>();
                 }
             } else {
                 std::cerr << "-s option recognized, but its argument is missing!" << std::endl;
@@ -159,7 +166,7 @@ parseOptions(int argc, char** argv, MineruleOptions& opt, RuleFormatter*& rf, do
     }
     
     if(rf==NULL) {
-        rf = new SimpleRuleFormatter(cout);
+        rf = new SimpleRuleFormatter();
     }
     
     if( !didReadMROpts ) {
@@ -174,6 +181,9 @@ parseOptions(int argc, char** argv, MineruleOptions& opt, RuleFormatter*& rf, do
     
     if( sepString!="" )
         rf->setFieldSeparationString(sepString);
+	
+	if( suppressLog )
+		rf->setSuppressLog(true);
 }
 
 
@@ -189,9 +199,9 @@ main(int argc, char** argv) {
         double conf=-1;
         parseOptions(argc, argv, mr, rf, conf);
         
-        MRErr() << "Started..." << std::endl;
+        if(!rf->suppressLog()) MRLogPush("Printing result set...");
         printRules( qryname, *rf, conf);
-        MRErr() << "Done!" << std::endl;
+		if(!rf->suppressLog()) MRLogPop();
     } catch ( minerule::MineruleException& e ) {
         MRErr() << "MineruleError:" << e.what() << std::endl;
         throw;

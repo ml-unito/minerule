@@ -13,13 +13,13 @@ namespace minerule {
  */
 class RuleFormatter {
 protected:
-  std::ostream& os;
-  std::string fieldSeparationString;
+  std::string _fieldSeparationString;
+  bool _suppressLog;
 
   static std::string quote(const std::string& elem);
   static std::string quoteElems(const ItemSet& elems);
  public:
-  RuleFormatter(std::ostream& out) : os(out), fieldSeparationString("") {
+  RuleFormatter() : _fieldSeparationString(""), _suppressLog(false) {
   }
 
   virtual ~RuleFormatter() {}
@@ -28,8 +28,11 @@ protected:
     printRule(const QueryResult::Rule&) = 0;
 
   void setFieldSeparationString(const std::string& s) {
-    fieldSeparationString=s;
+    _fieldSeparationString=s;
   }
+  
+  void setSuppressLog(bool newVal) {  _suppressLog = newVal; }
+  bool suppressLog() const { return _suppressLog; }
 
   virtual void
   postExec()=0;
@@ -38,7 +41,7 @@ protected:
 
 class SimpleRuleFormatter : public RuleFormatter {
 public:
-  SimpleRuleFormatter(std::ostream& os) : RuleFormatter(os) {};
+  SimpleRuleFormatter() : RuleFormatter() {};
 
   virtual ~SimpleRuleFormatter() {};
 
@@ -55,7 +58,7 @@ class SortedRuleFormatter : public SimpleRuleFormatter {
   typedef std::set<QueryResult::Rule,Sorter> SortedContainer;
   SortedContainer sortedRules;
 public:
-  SortedRuleFormatter(std::ostream& os) : SimpleRuleFormatter(os) {};
+  SortedRuleFormatter() : SimpleRuleFormatter() {};
   virtual ~SortedRuleFormatter() {};
 
   virtual void

@@ -15,6 +15,8 @@ namespace minerule {
 			logger() << *it << std::endl;						
 		}
 		
+		++it;
+		
 		for( ; it!=chunks->end(); ++it ) {
 			logger() << StringUtils::to_green("  +") << *it << std::endl;			
 		}

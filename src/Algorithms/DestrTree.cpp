@@ -17,13 +17,13 @@ namespace minerule {
     Head* newhead;
     while( qit.next()) {
       QueryResult::Rule r;
-      //crea body e head che sono due vettori ItemSetType
+      //crea body e head che sono due vettori ItemSet
       //ovvero due vettori di ItemType
       //ogni ItemType contiene un puntatore ad un SourceRowElement
       qit.getRule(r);
       //insertRuleInStructure(r);
-      //body e head sono due puntatori a ItemSetType
-      /*ItemSetType:: iterator itr=(r.body)->begin();
+      //body e head sono due puntatori a ItemSet
+      /*ItemSet:: iterator itr=(r.body)->begin();
 		        while(itr!=(r.body)->end()){cout<<" "<<(*itr);itr++;}
 			std::cout<<" -> ";
       itr=(r.head)->begin();
@@ -47,15 +47,15 @@ namespace minerule {
     //body e head servono per capire quando devo andare avanti nella rispettiva lista oppure no
     bool newbody=1;
     bool newhead=1;
-    ItemSetType* b1=new ItemSetType();
-    ItemSetType* b1nb2=new ItemSetType();
-    ItemSetType* h1=new ItemSetType();
-    ItemSetType* h1nh2=new ItemSetType();
+    ItemSet* b1=new ItemSet();
+    ItemSet* b1nb2=new ItemSet();
+    ItemSet* h1=new ItemSet();
+    ItemSet* h1nh2=new ItemSet();
     while( notend ) {
      std::string gb,gh;
       if (newbody){delete b1; delete b1nb2;
-                ItemSetType* b1=new ItemSetType();
-                ItemSetType* b1nb2=new ItemSetType();
+                ItemSet* b1=new ItemSet();
+                ItemSet* b1nb2=new ItemSet();
 		gb=mb1->getCurrentGID();
                 for(; mb1->current() != mb1->end() && mb1->getCurrentGID()==gb;(*mb1)++){
 	         ItemType item(*SourceRowElement::deserializeElementFromString("n "+mb1->getCurrentItem()));
@@ -67,8 +67,8 @@ namespace minerule {
                 }
       }
       if (newhead){delete h1; delete h1nh2;
-                ItemSetType* h1=new ItemSetType();
-                ItemSetType* h1nh2=new ItemSetType();
+                ItemSet* h1=new ItemSet();
+                ItemSet* h1nh2=new ItemSet();
                 gh=mb1->getCurrentGID();
                 for(; mh1->current() != mh1->end() && mh1->getCurrentGID()==gh;(*mh1)++){
 	         ItemType item(*SourceRowElement::deserializeElementFromString("n "+mh1->getCurrentItem()));
@@ -113,20 +113,20 @@ namespace minerule {
     bool h1notend=rh1->next();
     bool b1nb2notend=rb1nb2->next();
     bool h1nh2notend=rh1nh2->next();
-    ItemSetType* b1=new ItemSetType();
-    ItemSetType* b1nb2=new ItemSetType();
+    ItemSet* b1=new ItemSet();
+    ItemSet* b1nb2=new ItemSet();
     //HeadBodySourceRow curRowb1(rb1, bodyDes);
     //HeadBodySourceRow curRowb12(rb1nb2, bodyDes);
-    ItemSetType* h1=new ItemSetType();
-    ItemSetType* h1nh2=new ItemSetType();
+    ItemSet* h1=new ItemSet();
+    ItemSet* h1nh2=new ItemSet();
     //HeadBodySourceRow curRowh1(rh1, headDes);
     //HeadBodySourceRow curRowh12(rh1nh2, headDes);
     while( notend ) {
       
       if (b1notend && newbody){
 	delete b1; delete b1nb2;
-	b1=new ItemSetType();
-	b1nb2=new ItemSetType();
+	b1=new ItemSet();
+	b1nb2=new ItemSet();
         HeadBodySourceRow curRowb1(rb1, bodyDes);
         gb=curRowb1.getGroupBody();
 
@@ -151,8 +151,8 @@ namespace minerule {
 
       if(h1notend && newhead) {
 	delete h1; delete h1nh2;
-        h1=new ItemSetType();
-	h1nh2=new ItemSetType();
+        h1=new ItemSet();
+	h1nh2=new ItemSet();
 	HeadBodySourceRow curRowh1(rh1, headDes);
         gh=curRowh1.getGroupBody();
 
@@ -176,13 +176,13 @@ namespace minerule {
 
       if (!(gb<gh) && !(gb==gh)) {
                         /*cout<<"h1= "<<std::endl;
-                    	ItemSetType:: iterator it1=h1->begin();
+                    	ItemSet:: iterator it1=h1->begin();
 		 	 while(it1!=h1->end()){cout<<" "<<(*it1);it1++;}
 			 std::cout<<std::endl;
 
 
 		 	 std::cout<<"h1nh2= "<<std::endl;
-                 	 ItemSetType:: iterator it2=h1nh2->begin();
+                 	 ItemSet:: iterator it2=h1nh2->begin();
 		 	 while(it2!=h1nh2->end()){cout<<" "<<(*it2);it2++;}
                          std::cout<<std::endl;*/
 
@@ -191,13 +191,13 @@ namespace minerule {
                          newbody=0;newhead=1;
 
       }else if (gb<gh) {/*cout<<"b1= "<<std::endl;
-                        ItemSetType:: iterator it3=b1->begin();
+                        ItemSet:: iterator it3=b1->begin();
 		        while(it3!=b1->end()){cout<<" "<<(*it3);it3++;}
 			std::cout<<std::endl;
 
 
 			std::cout<<"b1nb2= "<<std::endl;
-                        ItemSetType:: iterator it4=b1nb2->begin();
+                        ItemSet:: iterator it4=b1nb2->begin();
 		        while(it4!=b1nb2->end()){cout<<" "<<(*it4);it4++;}
                         std::cout<<std::endl;*/
 
@@ -207,25 +207,25 @@ namespace minerule {
                         newbody=1;newhead=0;
        }
        else if (gb==gh) {/*cout<<"b1= "<<std::endl;
-                        ItemSetType:: iterator it5=b1->begin();
+                        ItemSet:: iterator it5=b1->begin();
 		        while(it5!=b1->end()){cout<<" "<<(*it5);it5++;}
 			std::cout<<std::endl;
 
 
 			std::cout<<"b1nb2= "<<std::endl;
-                        ItemSetType:: iterator it6=b1nb2->begin();
+                        ItemSet:: iterator it6=b1nb2->begin();
 		        while(it6!=b1nb2->end()){cout<<" "<<(*it6);it6++;}
 			std::cout<<std::endl;
 
 
 			std::cout<<"h1= "<<std::endl;
-			ItemSetType:: iterator it7=h1->begin();
+			ItemSet:: iterator it7=h1->begin();
 		        while(it7!=h1->end()){cout<<" "<<(*it7);it7++;}
 			std::cout<<std::endl;
 
 
 			std::cout<<"h1nh2= "<<std::endl;
-                        ItemSetType:: iterator it8=h1nh2->begin();
+                        ItemSet:: iterator it8=h1nh2->begin();
 		        while(it8!=h1nh2->end()){cout<<" "<<(*it8);it8++;}
                         std::cout<<std::endl;
 

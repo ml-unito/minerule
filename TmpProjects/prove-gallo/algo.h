@@ -38,8 +38,8 @@ class ConstrTree /*:public IncrementalAlgorithms*/{
  int getNGroups(){return ngroups;}
  Body* getRoot(){return root;}
  Body* insertRulesInStructure(const std::string& queryname, int ng);
- void buildAndFindBodies(ItemSetType& body);
- void buildAndFindRules(ItemSetType& body,ItemSetType& heads);
+ void buildAndFindBodies(ItemSet& body);
+ void buildAndFindRules(ItemSet& body,ItemSet& heads);
  void adjustSupp(MIndexIterator* b2,MIndexIterator* h2);
 };
 

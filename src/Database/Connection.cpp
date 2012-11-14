@@ -93,7 +93,7 @@ void Connection::createResultTables(const SourceRowDescriptor& srd)
  }
 
 
-void Connection::DirectDBInserter::insertHeadBodyElems(TableKind kind, const ItemSetType& elems, size_t counter) {
+void Connection::DirectDBInserter::insertHeadBodyElems(TableKind kind, const ItemSet& elems, size_t counter) {
   assert( !elems.empty() );
   odbc::PreparedStatement* state;
   switch(kind) {
@@ -107,7 +107,7 @@ void Connection::DirectDBInserter::insertHeadBodyElems(TableKind kind, const Ite
 		  throw MineruleException(MR_ERROR_INTERNAL, "bad call to insertHeadBodyElems. This is a bug! Please report it!");
   }
 
-  ItemSetType::const_iterator it = elems.begin();
+  ItemSet::const_iterator it = elems.begin();
   for(; it!=elems.end() ; it++ ) {
     state->setLong(1,counter);
 	it->setPreparedStatementParameters(state,2);
@@ -116,10 +116,10 @@ void Connection::DirectDBInserter::insertHeadBodyElems(TableKind kind, const Ite
 }
 
 
-void Connection::CachedDBInserter::insertHeadBodyElems(TableKind kind, const ItemSetType& elems, size_t counter) {
+void Connection::CachedDBInserter::insertHeadBodyElems(TableKind kind, const ItemSet& elems, size_t counter) {
 //  assert( !elems.empty() );
 
-  ItemSetType::const_iterator it = elems.begin();
+  ItemSet::const_iterator it = elems.begin();
   std::string str;
   for(; it!=elems.end() ; it++ ) {
     SourceRowElement::serializeElementToString(it->getElement(), str);
@@ -163,8 +163,8 @@ void Connection::CachedDBInserter::finalize() {
   unlink(loadstr2.c_str());
 }
 
-void Connection::CachedDBInserter::insert(const ItemSetType& body,
-			    const ItemSetType& head,
+void Connection::CachedDBInserter::insert(const ItemSet& body,
+			    const ItemSet& head,
 			    double support,
 			    double confidence,
 			    bool saveBody) {
@@ -188,8 +188,8 @@ void Connection::CachedDBInserter::insert(const ItemSetType& body,
   outR << bodyId << "\t" << headId << "\t" << support << "\t" << confidence << "\t" << body.size() << "\t" << head.size() << std::endl;
 }
 
-void Connection::DirectDBInserter::insert(const ItemSetType& body,
-			    const ItemSetType& head,
+void Connection::DirectDBInserter::insert(const ItemSet& body,
+			    const ItemSet& head,
 			    double support,
 			    double confidence,
                 bool saveBody) {

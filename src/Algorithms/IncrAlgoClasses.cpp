@@ -51,8 +51,8 @@ namespace minerule {
  //INSERIMENTO DI ItemSet BODY
 
  //funzione ricorsiva
- Head* Body::insertItemSetB(ItemSetType:: iterator ite,
-                           ItemSetType:: iterator itend, double s ){
+ Head* Body::insertItemSetB(ItemSet:: iterator ite,
+                           ItemSet:: iterator itend, double s ){
   RowBContainer::iterator itr;
   itr=NRB->find(*ite);
   Head* hr=NULL;
@@ -99,9 +99,9 @@ namespace minerule {
  }
 
 
- Head* Body::insertItemSetB(ItemSetType& SREV,double supp){
-  ItemSetType:: iterator ite=SREV.begin();
-  ItemSetType:: iterator itend=SREV.end();
+ Head* Body::insertItemSetB(ItemSet& SREV,double supp){
+  ItemSet:: iterator ite=SREV.begin();
+  ItemSet:: iterator itend=SREV.end();
   Head* h;
   h=insertItemSetB(ite, itend, supp);
   return h;
@@ -111,8 +111,8 @@ namespace minerule {
  //INSERIMENTO DI ItemSet HEAD
 
  //funzione ricorsiva
- void Head::insertItemSetH(ItemSetType:: iterator ite,
-                           ItemSetType:: iterator itend, double supp){
+ void Head::insertItemSetH(ItemSet:: iterator ite,
+                           ItemSet:: iterator itend, double supp){
   RowContainer::iterator itr;
   itr=NR->find(*ite);
 
@@ -151,19 +151,19 @@ namespace minerule {
   //itr->second->setSupp(supp);
 }
 
- void Head::insertItemSetH(ItemSetType& SREV,double supp){
-  ItemSetType:: iterator ite=SREV.begin();
-  ItemSetType:: iterator itend=SREV.end();
+ void Head::insertItemSetH(ItemSet& SREV,double supp){
+  ItemSet:: iterator ite=SREV.begin();
+  ItemSet:: iterator itend=SREV.end();
   insertItemSetH(ite,itend,supp);
  }
 
 
 
  //funzione ricorsiva
- void Body::findBodiesInTree(ItemSetType* body){
+ void Body::findBodiesInTree(ItemSet* body){
 
   RowBContainer::iterator ite=NRB->begin();
-  ItemSetType::iterator itfind;
+  ItemSet::iterator itfind;
   while(ite!=NRB->end()){
     itfind=find(body->begin(),body->end(),ite->first);
     //se l'ho trovato
@@ -180,10 +180,10 @@ namespace minerule {
 
 
   //funzione ricorsiva
- void Head::findHead(ItemSetType* head){
+ void Head::findHead(ItemSet* head){
   RowContainer::iterator ite=NR->begin();
-  ItemSetType::iterator itfind;
-  //  ItemSetType::iterator prova=head->begin();
+  ItemSet::iterator itfind;
+  //  ItemSet::iterator prova=head->begin();
   /*  std::cout<<"elementi in cui faccio ricerca:"<<std::endl;
   while(prova!=head->end()){
   std::cout<<(*prova)<<", ";
@@ -210,9 +210,9 @@ namespace minerule {
 //questa serve per l'algo incrementale distruttivo
 //arrivo qui quando il body della regola non soddisfa B2, quindi non mi interessa piu' che
 //H2 sia soddisfatto
- void Head::findHead2(ItemSetType* h1){
+ void Head::findHead2(ItemSet* h1){
   RowContainer::iterator ite=NR->begin();
-  ItemSetType::iterator itfind;
+  ItemSet::iterator itfind;
   while(ite!=NR->end()){
     //cout<<"esamino head "<<ite->first<<std::endl;
     itfind=find(h1->begin(),h1->end(),ite->first);
@@ -231,9 +231,9 @@ namespace minerule {
 
 //questa serve per l'algo incrementale distruttivo
 //arrivo qui quando il body soddisfa la regola
- void Head::findHead2bis(ItemSetType* h1nh2,ItemSetType* h1){
+ void Head::findHead2bis(ItemSet* h1nh2,ItemSet* h1){
   RowContainer::iterator ite=NR->begin();
-  ItemSetType::iterator itfind;
+  ItemSet::iterator itfind;
   while(ite!=NR->end()){
     //cout<<"esamino head "<<ite->first<<std::endl;
     itfind=find(h1nh2->begin(),h1nh2->end(),ite->first);
@@ -263,10 +263,10 @@ namespace minerule {
 
 //questa serve per l'algo incrementale distruttivo
 //funzione ricorsiva
- void Body::findChildInTree(ItemSetType* b1, ItemSetType* h1){
+ void Body::findChildInTree(ItemSet* b1, ItemSet* h1){
 
   RowBContainer::iterator ite=NRB->begin();
-  ItemSetType::iterator itfind;
+  ItemSet::iterator itfind;
   //cout<<"esamino body "<<ite->first<<std::endl;
   while(ite!=NRB->end()){
     itfind=find(b1->begin(),b1->end(),ite->first);
@@ -291,14 +291,14 @@ namespace minerule {
 
 
 
- void Body::findRulesInTree(ItemSetType* body,ItemSetType* head){
+ void Body::findRulesInTree(ItemSet* body,ItemSet* head){
 
 
-   //ItemSetType:: iterator itb=body->begin();
-   //ItemSetType:: iterator ity=body->end();
+   //ItemSet:: iterator itb=body->begin();
+   //ItemSet:: iterator ity=body->end();
 
   RowBContainer::iterator ite=NRB->begin();
-  ItemSetType::iterator itfind;
+  ItemSet::iterator itfind;
   while(ite!=NRB->end()){
     itfind=find(body->begin(),body->end(),ite->first);
     if(itfind!=body->end()) {//se l'ho trovato
@@ -329,10 +329,10 @@ namespace minerule {
 
 
 //questa serve per l'algo incrementale distruttivo
- void Body::findRulesInTree(ItemSetType* b1,ItemSetType* b1nb2,
-                            ItemSetType* h1,ItemSetType* h1nh2){
+ void Body::findRulesInTree(ItemSet* b1,ItemSet* b1nb2,
+                            ItemSet* h1,ItemSet* h1nh2){
   RowBContainer::iterator ite=NRB->begin();
-  ItemSetType::iterator itfind;
+  ItemSet::iterator itfind;
   while(ite!=NRB->end()){
     //cout<<"esamino body "<<ite->first<<std::endl;
     itfind=find(b1nb2->begin(),b1nb2->end(),ite->first);

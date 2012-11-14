@@ -2,7 +2,7 @@
 #include <iterator>
 #include <iostream>
 
-typedef std::vector<int> ItemSetType;
+typedef std::vector<int> ItemSet;
 #include "SubsetIterator.h"
 
 using namespace std;

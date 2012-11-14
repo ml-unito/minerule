@@ -5,7 +5,7 @@
 namespace minerule {
 
 	void 
-		QueryResult::Iterator::readElems(int id, ItemSetType& elems, odbc::PreparedStatement* ps_elems) 
+		QueryResult::Iterator::readElems(int id, ItemSet& elems, odbc::PreparedStatement* ps_elems) 
 	throw (MineruleException, odbc::SQLException, std::exception) {
 		ps_elems->setInt(1,id);
 		odbc::ResultSet* rs = ps_elems->executeQuery();
@@ -60,8 +60,8 @@ namespace minerule {
 	}
 
 	void QueryResult::Iterator::getRule( QueryResult::Rule& r ) throw(MineruleException, odbc::SQLException, std::exception) {
-		r.body = new ItemSetType();
-		r.head = new ItemSetType();
+		r.body = new ItemSet();
+		r.head = new ItemSet();
 		readElems(  rs_rules->getInt(1), *r.body, body_elems );
 		readElems(  rs_rules->getInt(2), *r.head, head_elems );
 		r.support = rs_rules->getFloat(3);

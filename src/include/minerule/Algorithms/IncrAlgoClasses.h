@@ -22,12 +22,12 @@ namespace minerule {
   
   private:
    ItemType ancestor;
-   NodeRowB* findBody(ItemSetType:: iterator ite,
-                      ItemSetType:: iterator itend);
-   NodeRowB* findHead(ItemSetType:: iterator ite,
-                          ItemSetType:: iterator itend);
-   Head* insertItemSetB(ItemSetType::iterator ite,
-                       ItemSetType::iterator itend,
+   NodeRowB* findBody(ItemSet:: iterator ite,
+                      ItemSet:: iterator itend);
+   NodeRowB* findHead(ItemSet:: iterator ite,
+                          ItemSet:: iterator itend);
+   Head* insertItemSetB(ItemSet::iterator ite,
+                       ItemSet::iterator itend,
 		       double d);
   public:
   static size_t countb;
@@ -38,12 +38,12 @@ namespace minerule {
 
   void setAncestor(ItemType b){ancestor=b;}
   ItemType getAncestor(){return ancestor;}
-  Head* insertItemSetB(ItemSetType& SREV, double supp);
-  void findBodiesInTree(ItemSetType* body);
-  void findChildInTree(ItemSetType* b1, ItemSetType* h1);
-  void findRulesInTree(ItemSetType* itemset_body,ItemSetType* itemset_head);
-  void findRulesInTree(ItemSetType* b1,ItemSetType* b1nb2,
-                       ItemSetType* h1,ItemSetType* h1nh2);
+  Head* insertItemSetB(ItemSet& SREV, double supp);
+  void findBodiesInTree(ItemSet* body);
+  void findChildInTree(ItemSet* b1, ItemSet* h1);
+  void findRulesInTree(ItemSet* itemset_body,ItemSet* itemset_head);
+  void findRulesInTree(ItemSet* b1,ItemSet* b1nb2,
+                       ItemSet* h1,ItemSet* h1nh2);
   void extractRules(std::vector<ItemType>& body,
 	       double thrR, double thrB,int ngroups,Connection* pconnection);
   void provaStampaLiv1();
@@ -65,16 +65,16 @@ namespace minerule {
    RowContainer* NR;
    void setAncestor(ItemType h){ancestor=h;}
    ItemType getAncestor(){return ancestor;}
-   void insertItemSetH(ItemSetType& SREV, double supp);
-   void insertItemSetH(ItemSetType:: iterator ite,
-                      ItemSetType:: iterator itend,
+   void insertItemSetH(ItemSet& SREV, double supp);
+   void insertItemSetH(ItemSet:: iterator ite,
+                      ItemSet:: iterator itend,
 		      double s);
    void extractRules(const std::vector<ItemType>& body,
                   std::vector<ItemType>& head,
 		  double thrR, double thrB, double suppB, int ngroups,Connection* pconnection);
-   void findHead(ItemSetType* head);
-   void findHead2bis(ItemSetType* h1nh2,ItemSetType* h1);
-   void findHead2(ItemSetType* h1);
+   void findHead(ItemSet* head);
+   void findHead2bis(ItemSet* h1nh2,ItemSet* h1);
+   void findHead2(ItemSet* h1);
  };
 
 

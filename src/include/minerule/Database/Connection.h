@@ -53,8 +53,8 @@ namespace minerule {
 			}
 			virtual void setHeadInserter(odbc::PreparedStatement* inserter) { headInserter = inserter; }
 			virtual void setBodyInserter(odbc::PreparedStatement* inserter) { bodyInserter = inserter; }
-			virtual void insert(const ItemSetType&, const ItemSetType&, double support,  double confidence, bool saveBody = true) =0;
-			virtual void insertHeadBodyElems(TableKind,const ItemSetType& elems, size_t counter) =0;
+			virtual void insert(const ItemSet&, const ItemSet&, double support,  double confidence, bool saveBody = true) =0;
+			virtual void insertHeadBodyElems(TableKind,const ItemSet& elems, size_t counter) =0;
 			virtual void init() {};
 			virtual void finalize() {};
 		};
@@ -62,8 +62,8 @@ namespace minerule {
 		class DirectDBInserter : public DBInserter {
 		public:
 			DirectDBInserter(Connection& cc) : DBInserter(cc) {};
-			virtual void insert(const ItemSetType&, const ItemSetType&, double support, double confidence,	bool saveBody = true);
-			virtual void insertHeadBodyElems(TableKind, const ItemSetType& elems, size_t counter);
+			virtual void insert(const ItemSet&, const ItemSet&, double support, double confidence,	bool saveBody = true);
+			virtual void insertHeadBodyElems(TableKind, const ItemSet& elems, size_t counter);
 			virtual ~DirectDBInserter() {};
 		};
 
@@ -73,8 +73,8 @@ namespace minerule {
 			std::string filename;
 		public:
 			CachedDBInserter(Connection& cc) : DBInserter(cc) {};
-			virtual void insert(const ItemSetType&, const ItemSetType&, double support, double confidence,	bool saveBody = true);
-			virtual void insertHeadBodyElems(TableKind, const ItemSetType& elems, size_t counter);
+			virtual void insert(const ItemSet&, const ItemSet&, double support, double confidence,	bool saveBody = true);
+			virtual void insertHeadBodyElems(TableKind, const ItemSet& elems, size_t counter);
 			virtual ~CachedDBInserter() {};
 			virtual void init();
 			virtual void finalize();
@@ -107,7 +107,7 @@ namespace minerule {
 		// write acquired rules to the DB
 		// It uses algorithmOptions.get????Cardinalities() to filter rules
 		// having wrong cardinalities
-		void insert(const ItemSetType& body,  const ItemSetType& head, double support, double confidence, bool saveBody = true) {
+		void insert(const ItemSet& body,  const ItemSet& head, double support, double confidence, bool saveBody = true) {
 			dbInserter->insert(body, head, support, confidence, saveBody);
 		}
 

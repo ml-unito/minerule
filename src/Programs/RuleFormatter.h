@@ -17,7 +17,7 @@ protected:
   std::string fieldSeparationString;
 
   static std::string quote(const std::string& elem);
-  static std::string quoteElems(const ItemSetType& elems);
+  static std::string quoteElems(const ItemSet& elems);
  public:
   RuleFormatter(std::ostream& out) : os(out), fieldSeparationString("") {
   }

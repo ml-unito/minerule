@@ -19,7 +19,7 @@ namespace minerule {
   /**
 	* this type is the one used by procedures which deal with itemsets and rules
    */
-	typedef std::vector<ItemType> ItemSetType;
+	typedef std::vector<ItemType> ItemSet;
   
 
 	class ItemType {

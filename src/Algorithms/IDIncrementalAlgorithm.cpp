@@ -83,8 +83,8 @@ IDIncrementalAlgorithm::fillValidItems(const std::string& constraints) const thr
 
 bool
 IDIncrementalAlgorithm::checkInclusion(const std::set<ItemType>& validOnes, 
-				       const ItemSetType& foundOnes) const {
-  ItemSetType::const_iterator it;
+				       const ItemSet& foundOnes) const {
+  ItemSet::const_iterator it;
   for(it=foundOnes.begin();
       it!=foundOnes.end();
       it++) {

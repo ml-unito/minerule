@@ -24,12 +24,12 @@ using namespace std;
 using namespace minerule;
 
 //ricorda: da ItemType.h:
-//typedef std::vector<ItemType> ItemSetType;
+//typedef std::vector<ItemType> ItemSet;
 //Ogni ItemType contiene un puntatore a SourceRowElement
 //void insertRuleInStructure(const QueryResultIterator::Rule& r){
 //    Body* root = new Body();
 //    Head* newhead;
-//    //body e head sono due puntatori a ItemSetType
+//    //body e head sono due puntatori a ItemSet
 //    newhead=root->insertItemSetB(*r.body);
 //    newhead->insertItemSetH(*r.head);
 //}

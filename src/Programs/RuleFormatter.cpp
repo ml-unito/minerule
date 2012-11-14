@@ -8,10 +8,10 @@ RuleFormatter::quote(const std::string& elem) {
   return "["+elem+"]";
 }
 std::string 
-RuleFormatter::quoteElems(const ItemSetType& elems) {
+RuleFormatter::quoteElems(const ItemSet& elems) {
  std::string result;
 
-  ItemSetType::const_iterator it=elems.begin();
+  ItemSet::const_iterator it=elems.begin();
   
   if(it!=elems.end()) {
     result = quote(it->asString());

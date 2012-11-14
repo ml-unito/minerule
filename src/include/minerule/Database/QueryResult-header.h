@@ -28,8 +28,8 @@ namespace minerule {
 			}
 
 		public:
-			ItemSetType* body;
-			ItemSetType* head;
+			ItemSet* body;
+			ItemSet* head;
 			double support;
 			double confidence;
 
@@ -37,11 +37,11 @@ namespace minerule {
 
 			Rule(const Rule& rule) : support(rule.support), confidence(rule.confidence) {
 				if(rule.body!=NULL) {
-					body= new ItemSetType(*rule.body);
+					body= new ItemSet(*rule.body);
 				}
 
 				if(rule.head!=NULL) {
-					head= new ItemSetType(*rule.head);
+					head= new ItemSet(*rule.head);
 				}
 			}
 
@@ -79,11 +79,11 @@ namespace minerule {
 				confidence=rule.confidence;
 
 				if(rule.body!=NULL) {
-					body= new ItemSetType(*rule.body);
+					body= new ItemSet(*rule.body);
 				}
 
 				if(rule.head!=NULL) {
-					head= new ItemSetType(*rule.head);
+					head= new ItemSet(*rule.head);
 				}
 
 				return *this;
@@ -102,7 +102,7 @@ namespace minerule {
 			odbc::PreparedStatement* body_elems;
 			odbc::PreparedStatement* head_elems;
 
-			void readElems(int id, ItemSetType& elems, odbc::PreparedStatement* elems_rs)
+			void readElems(int id, ItemSet& elems, odbc::PreparedStatement* elems_rs)
 				throw ( MineruleException, odbc::SQLException, std::exception);
 		public:
 			Iterator() : state(NULL), rs_rules(NULL), body_elems(NULL), head_elems(NULL) {}

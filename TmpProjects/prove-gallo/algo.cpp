@@ -28,11 +28,11 @@ Body* DestrTree::insertRulesInStructure(const string& queryname,int ngroups){
   Head* newhead;
   while( qit.next()) {
     QueryResultIterator::Rule r;
-    //crea body e head che sono due vettori ItemSetType
+    //crea body e head che sono due vettori ItemSet
     //ovvero due vettori di ItemType
     //ogni ItemType contiene un puntatore ad un SourceRowElement
     qit.getRule(r);
-    //body e head sono due puntatori a ItemSetType
+    //body e head sono due puntatori a ItemSet
     //moltiplico per il num dei gruppi
     //double suppr=r.support*9983;
     //double suppb=suppr*r.confidence;
@@ -52,12 +52,12 @@ Body* ConstrTree::insertRulesInStructure(const string& queryname, int ng){
   ngroups=ng;
   while( qit.next()) {
     QueryResultIterator::Rule r;
-    //crea body e head che sono due vettori ItemSetType
+    //crea body e head che sono due vettori ItemSet
     //ovvero due vettori di ItemType
     //ogni ItemType contiene un puntatore ad un SourceRowElement
     qit.getRule(r);
     //insertRuleInStructure(r);
-    //body e head sono due puntatori a ItemSetType
+    //body e head sono due puntatori a ItemSet
     newhead=root->insertItemSetB(*r.body,0.0);
     newhead->insertItemSetH(*r.head,0.0);
    }
@@ -66,10 +66,10 @@ Body* ConstrTree::insertRulesInStructure(const string& queryname, int ng){
 
 //creo le combinazioni di bodies e le cerco nell'albero
 //se le trovo incremento il loro supporto
-void ConstrTree::buildAndFindBodies(ItemSetType& body){
+void ConstrTree::buildAndFindBodies(ItemSet& body){
  SubsetIterator it(body);
  while(it.next()){
-   ItemSetType curBody;
+   ItemSet curBody;
    it.getCurrentSet(curBody);
    NodeRowB* ris=root->findBodyInTree(&curBody);
    if (ris!=NULL) {ris->incremSupp();
@@ -80,15 +80,15 @@ void ConstrTree::buildAndFindBodies(ItemSetType& body){
 
 //creo le combinazioni di rules e le cerco nell'albero
 //se le trovo incremento il loro supporto
-void ConstrTree::buildAndFindRules(ItemSetType& body,ItemSetType& heads){
- ItemSetType curHeadSet;
- std::insert_iterator< ItemSetType > ins_it(curHeadSet, curHeadSet.begin());
+void ConstrTree::buildAndFindRules(ItemSet& body,ItemSet& heads){
+ ItemSet curHeadSet;
+ std::insert_iterator< ItemSet > ins_it(curHeadSet, curHeadSet.begin());
  set_difference(heads.begin(), heads.end(),
                 body.begin(),body.end(),
 		ins_it);
  SubsetIterator it(curHeadSet);
  while(it.next()){
-   ItemSetType curHead;
+   ItemSet curHead;
    it.getCurrentSet(curHead);
    //restituisce un punt all'ultimo item della head della regola (se l'ha trovata)
    NodeRow* ris=root->findRuleInTree(&body,&curHead);
@@ -105,7 +105,7 @@ void ConstrTree::adjustSupp(MIndexIterator* b2,MIndexIterator* h2){
 
      for (; b2->current() != b2->end(); ) {
        string g=b2->getCurrentGID();
-       ItemSetType* body=new ItemSetType();
+       ItemSet* body=new ItemSet();
        cout<<"in adjustSupp:"<<std::endl;
        for(; b2->current() != b2->end() && b2->getCurrentGID()==g;(*b2)++){
          ItemType gid(*SourceRowElement::deserializeElementFromString("n "+b2->getCurrentGID()));
@@ -115,14 +115,14 @@ void ConstrTree::adjustSupp(MIndexIterator* b2,MIndexIterator* h2){
        }
        buildAndFindBodies(*body);
        if (g==h2->getCurrentGID()){
-         ItemSetType* head=new ItemSetType();
+         ItemSet* head=new ItemSet();
          for(;h2->current() != h2->end() && h2->getCurrentGID()==g; (*h2)++){
          ItemType item(*SourceRowElement::deserializeElementFromString("n "+h2->getCurrentItem()));
          head->push_back(item);
          }
          SubsetIterator si(*body);
 	 while(si.next()){
-	   ItemSetType result;
+	   ItemSet result;
 	   si.getCurrentSet(result);
            buildAndFindRules(result,*head);
 	 }delete head;
@@ -140,11 +140,11 @@ void ConstrTree::adjustSupp(MIndexIterator* b2,MIndexIterator* h2){
 
 //creo le combinazioni di bodies e le cerco nell'albero
 //se le trovo incremento il loro supporto
-void DestrTree::buildAndFindBodies(ItemSetType& body){
- ItemSetType curBodySet;
+void DestrTree::buildAndFindBodies(ItemSet& body){
+ ItemSet curBodySet;
  SubsetIterator it(curBodySet);
  while(it.next()){
-   ItemSetType curBody;
+   ItemSet curBody;
    it.getCurrentSet(curBody);
    NodeRowB* ris=root->findBodyInTree(&curBody);
    if (ris!=NULL) ris->decremSupp();
@@ -153,15 +153,15 @@ void DestrTree::buildAndFindBodies(ItemSetType& body){
 
 //creo le combinazioni di rules e le cerco nell'albero
 //se le trovo incremento il loro supporto
-void DestrTree::buildAndFindRules(ItemSetType& body,ItemSetType& heads){
- ItemSetType curHeadSet;
- std::insert_iterator< ItemSetType > ins_it(curHeadSet, curHeadSet.begin());
+void DestrTree::buildAndFindRules(ItemSet& body,ItemSet& heads){
+ ItemSet curHeadSet;
+ std::insert_iterator< ItemSet > ins_it(curHeadSet, curHeadSet.begin());
  set_difference(heads.begin(), heads.end(),
                 body.begin(),body.end(),
 		ins_it);
  SubsetIterator it(curHeadSet);
  while(it.next()){
-   ItemSetType curHead;
+   ItemSet curHead;
    it.getCurrentSet(curHead);
    //restituisce un punt all'ultimo item della head della regola (se l'ha trovata)
    NodeRow* ris=root->findRuleInTree(&body,&curHead);
@@ -180,7 +180,7 @@ void DestrTree::adjustSupp(MIndexIterator* b1notb2,MIndexIterator* h1noth2,
      for (; b1notb2->current() != b1notb2->end(); (*b1notb2)++) {
        string g=b1notb2->getCurrentGID();
        //createItemset crea tutte le possibili combinazioni di itemset in g
-       ItemSetType* body=new ItemSetType();
+       ItemSet* body=new ItemSet();
        while(b1notb2->getCurrentGID()==g){
          ItemType item(*SourceRowElement::deserializeElementFromString("g @[ "+b2->getCurrentItem()+" @]"));
          body->push_back(item);
@@ -188,7 +188,7 @@ void DestrTree::adjustSupp(MIndexIterator* b1notb2,MIndexIterator* h1noth2,
        }
        buildAndFindBodies(*body);
        if (g==h2->getCurrentGID()){
-         ItemSetType* head=new ItemSetType();
+         ItemSet* head=new ItemSet();
          while(h2->getCurrentGID()==g){
          ItemType item(*SourceRowElement::deserializeElementFromString("g @[ "+h2->getCurrentItem()+" @]"));
          head->push_back(item);
@@ -196,7 +196,7 @@ void DestrTree::adjustSupp(MIndexIterator* b1notb2,MIndexIterator* h1noth2,
          }
          SubsetIterator si(*body);
 	 while(si.next()){
-	   ItemSetType result;
+	   ItemSet result;
 	   si.getCurrentSet(result);
            buildAndFindRules(result,*head);
 	 }

@@ -16,12 +16,12 @@ namespace minerule {
     Head* newhead;
     while( qit.next()) {
       QueryResultIterator::Rule r;
-      //crea body e head che sono due vettori ItemSetType
+      //crea body e head che sono due vettori ItemSet
       //ovvero due vettori di ItemType
       //ogni ItemType contiene un puntatore ad un SourceRowElement
       qit.getRule(r);
       //insertRuleInStructure(r);
-      //body e head sono due puntatori a ItemSetType
+      //body e head sono due puntatori a ItemSet
       newhead=root->insertItemSetB(*r.body,0.0);
       newhead->insertItemSetH(*r.head,0.0);
     }
@@ -34,7 +34,7 @@ namespace minerule {
 
     while( mb2->current() != mb2->end() ) {
       string g=mb2->getCurrentGID();
-      ItemSetType* body=new ItemSetType();
+      ItemSet* body=new ItemSet();
       //cout<<"in adjustSupp:"<<std::endl;
       for(; mb2->current() != mb2->end() && mb2->getCurrentGID()==g;(*mb2)++){
 	ItemType gid(*SourceRowElement::deserializeElementFromString("n "+mb2->getCurrentGID()));
@@ -47,7 +47,7 @@ namespace minerule {
       if (g!=mh2->getCurrentGID())
 	this->root->findBodiesInTree(body);
       else{
-	ItemSetType* head=new ItemSetType();
+	ItemSet* head=new ItemSet();
 	for(;mh2->current() != mh2->end() && mh2->getCurrentGID()==g; (*mh2)++){
 	  ItemType item(*SourceRowElement::deserializeElementFromString("n "+mh2->getCurrentItem()));
 	  head->push_back(item);
@@ -72,7 +72,7 @@ namespace minerule {
       //string g=mb2->getCurrentGID();
       gidb=curRowb.getGroupBody();
     
-      ItemSetType* body=new ItemSetType();
+      ItemSet* body=new ItemSet();
       //cout<<"in adjustSupp:"<<std::endl;
 
       while(bodynotend && ItemType(curRowb.getGroupBody())==gidb){
@@ -87,7 +87,7 @@ namespace minerule {
 	if (gidb!=curRowh.getGroupBody())
 	  this->root->findBodiesInTree(body);
 	else{
-	  ItemSetType* head=new ItemSetType();
+	  ItemSet* head=new ItemSet();
 	  while(headnotend && ItemType(curRowh.getGroupBody())==gidb ){
 	    head->push_back(curRowh.getHead());
 	    if (headnotend=rh2->next()) {

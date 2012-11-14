@@ -40,7 +40,7 @@ class IDIncrementalAlgorithm : public IncrementalAlgorithm {
 
   bool
     checkInclusion(const std::set<ItemType>& validOnes, 
-		   const ItemSetType& foundOnes) const;
+		   const ItemSet& foundOnes) const;
 
   bool
     checkInValidRules(const ValidRules& validRules, 

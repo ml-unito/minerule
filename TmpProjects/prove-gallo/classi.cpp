@@ -51,8 +51,8 @@ namespace minerule {
  //INSERIMENTO DI ItemSet BODY
 
  //funzione ricorsiva
- Head* Body::insertItemSetB(ItemSetType:: iterator ite,
-                           ItemSetType:: iterator itend, double s ){
+ Head* Body::insertItemSetB(ItemSet:: iterator ite,
+                           ItemSet:: iterator itend, double s ){
   RowBContainer::iterator itr;
   itr=NRB->find(*ite);
   Head* hr=NULL;
@@ -100,9 +100,9 @@ namespace minerule {
  }
 
 
- Head* Body::insertItemSetB(ItemSetType& SREV,double supp){
-  ItemSetType:: iterator ite=SREV.begin();
-  ItemSetType:: iterator itend=SREV.end();
+ Head* Body::insertItemSetB(ItemSet& SREV,double supp){
+  ItemSet:: iterator ite=SREV.begin();
+  ItemSet:: iterator itend=SREV.end();
   Head* h;
   h=insertItemSetB(ite, itend, supp);
   return h;
@@ -112,8 +112,8 @@ namespace minerule {
  //INSERIMENTO DI ItemSet HEAD
 
  //funzione ricorsiva
- void Head::insertItemSetH(ItemSetType:: iterator ite,
-                           ItemSetType:: iterator itend, double supp){
+ void Head::insertItemSetH(ItemSet:: iterator ite,
+                           ItemSet:: iterator itend, double supp){
   RowContainer::iterator itr;
   itr=NR->find(*ite);
 
@@ -151,17 +151,17 @@ namespace minerule {
   itr->second->setSupp(supp);
 }
 
- void Head::insertItemSetH(ItemSetType& SREV,double supp){
-  ItemSetType:: iterator ite=SREV.begin();
-  ItemSetType:: iterator itend=SREV.end();
+ void Head::insertItemSetH(ItemSet& SREV,double supp){
+  ItemSet:: iterator ite=SREV.begin();
+  ItemSet:: iterator itend=SREV.end();
   insertItemSetH(ite,itend,supp);
  }
 
 
 
  //funzione ricorsiva
- NodeRowB* Body::findBody(ItemSetType:: iterator ite,
-                          ItemSetType:: iterator itend){
+ NodeRowB* Body::findBody(ItemSet:: iterator ite,
+                          ItemSet:: iterator itend){
   RowBContainer::iterator itr;
   //stampa di prova
   /*itr=NRB->begin();
@@ -198,9 +198,9 @@ namespace minerule {
   }
  }
 
- NodeRowB* Body::findBodyInTree(ItemSetType* itemset_body){
-  ItemSetType:: iterator ite=itemset_body->begin();
-  ItemSetType:: iterator itend=itemset_body->end();
+ NodeRowB* Body::findBodyInTree(ItemSet* itemset_body){
+  ItemSet:: iterator ite=itemset_body->begin();
+  ItemSet:: iterator itend=itemset_body->end();
   NodeRowB* nrb;
   nrb=this->findBody(ite, itend);
   return nrb;
@@ -209,8 +209,8 @@ namespace minerule {
 
 
   //funzione ricorsiva
- NodeRow* Head::findHead(ItemSetType:: iterator ite,
-                         ItemSetType:: iterator itend){
+ NodeRow* Head::findHead(ItemSet:: iterator ite,
+                         ItemSet:: iterator itend){
   RowContainer::iterator itr;
   //cout<<"ora cerco in head "<<(*ite)<<std::endl;
   itr=NR->find(*ite);
@@ -237,9 +237,9 @@ namespace minerule {
   }
  }
 
- NodeRow* Body::findRuleInTree(ItemSetType* itemset_body,ItemSetType* itemset_head){
-  ItemSetType:: iterator ite;
-  ItemSetType:: iterator itend;
+ NodeRow* Body::findRuleInTree(ItemSet* itemset_body,ItemSet* itemset_head){
+  ItemSet:: iterator ite;
+  ItemSet:: iterator itend;
   NodeRowB* nrb=NULL;
   NodeRow* nr=NULL;
   nrb=this->findBodyInTree(itemset_body);

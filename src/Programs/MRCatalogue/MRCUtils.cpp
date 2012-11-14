@@ -11,7 +11,7 @@
 #include <string>
 
 #include "MRCUtils.h"
-
+#include "Printer.h"
 
 
 namespace mrc {
@@ -130,23 +130,9 @@ namespace mrc {
 	  }
 	}
 
-	void printQueryInfo(std::ostream& out, 
-			    const minerule::CatalogueInfo& info,
-			    const Options& options) {
-	  out << info.qryName;
-	  if(options.getListFormat().size) {
-	    out << options.getSepString() << info.resSize;
-	  }
-  
-	  if(options.getListFormat().result) {
-	    out << options.getSepString() << info.resName;
-	  }
-  
-	  if(options.getListFormat().text) {
-	    out << options.getSepString() << info.qryText;
-	  }
-  
-	  out << std::endl;
+	void printQueryInfo(std::ostream& out, const minerule::CatalogueInfo& info, const Options& options) {
+		Printer printer(out, options);
+		printer.print(info);
 	}
 
 
@@ -169,12 +155,11 @@ namespace mrc {
 
 
 	void printMRQueryList(const Options& options) {
-	  std::vector<minerule::CatalogueInfo> mrqlist;
-	  minerule::OptimizerCatalogue::getMRQueryInfos(mrqlist, options.getListFormat().size );
-	  std::vector<minerule:: CatalogueInfo>::const_iterator it;
-	  for(it=mrqlist.begin(); it!=mrqlist.end(); it++) {
-	    printQueryInfo(std::cout, *it, options);
-	  }
+		Printer printer(std::cout, options);
+  	  	std::vector<minerule::CatalogueInfo> mrqlist;
+  	  	minerule::OptimizerCatalogue::getMRQueryInfos(mrqlist, options.getListFormat().size );
+		
+		printer.print(mrqlist);
 	}
 
 	void deleteQuery(const Options& options) {

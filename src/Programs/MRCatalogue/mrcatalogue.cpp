@@ -1,5 +1,4 @@
 #include "Utils/MineruleOptions.h"
-#include "Optimizer/OptimizerCatalogue.h"
 
 #include "ErrorCodes.h"
 #include "MRCUtils.h"

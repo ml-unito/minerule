@@ -30,7 +30,11 @@ LIST(APPEND LIBS ${LIBODBC++_LIBRARIES})
 add_executable(minerule Programs/Minerule/minerule.cpp)
 target_link_libraries(minerule ${LIBS})
 
-add_executable(mrcatalogue Programs/MRCatalogue/mrcatalogue.cpp Programs/MRCatalogue/MRCUtils.cpp)
+add_executable(mrcatalogue 
+	Programs/MRCatalogue/mrcatalogue.cpp 
+	Programs/MRCatalogue/MRCUtils.cpp
+	Programs/MRCatalogue/Printer.cpp)
+	
 target_link_libraries(mrcatalogue mrpredicateutils mroptimizer mrdatabase mrutils mrparsers ${LIBODBC++_LIBRARIES})
 
 add_executable(mrprintrules Programs/MRPrintRules/PrintRules.cpp Programs/MRPrintRules/RuleFormatter.cpp)

@@ -17,6 +17,14 @@ namespace minerule {
   std::ostream& MRErr();
   std::ostream& MRWarn();
   std::ostream& MRDebug();
+  
+  // The following methods print msg on the log and ensure that
+  // the whole thing stays in 80 characters.
+  void MRLog(const std::string& msg);
+  void MRErr(const std::string& msg);
+  void MRWarn(const std::string& msg);
+  void MRDebug(const std::string& msg);
+  
   void MRLogPush(const std::string& descr);
   void MRLogPop();
   void MRErrPush(const std::string& descr);

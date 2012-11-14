@@ -235,12 +235,16 @@ int main (int argc, char *argv[])
 	
 	try {
 		parseOptions(argc, argv, mrOpts, mrtext);
-		MRDebug() << "Minerule source text:[" << mrtext << "]" <<std::endl;
-
+		MRLog() << "Minerule source text:" << std::endl;
+		MRLog(mrtext);
+		
+				
 		MRLogPush("Minerule system starting");
 		
 		OptimizedMinerule optMR(mrtext);
 		Algorithms::executeMinerule(optMR);
+		
+		MRLogPop();		
 	} catch (odbc::SQLException& e) {
 		MRErr() << "ODBC Exception:" << e.getMessage() << std::endl;
 		exit(MR_ERROR_DATABASE_ERROR);
@@ -256,8 +260,6 @@ int main (int argc, char *argv[])
 		MRErr() << "An unknown exception has been thrown..." << std::endl;
 		exit( MR_ERROR_UNKNOWN );
 	}
-
-	MRLogPop();
 
 	return 0;
 }

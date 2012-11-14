@@ -47,7 +47,7 @@ namespace minerule {
 		void indent() {
 			*os<<indentString;
 		}
-
+		
 		double getTimeSecs(const LogInfo& last, const LogInfo& first) const {
 			return double(last.time.tv_sec-first.time.tv_sec)
 				+double((last.time.tv_usec-first.time.tv_usec)/1e6);
@@ -94,6 +94,9 @@ namespace minerule {
 		void setLogLevel(size_t newLevel) {
 			logLevel=newLevel;
 		}
+		
+		size_t getIndentLen() { return indentString.size(); }
+		
 	}; // MRLogger
 
 

@@ -6,14 +6,13 @@
 
 #include <iostream>
 #include <assert.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
 
 #include "Utils/MineruleOptions.h"
 #include "Optimizer/OptimizerCatalogue.h"
-#include "RuleFormatter.h"
 #include "Database/SourceRowElement.h"
+#include "Utils/FileUtils.h"
+
+#include "RuleFormatter.h"
 
 
 using namespace minerule;
@@ -34,18 +33,6 @@ printRules(std::string queryname,
     
     formatter.postExec();
 }
-
-
-bool
-fileExists(const std::string& filename) {
-    struct stat st;
-    if( stat(filename.c_str(),&st)==0 && S_ISREG(st.st_mode) ) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
 
 
 void
@@ -85,7 +72,7 @@ parseOptions(int argc, char** argv, MineruleOptions& opt, RuleFormatter*& rf, do
         // checking -f options
         if(argv[i]==string("-f")) {
             if(i+1<argc) {
-                if( fileExists( argv[i+1] ) ) {
+                if( minerule::FileUtils::fileExists( argv[i+1] ) ) {
                     // all ok
                     opt.readFromFile(argv[i+1]);
                     didReadMROpts=true;
@@ -170,7 +157,7 @@ parseOptions(int argc, char** argv, MineruleOptions& opt, RuleFormatter*& rf, do
     }
     
     if( !didReadMROpts ) {
-        if(fileExists(MineruleOptions::DEFAULT_FILE_NAME))
+        if(FileUtils::fileExists(MineruleOptions::DEFAULT_FILE_NAME))
             opt.readFromFile(MineruleOptions::DEFAULT_FILE_NAME);
         else {
             std::cout << "Cannot open "+MineruleOptions::DEFAULT_FILE_NAME+" and not -f option has been given"

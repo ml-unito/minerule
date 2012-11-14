@@ -13,17 +13,6 @@ using namespace minerule;
 
 
 
-
-bool
-fileExists(const string& filename) {
-  struct stat st;
-  if( stat(filename.c_str(),&st)==0 && S_ISREG(st.st_mode) ) {
-    return true;
-  } else {
-    return false;
-  }
-}
-
 void
 printHelp(int argc, char** argv) {
   cout << "Usage:" << endl

@@ -8,8 +8,6 @@
 #include<iterator>
 #include<cstring>
 #include<cctype>
-#include<sys/stat.h>
-#include <unistd.h>
 
 #include<odbc++/drivermanager.h>
 #include<odbc++/connection.h>
@@ -22,19 +20,12 @@
 #include "Optimizer/OptimizedMinerule.h"
 #include "Utils/MineruleOptions.h"
 #include "Utils/MineruleErrors.h"
+#include "Utils/FileUtils.h"
 
 
 
 using namespace minerule;
 
-
-bool fileExist(const std::string& fname) {
-	struct stat trash;
-	if( stat(fname.c_str(),&trash)==0 ) 
-		return true;
-	else
-		return false;
-}
 
 void
 printHelp(char* progName) {
@@ -167,7 +158,7 @@ parseOptions(int argc, char** argv, MineruleOptions& mrOpts, std::string& mrtext
 			}
 			break;
 			case 'f':
-				if( fileExist(optarg) ) {
+				if( FileUtils::fileExists(optarg) ) {
 					mrOpts.readFromFile(optarg);
 					MRLog() << "Options read from '" << optarg <<"'." << std::endl;
 				} else {
@@ -206,7 +197,7 @@ parseOptions(int argc, char** argv, MineruleOptions& mrOpts, std::string& mrtext
 	}
 	
 	if(!okMROptions) {
-		if( fileExist(MineruleOptions::DEFAULT_FILE_NAME) ) {
+		if( FileUtils::fileExists(MineruleOptions::DEFAULT_FILE_NAME) ) {
 			mrOpts.readFromFile(MineruleOptions::DEFAULT_FILE_NAME);
 			MRLog() << "Options read from:" << MineruleOptions::DEFAULT_FILE_NAME << std::endl;
 			okMROptions = true;

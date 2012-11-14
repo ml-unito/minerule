@@ -28,7 +28,8 @@ set(utils_src
 	MineruleLogs.cpp
 	SQLUtils.cpp
 	StringUtils.cpp
-	MineruleException.cpp)
+	MineruleException.cpp
+	FileUtils.cpp)
 	
 
 add_library( mrutils ${utils_src})

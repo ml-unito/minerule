@@ -32,16 +32,6 @@ class MRLockManager {
     }
   }
 
-  bool
-  fileExists(const char* str) {
-    struct stat st;
-    if( stat(str,&st)!=-1 ) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
 
   bool
   fileLocked(const char* str) {
@@ -71,7 +61,7 @@ class MRLockManager {
 
  public:
   void lock(const std::string& fname) throw (int) {
-    if(fileExists(fname.c_str())) {
+    if(FileUtils::fileExists(fname.c_str())) {
       cout << "file exists..." << endl;
       // Looking if I can get control of the file...
       if(fileLocked(fname.c_str())) {

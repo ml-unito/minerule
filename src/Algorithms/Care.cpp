@@ -4,9 +4,6 @@
 
 #include "PredicateUtils/HeadBodyPredicatesSeparator.h"
 #include "Algorithms/PrepareDataUtils.h"
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
 
 #define MROPTIONFILE "mroptions"
 

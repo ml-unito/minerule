@@ -5,26 +5,14 @@
 
 #include <iostream>
 #include <assert.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
 #include <string>
 
 #include "MRCUtils.h"
 #include "Printer.h"
+#include "Utils/FileUtils.h"
 
 
 namespace mrc {
-	bool
-	fileExists(const std::string& filename) {
-	  struct stat st;
-	  if( stat(filename.c_str(),&st)==0 && S_ISREG(st.st_mode) ) {
-	    return true;
-	  } else {
-	    return false;
-	  }
-	}
-
 	void
 	printHelp(int argc, char** argv) {
 	  std::cout << "Usage:" << std::endl
@@ -60,7 +48,7 @@ namespace mrc {
 	void 
 	doLoadOptions(const char* fname, minerule::MineruleOptions& opt) {
   
-		if( fileExists(fname) ) {
+		if( minerule::FileUtils::fileExists(fname) ) {
 			opt.readFromFile(fname);
 		} else {
 			std::string errstr;
@@ -123,7 +111,7 @@ namespace mrc {
 	    }
 	  }
 	  if( !didLoadOptions  ) {
-		  if( !fileExists(minerule::MineruleOptions::DEFAULT_FILE_NAME) )
+		  if( !minerule::FileUtils::fileExists(minerule::MineruleOptions::DEFAULT_FILE_NAME) )
 		    throw Exception( mrc::ERROR_OPTION_PARSING,"You should specify at least one -f option or provide ./"+minerule::MineruleOptions::DEFAULT_FILE_NAME);
 		  else
 	        doLoadOptions(minerule::MineruleOptions::DEFAULT_FILE_NAME.c_str(), mopt);

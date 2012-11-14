@@ -117,7 +117,7 @@ namespace minerule {
     if(!logStack.empty())
       *os<<indentInset<<END_SEPARATOR<< StringUtils::to_bold(timeMemInfo) <<std::endl;
     else
-	  *os<<END_SEPARATOR<<timeMemInfo<<std::endl;
+	  *os<<END_SEPARATOR<<StringUtils::to_bold(timeMemInfo)<<std::endl;
 
     indent();
     *os<<std::endl;

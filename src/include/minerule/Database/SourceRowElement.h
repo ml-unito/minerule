@@ -52,12 +52,12 @@ namespace minerule {
 
     virtual bool empty() const =0;
 
-    virtual std::string asString() const=0;
+    virtual std::string asString(const std::string& sep=",") const=0;
 	
 	virtual void setPreparedStatementParameters(odbc::PreparedStatement* state, size_t start_index) const = 0;
 	
 
-    // This function should return astd::string having the sql
+    // This function should return a std::string having the sql
     // representation of the data in the object (it is used
     // by some algorithm to store temporary information about
     // the data.
@@ -166,7 +166,7 @@ namespace minerule {
     }
   
 
-    virtual std::string asString() const {
+    virtual std::string asString(const std::string& sep=",") const {
       return "";
     }
 

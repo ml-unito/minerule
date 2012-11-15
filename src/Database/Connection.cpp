@@ -120,50 +120,80 @@ void Connection::DirectDBInserter::insertHeadBodyElems(TableKind kind, const Ite
 }
 
 
-void Connection::CachedDBInserter::insertHeadBodyElems(TableKind kind, const ItemSet& elems, size_t counter) {
+void Connection::CachedDBInserter::insertHeadBodyElems(TableKind kind, const ItemSet& elems, size_t id) {
 //  assert( !elems.empty() );
+	
+	std::ofstream* outStream = NULL;
+	switch(kind) {
+		case RulesTable:
+			outStream = &outR;
+			break;
+		case HeadsTable:
+			outStream = &outH;
+			break;
+		case BodiesTable:
+			outStream = &outB;
+			break;
+		default:
+			throw MineruleException( MR_ERROR_INTERNAL, "Unexpected TableKind value." );
+	}
 
-  ItemSet::const_iterator it = elems.begin();
-  std::string str;
-  for(; it!=elems.end() ; it++ ) {
-    SourceRowElement::serializeElementToString(it->getElement(), str);
-    outHB << counter << "\t" << str << std::endl;
-  }
-
+	ItemSet::const_iterator it = elems.begin();
+	std::string str;
+	for(; it!=elems.end() ; it++ ) {
+		(*outStream) << id << "\t" << it->getElement().asString("\t") << std::endl;
+	}
 }
 
 void Connection::CachedDBInserter::init() {
-  filename = tmpnam(NULL);
+  char tmpFName[30];
+  strcpy(tmpFName,"cacheDBInserterXXXXX");
+  filename = mkstemp(tmpFName);
+  
   std::string temp = filename + ".r";
   outR.open(temp.c_str());
-  temp = filename + ".hb";
-  outHB.open(temp.c_str());
+  
+  temp = filename + ".h";
+  outH.open(temp.c_str());
+  
+  temp = filename + ".b";
+  outB.open(temp.c_str());
 }
 
 void Connection::CachedDBInserter::finalize() {
 	throw MineruleException(MR_ERROR_INTERNAL, "cached inserts not supported yet");
 	
   outR.close();
-  outHB.close();
+  outH.close();
+  outB.close();
+  
   std::string loadstr1 = filename + ".r";
   chmod(loadstr1.c_str(),S_IRUSR|S_IRGRP|S_IROTH);
-  std::string loadstr2 = filename + ".hb";
+  
+  std::string loadstr2 = filename + ".h";
   chmod(loadstr2.c_str(),S_IRUSR|S_IRGRP|S_IROTH);
-  loadstr1 = "LOAD DATA INFILE '";
-  loadstr1 += filename;
-  loadstr1 += ".r' INTO TABLE ";
-  loadstr1 += connection.getTableName(RulesTable);
-  loadstr2 = "LOAD DATA INFILE '";
-  loadstr2 += filename;
-  loadstr2 += ".hb' INTO TABLE ";
-  loadstr2 += connection.getTableName(BodiesTable);
+  
+  std::string loadstr3 = filename + ".b";
+  chmod(loadstr2.c_str(),S_IRUSR|S_IRGRP|S_IROTH);
+  
+  loadstr1 = "LOAD DATA INFILE '" + filename + ".r' INTO TABLE " + connection.getTableName(RulesTable);  
+  loadstr2 = "LOAD DATA INFILE '" + filename + ".h' INTO TABLE " + connection.getTableName(HeadsTable);
+  loadstr3 = "LOAD DATA INFILE '" + filename + ".b' INTO TABLE " + connection.getTableName(BodiesTable);
+  
   odbc::Statement* state = connection.getODBCConnection()->createStatement();
   state->execute(loadstr1.c_str());
   state->execute(loadstr2.c_str());
+  state->execute(loadstr3.c_str());
+
   delete state;
+  
   loadstr1 = filename + ".r";
   unlink(loadstr1.c_str());
-  loadstr2 = filename + ".hb";
+  
+  loadstr2 = filename + ".h";
+  unlink(loadstr2.c_str());
+
+  loadstr2 = filename + ".b";
   unlink(loadstr2.c_str());
 }
 

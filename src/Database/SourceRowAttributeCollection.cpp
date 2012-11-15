@@ -73,7 +73,7 @@ namespace minerule {
   /** Strings related... */
 
   std::string
-  SourceRowAttributeCollection::asString() const {
+  SourceRowAttributeCollection::asString(const std::string& sep) const {
     CollectionType::const_iterator it;
 
     std::string attrString;
@@ -84,13 +84,13 @@ namespace minerule {
 
     it=attributes.begin();
     if(it!=attributes.end()) {
-      attrString+=(*it)->asString();
+      attrString+=(*it)->asString(sep);
       it++;
     }
 
     for(; it!=attributes.end();it++) {
-      attrString+=",";
-      attrString+=(*it)->asString();
+      attrString+=sep;
+      attrString+=(*it)->asString(sep);
     }
 
     return attrString;

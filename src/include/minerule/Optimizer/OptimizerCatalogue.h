@@ -59,48 +59,44 @@ namespace minerule {
     typedef std::multimap< KeyCols,std::pair<KeyCols,OrderType> > CatalogueEntry;
 
     // A catalogue is a mapping tableName->CatalogueEntry
-    class Catalogue : public std::map<std::string, CatalogueEntry> {
-    public:
-      Catalogue() : std::map<std::string, CatalogueEntry>() {}
-      Catalogue(const Catalogue& catalogue) : 
-	map<std::string, CatalogueEntry>(catalogue) {}
-      virtual ~Catalogue() {}
+	class Catalogue : public std::map<std::string, CatalogueEntry> {
+	public:
+		Catalogue() : std::map<std::string, CatalogueEntry>() {}
+		Catalogue(const Catalogue& catalogue) : 
+		map<std::string, CatalogueEntry>(catalogue) {}
+		virtual ~Catalogue() {}
 
-      void insertMapping(const std::string& table,
-			 const KeyCols& origKeyCols,
-			 int refKeyId,
-			 OrderType orderType) throw(MineruleException);
-      static OrderType stringToOrder(const std::string&);
-      void initialize() throw (MineruleException);
-      virtual const std::string& getSchemaInfo(const std::string& schemaKey) const=0;
-    };
+		void insertMapping(const std::string& table,const KeyCols& origKeyCols,int refKeyId,OrderType orderType) throw(MineruleException);
+		static OrderType stringToOrder(const std::string&);
+		void initialize() throw (MineruleException);
+		virtual const std::string& getSchemaInfo(const std::string& schemaKey) const=0;
+	};
 
     class EqKeysCatalogue : public Catalogue {
       std::map<std::string,std::string> schema;
     public:
       EqKeysCatalogue() : Catalogue() {
-	schema["tab_main"]="mr_eq_keys";
-	schema["tab_main_tab_name"]="tab_name";
-	schema["tab_main_lhs_key_id"]="key_id";
-	schema["tab_main_rhs_key_id"]="ref_key_id";
-	schema["tab_main_order_type"]="order_type";
-	schema["tab_cols"]="mr_eq_keys_col";
-	schema["tab_cols_col_name"]="col_name";
-	schema["tab_cols_key_id"]="key_id";
-	initialize();
-      }
+		  schema["tab_main"]="mr_eq_keys";
+		  schema["tab_main_tab_name"]="tab_name";
+		  schema["tab_main_lhs_key_id"]="key_id";
+		  schema["tab_main_rhs_key_id"]="ref_key_id";
+		  schema["tab_main_order_type"]="order_type";
+		  schema["tab_cols"]="mr_eq_keys_col";
+		  schema["tab_cols_col_name"]="col_name";
+		  schema["tab_cols_key_id"]="key_id";
+		  initialize();
+	  }
 
-      EqKeysCatalogue(const EqKeysCatalogue& catalogue) : 
-	Catalogue(catalogue), schema(catalogue.schema) { }
+      EqKeysCatalogue(const EqKeysCatalogue& catalogue) : Catalogue(catalogue), schema(catalogue.schema) { }
       virtual ~EqKeysCatalogue() {}
 
       virtual const std::string& getSchemaInfo(const std::string& schemaKey) const {
-	std::map<std::string,std::string>::const_iterator it;
-	it=schema.find(schemaKey);
-	if(it==schema.end())
-	  throw MineruleException( MR_ERROR_CATALOGUE_ERROR,
-				   "Requested for the unknown schema key:"+schemaKey);
-	return it->second;
+		  std::map<std::string,std::string>::const_iterator it;
+		  it=schema.find(schemaKey);
+		  if(it==schema.end())
+			  throw MineruleException( MR_ERROR_CATALOGUE_ERROR,
+				  "Requested for the unknown schema key:"+schemaKey);
+		  return it->second;
       }
     };
 
@@ -108,15 +104,15 @@ namespace minerule {
       std::map<std::string,std::string> schema;
     public:
       DepFunCatalogue() : Catalogue() {
-	schema["tab_main"]="mr_dep_fun";
-	schema["tab_main_tab_name"]="lhs_tab_name";
-	schema["tab_main_lhs_key_id"]="lhs_att_list_id";
-	schema["tab_main_rhs_key_id"]="rhs_att_list_id";
-	schema["tab_main_order_type"]="order_type";
-	schema["tab_cols"]="mr_dep_fun_col";
-	schema["tab_cols_col_name"]="col_name";
-	schema["tab_cols_key_id"]="col_id";
-	initialize();
+		  schema["tab_main"]="mr_dep_fun";
+		  schema["tab_main_tab_name"]="lhs_tab_name";
+		  schema["tab_main_lhs_key_id"]="lhs_att_list_id";
+		  schema["tab_main_rhs_key_id"]="rhs_att_list_id";
+		  schema["tab_main_order_type"]="order_type";
+		  schema["tab_cols"]="mr_dep_fun_col";
+		  schema["tab_cols_col_name"]="col_name";
+		  schema["tab_cols_key_id"]="col_id";
+		  initialize();
       }
 
       DepFunCatalogue(const DepFunCatalogue& catalogue) : 
@@ -140,16 +136,11 @@ namespace minerule {
     // to the system.
     class MineruleResultInfo : public ParsedMinerule {
     public:
-     std::string resultset;
+		std::string resultset;
       
-      MineruleResultInfo(const ParsedMinerule& mr) : 
-	ParsedMinerule(mr),
-	resultset(mr.tab_result) {};
-
-      MineruleResultInfo(const MineruleResultInfo& mri) :
-	ParsedMinerule(mri),
-	resultset(mri.resultset) {};
-    };
+		MineruleResultInfo(const ParsedMinerule& mr) : ParsedMinerule(mr), resultset(mr.tab_result) {};
+		MineruleResultInfo(const MineruleResultInfo& mri) : ParsedMinerule(mri), resultset(mri.resultset) {};
+	};
 
   private:
     EqKeysCatalogue eqKeysCatalogue;
@@ -166,15 +157,14 @@ namespace minerule {
     }
 
     const Catalogue& getCatalogue(CatalogueType ct=EQKEYS) const { 
-      switch( ct ) {
-      case EQKEYS:
-	return eqKeysCatalogue;
-      case DEPFUN:
-	return depFunCatalogue;
-      default:
-	throw MineruleException(MR_ERROR_CATALOGUE_ERROR,
-				"Requests for an unknown catalogue type!");
-      }
+		switch( ct ) {
+			case EQKEYS:
+				return eqKeysCatalogue;
+			case DEPFUN:
+				return depFunCatalogue;
+			default:
+				throw MineruleException(MR_ERROR_CATALOGUE_ERROR, "Requests for an unknown catalogue type!");
+		}
     }
     
     bool isIDAttribute(const std::string& tableName,
@@ -185,12 +175,9 @@ namespace minerule {
     // ==================== STATIC METHODS ====================
 
 
-    static void addMineruleResult( const MineruleResultInfo& mri )
-      throw(odbc::SQLException, MineruleException);
-    static std::string addMineruleAttributeList(const ParsedMinerule::AttrVector& l) 
-      throw(odbc::SQLException, MineruleException);
-    static std::string getNewAutoincrementValue(const std::string& tableName) 
-      throw(odbc::SQLException, MineruleException);
+    static void addMineruleResult( const MineruleResultInfo& mri ) throw(odbc::SQLException, MineruleException);
+    static std::string addMineruleAttributeList(const ParsedMinerule::AttrVector& l) throw(odbc::SQLException, MineruleException);
+    static std::string getNewAutoincrementValue(const std::string& tableName) throw(odbc::SQLException, MineruleException);
 
     /**
      * @param queryname
@@ -198,8 +185,7 @@ namespace minerule {
      *  given query. It throws a MineruleException(MR_ERROR_CATALOGUE_ERROR,"...")
      *  in case queryname is not in the catalogue.
      */
-    static std::string getResultsetName(const std::string& queryname) 
-      throw(odbc::SQLException, MineruleException);
+    static std::string getResultsetName(const std::string& queryname) throw(odbc::SQLException, MineruleException);
 
     /**
      * @param mrname

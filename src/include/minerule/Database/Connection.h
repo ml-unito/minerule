@@ -69,7 +69,7 @@ namespace minerule {
 
 		class CachedDBInserter : public DBInserter {
 		private:
-			ofstream outR, outHB;
+			ofstream outR, outH, outB;
 			std::string filename;
 		public:
 			CachedDBInserter(Connection& cc) : DBInserter(cc) {};

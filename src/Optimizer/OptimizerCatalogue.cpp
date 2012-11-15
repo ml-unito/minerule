@@ -97,23 +97,12 @@ namespace minerule {
       KeyCols refKeyCols;
 
       while(rs->next()) {
-	refKeyCols.insert( rs->getString(1) );
+		  refKeyCols.insert( rs->getString(1) );
       }
-
-      /*      std::cout << "Inserting rule:" << std::endl;
-      copy( cols.begin(),
-	    cols.end(),
-	    std::ostream_iterator<std::string >(cout, ","));
-      std::cout << " -> ";
-      copy( refKeyCols.begin(),
-	    refKeyCols.end(),
-	    std::ostream_iterator<std::string >( std::cout, ","));
-	    std::cout << std::endl;*/
      
       //      OrderType orderType = getOrderType(origKey,refKey);
       // (*this)[table][cols] = pair<KeyCols,OrderType>(refKeyCols,orderType);
-      std::pair<KeyCols, std::pair<KeyCols,OrderType> > insElem(cols,
-		      std::pair<KeyCols,OrderType>(refKeyCols,orderType));
+      std::pair<KeyCols, std::pair<KeyCols,OrderType> > insElem(cols,std::pair<KeyCols,OrderType>(refKeyCols,orderType));
       (*this)[table].insert(insElem);
 
     } catch( odbc::SQLException& e ) {
@@ -141,87 +130,80 @@ namespace minerule {
       MineruleOptions::getSharedOptions().getOdbc_db().getODBCConnection();
 
     try {
-      std::auto_ptr<odbc::Statement> stat1( connection->createStatement() );
-     std::string getCatalogueQuery = (std::string)
-	"SELECT A."+getSchemaInfo("tab_main_tab_name")+
-	      ",B."+getSchemaInfo("tab_cols_col_name")+
-	      ",A."+getSchemaInfo("tab_main_rhs_key_id")+
-	      ",A."+getSchemaInfo("tab_main_order_type")+" "+
-	"FROM "+getSchemaInfo("tab_main")+" AS A,"+
-	        getSchemaInfo("tab_cols")+" AS B "+
-	"WHERE A."+getSchemaInfo("tab_main_lhs_key_id")+"=B."+
-	           getSchemaInfo("tab_cols_key_id");
+		std::auto_ptr<odbc::Statement> stat1( connection->createStatement() );
+		std::string getCatalogueQuery = (std::string)
+			"SELECT A."+getSchemaInfo("tab_main_tab_name")+
+				",B."+getSchemaInfo("tab_cols_col_name")+
+				",A."+getSchemaInfo("tab_main_rhs_key_id")+
+				",A."+getSchemaInfo("tab_main_order_type")+" "+
+			"FROM "+getSchemaInfo("tab_main")+" AS A,"+
+					getSchemaInfo("tab_cols")+" AS B "+
+			"WHERE A."+getSchemaInfo("tab_main_lhs_key_id")+"=B."+
+						getSchemaInfo("tab_cols_key_id");
      
-      std::auto_ptr<odbc::ResultSet> rs( stat1->executeQuery(getCatalogueQuery) );
-      KeyCols origKey;
-      unsigned long refKeyId=0;
-     std::string curTable;
-      OrderType orderType;
+		std::auto_ptr<odbc::ResultSet> rs( stat1->executeQuery(getCatalogueQuery) );
+		KeyCols origKey;
+		unsigned long refKeyId=0;
+		std::string curTable;
+		OrderType orderType;
 
 
-      // We start building the first of the two col l lists.
-      // we accumulate the result in the set origKey. 
+	    // We start building the first of the two col l lists.
+	    // we accumulate the result in the set origKey. 
 
-      if(rs->next()) {
-	curTable = rs->getString(1);
-	origKey.insert( rs->getString(2) );
-	refKeyId= rs->getInt(3);
-	orderType = stringToOrder(rs->getString(4));
-      } else {
-	return;
-      }
+		if(rs->next()) {
+			curTable = rs->getString(1);
+			origKey.insert( rs->getString(2) );
+			refKeyId= rs->getInt(3);
+			orderType = stringToOrder(rs->getString(4));
+		} else {
+			return;
+		}
 
-      while( rs->next() ) {
-	if(curTable!=rs->getString(1) || 
-	   refKeyId!=(unsigned long)rs->getInt(3)) {
-	  // here the current rule changed, in fact either the table
-	  // or the refKeyId are different
-	  insertMapping( curTable,origKey,refKeyId, orderType );
-	  origKey.clear();
+		while( rs->next() ) {
+			if(curTable!=rs->getString(1) || refKeyId!=(unsigned long)rs->getInt(3)) {
+		  // here the current rule changed, in fact either the table
+		  // or the refKeyId are different
+				insertMapping( curTable,origKey,refKeyId, orderType );
+				origKey.clear();
 	  
-	  curTable=rs->getString(1);
-	  origKey.insert( rs->getString(2) );
-	  refKeyId=rs->getInt(3);
-	  orderType = stringToOrder(rs->getString(4));
-	} else {
-	  // here we continue to accumulate the columns in origKey
-	  origKey.insert( rs->getString(2) );
-	}
-      } // end while
+				curTable=rs->getString(1);
+				origKey.insert( rs->getString(2) );
+				refKeyId=rs->getInt(3);
+				orderType = stringToOrder(rs->getString(4));
+			} else {
+				// here we continue to accumulate the columns in origKey
+				origKey.insert( rs->getString(2) );
+			}
+      	} // end while
 
-      assert( !origKey.empty() );
-      insertMapping( curTable, origKey, refKeyId, orderType );
-    } catch( odbc::SQLException& e ) {
-      throw MineruleException(MR_ERROR_DATABASE_ERROR,
-			      std::string("Cannot access the db while "
-				     "initializing a member of the OptimizerCatalogue,"
-				     "the reason is:") + e.getMessage() );
-    }
+		assert( !origKey.empty() );
+		insertMapping( curTable, origKey, refKeyId, orderType );
+	} catch( odbc::SQLException& e ) {
+		throw MineruleException(MR_ERROR_DATABASE_ERROR, std::string("Cannot access the db while "
+				"initializing a member of the OptimizerCatalogue, the reason is:") + e.getMessage() );
+	}
   }
 
 
 
- std::string OptimizerCatalogue::getNewAutoincrementValue(const std::string& tableName) 
-    throw(odbc::SQLException,MineruleException) {
-    odbc::Connection* connection = 
-      MineruleOptions::getSharedOptions().getOdbc_db().getODBCConnection();
+ std::string OptimizerCatalogue::getNewAutoincrementValue(const std::string& tableName)  throw(odbc::SQLException,MineruleException) {
+    odbc::Connection* connection = MineruleOptions::getSharedOptions().getOdbc_db().getODBCConnection();
     odbc::Statement* statement=NULL;
     odbc::ResultSet* rs=NULL;
     odbc::Statement* updateStatement=NULL;
-
 
    std::string idstr;
 
     try {
       statement=connection->createStatement();
-      rs=statement->executeQuery("SELECT current_id FROM mr_autoincrement "
-				 "WHERE table_name="+SQLUtils::quote(tableName));
+      rs=statement->executeQuery("SELECT current_id FROM mr_autoincrement WHERE table_name="+SQLUtils::quote(tableName));
 
       if(!rs->next())
-	throw MineruleException(MR_ERROR_INSTALLATION_PROBLEM,
-				"Cannot find the autoincrement value for table "+ tableName+
-				" in Optimizer catalogue (i.e. in table:`mr_autoincrement'),"
-				" please check your installation");
+		throw MineruleException(MR_ERROR_INSTALLATION_PROBLEM,
+					"Cannot find the autoincrement value for table "+ tableName+
+					" in Optimizer catalogue (i.e. in table:`mr_autoincrement'),"
+					" please check your installation");
 
       size_t id = rs->getInt(1);
       idstr = Converter((long)++id).toString();
@@ -250,8 +232,7 @@ namespace minerule {
     return idstr;
   }
 
- std::string OptimizerCatalogue::addMineruleAttributeList(const ParsedMinerule::AttrVector& l) 
-    throw (odbc::SQLException, MineruleException) {
+ std::string OptimizerCatalogue::addMineruleAttributeList(const ParsedMinerule::AttrVector& l) throw (odbc::SQLException, MineruleException) {
     if( l.empty() )
       return "NULL";
 
@@ -442,13 +423,9 @@ namespace minerule {
   }
 
   bool
-  OptimizerCatalogue::isIDAttribute(const std::string& table,
-		const ParsedMinerule::AttrVector& itemCols,
-		const std::string& attribute) const throw(MineruleException)  {
+  OptimizerCatalogue::isIDAttribute(const std::string& table,const ParsedMinerule::AttrVector& itemCols,const std::string& attribute) const throw(MineruleException)  {
     std::set<std::string> itemColsSet;
-    copy( itemCols.begin(),
-	  itemCols.end(),
-	  std::insert_iterator< std::set<std::string> >(itemColsSet,itemColsSet.begin()));
+    copy( itemCols.begin(), itemCols.end(), std::insert_iterator< std::set<std::string> >(itemColsSet,itemColsSet.begin()));
 
     Catalogue::const_iterator cat_it = depFunCatalogue.find(table);
     if(cat_it==depFunCatalogue.end())
@@ -458,14 +435,11 @@ namespace minerule {
     CatalogueEntry::const_iterator ce_it;
     for( ce_it=ce.begin(); ce_it!=ce.end(); ce_it++ ) {
       // if I can find the attribute in the rhs of the fd
-      if(ce_it->second.first.find(attribute)!=ce_it->second.first.end() &&
-	 // and I the item cols includes the lhs of the fd 
-	 includes(itemColsSet.begin(),
-		  itemColsSet.end(),
-		  ce_it->first.begin(),
-		  ce_it->first.end()))
-	// then the attribute is item dependent
-	return true;
+			 // and I the item cols includes the lhs of the fd 
+      if(ce_it->second.first.find(attribute)!=ce_it->second.first.end() && 
+		  includes(itemColsSet.begin(), itemColsSet.end(), ce_it->first.begin(), ce_it->first.end()))
+			  // then the attribute is item dependent
+			  return true;
     }
     
     return false;

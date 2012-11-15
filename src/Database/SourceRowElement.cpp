@@ -41,11 +41,7 @@ namespace minerule {
 				"Cannot recognize the specified element type!"); 
 	}
 
-
-	void
-		SourceRowElement::serializeElementToString(const SourceRowElement& elem,
-			std::string& strRepr) 
-	throw(MineruleException) {
+	void SourceRowElement::serializeElementToString(const SourceRowElement& elem, std::string& strRepr) throw(MineruleException) {
 		std::ostringstream sstream;
 		sstream << elem.getElementType();
 		elem.serialize(sstream);

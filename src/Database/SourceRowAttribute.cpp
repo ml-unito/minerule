@@ -66,7 +66,7 @@ namespace minerule {
 	}
 
 	std::string
-	GenericSourceRowAttribute::asString() const {
+	GenericSourceRowAttribute::asString(const std::string& sep) const {
 		if(value == "")
 			return "(not set)";
 		else 
@@ -166,7 +166,7 @@ namespace minerule {
 		}
   
 		std::string 
-		NumericSourceRowAttribute::asString() const {
+		NumericSourceRowAttribute::asString(const std::string& sep) const {
 			std::stringstream ss;
 			ss << value;
 			return ss.str();

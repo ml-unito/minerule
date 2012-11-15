@@ -72,7 +72,7 @@ namespace minerule {
     /** 
      * return thestd::string representation for the attribute
      */ 
-    virtual std::string asString() const = 0;
+    virtual std::string asString(const std::string& sep=",") const = 0;
 
     // INHERITED FROM SOURCE ROW ELEMENT
 
@@ -171,7 +171,7 @@ namespace minerule {
     virtual void setValue( const std::string& );
     virtual int compareTo(const SourceRowAttribute&) const;
 
-    virtual std::string asString() const;
+    virtual std::string asString(const std::string& sep=",") const;
 
     virtual std::string
        getSQLData() const;
@@ -295,7 +295,7 @@ namespace minerule {
     virtual void setValue( const std::string& );
     virtual int compareTo(const SourceRowAttribute&) const;
 
-    virtual std::string asString() const;
+    virtual std::string asString(const std::string& sep=",") const;
 
     virtual std::string
        getSQLData() const;

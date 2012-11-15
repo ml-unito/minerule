@@ -59,11 +59,9 @@ namespace minerule {
 	
 	
     
-    virtual std::string 
-      getSQLData() const;
+    virtual std::string getSQLData() const;
 
-    virtual std::string
-      asString() const;
+    virtual std::string asString(const std::string& sep=",") const;
     
     virtual SourceRowElement* copy() const {
       return new SourceRowAttributeCollection(*this);

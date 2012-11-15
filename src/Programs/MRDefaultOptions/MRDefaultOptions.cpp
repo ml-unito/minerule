@@ -7,29 +7,31 @@ using namespace minerule;
 
 void
 printHelp(std::string progname) {
-  std::cout << "Usage: " << progname << " [-h] [-v] [-f optionfile] [-O optionstring] [optfile]" << std::endl;
-  std::cout << "  If invoked without arguments the program output (stdout)" << std::endl
+  std::cout << StringUtils::to_bold("Usage: ") << progname << " [-h] [-v] [-f optionfile] [-O optionstring] [optfile]" << std::endl;
+  std::cout << std::endl;
+  std::cout 
+	   << "  If invoked without arguments the program output (stdout)" << std::endl
        << "  the default options used by the Minerule system." << std::endl << std::endl
-       << "  If \"-h\" or if more than one argument is given, the"<< std::endl
-       << "  program output this message." << std::endl
-       << "  If an option file is specified, the program read it and" << std::endl
-       << "  output the resulting options immediately afterwards" << std::endl
+ 	   << "  If " << StringUtils::to_bold("-v") <<" is given, the program outputs its version number and exits" << std::endl <<std::endl
+       << "  If " << StringUtils::to_bold("-h") << " is given, the program outputs this message." << std::endl
+       << "  If an option file is specified, the program reads it and" << std::endl
+       << "  outputs the resulting options immediately afterwards" << std::endl
        << "  (useful to check that the file syntax is correct and that"<<std::endl
-       << "  the program correctly parsify it)" << std::endl
-       << "  If more than one option file is specified, the latter options" <<std::endl
-       << "  override the former ones. The same holds with the options" << std::endl
-       << "  given using the -O flag" << std::endl << std::endl;
-  std::cout << "NOTE: all options regarding streams will be either commented"<< std::endl
+       << "  the program correctly parses it)." << std::endl
+       << "  If more than one option file is specified, latter options" <<std::endl
+       << "  override former ones. The same holds with the options" << std::endl
+       << "  given using the "<<StringUtils::to_bold("-O")<<" flag" << std::endl << std::endl;
+  std::cout << StringUtils::to_bold("NOTE:") << " all options regarding streams will be either commented"<< std::endl
        << "  or set to default values (for implementation reasons it is"<< std::endl
        << "  not possible to retrieve the file name they point to and " << std::endl
        << "  printing a number representing a pointer in memory is likely"<<std::endl
-       << "  to lead to some kind of misunderstanding" <<std::endl;
+       << "  to lead to some kind of misunderstanding)" <<std::endl;
 }
 
 
 
 void printVersion() {
-  std::cout << "MRDefaults v:" << MR_VERSION << std::endl;
+  std::cout << "mrdefaults v:" << MR_VERSION << std::endl;
 }
 
 void

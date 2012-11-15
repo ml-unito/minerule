@@ -10,33 +10,34 @@
 #include "MRCUtils.h"
 #include "Printer.h"
 #include "Utils/FileUtils.h"
-
+#include "Utils/StringUtils.h"
 
 namespace mrc {
 	void
 	printHelp(int argc, char** argv) {
-	  std::cout << "Usage:" << std::endl
-	       << "   " << argv[0] << " [-h] [-s <sepstring>] [-f <optionfile>] " << std::endl
+	  using namespace minerule;
+	  std::cout << StringUtils::to_bold("Usage:") << std::endl
+	       << "   " << StringUtils::to_bold(argv[0]) << " [-h] [-s <sepstring>] [-f <optionfile>] " << std::endl
 	       << "           [-n <queryname>] [-l] [-F formatSpecs] [-d <queryname>]"
 	       << std::endl
 	       << "The program allow to inspect the MR catalogue" << std::endl
-	       << "-h - Output this message and returns NOTHING_TO_DO" << std::endl
-	       << "-s - Change thestd::string used to separate different elements in" << std::endl
+	       << StringUtils::to_bold("-h") << " - Output this message and returns NOTHING_TO_DO" << std::endl
+	       << StringUtils::to_bold("-s") << " - Change thestd::string used to separate different elements in" << std::endl
 	       << "     the output. The default is ' '" << std::endl
-	       << "-n - Look in the catalogue for the specified query" << std::endl
+	       << StringUtils::to_bold("-n") << " - Look in the catalogue for the specified query" << std::endl
 	       << "     it returns QUERY_NAME_FOUND, or QUERY_NAME_NOT_FOUND" << std::endl
 	       << "     accordingly to whether the query could be found."<<std::endl 
-	       << "-l - Print the list of already executed queries, returns" << std::endl
+	       << StringUtils::to_bold("-l") << " - Print the list of already executed queries, returns" << std::endl
 	       << "     SUCCESS upon completion" << std::endl
-	       << "-d - Delete the given minerule from the system (notice that" << std::endl
+	       << StringUtils::to_bold("-d") << " - Delete the given minerule from the system (notice that" << std::endl
 	       << "     the safety options in the option file must be setted" << std::endl
 	       << "     in such a way to allow the deletion. " << std::endl
-	       << "-F - Format specifiers for printing the list of queries (-l)" <<std::endl
+	       << StringUtils::to_bold("-F") << " - Format specifiers for printing the list of queries (-l)" <<std::endl
 	       << "     Valid specifiers: s - Print the size of the result set" << std::endl
 	       << "                       t - Print the text of the original mr" <<std::endl
 	       << "                       r - Print the result set table names" << std::endl
 	       << "     the default is '', i.e.: print onlty the qry name" << std::endl
-	       << "Return values:" << std::endl
+	       << StringUtils::to_bold("Return values:") << std::endl
 	       << "      SUCCESS = " << mrc::SUCCESS << std::endl
 	       << "      NOTHING_TO_DO = " << mrc::NOTHING_TO_DO << std::endl
 	       << "      QUERY_NAME_FOUND = " << mrc::QUERY_NAME_FOUND << std::endl

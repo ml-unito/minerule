@@ -37,11 +37,13 @@ printRules(std::string queryname,
 
 void
 printHelp(int argc, char** argv) {
-    std::cout << "Usage:" << std::endl
-    << "   " << argv[0] << " [-0] [-c] [-h] [-s <order>] [-x <sepString>] [-f <optionfile>] resultsetname" << std::endl
-	<< " -0 suppresses logging output " << std::endl
-    << " -c do not filter out rules having low confidence" << std::endl	
-    << " Option -s can be used to sort the rules in a given order." << std::endl
+    std::cout << StringUtils::to_bold("Usage:") << std::endl
+    << "   " << StringUtils::to_bold(argv[0]) << " [-0] [-c] [-h] [-s <order>] [-x <sepString>] [-f <optionfile>] resultsetname" << std::endl
+	<< "The program allows printing results of minerule queries." << std::endl 
+	<< std::endl
+	<< StringUtils::to_bold("-0") << " - suppresses logging output " << std::endl
+    << StringUtils::to_bold("-c") << " - do not filter out rules having low confidence" << std::endl	
+    << StringUtils::to_bold("-s -") << " allows one to sort the rules in a given order." << std::endl
     << "   supported orders are: " << std::endl
     << "     'no' -> no particular order (fastest display)" << std::endl
     << "     'scbh' -> order is support, confidence, body, head"<<std::endl
@@ -51,9 +53,9 @@ printHelp(int argc, char** argv) {
     << "     'cbhs' -> order is conf, body, head, supp" << std::endl
     << "     'cbsh' -> order is conf, body, supp, head" << std::endl
     << "   the default is 'no'" << std::endl
-    << " Option -x allows one to specify if a particularstd::string needs to be" << std::endl
-    << "   used in order to specify fields in the output (in none is given)" << std::endl
-    << "   the program uses a human readable format." <<std::endl
+    << StringUtils::to_bold("-x") << " - allows one to specify if a particular std::string needs to be" << std::endl
+    << "   used in order to specify fields in the output (if none is given" << std::endl
+    << "   the program uses ',')." <<std::endl
     << std::endl << std::endl;
 }
 

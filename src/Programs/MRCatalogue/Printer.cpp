@@ -1,12 +1,15 @@
 #include "Printer.h"
 #include "Utils/StringUtils.h"
+#include <sstream>
 
 namespace mrc {
 	const size_t  Printer::OUTPUT_MAX_LEN = 70;
 	
 	
 	void Printer::printIndex() const {
-		_out << "-" << _result_index << "- ";
+		std::stringstream ss;
+		ss <<  _result_index;
+		_out << "-" << minerule::StringUtils::to_bold( ss.str() ) << "- ";
 	}
 		
 	void Printer::format(std::string header, std::string info) {
@@ -15,7 +18,7 @@ namespace mrc {
 		assert(chunks->size()!=0);
 		
 		std::vector<std::string>::const_iterator it = chunks->begin();
-		_out << header << "\t" << *it << std::endl;					
+		_out << minerule::StringUtils::to_green(header) << "\t" << *it << std::endl;					
 		++it;
 		
 		for(; it!=chunks->end(); ++it) {
@@ -27,7 +30,7 @@ namespace mrc {
 	
 	void Printer::format(std::string header, size_t info) {
 		printIndex();
-		_out << header << "\t"  << info << std::endl;
+		_out << minerule::StringUtils::to_green(header) << "\t"  << info << std::endl;
 	}
 
 	

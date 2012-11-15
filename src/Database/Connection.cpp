@@ -60,27 +60,29 @@ void Connection::deleteTable(const char * tableName)
 
 // Bisogna controllare che non esista già la tabella
 // altrimenti va in errore !!
-void Connection::createResultTables(const SourceRowDescriptor& srd)
- {
-    odbc::Statement* statement=connection->createStatement();
-    std::string create, create_index;
+void Connection::createResultTables(const SourceRowDescriptor& srd) {
+	if(MineruleOptions::getSharedOptions().getSafety().getOverwriteHomonymMinerules())
+		deleteDestTables();
+		
+	odbc::Statement* statement=connection->createStatement();
+	std::string create, create_index;
 
 	// Creating the rules table
-    create=string("CREATE TABLE ")+getTableName(RulesTable)+" (bodyId int, headId int, supp float, con float, cardBody int, cardHead int );";	
-    statement->execute(create);	
+	create=string("CREATE TABLE ")+getTableName(RulesTable)+" (bodyId int, headId int, supp float, con float, cardBody int, cardHead int );";	
+	statement->execute(create);	
 	
 	// Creating the body elements table
-    create=string("CREATE TABLE ")+ getTableName(BodiesTable) + " (id int, " + srd.getBody().getSQLDataDefinition() +")";
+	create=string("CREATE TABLE ")+ getTableName(BodiesTable) + " (id int, " + srd.getBody().getSQLDataDefinition() +")";
 	create_index = " CREATE INDEX "+getTableName(BodiesTable)+"_index ON " + getTableName(BodiesTable) + " (id);";
 
-    statement->execute(create);
+	statement->execute(create);
 	statement->execute(create_index);
 
 	// Creating the head elements table
-    create=string("CREATE TABLE ")+ getTableName(HeadsTable) +  " (id int, " + srd.getHead().getSQLDataDefinition() +")";
+	create=string("CREATE TABLE ")+ getTableName(HeadsTable) +  " (id int, " + srd.getHead().getSQLDataDefinition() +")";
 	create_index = " CREATE INDEX "+getTableName(HeadsTable)+"_index ON " + getTableName(HeadsTable) + " (id);";
 
-    statement->execute(create);
+	statement->execute(create);
 	statement->execute(create_index);
 
 	std::string headInserterQuery = "INSERT INTO " + getTableName(HeadsTable) + " VALUES (?,"+ srd.getHead().questionMarks() +")";
@@ -89,7 +91,7 @@ void Connection::createResultTables(const SourceRowDescriptor& srd)
 	std::string bodyInserterQuery = "INSERT INTO " + getTableName(BodiesTable) + " VALUES (?," + srd.getBody().questionMarks() + ")";
 	dbInserter->setBodyInserter(connection->prepareStatement(bodyInserterQuery));
 
-    delete statement;
+	delete statement;
  }
 
 
@@ -122,6 +124,7 @@ void Connection::DirectDBInserter::insertHeadBodyElems(TableKind kind, const Ite
 
 void Connection::CachedDBInserter::insertHeadBodyElems(TableKind kind, const ItemSet& elems, size_t id) {
 //  assert( !elems.empty() );
+    MRLogStartMeasuring("Head/Body Insertion time:");
 	
 	std::ofstream* outStream = NULL;
 	switch(kind) {
@@ -143,12 +146,18 @@ void Connection::CachedDBInserter::insertHeadBodyElems(TableKind kind, const Ite
 	for(; it!=elems.end() ; it++ ) {
 		(*outStream) << id << "\t" << it->getElement().asString("\t") << std::endl;
 	}
+	
+    MRLogStopMeasuring("Head/Body Insertion time:");	
 }
 
 void Connection::CachedDBInserter::init() {
+  MRLogStartMeasuring("CachedDBInserter init");
+	
   char tmpFName[30];
-  strcpy(tmpFName,"cacheDBInserterXXXXX");
-  filename = mkstemp(tmpFName);
+  strcpy(tmpFName,"/tmp/cacheDBInserterXXXXX");
+  filename = mktemp(tmpFName);
+  
+  MRLog() << "CachedDBInserter will use filestem: " << filename << std::endl;
   
   std::string temp = filename + ".r";
   outR.open(temp.c_str());
@@ -158,10 +167,11 @@ void Connection::CachedDBInserter::init() {
   
   temp = filename + ".b";
   outB.open(temp.c_str());
+  MRLogStopMeasuring("CachedDBInserter init");
 }
 
 void Connection::CachedDBInserter::finalize() {
-	throw MineruleException(MR_ERROR_INTERNAL, "cached inserts not supported yet");
+  MRLogStartMeasuring("CachedDBInserter finalize");
 	
   outR.close();
   outH.close();
@@ -195,17 +205,21 @@ void Connection::CachedDBInserter::finalize() {
 
   loadstr2 = filename + ".b";
   unlink(loadstr2.c_str());
+
+  MRLogStopMeasuring("CachedDBInserter finalize");
 }
 
 void Connection::CachedDBInserter::insert(const ItemSet& body,
 			    const ItemSet& head,
 			    double support,
 			    double confidence,
-			    bool saveBody) {
+			    bool saveBody) {  
   // if either body or head elements are too many or too few with respect to
   // the allowed cardinalities, we simply return back to the caller.
   if( !connection.bodyCard.validate(body.size()) || !connection.headCard.validate(head.size()))
     return;
+  
+  MRLogStartMeasuring("Rule Insertion");
 
   static size_t counter=0;
 
@@ -219,6 +233,8 @@ void Connection::CachedDBInserter::insert(const ItemSet& body,
   insertHeadBodyElems(HeadsTable, head, headId);
 
   outR << bodyId << "\t" << headId << "\t" << support << "\t" << confidence << "\t" << body.size() << "\t" << head.size() << std::endl;
+  
+  MRLogStopMeasuring("Rule Insertion");
 }
 
 void Connection::DirectDBInserter::insert(const ItemSet& body,
@@ -226,12 +242,13 @@ void Connection::DirectDBInserter::insert(const ItemSet& body,
 			    double support,
 			    double confidence,
                 bool saveBody) {
-  MRLogStartMeasuring("Rule Insertion");
 					
   // if either body or head, is too big, too low with respect to
   // the allowed cardinalities we simply return back to the caller.
   if( !connection.bodyCard.validate(body.size()) || !connection.headCard.validate(head.size()))
     return;
+
+  MRLogStartMeasuring("Rule Insertion");
 
   static size_t counter=0;
 

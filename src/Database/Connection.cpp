@@ -182,13 +182,25 @@ void Connection::CachedDBInserter::finalize() {
   outB.close();
   
   std::string loadstr1 = filename + ".r";
-  chmod(loadstr1.c_str(),S_IRUSR|S_IRGRP|S_IROTH);
+  if(chmod(loadstr1.c_str(),S_IRUSR|S_IRGRP|S_IROTH)==-1) {
+	  throw MineruleException( MR_ERROR_INTERNAL, 
+		  std::string("Cannot change permissions on file ")+loadstr1 +
+		  " reason is:" + strerror(errno));
+  }
   
   std::string loadstr2 = filename + ".h";
-  chmod(loadstr2.c_str(),S_IRUSR|S_IRGRP|S_IROTH);
+  if(chmod(loadstr2.c_str(),S_IRUSR|S_IRGRP|S_IROTH)==-1) {
+	  throw MineruleException( MR_ERROR_INTERNAL, 
+		  std::string("Cannot change permissions on file ")+loadstr2 +
+		  " reason is:" + strerror(errno));  	
+  }
   
   std::string loadstr3 = filename + ".b";
-  chmod(loadstr2.c_str(),S_IRUSR|S_IRGRP|S_IROTH);
+  if(chmod(loadstr3.c_str(),S_IRUSR|S_IRGRP|S_IROTH)==-1) {
+	  throw MineruleException( MR_ERROR_INTERNAL, 
+		  std::string("Cannot change permissions on file ")+loadstr3 +
+		  " reason is:" + strerror(errno));  	
+  }
   
   const std::string& dbms = MineruleOptions::getSharedOptions().getOdbc_db().getDBMS();
   if(  dbms == "mysql" ) {

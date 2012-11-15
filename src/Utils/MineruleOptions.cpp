@@ -126,6 +126,9 @@ namespace minerule {
        << "  username="<<getOdbc_db().getUsername() << std::endl
        << "  password="<<getOdbc_db().getPassword() << std::endl
        << "  cacheWrites="<<Converter(getOdbc_db().getCacheWrites()).toString() << std::endl
+	   << "# dbms allows one to specify the underlying dbms, supported dbms are presently" << std::endl
+	   << "# mysql and postgres" << std::endl
+	   << "  dbms=" <<getOdbc_db().getDBMS() << std::endl
        << "}" << std::endl << std::endl;
 
     os << "# Options related to data safety issues" << std::endl;
@@ -339,9 +342,11 @@ namespace minerule {
       setPassword(value);
     else if(name=="cacheWrites")
       setCacheWrites(Converter(value).toBool());
+	else if(name=="dbms")
+	  setDBMS(value);
     else {
       std::cerr << "Error while parsing options, expecting an odbc option in:" <<std::endl
-	   << "{name, userName, password, cacheWrites} and: " << std::endl
+	   << "{name, userName, password, cacheWrites,odbc} and: " << std::endl
 	   << "\"" << name << "\" found." << std::endl;
       throw MineruleException(MR_ERROR_OPTION_PARSING, MINERULE_OPTIONS_PARSING_ERROR);
     }

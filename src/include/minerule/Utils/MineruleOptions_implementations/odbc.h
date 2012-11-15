@@ -4,8 +4,9 @@ class Odbc_db : public OptionBase {
   std::string password;
   odbc::Connection* connection;
   bool cacheWrites;
+  std::string dbms;
 public:
-  Odbc_db() : connection(NULL), cacheWrites(false) {};
+  Odbc_db() : connection(NULL), cacheWrites(false), dbms("mysql") {};
 
   virtual ~Odbc_db()  { }
 
@@ -19,13 +20,18 @@ public:
   std::string getName() const {
 	return name;
   }
-
+  
   std::string getUsername() const {
 	return username;
   }
   std::string getPassword() const {
 	return password;
   }
+  
+  std::string getDBMS() const {
+	  return dbms;
+  }
+  
 
   bool getCacheWrites() const {
 	return cacheWrites;
@@ -58,6 +64,10 @@ public:
 
   void setCacheWrites(bool v) {
 	cacheWrites = v;
+  }
+  
+  void setDBMS(std::string v) {
+	  dbms = v;
   }
 
   void setConnection(odbc::Connection* con) {

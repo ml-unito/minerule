@@ -190,9 +190,20 @@ void Connection::CachedDBInserter::finalize() {
   std::string loadstr3 = filename + ".b";
   chmod(loadstr2.c_str(),S_IRUSR|S_IRGRP|S_IROTH);
   
-  loadstr1 = "LOAD DATA INFILE '" + filename + ".r' INTO TABLE " + connection.getTableName(RulesTable);  
-  loadstr2 = "LOAD DATA INFILE '" + filename + ".h' INTO TABLE " + connection.getTableName(HeadsTable);
-  loadstr3 = "LOAD DATA INFILE '" + filename + ".b' INTO TABLE " + connection.getTableName(BodiesTable);
+  const std::string& dbms = MineruleOptions::getSharedOptions().getOdbc_db().getDBMS();
+  if(  dbms == "mysql" ) {
+	  loadstr1 = "LOAD DATA INFILE '" + filename + ".r' INTO TABLE " + connection.getTableName(RulesTable);  
+	  loadstr2 = "LOAD DATA INFILE '" + filename + ".h' INTO TABLE " + connection.getTableName(HeadsTable);
+	  loadstr3 = "LOAD DATA INFILE '" + filename + ".b' INTO TABLE " + connection.getTableName(BodiesTable);
+  } else if( dbms == "postgres" ) {
+	  loadstr1 = "COPY " + connection.getTableName(RulesTable)  +" FROM '" + filename + ".r'";  
+	  loadstr2 = "COPY " + connection.getTableName(HeadsTable)  +" FROM '" + filename + ".h'"; 
+	  loadstr3 = "COPY " + connection.getTableName(BodiesTable) +" FROM '" + filename + ".b'";   	
+  } else  {
+	  throw MineruleException( MR_ERROR_OPTION_CONFIGURATION, 
+		  "Option for key odbc::dbms is not set properly, it is set to "+dbms+
+		  ", but only 'mysql' or 'postgres' are supported." );
+  }
   
   odbc::Statement* state = connection.getODBCConnection()->createStatement();
   state->execute(loadstr1.c_str());

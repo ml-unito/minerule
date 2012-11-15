@@ -156,7 +156,7 @@ void Connection::CachedDBInserter::init() {
   char tmpFName[30];
   strcpy(tmpFName,"/tmp/cacheDBInserterXXXXX");
   if(mkstemp(tmpFName)==-1) {
-	  throw MineruleException(MR_ERROR_OUTPUT_FILE_PROBLEM, "Cannot create temporary file");
+	  throw MineruleException(MR_ERROR_OUTPUT_FILE_PROBLEM, std::string("Cannot create temporary file:")+tmpFName);
   }
 
   filename = tmpFName;

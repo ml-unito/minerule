@@ -313,8 +313,8 @@ namespace minerule {
     connection.createResultTables(SourceRowDescriptor(connection.getODBCConnection(), minerule.getParsedMinerule()));
     connection.init();
 
-    MRDebug() << "BFSWithGids: body queries:" << bodyQry.c_str() << std::endl;
-    MRDebug() << "BFSWithGids: head queries:" << headQry.c_str() << std::endl;
+    MRDebug( std::string("BFSWithGids: body queries:") + bodyQry.c_str() );
+    MRDebug( std::string("BFSWithGids: head queries:") + headQry.c_str() );
 
     statementBody = connection.getODBCConnection()->prepareStatement(bodyQry.c_str());
     statementHead = connection.getODBCConnection()->prepareStatement(headQry.c_str());

@@ -29,20 +29,22 @@ using namespace minerule;
 
 void
 printHelp(char* progName) {
-	std::cout << "Usage:" << std::endl
-		<< "  " << progName << " [-i <mineruletextfile>] [-m '<mineruletext>'] " << std::endl
+	std::cout << StringUtils::to_bold("Usage:") << std::endl
+		<< "  " << StringUtils::to_bold(progName) << " [-i <mineruletextfile>] [-m '<mineruletext>'] " << std::endl
 		<< "     -f <mineruleoptionfile> -O <optionlist> -v -h " << std::endl << std::endl;
-	std::cout << "   -i -- specify a file name containing the text of the minerule" << std::endl
-		<< "   -m -- the argument is the text of the minerule" << std::endl
-		<< "   -f -- specify a file name containing the Options to be used." << std::endl
+	
+	std::cout 
+		<< StringUtils::to_bold("   -i") << " -- specify a file name containing the text of the minerule" << std::endl
+		<< StringUtils::to_bold("   -m") << " -- the argument is the text of the minerule" << std::endl
+		<< StringUtils::to_bold("   -f") << " -- specify a file name containing the Options to be used." << std::endl
 		<< "         more than one is allowed and later ones override the options"<< std::endl
 		<< "         read from previous ones" << std::endl
-		<< "   -O -- Allows to specify some options from the command line" << std::endl
+		<< StringUtils::to_bold("   -O") << " -- Allows to specify some options from the command line" << std::endl
 		<< "         whether those options overrides or not the ones given by -f"<<std::endl
 		<< "         commands depends on which comes first" <<std::endl
-		<< "   -v -- version informations" << std::endl
-		<< "   -h -- this message" << std::endl
-		<< " exit codes:" << std::endl;
+		<< StringUtils::to_bold("   -v") << " -- version informations" << std::endl
+		<< StringUtils::to_bold("   -h") << " -- this message" << std::endl
+		<< StringUtils::to_bold(" exit codes:") << std::endl;
 	for(int i=me_error_begin(); i<me_error_end(); i++) {
 		std::cout 
 		<<  "\t" << i << "\t- " << me_error_name((MineruleErrors) i) << std::endl;
@@ -52,7 +54,7 @@ printHelp(char* progName) {
 }
 
 void printVersion() {
-	std::cout << "Minerule Kernel v:" << MR_VERSION << std::endl;
+	std::cout << StringUtils::to_bold("Minerule v:") << MR_VERSION << std::endl;
 }
 
 
@@ -192,7 +194,6 @@ parseOptions(int argc, char** argv, MineruleOptions& mrOpts, std::string& mrtext
 
 	if(!okMRText) {
 		MRErr() << "No minerule has been specified (use -i or -m options)" << std::endl;
-		std::cerr << "No minerule has been specified (use -i or -m options)" << std::endl;
 		exit(MR_ERROR_NO_MINERULE_SPECIFIED);
 	}
 	
@@ -222,11 +223,12 @@ parseOptions(int argc, char** argv, MineruleOptions& mrOpts, std::string& mrtext
 int main (int argc, char *argv[])
 {	
 	try {
-		MRLogPush("Initialization...");
 		MineruleOptions& mrOpts =  MineruleOptions::getSharedOptions();
 		std::string mrtext;
 		
 		parseOptions(argc, argv, mrOpts, mrtext);
+
+		MRLogPush("Initialization...");
 		MRLog() << "Minerule source text:" << std::endl;
 		MRLog(mrtext);
 		MRLogPop();

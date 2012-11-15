@@ -206,7 +206,7 @@ parseOptions(int argc, char** argv, MineruleOptions& mrOpts, std::string& mrtext
 		if( !cmd_line_mr_options.empty() ) {
 			for(std::vector<std::string>::const_iterator it=cmd_line_mr_options.begin(); it!=cmd_line_mr_options.end(); ++it) {
 				mrOpts.readFromString(*it);
-				MRLog() << "Options set accordingly to command line paramenter:-O " << optarg << std::endl;
+				MRLog() << "Options set accordingly to command line paramenter:-O " << *it << std::endl;
 			}
 			okMROptions = true;			
 		}

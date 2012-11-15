@@ -10,11 +10,6 @@
 
 #include "Database/SourceRowElement.h"
 
-//#ifndef String
-//  #include<wxstrgnu.h>
-//  typedef wxString String;
-//#endif
-
 namespace minerule { 
   /**
    * This is the base class for all attributes types. It should be subclassed
@@ -29,9 +24,7 @@ namespace minerule {
      */
 
     static
-      SourceRowAttribute* createAttribute(odbc::ResultSetMetaData* rsmd,
-					  odbc::ResultSet* rs,
-					  int elem);
+      SourceRowAttribute* createAttribute(odbc::ResultSetMetaData* rsmd, odbc::ResultSet* rs, int elem);
     
 
     virtual ~SourceRowAttribute() {

@@ -241,83 +241,64 @@ namespace minerule {
 
 
   
- std::string BFSWithGidsNoCross::buildQry( const std::string& groupAttrStr,
-				       const std::string& attrStr,
-				       const std::string& constraints) const {
-    
-    return std::string("SELECT "+groupAttrStr+","+attrStr+" "
-		  "FROM "+minerule.getParsedMinerule().tab_source+" "+
-		  (constraints.size()>0 ?
-		   "WHERE "+constraints+" " :
-		   "")
-		  +"ORDER BY "+groupAttrStr+","+attrStr);
+ std::string BFSWithGidsNoCross::buildQry( const std::string& groupAttrStr, const std::string& attrStr, const std::string& constraints) const {
+    std::string whereClause = (constraints.size()>0 ? "WHERE "+constraints+" " : "");
+
+    return std::string(
+		  "SELECT "+groupAttrStr+","+attrStr+" "
+		  "FROM "+minerule.getParsedMinerule().tab_source+" " + 
+		   whereClause +
+		   "ORDER BY "+groupAttrStr+","+attrStr);
   }
 
 
   void BFSWithGidsNoCross::prepareData() {
-    MineruleOptions& mrOptions = 
-      MineruleOptions::getSharedOptions();
+	  MineruleOptions& mrOptions = MineruleOptions::getSharedOptions();
 
-    options.setSupport( minerule.getParsedMinerule().sup );
-    options.setConfidence( minerule.getParsedMinerule().conf );
-    options.setBodyCardinalities( minerule.getParsedMinerule().bodyCardinalities);
-    options.setHeadCardinalities( minerule.getParsedMinerule().headCardinalities);
-    options.getBodyCardinalities().applyConstraints(mrOptions.getParsers().getBodyCardinalities());
-    options.getHeadCardinalities().applyConstraints(mrOptions.getParsers().getHeadCardinalities());
+	  options.setSupport( minerule.getParsedMinerule().sup );
+	  options.setConfidence( minerule.getParsedMinerule().conf );
+	  options.setBodyCardinalities( minerule.getParsedMinerule().bodyCardinalities);
+	  options.setHeadCardinalities( minerule.getParsedMinerule().headCardinalities);
+	  options.getBodyCardinalities().applyConstraints(mrOptions.getParsers().getBodyCardinalities());
+	  options.getHeadCardinalities().applyConstraints(mrOptions.getParsers().getHeadCardinalities());
 
-    PrepareDataUtils pdu(minerule, *this);
-    options.setTotGroups(pdu.evaluateTotGroups());
+	  PrepareDataUtils pdu(minerule, *this);
+	  options.setTotGroups(pdu.evaluateTotGroups());
 
-    MRLog() << "Building db queries" << std::endl;
-   std::string bodyConstraints;
-   std::string headConstraints;
-    HeadBodyPredicatesSeparator::separate((minerule.getParsedMinerule().mc!=NULL?
-					   minerule.getParsedMinerule().mc->l_and:
-					   NULL),
-					  bodyConstraints,
-					  headConstraints);
-    size_t index;
-   std::string groupAttr;
-   std::string bodyAttr;
-   std::string headAttr;
-    index=buildAttrStr(minerule.getParsedMinerule().ga,
-		       0,
-		       groupAttr,
-		       rowDes.groupBodyElems );
+	  MRLog() << "Building db queries" << std::endl;
+	  std::string bodyConstraints;
+	  std::string headConstraints;
+    
+	  list_AND_node* miningCondition = (minerule.getParsedMinerule().mc!=NULL ? minerule.getParsedMinerule().mc->l_and : NULL);
+	  HeadBodyPredicatesSeparator::separate(miningCondition, bodyConstraints, headConstraints);
+	  
+	  size_t index;
+	  std::string groupAttr;
+	  std::string bodyAttr;
+	  std::string headAttr;
+    
+	  index=buildAttrStr(minerule.getParsedMinerule().ga, 0, groupAttr, rowDes.groupBodyElems );
 
-    buildAttrStr(minerule.getParsedMinerule().ba,
-		 index,
-		 bodyAttr,
-		 rowDes.bodyElems);
-    buildAttrStr(minerule.getParsedMinerule().ha,
-		 index,
-		 headAttr,
-		 rowDes.headElems);
+	  buildAttrStr(minerule.getParsedMinerule().ba, index, bodyAttr, rowDes.bodyElems);
+	  buildAttrStr(minerule.getParsedMinerule().ha, index, headAttr, rowDes.headElems);
 		 
-   std::string bodyQry =
-      buildQry( groupAttr,
-		bodyAttr,
-		bodyConstraints);
+	  std::string bodyQry = buildQry( groupAttr, bodyAttr, bodyConstraints);
+	  std::string headQry = buildQry( groupAttr, headAttr, headConstraints);
 
-   std::string headQry =
-      buildQry( groupAttr,
-		headAttr,
-		headConstraints);
+	  MRLog() << "Preparing queries" << std::endl;
 
-    MRLog() << "Executing queries" << std::endl;
+	  connection.useODBCConnection(MineruleOptions::getSharedOptions().getOdbc_db().getODBCConnection());
+	  connection.setOutTableName(minerule.getParsedMinerule().tab_result);
+	  connection.setBodyCardinalities(minerule.getParsedMinerule().bodyCardinalities);
+	  connection.setHeadCardinalities(minerule.getParsedMinerule().headCardinalities);
+	  connection.createResultTables(SourceRowDescriptor(connection.getODBCConnection(), minerule.getParsedMinerule()));
+	  connection.init();
 
-    connection.useODBCConnection(MineruleOptions::getSharedOptions().getOdbc_db().getODBCConnection());
-    connection.setOutTableName(minerule.getParsedMinerule().tab_result);
-    connection.setBodyCardinalities(minerule.getParsedMinerule().bodyCardinalities);
-    connection.setHeadCardinalities(minerule.getParsedMinerule().headCardinalities);
-    connection.createResultTables(SourceRowDescriptor(connection.getODBCConnection(), minerule.getParsedMinerule()));
-    connection.init();
+	  MRDebug( std::string("BFSWithGids: body queries:") + bodyQry.c_str() );
+	  MRDebug( std::string("BFSWithGids: head queries:") + headQry.c_str() );
 
-    MRDebug( std::string("BFSWithGids: body queries:") + bodyQry.c_str() );
-    MRDebug( std::string("BFSWithGids: head queries:") + headQry.c_str() );
-
-    statementBody = connection.getODBCConnection()->prepareStatement(bodyQry.c_str());
-    statementHead = connection.getODBCConnection()->prepareStatement(headQry.c_str());
+	  statementBody = connection.getODBCConnection()->prepareStatement(bodyQry.c_str());
+	  statementHead = connection.getODBCConnection()->prepareStatement(headQry.c_str());
   }
 
 
@@ -333,8 +314,10 @@ namespace minerule {
     int maxBody = options.getBodyCardinalities().getMax();
     int maxHead = options.getHeadCardinalities().getMax();
 
+	MRLogPush("Executing queries...");
     resultBody = statementBody->executeQuery();
     resultHead = statementHead->executeQuery();
+	MRLogPop();
 
     ItemType gid1;
 	
@@ -361,7 +344,7 @@ namespace minerule {
       if (found2) {
 		  t2.loadHead(gid,resultHead);
       }
-      //howManyRows += bodyMap.add(gid,t1,t2);
+
       howManyRows += bodyMap.add(howManyGroups,t1,t2);
       howManyGroups++;
     }

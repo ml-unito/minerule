@@ -16,8 +16,8 @@ namespace minerule {
 
   /**
 	* This class models the concept of SourceRow. 
-		* It is useful in order to abstract away details about the
-			* structure of the source table. 
+	* It is useful in order to abstract away details about the
+	* structure of the source table. 
    */
 
 	class HeadBodySourceRow {

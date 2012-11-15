@@ -154,7 +154,7 @@ void Connection::CachedDBInserter::init() {
   MRLogStartMeasuring("CachedDBInserter init");
 	
   char tmpFName[30];
-  strcpy(tmpFName,"/tmp/cacheDBInserterXXXXX");
+  strcpy(tmpFName,"/tmp/cacheDBInserterXXXXXX");
   if(mkstemp(tmpFName)==-1) {
 	  throw MineruleException(MR_ERROR_OUTPUT_FILE_PROBLEM, std::string("Cannot create temporary file:")+tmpFName);
   }

@@ -31,7 +31,7 @@ class IDIncrementalAlgorithm : public IncrementalAlgorithm {
 
   void getItemInfos( std::string& itemDescr, HeadBodySourceRowDescription& hbsr ) const;
   bool checkInclusion(const std::set<ItemType>& validOnes, const ItemSet& foundOnes) const;
-  bool checkInValidRules(const ValidRules& validRules, QueryResult::Rule& r) const;
+  bool checkInValidRules(const ValidRules& validRules, Rule& r) const;
   void filterQueries(const ValidRules& validRules) throw(MineruleException,odbc::SQLException);
 
  public:

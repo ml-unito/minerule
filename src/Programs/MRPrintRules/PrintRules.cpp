@@ -25,7 +25,7 @@ printRules(std::string queryname,
     OptimizerCatalogue::getMRQueryResultIterator( queryname, qit, -1, conf );
     
     while( qit.next() ) {
-        QueryResult::Rule r;
+        Rule r;
         qit.getRule(r);
         
         formatter.printRule(r);

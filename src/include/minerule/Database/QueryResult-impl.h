@@ -14,7 +14,7 @@ namespace minerule {
 		OptimizerCatalogue::getMRQueryResultIterator(qryName,qit,sup,con);
 
 		while( qit.next() ) {
-			QueryResult::Rule r;
+			Rule r;
 			qit.getRule(r);
 
 			std::set<Rule,Sorter>::insert(r);

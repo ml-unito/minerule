@@ -59,7 +59,7 @@ namespace minerule {
 		return rs_rules->next();
 	}
 
-	void QueryResult::Iterator::getRule( QueryResult::Rule& r ) throw(MineruleException, odbc::SQLException, std::exception) {
+	void QueryResult::Iterator::getRule( Rule& r ) throw(MineruleException, odbc::SQLException, std::exception) {
 		r.body = new ItemSet();
 		r.head = new ItemSet();
 		readElems(  rs_rules->getInt(1), *r.body, body_elems );

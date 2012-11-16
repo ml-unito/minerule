@@ -25,7 +25,7 @@ protected:
   virtual ~RuleFormatter() {}
 
   virtual void
-    printRule(const QueryResult::Rule&) = 0;
+    printRule(const Rule&) = 0;
 
   void setFieldSeparationString(const std::string& s) {
     _fieldSeparationString=s;
@@ -46,7 +46,7 @@ public:
   virtual ~SimpleRuleFormatter() {};
 
   virtual void
-  printRule(const QueryResult::Rule&);
+  printRule(const Rule&);
 
   virtual void
   postExec() {};
@@ -55,21 +55,21 @@ public:
 
 template <class Sorter>
 class SortedRuleFormatter : public SimpleRuleFormatter {
-  typedef std::set<QueryResult::Rule,Sorter> SortedContainer;
+  typedef std::set<Rule,Sorter> SortedContainer;
   SortedContainer sortedRules;
 public:
   SortedRuleFormatter() : SimpleRuleFormatter() {};
   virtual ~SortedRuleFormatter() {};
 
   virtual void
-  printRule(const QueryResult::Rule&);
+  printRule(const Rule&);
 
   virtual void
   postExec();
 };
 
 template <class Sorter> void
-SortedRuleFormatter<Sorter>::printRule(const QueryResult::Rule& r) {
+SortedRuleFormatter<Sorter>::printRule(const Rule& r) {
   sortedRules.insert(r);
 }
 

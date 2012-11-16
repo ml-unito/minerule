@@ -13,14 +13,14 @@ namespace minerule {
   public:
     Transaction(HeadBodySourceRowDescription& rowDes) : std::vector<std::pair<ItemType, ItemType> >(), srd(rowDes) {}
     void load(ItemType& gid, odbc::ResultSet *rs) {
-      HeadBodySourceRow hbsr(rs,srd);
+		HeadBodySourceRow hbsr(rs,srd);
 
-      while (!rs->isAfterLast() && gid == hbsr.getGroupBody()) {
-	insert(end(),std::pair<ItemType,ItemType>(hbsr.getBody(),hbsr.getHead()));
-	rs->next();
-	if(!rs->isAfterLast())
-	  hbsr.init(rs,srd);
-      }
+		while (!rs->isAfterLast() && gid == hbsr.getGroupBody()) {
+			insert(end(),std::pair<ItemType,ItemType>(hbsr.getBody(),hbsr.getHead()));
+			rs->next();
+			if(!rs->isAfterLast())
+				hbsr.init(rs,srd);
+		}
     }
 
     static bool findGid(ItemType& gid, odbc::ResultSet *rs, HeadBodySourceRowDescription& srd, bool init=false) {

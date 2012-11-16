@@ -16,7 +16,7 @@ namespace minerule {
     OptimizerCatalogue::getMRQueryResultIterator(minerule->getOptimizationInfo().minerule.tab_result, qit, -1, 0.0);
     Head* newhead;
     while( qit.next()) {
-      QueryResult::Rule r;
+      Rule r;
       //crea body e head che sono due vettori ItemSet
       //ovvero due vettori di ItemType
       //ogni ItemType contiene un puntatore ad un SourceRowElement

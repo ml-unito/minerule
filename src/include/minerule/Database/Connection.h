@@ -25,11 +25,7 @@ namespace minerule {
 
 	class Connection  {
 	public:
-		typedef enum {
-			RulesTable,
-			HeadsTable,
-			BodiesTable
-		} TableKind;
+		typedef enum { RulesTable, HeadsTable, BodiesTable } TableKind;
 		
 	private:
 		class DBInserter; // forward declaration

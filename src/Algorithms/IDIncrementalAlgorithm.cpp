@@ -90,7 +90,7 @@ bool IDIncrementalAlgorithm::checkInclusion(const std::set<ItemType>& validOnes,
 	}
 
 	bool
-	IDIncrementalAlgorithm::checkInValidRules(const ValidRules& validRules, QueryResult::Rule& r) const {
+	IDIncrementalAlgorithm::checkInValidRules(const ValidRules& validRules, Rule& r) const {
 		assert(r.body!=NULL && r.head!=NULL );
 		ValidRules::const_iterator it = validRules.begin();
 		bool found = false;
@@ -107,8 +107,7 @@ bool IDIncrementalAlgorithm::checkInclusion(const std::set<ItemType>& validOnes,
 	
 	
 	void IDIncrementalAlgorithm::filterQueries(const ValidRules& validRules) throw(MineruleException,odbc::SQLException) {
-		OptimizerCatalogue& cat = 
-			MineruleOptions::getSharedOptions().getOptimizations().getCatalogue();
+		OptimizerCatalogue& cat = MineruleOptions::getSharedOptions().getOptimizations().getCatalogue();
 		
 		std::string resName = cat.getResultsetName(minerule->getOptimizationInfo().minerule.tab_result );
 
@@ -129,7 +128,7 @@ bool IDIncrementalAlgorithm::checkInclusion(const std::set<ItemType>& validOnes,
 
 		size_t rcount = 0;
 		while(qri.next()) {
-			QueryResult::Rule r;
+			Rule r;
 			qri.getRule(r);
 			if(checkInValidRules(validRules, r))
 				connection.insert(*r.body, *r.head, r.support, r.confidence);

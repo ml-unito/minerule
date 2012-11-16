@@ -267,8 +267,7 @@ namespace minerule {
 
 
   void BFSWithGidsAndCross::prepareData() {
-    MineruleOptions& mrOptions = 
-      MineruleOptions::getSharedOptions();
+    MineruleOptions& mrOptions = MineruleOptions::getSharedOptions();
 
     options.setSupport( minerule.getParsedMinerule().sup );
     options.setConfidence( minerule.getParsedMinerule().conf );
@@ -281,44 +280,7 @@ namespace minerule {
     options.setTotGroups(pdu.evaluateTotGroups());
 
     MRLog() << "Building db queries" << std::endl;
-/*
-   std::string bodyConstraints;
-   std::string headConstraints;
-    HeadBodyPredicatesSeparator::separate((minerule.getParsedMinerule().mc!=NULL?
-					   minerule.getParsedMinerule().mc->l_and:
-					   NULL),
-					  bodyConstraints,
-					  headConstraints);
-    size_t index;
-   std::string groupAttr;
-   std::string bodyAttr;
-   std::string headAttr;
-    index=buildAttrStr(minerule.getParsedMinerule().ga,
-		       0,
-		       groupAttr,
-		       rowDes.groupBodyElems );
 
-    buildAttrStr(minerule.getParsedMinerule().ba,
-		 index,
-		 bodyAttr,
-		 rowDes.bodyElems);
-    buildAttrStr(minerule.getParsedMinerule().ha,
-		 index,
-		 headAttr,
-		 rowDes.headElems);
-		 
-   std::string bodyQry =
-      buildQry( groupAttr,
-		bodyAttr,
-		bodyConstraints);
-
-   std::string headQry =
-      buildQry( groupAttr,
-		headAttr,
-		headConstraints);
-
-    MRLog() << "Executing queries" << std::endl;
-i*/
     connection.useODBCConnection(MineruleOptions::getSharedOptions().getODBC().getODBCConnection());
     connection.setOutTableName(minerule.getParsedMinerule().tab_result);
     connection.setBodyCardinalities(minerule.getParsedMinerule().bodyCardinalities);
@@ -327,15 +289,13 @@ i*/
     connection.init();
 
     MRDebug() << "Preparing data sources..." << std::endl;
-rowDes.setGroupBodyElems(1,minerule.getParsedMinerule().ga.size());
-   std::string queryText;
+	rowDes.setGroupBodyElems(1,minerule.getParsedMinerule().ga.size());
+   	
+	std::string queryText;
     pdu.buildSourceTableQuery( queryText, rowDes );
 
     MRDebug() << "BFSWithGidsAndCross: query:" << queryText.c_str() << std::endl;
     statement= connection.getODBCConnection()->prepareStatement(queryText.c_str());
-
-//    statement = connection.getODBCConnection()->prepareStatement(bodyQry.c_str());
-//    stmt1 = connection.getODBCConnection()->prepareStatement(headQry.c_str());
   }
 
 
@@ -352,11 +312,8 @@ rowDes.setGroupBodyElems(1,minerule.getParsedMinerule().ga.size());
     int maxHead = options.getHeadCardinalities().getMax();
 
     result = statement->executeQuery();
-//    result1 = stmt1->executeQuery();
 
     ItemType gid1;
-//    bool found = Transaction::findGid(gid1,result1, rowDes, true);
-//    found = found && Transaction::findGid(gid1,result,rowDes,true);
     BodyMap bodyMap(connection);
 
     int totalGroups = options.getTotGroups();
@@ -367,23 +324,14 @@ rowDes.setGroupBodyElems(1,minerule.getParsedMinerule().ga.size());
 	MRLogPush("Reading data...");
     result->next();
     HeadBodySourceRow hbsr(result, rowDes);
-    while (!result->isAfterLast()) {
-    //  if (gid1 != hbsr.getGroupBody()) {
-	gid1 = hbsr.getGroupBody();
-        howManyGroups++;
-     // }
-      Transaction t1(rowDes);
-      t1.load(gid1,result);
-//      bool found2 = t2.findGid(gid,result1,rowDes);
-//      if (found2) {
-//	t2.loadHead(gid,result1);
-//      }
-      //howManyRows += bodyMap.add(gid,t1,t2);
-      //howManyRows += bodyMap.add(howManyGroups,result,hbsr);
-      howManyRows += bodyMap.add(howManyGroups,t1);
-//      result->next();
-      if(!result->isAfterLast()) hbsr.init(result,rowDes);
-    }
+	while (!result->isAfterLast()) {
+		gid1 = hbsr.getGroupBody();
+		howManyGroups++;
+		Transaction t1(rowDes);
+		t1.load(gid1,result);
+		howManyRows += bodyMap.add(howManyGroups,t1);
+		if(!result->isAfterLast()) hbsr.init(result,rowDes);
+	}
 
     MRLog() << "Total groups: " << totalGroups << std::endl;
 	MRLogPop();

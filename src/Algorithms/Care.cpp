@@ -41,67 +41,48 @@ namespace minerule {
   }
 
   void CARE::prepareData() {
-    MineruleOptions& mrOptions = MineruleOptions::getSharedOptions();
+	  MineruleOptions& mrOptions = MineruleOptions::getSharedOptions();
 
-    options.setSupport( minerule.getParsedMinerule().sup );
-    options.setConfidence( minerule.getParsedMinerule().conf );
-    options.setBodyCardinalities( minerule.getParsedMinerule().bodyCardinalities);
-    options.setHeadCardinalities( minerule.getParsedMinerule().headCardinalities);
-    options.getBodyCardinalities().applyConstraints(mrOptions.getParsers().getBodyCardinalities());
-    options.getHeadCardinalities().applyConstraints(mrOptions.getParsers().getHeadCardinalities());
+	  options.setSupport( minerule.getParsedMinerule().sup );
+	  options.setConfidence( minerule.getParsedMinerule().conf );
+	  options.setBodyCardinalities( minerule.getParsedMinerule().bodyCardinalities);
+	  options.setHeadCardinalities( minerule.getParsedMinerule().headCardinalities);
+	  options.getBodyCardinalities().applyConstraints(mrOptions.getParsers().getBodyCardinalities());
+	  options.getHeadCardinalities().applyConstraints(mrOptions.getParsers().getHeadCardinalities());
 
-    PrepareDataUtils pdu(minerule, *this);
-    options.setTotGroups(pdu.evaluateTotGroups());
+	  PrepareDataUtils pdu(minerule, *this);
+	  options.setTotGroups(pdu.evaluateTotGroups());
 
-    MRLog() << "Building db queries" << std::endl;
-   std::string bodyConstraints;
-   std::string headConstraints;
-    HeadBodyPredicatesSeparator::separate((minerule.getParsedMinerule().mc!=NULL?
-                                           minerule.getParsedMinerule().mc->l_and:
-                                           NULL),
-                                          bodyConstraints,
-                                          headConstraints);
-    size_t index;
-   std::string groupAttr;
-   std::string bodyAttr;
-   std::string headAttr;
-    index=buildAttrStr(minerule.getParsedMinerule().ga,
-                       0,
-                       groupAttr,
-                       rowDes.groupBodyElems );
+	  MRLog() << "Building db queries" << std::endl;
+	  std::string bodyConstraints;
+	  std::string headConstraints;
+	  list_AND_node* mining_cond = (minerule.getParsedMinerule().mc!=NULL ? minerule.getParsedMinerule().mc->l_and : NULL);
+	  HeadBodyPredicatesSeparator::separate( mining_cond, bodyConstraints, headConstraints);
+	  
+	  size_t index;
+	  std::string groupAttr;
+	  std::string bodyAttr;
+	  std::string headAttr;
+	  index=buildAttrStr(minerule.getParsedMinerule().ga, 0, groupAttr, rowDes.groupBodyElems );
 
-    buildAttrStr(minerule.getParsedMinerule().ba,
-                 index,
-                 bodyAttr,
-                 rowDes.bodyElems);
-    buildAttrStr(minerule.getParsedMinerule().ha,
-                 index,
-                 headAttr,
-                 rowDes.headElems);
+	  buildAttrStr(minerule.getParsedMinerule().ba, index, bodyAttr, rowDes.bodyElems);
+	  buildAttrStr(minerule.getParsedMinerule().ha, index, headAttr, rowDes.headElems);
 
-   std::string bodyQry =
-      buildQry( groupAttr,
-                bodyAttr,
-                bodyConstraints);
+	  std::string bodyQry = buildQry( groupAttr, bodyAttr, bodyConstraints);
+	  std::string headQry = buildQry( groupAttr, headAttr, headConstraints);
 
-   std::string headQry =
-      buildQry( groupAttr,
-                headAttr,
-                headConstraints);
+	  connection.useODBCConnection(MineruleOptions::getSharedOptions().getODBC().getODBCConnection());
+	  connection.setOutTableName(minerule.getParsedMinerule().tab_result);
+	  connection.setBodyCardinalities(minerule.getParsedMinerule().bodyCardinalities);
+	  connection.setHeadCardinalities(minerule.getParsedMinerule().headCardinalities);
+	  connection.createResultTables(SourceRowDescriptor(connection.getODBCConnection(), minerule.getParsedMinerule()));
+	  connection.init();
 
-    MRLog() << "Executing queries" << std::endl;
-
-    connection.useODBCConnection(MineruleOptions::getSharedOptions().getODBC().getODBCConnection());
-    connection.setOutTableName(minerule.getParsedMinerule().tab_result);
-    connection.setBodyCardinalities(minerule.getParsedMinerule().bodyCardinalities);
-    connection.setHeadCardinalities(minerule.getParsedMinerule().headCardinalities);
-    connection.createResultTables(SourceRowDescriptor(connection.getODBCConnection(), minerule.getParsedMinerule()));
-    connection.init();
-
-    MRDebug() << "CARE: body queries:" << bodyQry.c_str() << std::endl;
-    MRDebug() << "CARE: head queries:" << headQry.c_str() << std::endl;
-    statement = connection.getODBCConnection()->prepareStatement(bodyQry.c_str());
-    stmt1 = connection.getODBCConnection()->prepareStatement(headQry.c_str());
+	  MRDebug() << "CARE: body queries:" << bodyQry.c_str() << std::endl;
+	  MRDebug() << "CARE: head queries:" << headQry.c_str() << std::endl;
+	  
+	  statement = connection.getODBCConnection()->prepareStatement(bodyQry.c_str());
+	  stmt1 = connection.getODBCConnection()->prepareStatement(headQry.c_str());
   }
 
   void CARE::execute() {

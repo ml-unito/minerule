@@ -27,7 +27,7 @@ namespace minerule {
 
 
 	void
-	SimpleRuleFormatter::printRule(const QueryResult::Rule& rule) {
+	SimpleRuleFormatter::printRule(const Rule& rule) {
 		std::string bhSep = " => ";   // separates body from head 
 		std::string rsSep = "\t";   // separates rule from support
 		std::string scSep = "\t\t"; // separates support from confidence

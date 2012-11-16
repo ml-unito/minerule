@@ -287,7 +287,7 @@ namespace minerule {
 
 	  MRLog() << "Preparing queries" << std::endl;
 
-	  connection.useODBCConnection(MineruleOptions::getSharedOptions().getOdbc_db().getODBCConnection());
+	  connection.useODBCConnection(MineruleOptions::getSharedOptions().getODBC().getODBCConnection());
 	  connection.setOutTableName(minerule.getParsedMinerule().tab_result);
 	  connection.setBodyCardinalities(minerule.getParsedMinerule().bodyCardinalities);
 	  connection.setHeadCardinalities(minerule.getParsedMinerule().headCardinalities);

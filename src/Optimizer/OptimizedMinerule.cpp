@@ -190,7 +190,7 @@ namespace minerule {
     MRDebug("Minerule text after normalization:" + minerule.getText());
 
     odbc::Connection* connection = 
-      MineruleOptions::getSharedOptions().getOdbc_db().getODBCConnection();
+      MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
 
     odbc::Statement* statement = NULL;
     ResultSet* rs = NULL;

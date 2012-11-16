@@ -84,7 +84,7 @@ namespace minerule {
 		connection.setOutTableName(mr.tab_result);
 		connection.setBodyCardinalities(mr.bodyCardinalities);
 		connection.setHeadCardinalities(mr.headCardinalities);
-		connection.useODBCConnection( MineruleOptions::getSharedOptions().getOdbc_db().getODBCConnection());
+		connection.useODBCConnection( MineruleOptions::getSharedOptions().getODBC().getODBCConnection());
 		
 		connection.createResultTables(SourceRowDescriptor(connection.getODBCConnection(), mr));
 

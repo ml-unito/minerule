@@ -514,7 +514,7 @@ namespace minerule {
         // " ORDER BY " +aiVal;
         
         odbc::Connection* con =
-        MineruleOptions::getSharedOptions().getOdbc_db().getODBCConnection();
+        MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
         odbc::Statement* state=NULL;
         odbc::ResultSet* rs=NULL;
         
@@ -679,7 +679,7 @@ namespace minerule {
         assert(op=="<" || op==">");
         
         odbc::Connection* conn =
-        MineruleOptions::getSharedOptions().getOdbc_db().getODBCConnection();
+        MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
         std::auto_ptr<odbc::Statement> state(conn->createStatement());
         
         std::string sqlfun;
@@ -878,7 +878,7 @@ namespace minerule {
                 
                 SQLUtils::Type type =
                 SQLUtils::getType( MineruleOptions::getSharedOptions()
-                                  .getOdbc_db()
+                                  .getODBC()
                                   .getODBCConnection(),
                                   mr->tab_source, Xattr);
                 

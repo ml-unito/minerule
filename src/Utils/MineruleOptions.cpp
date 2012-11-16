@@ -34,7 +34,7 @@ namespace minerule {
   OptionBase& MineruleOptions::subclassForName(const std::string& oclass)
   throw(MineruleException) {
       if(oclass=="odbc")
-	return getOdbc_db();
+	return getODBC();
       else if(oclass=="safety")
 	return getSafety();
       else if(oclass=="miningalgorithms")
@@ -122,13 +122,13 @@ namespace minerule {
   std::ostream& MineruleOptions::saveOptions(std::ostream& os) const {
     os << "# Options related to the ODBC connection" << std::endl;
     os << "odbc::{" << std::endl
-       << "  name="<< getOdbc_db().getName() <<std::endl
-       << "  username="<<getOdbc_db().getUsername() << std::endl
-       << "  password="<<getOdbc_db().getPassword() << std::endl
-       << "  cacheWrites="<<Converter(getOdbc_db().getCacheWrites()).toString() << std::endl
+       << "  name="<< getODBC().getName() <<std::endl
+       << "  username="<<getODBC().getUsername() << std::endl
+       << "  password="<<getODBC().getPassword() << std::endl
+       << "  cacheWrites="<<Converter(getODBC().getCacheWrites()).toString() << std::endl
 	   << "# dbms allows one to specify the underlying dbms, supported dbms are presently" << std::endl
 	   << "# mysql and postgres" << std::endl
-	   << "  dbms=" <<getOdbc_db().getDBMS() << std::endl
+	   << "  dbms=" <<getODBC().getDBMS() << std::endl
        << "}" << std::endl << std::endl;
 
     os << "# Options related to data safety issues" << std::endl;

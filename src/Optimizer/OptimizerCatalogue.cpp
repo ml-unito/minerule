@@ -15,7 +15,7 @@ namespace minerule {
 
   bool OptimizerCatalogue::existsMinerule(const std::string& mrname) {
     odbc::Connection* conn = 
-      MineruleOptions::getSharedOptions().getOdbc_db().getODBCConnection();
+      MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
 
    std::string query = (std::string)
       "SELECT * FROM mr_query WHERE query_name="+SQLUtils::quote(mrname);
@@ -33,7 +33,7 @@ namespace minerule {
     MRLogPusher _("Deleting past minerules...");
 
     Connection conn;
-	conn.useODBCConnection(MineruleOptions::getSharedOptions().getOdbc_db().getODBCConnection());
+	conn.useODBCConnection(MineruleOptions::getSharedOptions().getODBC().getODBCConnection());
 	conn.setOutTableName(mrname);
 
    std::string query = (std::string)
@@ -82,7 +82,7 @@ namespace minerule {
 					       int refKey,
 					       OrderType orderType) throw(MineruleException)  {
     odbc::Connection* connection =
-      MineruleOptions::getSharedOptions().getOdbc_db().getODBCConnection();
+      MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
     
     try {
       std::auto_ptr<odbc::Statement> stat1( connection->createStatement() );
@@ -127,7 +127,7 @@ namespace minerule {
   void 
   OptimizerCatalogue::Catalogue::initialize() throw(MineruleException) {
     odbc::Connection* connection = 
-      MineruleOptions::getSharedOptions().getOdbc_db().getODBCConnection();
+      MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
 
     try {
 		std::auto_ptr<odbc::Statement> stat1( connection->createStatement() );
@@ -188,7 +188,7 @@ namespace minerule {
 
 
  std::string OptimizerCatalogue::getNewAutoincrementValue(const std::string& tableName)  throw(odbc::SQLException,MineruleException) {
-    odbc::Connection* connection = MineruleOptions::getSharedOptions().getOdbc_db().getODBCConnection();
+    odbc::Connection* connection = MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
     odbc::Statement* statement=NULL;
     odbc::ResultSet* rs=NULL;
     odbc::Statement* updateStatement=NULL;
@@ -238,7 +238,7 @@ namespace minerule {
 
    std::string id = getNewAutoincrementValue("mr_att_lists");
     odbc::Connection* connection =
-      MineruleOptions::getSharedOptions().getOdbc_db().getODBCConnection();
+      MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
 
    std::string query =
       "INSERT INTO mr_att_lists (att_list_id, col_name) VALUES ";
@@ -260,7 +260,7 @@ namespace minerule {
     throw(odbc::SQLException, MineruleException){
 
     odbc::Connection* connection = 
-      MineruleOptions::getSharedOptions().getOdbc_db().getODBCConnection();
+      MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
 
    std::string galid = addMineruleAttributeList(mri.ga);
    std::string ralid = addMineruleAttributeList(mri.ra);
@@ -285,7 +285,7 @@ namespace minerule {
  std::string OptimizerCatalogue::getResultsetName(const std::string& queryname) 
     throw(odbc::SQLException, MineruleException){
     odbc::Connection* connection =
-      MineruleOptions::getSharedOptions().getOdbc_db().getODBCConnection();
+      MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
 
     std::auto_ptr<odbc::Statement> statement(connection->createStatement());
     std::auto_ptr<odbc::ResultSet> rs(
@@ -305,7 +305,7 @@ namespace minerule {
   OptimizerCatalogue::getMRQueryNames(std::vector<std::string>& nameVec) 
     throw(odbc::SQLException, MineruleException) {
     odbc::Connection* connection =
-      MineruleOptions::getSharedOptions().getOdbc_db().getODBCConnection();
+      MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
 
     std::auto_ptr<odbc::Statement> statement(connection->createStatement());
     std::auto_ptr<odbc::ResultSet> rs(
@@ -336,7 +336,7 @@ namespace minerule {
   void 
   OptimizerCatalogue::getMRQueryInfos(std::vector<CatalogueInfo>& catInfoVec, bool includeResultSize) 
     throw(odbc::SQLException, MineruleException) {
-    odbc::Connection* connection = MineruleOptions::getSharedOptions().getOdbc_db().getODBCConnection();
+    odbc::Connection* connection = MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
 
     std::auto_ptr<odbc::Statement> statement(connection->createStatement());
     std::auto_ptr<odbc::ResultSet> rs(statement->executeQuery(
@@ -356,7 +356,7 @@ namespace minerule {
   OptimizerCatalogue::getMRQueryInfo(const std::string& qryName, CatalogueInfo& info, bool includeResultSize) 
     throw(odbc::SQLException, MineruleException) {
     odbc::Connection* odbc_connection =
-      MineruleOptions::getSharedOptions().getOdbc_db().getODBCConnection();
+      MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
 
     std::auto_ptr<odbc::Statement> statement(odbc_connection->createStatement());
     std::auto_ptr<odbc::ResultSet> rs(
@@ -407,7 +407,7 @@ namespace minerule {
       " AND con>="+Converter(p.conf).toString();
 
     odbc::Connection* connection =
-      MineruleOptions::getSharedOptions().getOdbc_db().getODBCConnection();
+      MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
     std::auto_ptr<odbc::Statement> statement(connection->createStatement());
     std::auto_ptr<odbc::ResultSet> rs(statement->executeQuery( qry ));
 				 

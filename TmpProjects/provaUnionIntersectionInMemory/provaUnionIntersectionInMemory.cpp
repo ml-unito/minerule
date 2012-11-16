@@ -15,7 +15,7 @@ const string TMP_TAB2 = "tmp_table2";
 string
 build_source(MineruleOptions& opts, string perc_string, string tab_name) {
   MRLogPusher log("Creating tmp table "+tab_name+" filtering out 1-"+perc_string+" of table "+TAB_SOURCE);
-  odbc::Connection* connection = opts.getOdbc_db().getODBCConnection();
+  odbc::Connection* connection = opts.getODBC().getODBCConnection();
   string query =
     "CREATE TABLE "+tab_name+" SELECT * FROM "+TAB_SOURCE+" WHERE RAND()<"+perc_string;
   string query_elems =
@@ -43,7 +43,7 @@ build_source(MineruleOptions& opts, string perc_string, string tab_name) {
 
 void
 cleanUp(MineruleOptions& opts) {
-  odbc::Connection* connection = opts.getOdbc_db().getODBCConnection();
+  odbc::Connection* connection = opts.getODBC().getODBCConnection();
   odbc::Statement* stmt=connection->createStatement();
   stmt->execute("DROP TABLE IF EXISTS "+TAB_SOURCE+"Result");
   stmt->execute("DROP TABLE IF EXISTS "+TAB_SOURCE+"Result_elems");

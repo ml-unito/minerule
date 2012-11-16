@@ -22,6 +22,7 @@ class AlgorithmsOptions {
   MinMaxPair bodyCardinalities;
   odbc::Connection* connection;
   odbc::PreparedStatement* statement;
+
   // the following will substitute the prepared statement 
   // when the MRResultSetIterator will be integrated in the proj.
   MRResultSetIterator* mriterator;

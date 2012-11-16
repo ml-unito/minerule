@@ -30,7 +30,7 @@ namespace minerule {
 		QueryResult::Iterator::init( const std::string& rulesTable,
 			double support,
 	double confidence ) throw( MineruleException, odbc::SQLException ) {
-		odbc::Connection* odbc_conn = MineruleOptions::getSharedOptions().getOdbc_db().getODBCConnection();
+		odbc::Connection* odbc_conn = MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
 		Connection connection;
 		connection.setOutTableName(rulesTable);
 			

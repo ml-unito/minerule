@@ -38,7 +38,7 @@ int main(int argc, char *argv[]) {
   MineruleOptions& mrOpts =  MineruleOptions::getSharedOptions();
   mrOpts.readFromFile(MROPTIONFILE);
 
-  connection = mrOpts.getOdbc_db().getODBCConnection();
+  connection = mrOpts.getODBC().getODBCConnection();
 
   options.setSupport(0.001);
   options.setConfidence(75.0);

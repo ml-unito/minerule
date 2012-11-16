@@ -19,7 +19,7 @@ int main(int argc, char *argv[]) {
   //MineruleOptions::MiningAlgorithms::PartitionBase& partOpt = mrOpts.getMiningAlgorithms().getPartitionBase();
   mrOpts.readFromFile(MROPTIONFILE);
 
-  connection = mrOpts.getOdbc_db().getODBCConnection();
+  connection = mrOpts.getODBC().getODBCConnection();
 
   options.setSupport(Converter(argv[1]).toDouble());
   options.setConfidence(96.0);

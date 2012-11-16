@@ -202,7 +202,7 @@ void Connection::CachedDBInserter::finalize() {
 		  " reason is:" + strerror(errno));  	
   }
   
-  const std::string& dbms = MineruleOptions::getSharedOptions().getOdbc_db().getDBMS();
+  const std::string& dbms = MineruleOptions::getSharedOptions().getODBC().getDBMS();
   if(  dbms == "mysql" ) {
 	  loadstr1 = "LOAD DATA INFILE '" + filename + ".r' INTO TABLE " + connection.getTableName(RulesTable);  
 	  loadstr2 = "LOAD DATA INFILE '" + filename + ".h' INTO TABLE " + connection.getTableName(HeadsTable);

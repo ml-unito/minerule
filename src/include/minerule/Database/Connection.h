@@ -83,7 +83,7 @@ namespace minerule {
 	public:
 		// Costruttore
 		Connection() : bodyCard(1,1000), headCard(1,1000)  /*algoOptions(NULL)*/ {
-			if (MineruleOptions::getSharedOptions().getOdbc_db().getCacheWrites()) 
+			if (MineruleOptions::getSharedOptions().getODBC().getCacheWrites()) 
 				dbInserter = new CachedDBInserter(*this);
 			else dbInserter = new DirectDBInserter(*this);
 		}

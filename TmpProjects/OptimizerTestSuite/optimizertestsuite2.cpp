@@ -28,10 +28,10 @@ char mineruletext[1024]; // the minerule text which will be used...
 int
 main() {
   MineruleOptions& mrOpts =  MineruleOptions::getSharedOptions();
-  mrOpts.getOdbc_db().setOption("name","bbdemo");
-  mrOpts.getOdbc_db().setOption("username","root");
-  mrOpts.getOdbc_db().setOption("password","mysql");
-  mrOpts.getOdbc_db().resetConnection();
+  mrOpts.getODBC().setOption("name","bbdemo");
+  mrOpts.getODBC().setOption("username","root");
+  mrOpts.getODBC().setOption("password","mysql");
+  mrOpts.getODBC().resetConnection();
   mrOpts.getLogStreamObj().setOption("stream","/dev/null");
   mrOpts.getErrStreamObj().setOption("stream","/dev/null");
   mrOpts.getWarnStreamObj().setOption("stream","/dev/null");

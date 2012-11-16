@@ -193,7 +193,7 @@ namespace minerule {
     if(it!=typesMap.end()) {
       t = it->second;
     } else {
-      t = SQLUtils::getType( MineruleOptions::getSharedOptions().getOdbc_db().getODBCConnection(),
+      t = SQLUtils::getType( MineruleOptions::getSharedOptions().getODBC().getODBCConnection(),
 			     tab_source,
 			     attr );
       

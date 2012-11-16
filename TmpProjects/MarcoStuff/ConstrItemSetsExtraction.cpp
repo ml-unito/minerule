@@ -83,7 +83,7 @@ namespace minerule {
 
     MRLog() << "Executing queries" << endl;
 
-    connection.useODBCConnection(MineruleOptions::getSharedOptions().getOdbc_db().getODBCConnection());
+    connection.useODBCConnection(MineruleOptions::getSharedOptions().getODBC().getODBCConnection());
     connection.setOutTableName(minerule.getParsedMinerule().tab_result);
     connection.setBodyCardinalities(minerule.getParsedMinerule().bodyCardinalities);
     connection.createResultTables();

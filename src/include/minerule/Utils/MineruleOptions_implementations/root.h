@@ -173,12 +173,12 @@ public:
   }
 
   Odbc_db&
-    getOdbc_db() {
+    getODBC() {
     return odbc_db;
   }
 
   const Odbc_db&
-    getOdbc_db() const {
+    getODBC() const {
     return odbc_db;
   }
   

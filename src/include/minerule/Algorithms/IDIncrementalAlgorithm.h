@@ -27,39 +27,19 @@ class IDIncrementalAlgorithm : public IncrementalAlgorithm {
  protected:
   const ParsedMinerule::AttrVector* attrList;
 
-  std::set<ItemType>*
-    fillValidItems(const std::string& constraints) const 
-    throw(odbc::SQLException);
+  std::set<ItemType>* fillValidItems(const std::string& constraints) const throw(odbc::SQLException);
 
-  void
-    printValidRules(const IDIncrementalAlgorithm::ValidRules& vr) const;
+  void getItemInfos( std::string& itemDescr, HeadBodySourceRowDescription& hbsr ) const;
+  bool checkInclusion(const std::set<ItemType>& validOnes, const ItemSet& foundOnes) const;
+  bool checkInValidRules(const ValidRules& validRules, QueryResult::Rule& r) const;
+  void filterQueries(const ValidRules& validRules) throw(MineruleException,odbc::SQLException);
 
-  void
-    getItemInfos( std::string& itemDescr, 
-		  HeadBodySourceRowDescription& hbsr ) const;
-
-  bool
-    checkInclusion(const std::set<ItemType>& validOnes, 
-		   const ItemSet& foundOnes) const;
-
-  bool
-    checkInValidRules(const ValidRules& validRules, 
-		      QueryResult::Rule& r) const;
-
-  void
-    filterQueries(const ValidRules& validRules) 
-    throw(MineruleException,odbc::SQLException);
-  
-  
  public:
-  IDIncrementalAlgorithm(const OptimizedMinerule& mr) 
-    : IncrementalAlgorithm(mr), attrList(NULL) {
-  }
 
+  IDIncrementalAlgorithm(const OptimizedMinerule& mr) : IncrementalAlgorithm(mr), attrList(NULL) { }
   virtual ~IDIncrementalAlgorithm() {}
 
-  virtual void execute() 
-    throw(MineruleException,odbc::SQLException);
+  virtual void execute() throw(MineruleException,odbc::SQLException);
 };
 
 } // namespace

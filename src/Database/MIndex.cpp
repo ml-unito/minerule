@@ -140,7 +140,7 @@ bool MIndex::createIndex() {
 
   try {
     odbc::Connection* connection=
-      mrOpts.getOdbc_db().getODBCConnection();
+      mrOpts.getODBC().getODBCConnection();
 
   //MRLog() << "Connessione ok!" << std::endl;
   odbc::Statement* state = connection->createStatement(
@@ -400,7 +400,7 @@ int main(int argc, char** argv) {
 //  MIR2.fetchInit(query);
 */
   odbc::ResultSet* rs;
-  odbc::Connection* connection= mrOpts.getOdbc_db().getODBCConnection();
+  odbc::Connection* connection= mrOpts.getODBC().getODBCConnection();
   
   odbc::PreparedStatement * pst = connection->prepareStatement("select * from sales_facts where customer_key = ?");
 

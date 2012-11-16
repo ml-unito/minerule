@@ -19,7 +19,7 @@ namespace minerule {
     options.setMiningAlgorithmsOptions(mrOptions.getMiningAlgorithms());
     
     minerule::HeadBodySourceRowDescription rowDes;
-    connection = mrOptions.getOdbc_db().getODBCConnection();
+    connection = mrOptions.getODBC().getODBCConnection();
     
     options.setSupport( minerule.getParsedMinerule().sup );
     options.setConfidence( minerule.getParsedMinerule().conf );

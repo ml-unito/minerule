@@ -49,18 +49,14 @@ namespace minerule {
   template <class Sorter>
 	QueryResult::ResultSet<Sorter>& QueryResult::ResultSet<Sorter>::inplace_intersect(const ResultSet<Sorter>& rhs) {
 		QueryResult::ResultSet<Sorter> tmp;
-		set_intersection( this->begin(),
-			this->end(),
-			rhs.begin(),
-			rhs.end(),
-			std::insert_iterator<ResultSet<Sorter> >( tmp, tmp.begin() ),
-			Sorter());
+		set_intersection( this->begin(), this->end(), rhs.begin(),rhs.end(),
+			std::insert_iterator<ResultSet<Sorter> >( tmp, tmp.begin() ), Sorter());
 
 		*this = tmp;
 		return *this;
 	}
 
-  template <class Sorter>
+  template <class Sorter> 
 	QueryResult::ResultSet<Sorter>&	QueryResult::ResultSet<Sorter>::inplace_union(const ResultSet<Sorter>& rhs) {
 
 		copy( rhs.begin(), rhs.end(), 

@@ -33,6 +33,8 @@ class MiningAlgorithm {
   virtual bool canHandleMinerule() const {
     return false;
   }
+  
+  virtual const OptimizedMinerule& optimizedMinerule() const { return optimizedMinerule; }
 
   // Instantiate the algorithm specified by t
   static MiningAlgorithm* algorithmForType(AlgorithmTypes t, const OptimizedMinerule&) 

@@ -6,11 +6,13 @@ namespace minerule {
 	class SourceTable {
 	public:
 		class Iterator {
+		private:
+			SourceRow* _sourceRow;
+			
+		public:
 			bool next();
 			bool isAfterLast() const;
-			ItemType* getHead();  
-			ItemType* getBody();  
-			ItemType* getGroup(); 
+			SourceRow* get();
 		};
 		
 		

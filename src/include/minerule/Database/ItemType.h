@@ -41,9 +41,14 @@ namespace minerule {
 				el=i.el->copy();
 		}
 
+		// This constructor makes a copy of the given srel. The caller is free to delete it
+		// as needed.
 		ItemType( const SourceRowElement& srel ) {
 			el = srel.copy();
 		}
+		
+		// By calling this constructor one delegates to this class the management of srel.
+		ItemType(SourceRowElement* srel) : el(srel) {}
 		
 		virtual void setPreparedStatementParameters(odbc::PreparedStatement* state, size_t start_index) const {
 			el->setPreparedStatementParameters(state, start_index);

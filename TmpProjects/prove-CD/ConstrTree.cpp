@@ -68,7 +68,7 @@ namespace minerule {
     bool headnotend=rh2->next();
     while( bodynotend ) {
 
-      HeadBodySourceRow curRowb(rb2, bodyDes);
+      SourceRow curRowb(rb2, bodyDes);
       //string g=mb2->getCurrentGID();
       gidb=curRowb.getGroupBody();
     
@@ -83,7 +83,7 @@ namespace minerule {
       }
       
       if(headnotend) {
-	HeadBodySourceRow curRowh(rh2, headDes);
+	SourceRow curRowh(rh2, headDes);
 	if (gidb!=curRowh.getGroupBody())
 	  this->root->findBodiesInTree(body);
 	else{

@@ -28,7 +28,7 @@ fillCounterFromDB(odbc::ResultSet* result,
 		  Counter<ItemType>& gCount)  {
   ItemType item;
   do {
-    HeadBodySourceRow curRow(result, rowDes);    
+    SourceRow curRow(result, rowDes);    
     
     item=curRow.getBody();
     gCount.addValue(item);
@@ -51,7 +51,7 @@ readDataBaseOrig(odbc::ResultSet* result,
 
   do {
     rowCount++;
-    HeadBodySourceRow curRow(result, rowDes);    
+    SourceRow curRow(result, rowDes);    
 
     gid=curRow.getGroupBody();
     item=curRow.getBody();

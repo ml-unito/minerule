@@ -59,7 +59,7 @@ class Transaction : public std::set<ItemType> {
 public:
   Transaction(SourceRowColumnIds& rowDes) : std::set<ItemType>(), srd(rowDes) {}
   void load(ItemType& gid, odbc::ResultSet *rs) {
-    HeadBodySourceRow hbsr(rs,srd);
+    SourceRow hbsr(rs,srd);
 
     while (!rs->isAfterLast() && gid == hbsr.getGroupBody()) {
       insert(hbsr.getBody());
@@ -71,7 +71,7 @@ public:
   static bool findGid(ItemType& gid, odbc::ResultSet *rs, SourceRowColumnIds& srd, bool init=false) {
     if (init) { rs->next(); return true; }
     
-    HeadBodySourceRow hbsr(rs,srd);
+    SourceRow hbsr(rs,srd);
     while (!rs->isAfterLast() &&  ItemType(hbsr.getGroupBody()) < gid ) {
       rs->next();
       
@@ -528,7 +528,7 @@ int main(int argc, char *argv[]) {
   ofstream out("partition");
   cout << "Reading partition " << howManyPart << " ..." << endl;
   while (!result->isAfterLast()) {
-    HeadBodySourceRow hbsr(result, rowDes);
+    SourceRow hbsr(result, rowDes);
     ItemType gid = hbsr.getGroupBody();
     Transaction t1(rowDes), t2(rowDes);
     t1.load(gid,result);
@@ -587,7 +587,7 @@ int main(int argc, char *argv[]) {
     found = found && Transaction::findGid(gid1,result,rowDes);
     cout << "Reading again database " << " ..." << endl;
     while (!result->isAfterLast()) {
-      HeadBodySourceRow hbsr(result,rowDes);
+      SourceRow hbsr(result,rowDes);
       ItemType gid=hbsr.getGroupBody();
       Transaction t1(rowDes), t2(rowDes);
       t1.load(gid,result);

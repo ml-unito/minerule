@@ -13,7 +13,7 @@ namespace minerule {
 		public:
 			Transaction(SourceRowColumnIds& rowDes) : std::set<ItemType>(), srd(rowDes) {}
 			void loadBody(ItemType& gid, odbc::ResultSet *rs) {
-				HeadBodySourceRow hbsr(rs,srd);
+				SourceRow hbsr(rs,srd);
 
 				while (!rs->isAfterLast() && gid == hbsr.getGroupBody()) {
 					// MRDebug() << "Body:" << hbsr.getBody() << std::endl;
@@ -26,7 +26,7 @@ namespace minerule {
 			}
 
 			void loadHead(ItemType& gid, odbc::ResultSet *rs) {
-				HeadBodySourceRow hbsr(rs,srd);
+				SourceRow hbsr(rs,srd);
 			
 				// MRDebug() << "\n" << std::endl;
 				while (!rs->isAfterLast() && gid == hbsr.getGroupBody()) {
@@ -48,7 +48,7 @@ namespace minerule {
 							return false;
 					}      
       
-					HeadBodySourceRow hbsr(rs,srd);
+					SourceRow hbsr(rs,srd);
 					while (!rs->isAfterLast() && gid > hbsr.getGroupBody() ) {
 						rs->next();
       

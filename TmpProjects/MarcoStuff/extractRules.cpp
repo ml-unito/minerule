@@ -96,7 +96,7 @@ int maxHead = 5;
   ofstream out("partition");
   cout << "Reading partition " << howManyPart << " ..." << endl;
   while (!result->isAfterLast()) {
-	HeadBodySourceRow hbsr(result, rowDes);
+	SourceRow hbsr(result, rowDes);
 	ItemType gid = hbsr.getGroupBody();
 	Transaction t1(rowDes), t2(rowDes);
 	t1.loadBody(gid,result,0);
@@ -159,7 +159,7 @@ totalGroups = 99920;
   cout << "Reading again database " << " ..." << endl;
   int n = 0;
   while (!result->isAfterLast()) {
-	HeadBodySourceRow hbsr(result,rowDes);
+	SourceRow hbsr(result,rowDes);
 	ItemType gid=hbsr.getGroupBody();
 	Transaction t1(rowDes), t2(rowDes);
 	t1.loadBody(gid,result,0);

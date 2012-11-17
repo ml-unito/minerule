@@ -115,19 +115,19 @@ namespace minerule {
     bool h1nh2notend=rh1nh2->next();
     ItemSet* b1=new ItemSet();
     ItemSet* b1nb2=new ItemSet();
-    //HeadBodySourceRow curRowb1(rb1, bodyDes);
-    //HeadBodySourceRow curRowb12(rb1nb2, bodyDes);
+    //SourceRow curRowb1(rb1, bodyDes);
+    //SourceRow curRowb12(rb1nb2, bodyDes);
     ItemSet* h1=new ItemSet();
     ItemSet* h1nh2=new ItemSet();
-    //HeadBodySourceRow curRowh1(rh1, headDes);
-    //HeadBodySourceRow curRowh12(rh1nh2, headDes);
+    //SourceRow curRowh1(rh1, headDes);
+    //SourceRow curRowh12(rh1nh2, headDes);
     while( notend ) {
       
       if (b1notend && newbody){
 	delete b1; delete b1nb2;
 	b1=new ItemSet();
 	b1nb2=new ItemSet();
-        HeadBodySourceRow curRowb1(rb1, bodyDes);
+        SourceRow curRowb1(rb1, bodyDes);
         gb=curRowb1.getGroupBody();
 
         while(b1notend && ItemType(curRowb1.getGroupBody())==gb){
@@ -137,7 +137,7 @@ namespace minerule {
 	  }
         }
         if(b1nb2notend){
-         HeadBodySourceRow curRowb12(rb1nb2, bodyDes);
+         SourceRow curRowb12(rb1nb2, bodyDes);
          while(b1nb2notend && ItemType(curRowb12.getGroupBody())==gb){
 	   b1nb2->push_back(curRowb12.getBody());
 	   if((b1nb2notend=rb1nb2->next())) {
@@ -153,7 +153,7 @@ namespace minerule {
 	delete h1; delete h1nh2;
         h1=new ItemSet();
 	h1nh2=new ItemSet();
-	HeadBodySourceRow curRowh1(rh1, headDes);
+	SourceRow curRowh1(rh1, headDes);
         gh=curRowh1.getGroupBody();
 
 	  while(h1notend && ItemType(curRowh1.getGroupBody())==gh ){
@@ -163,7 +163,7 @@ namespace minerule {
 	    }
 	  }
 	  if(h1nh2notend){
-           HeadBodySourceRow curRowh12(rh1nh2, headDes);
+           SourceRow curRowh12(rh1nh2, headDes);
 	   while(h1nh2notend && ItemType(curRowh12.getGroupBody())==gh ){
 	     h1nh2->push_back(curRowh12.getHead());
 	     if ((h1nh2notend=rh1nh2->next())) {

@@ -1206,7 +1206,7 @@ void itemSetCluster< NODETYPE >::mergeItemSetHelper(
     
 
     // lettura dal db
-    HeadBodySourceRow srow(resultAllBody, srDescription);
+    SourceRow srow(resultAllBody, srDescription);
 
     level = atoi(resultAllBody->getString(1).c_str());
 
@@ -1329,7 +1329,7 @@ void itemSetCluster< NODETYPE >::mergeItemSetHeadHelper(
   
   while( resultHead->next() ) {
     // lettura dal db
-    HeadBodySourceRow srow(resultHead, srDescription);
+    SourceRow srow(resultHead, srDescription);
 
     level = atoi(resultHead->getString(1).c_str());
 

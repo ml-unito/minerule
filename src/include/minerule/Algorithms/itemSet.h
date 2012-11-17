@@ -688,7 +688,7 @@ void itemSet< NODETYPE >::mergeItemSetHelper(
   while( resultAllBody->next() ) {
     
     // lettura dal db
-    HeadBodySourceRow srow(resultAllBody, srDescription);
+    SourceRow srow(resultAllBody, srDescription);
 
     lastLevel = level;
     level = atoi(resultAllBody->getString(1).c_str());

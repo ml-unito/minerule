@@ -20,8 +20,8 @@ namespace minerule {
 	* structure of the source table. 
    */
 
-	class HeadBodySourceRow {
-		friend  std::ostream& operator<<(std::ostream& os, const HeadBodySourceRow& item);
+	class SourceRow {
+		friend  std::ostream& operator<<(std::ostream& os, const SourceRow& item);
 	private:
 		SourceRowElement* groupBody;
 		SourceRowElement* clusterBody;
@@ -34,14 +34,14 @@ namespace minerule {
     
 	public:
     // create a new item as a copy of the current row of the result set
-		HeadBodySourceRow(odbc::ResultSet* resultSet,
+		SourceRow(odbc::ResultSet* resultSet,
 			const SourceRowColumnIds& srd);
 
     // copy constructor
-		HeadBodySourceRow(const HeadBodySourceRow& item);
+		SourceRow(const SourceRow& item);
 		      
 
-		virtual ~HeadBodySourceRow();
+		virtual ~SourceRow();
 
 		void init(odbc::ResultSet* resultSet,const SourceRowColumnIds& srd);
 
@@ -75,7 +75,7 @@ namespace minerule {
 	};
 
 
-	std::ostream& operator<<(std::ostream& os, const HeadBodySourceRow& sr);
+	std::ostream& operator<<(std::ostream& os, const SourceRow& sr);
 
 
 }; // END NAMESPACE MINERULE

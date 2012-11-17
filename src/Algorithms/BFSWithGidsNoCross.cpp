@@ -334,7 +334,7 @@ namespace minerule {
     int howManyGroups = 0;
 
     while (!resultBody->isAfterLast()) {		
-      HeadBodySourceRow hbsr(resultBody, rowDes);
+      SourceRow hbsr(resultBody, rowDes);
       ItemType gid = hbsr.getGroupBody();
       
 	  Transaction t1(rowDes), t2(rowDes);

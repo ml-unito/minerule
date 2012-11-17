@@ -121,7 +121,7 @@ namespace minerule {
   //  int nFields = rsmd->getColumnCount();
     result->next();
     while (!result->isAfterLast()) {
-	HeadBodySourceRow hbsr(result, rowDes);
+	SourceRow hbsr(result, rowDes);
 	ItemType gid = hbsr.getGroupBody();
 	Transaction t1(rowDes), t2(rowDes);
 	t1.loadBody(gid,result,0);

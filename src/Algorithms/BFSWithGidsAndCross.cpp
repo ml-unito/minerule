@@ -64,7 +64,7 @@ namespace minerule {
     return howMany;
   }
 
-  int BFSWithGidsAndCross::BodyMap::add(int gid, odbc::ResultSet* rs, HeadBodySourceRow& hbsr, bool secondPass) {
+  int BFSWithGidsAndCross::BodyMap::add(int gid, odbc::ResultSet* rs, SourceRow& hbsr, bool secondPass) {
     int howMany = 0;
     MapElement me;
     me.insert(gid);
@@ -323,7 +323,7 @@ namespace minerule {
 
 	MRLogPush("Reading data...");
     result->next();
-    HeadBodySourceRow hbsr(result, rowDes);
+    SourceRow hbsr(result, rowDes);
 	while (!result->isAfterLast()) {
 		gid1 = hbsr.getGroupBody();
 		howManyGroups++;

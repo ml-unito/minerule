@@ -292,7 +292,7 @@ namespace minerule {
 				
 				rs->next();
 				while (!rs->isAfterLast()){
-					// HeadBodySourceRow hbsr(rs,rowDes);
+					// SourceRow hbsr(rs,rowDes);
 					input.read(rs, rowDes);	
 				 	// std::cout<<"LEGGO SEQUENZA: "<<input.toStdString()<<std::endl;
 					for(size_t i=0;i<input.size();++i){

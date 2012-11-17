@@ -9,7 +9,7 @@
   public:
     Transaction(SourceRowColumnIds& rowDes) : std::set<ItemType>(), srd(rowDes) {}
     void loadBody(ItemType& gid, odbc::ResultSet *rs, int n) {
-      HeadBodySourceRow hbsr(rs,srd);
+      SourceRow hbsr(rs,srd);
 
       while (!rs->isAfterLast() && gid == hbsr.getGroupBody()) {
 	insert(hbsr.getBody());
@@ -20,7 +20,7 @@
     }
 
     void loadHead(ItemType& gid, odbc::ResultSet *rs, int n) {
-      HeadBodySourceRow hbsr(rs,srd);
+      SourceRow hbsr(rs,srd);
 
       while (!rs->isAfterLast() && gid == hbsr.getGroupBody()) {
 	insert(hbsr.getHead());
@@ -39,7 +39,7 @@
 	  return false;
       }      
       
-      HeadBodySourceRow hbsr(rs,srd);
+      SourceRow hbsr(rs,srd);
       while (!rs->isAfterLast() && gid > hbsr.getGroupBody() ) {
 	rs->next();
       

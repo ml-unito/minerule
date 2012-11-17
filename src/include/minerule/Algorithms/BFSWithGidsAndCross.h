@@ -13,7 +13,7 @@ namespace minerule {
   public:
     Transaction(SourceRowColumnIds& rowDes) : std::vector<std::pair<ItemType, ItemType> >(), srd(rowDes) {}
     void load(ItemType& gid, odbc::ResultSet *rs) {
-		HeadBodySourceRow hbsr(rs,srd);
+		SourceRow hbsr(rs,srd);
 
 		while (!rs->isAfterLast() && gid == hbsr.getGroupBody()) {
 			insert(end(),std::pair<ItemType,ItemType>(hbsr.getBody(),hbsr.getHead()));
@@ -32,7 +32,7 @@ namespace minerule {
 					return false;
 			}      
       
-			HeadBodySourceRow hbsr(rs,srd);
+			SourceRow hbsr(rs,srd);
 			while (!rs->isAfterLast() &&  gid > hbsr.getGroupBody() ) {
 				rs->next();
       
@@ -121,7 +121,7 @@ namespace minerule {
     BodyMap(Connection& cc) : connection(&cc) {};
 
     int add(int gid, Transaction& t1, bool secondPass = false);
-    int add(int gid, odbc::ResultSet* rs, HeadBodySourceRow& hbsr, bool secondPass = false);
+    int add(int gid, odbc::ResultSet* rs, SourceRow& hbsr, bool secondPass = false);
 
     void pruneMap(float threshold);
     void updateCount ();

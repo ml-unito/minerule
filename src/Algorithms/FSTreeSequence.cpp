@@ -96,7 +96,7 @@ namespace minerule {
   }
 
   void FSTreeSequence::read(odbc::ResultSet* rs, const SourceRowColumnIds& rowDes){
-	HeadBodySourceRow hbsr(rs,rowDes);
+	SourceRow hbsr(rs,rowDes);
 	ItemType gid;
 	if(!rs->isAfterLast()) 
 		gid = hbsr.getGroupBody();

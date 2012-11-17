@@ -55,7 +55,7 @@ namespace minerule {
 		std::auto_ptr<odbc::ResultSet> rs(state->executeQuery(query.c_str()));
 
 		while(rs->next()) {
-			HeadBodySourceRow sr(rs.get(), hbsr);
+			SourceRow sr(rs.get(), hbsr);
 			result->insert(sr.getBody());
 		};
 

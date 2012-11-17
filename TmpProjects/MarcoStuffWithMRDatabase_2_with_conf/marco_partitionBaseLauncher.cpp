@@ -77,7 +77,7 @@ readSourceTable(
     rowCount++;
 	 odbc::ResultSet* result=options.getMRIterator().getResultSet();
 
-    HeadBodySourceRow curRow(result, rowDes);
+    SourceRow curRow(result, rowDes);
     
      
     gidB = curRow.getGroupBody();

@@ -79,7 +79,7 @@ readSourceTable(
   do {
     rowCount++;
 
-    HeadBodySourceRow curRow(result, rowDes);
+    SourceRow curRow(result, rowDes);
    
      
     gidB = curRow.getGroupBody();

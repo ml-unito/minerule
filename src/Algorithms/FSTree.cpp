@@ -43,7 +43,7 @@ void FSTree::createLinkNSTable(){
   }
 }
 
-void FSTree::createLinkSTable(odbc::ResultSet* rs, const HeadBodySourceRowDescription& rowDes) {
+void FSTree::createLinkSTable(odbc::ResultSet* rs, const SourceRowColumnIds& rowDes) {
   FSTreeSequence* input = new FSTreeSequence();
   rs->next();
  while(!rs->isAfterLast()) {
@@ -72,7 +72,7 @@ void FSTree::insertLink(FSTreeSequence* s){
   }
 }
 
-void FSTree::construct_Tree(odbc::ResultSet* rs, const HeadBodySourceRowDescription& rowDes){
+void FSTree::construct_Tree(odbc::ResultSet* rs, const SourceRowColumnIds& rowDes){
   std::vector<FSTreeSequence*>* collezione;
   FSTreeSequence* seq;
   size_t num=0;

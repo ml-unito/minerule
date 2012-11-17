@@ -120,7 +120,7 @@ namespace minerule {
 
 
 	void
-	PrepareDataUtils::buildSimpleSourceTableQuery(string& queryText,HeadBodySourceRowDescription& rowDes) const {
+	PrepareDataUtils::buildSimpleSourceTableQuery(string& queryText,SourceRowColumnIds& rowDes) const {
 		queryText = "SELECT ";
 		queryText += buildAttrListDescription(mr.getParsedMinerule().ga);
 		queryText += "," + buildAttrListDescription(mr.getParsedMinerule().ba);
@@ -250,7 +250,7 @@ namespace minerule {
 	}
 
 
-	void PrepareDataUtils::buildExtendedSourceTableQuery(std::string& queryText, HeadBodySourceRowDescription& rowDes) const  {
+	void PrepareDataUtils::buildExtendedSourceTableQuery(std::string& queryText, SourceRowColumnIds& rowDes) const  {
 		std::string tableName = createSourceTable();
 
 		queryText = "SELECT * FROM "+tableName;
@@ -267,7 +267,7 @@ namespace minerule {
 	void
 		PrepareDataUtils::buildSourceTableQuery(
 			std::string& queryText,
-	HeadBodySourceRowDescription& rowDes) const {
+	SourceRowColumnIds& rowDes) const {
 		if(miningAlgo.needsCrossProductOfSourceTable() ) {
 			buildExtendedSourceTableQuery(queryText,rowDes);
 		} else {

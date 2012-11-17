@@ -1,7 +1,7 @@
 #include "Algorithms/FSTreeSequence.h"
 
 #include <iostream>
-#include "Database/SourceRowCommon.h"
+#include "Database/SourceRowColumnIds.h"
 #include "Database/SourceRow.h"
 #include "Utils/MineruleLogs.h"
 
@@ -95,7 +95,7 @@ namespace minerule {
 
   }
 
-  void FSTreeSequence::read(odbc::ResultSet* rs, const HeadBodySourceRowDescription& rowDes){
+  void FSTreeSequence::read(odbc::ResultSet* rs, const SourceRowColumnIds& rowDes){
 	HeadBodySourceRow hbsr(rs,rowDes);
 	ItemType gid;
 	if(!rs->isAfterLast()) 

@@ -11,7 +11,7 @@
 namespace minerule {
 
 	void
-	IDIncrementalAlgorithm::getItemInfos( std::string& itemDescr, HeadBodySourceRowDescription& hbsr ) const {
+	IDIncrementalAlgorithm::getItemInfos( std::string& itemDescr, SourceRowColumnIds& hbsr ) const {
 		assert(attrList!=NULL);
 		ParsedMinerule::AttrVector::const_iterator it;
 		int n;
@@ -39,7 +39,7 @@ namespace minerule {
 		is needingly larger).
 #endif 
 		std::string itemDescr;
-		HeadBodySourceRowDescription hbsr;
+		SourceRowColumnIds hbsr;
   
 		getItemInfos(itemDescr,hbsr);
 
@@ -124,7 +124,7 @@ bool IDIncrementalAlgorithm::checkInclusion(const std::set<ItemType>& validOnes,
 		connection.setBodyCardinalities(minerule->getParsedMinerule().bodyCardinalities);
 		connection.setHeadCardinalities(minerule->getParsedMinerule().headCardinalities);
 		connection.useODBCConnection( MineruleOptions::getSharedOptions().getODBC().getODBCConnection());
-		connection.createResultTables(SourceRowDescriptor(connection.getODBCConnection(), minerule->getParsedMinerule()));
+		connection.createResultTables(SourceRowMetaInfo(connection.getODBCConnection(), minerule->getParsedMinerule()));
 
 		size_t rcount = 0;
 		while(qri.next()) {

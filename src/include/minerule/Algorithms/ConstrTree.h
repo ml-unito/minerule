@@ -22,8 +22,8 @@ class ConstrTree : public IncrementalAlgorithm {
   MIndexIterator* mh2;
   odbc::ResultSet* rb2;
   odbc::ResultSet* rh2;
-  HeadBodySourceRowDescription bodyDes;
-  HeadBodySourceRowDescription headDes;
+  SourceRowColumnIds bodyDes;
+  SourceRowColumnIds headDes;
 
   void adjustSuppRSet();
   void adjustSuppMIndex();

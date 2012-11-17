@@ -3,7 +3,7 @@
 
 #include <string>
 #include "Parsers/ParsedMinerule.h"
-#include "Database/SourceRowCommon.h"
+#include "Database/SourceRowColumnIds.h"
 #include "Optimizer/OptimizedMinerule.h"
 #include "Algorithms/MiningAlgorithmBase.h"
 
@@ -42,16 +42,16 @@ class PrepareDataUtils {
 
    void
       buildSimpleSourceTableQuery(string& queryText,
-				  HeadBodySourceRowDescription& rowDes) const;
+				  SourceRowColumnIds& rowDes) const;
    
    void
      buildExtendedSourceTableQuery(string& queryText,
-				   HeadBodySourceRowDescription& rowDes) const;
+				   SourceRowColumnIds& rowDes) const;
 
 
    void
     buildSourceTableQuery(string& queryText,
-			  HeadBodySourceRowDescription& rowDes) const;
+			  SourceRowColumnIds& rowDes) const;
   
 
    static void

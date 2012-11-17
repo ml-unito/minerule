@@ -14,7 +14,7 @@
 
 #include "Utils/MineruleOptions.h"
 #include "Database/SourceRow.h"
-#include "Database/SourceRowDescriptor.h"
+#include "Database/SourceRowMetaInfo.h"
 
 #include <iostream>
 #include <stdio.h>
@@ -96,7 +96,7 @@ namespace minerule {
 		void deleteTable(const char * tableName);
 		void deleteDestTables();
 
-		void createResultTables(const SourceRowDescriptor&);
+		void createResultTables(const SourceRowMetaInfo&);
 		void insert(const char * what);
 
 		// this function should be systematically used in order to

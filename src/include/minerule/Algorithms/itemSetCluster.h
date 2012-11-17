@@ -20,7 +20,7 @@ using namespace minerule;
 
 
 #include "Database/SourceRow.h"
-#include "Database/SourceRowDescriptor.h"
+#include "Database/SourceRowMetaInfo.h"
 
 
 
@@ -174,7 +174,7 @@ class itemSetCluster {
   void mergeItemSet(
 		    Connection& connection,
 		    itemSetListCluster<NODETYPE>& ptrList,
-		    const SourceRowDescriptor& srd);
+		    const SourceRowMetaInfo& srd);
 
 
   // --- PRIVATE MEMBERS ---
@@ -199,30 +199,30 @@ class itemSetCluster {
 			  itemSetListCluster<NODETYPE>& ptrList, 
 			  odbc::ResultSet* resultAllBody,
 			  // The following parameters describe the data set
-			  const HeadBodySourceRowDescription& srDescription,
+			  const SourceRowColumnIds& srDescription,
 			  size_t lastElem,
 			  // The following parameters will be passed to the
 			  // mergeItemSetHead function
 			  Connection& connection,
-			  const SourceRowDescriptor& srd);
+			  const SourceRowMetaInfo& srd);
   
   void mergeItemSetHeadBase(
 			    odbc::PreparedStatement * statement,
 			    const std::string& fHead,
 			    const NODETYPE& item,
-			    const SourceRowDescriptor& srd);
+			    const SourceRowMetaInfo& srd);
   
   
   void mergeItemSetHead(
 			 odbc::PreparedStatement * statement,
 			 itemSetListCluster<NODETYPE>& ptrList,
 			 const std::string& fHead,
-			 const SourceRowDescriptor& srd);
+			 const SourceRowMetaInfo& srd);
   
   void mergeItemSetHeadHelper(
 			       itemSetListCluster<NODETYPE>& ptrList, 
 			       odbc::ResultSet* resultHead,
-			       const HeadBodySourceRowDescription& srDescription);
+			       const SourceRowColumnIds& srDescription);
 
    bool setItemSetIfExistHead(const NODETYPE& valueH, const int gidH, const int cidH);
    void remove(itemSetListCluster<NODETYPE>& ptrList);
@@ -1138,7 +1138,7 @@ template< class NODETYPE >
 void itemSetCluster< NODETYPE >::mergeItemSet(
 				     Connection& connection,
 				     itemSetListCluster<NODETYPE>& ptrList,
-				     const SourceRowDescriptor& srd) {
+				     const SourceRowMetaInfo& srd) {
    std::string Qry;
    HASHTYPE anc;
    NODETYPE temp;
@@ -1160,7 +1160,7 @@ void itemSetCluster< NODETYPE >::mergeItemSet(
 
    //   std::cerr << std::endl << "QRY:" << Qry << std::endl;
 
-   HeadBodySourceRowDescription srDescription;
+   SourceRowColumnIds srDescription;
    lastElem = srDescription.setBodyElems(2,srd.getBody().getColumnsCount());
 
    resultAllBody=statement->executeQuery(Qry.c_str());
@@ -1182,12 +1182,12 @@ void itemSetCluster< NODETYPE >::mergeItemSetHelper(
 			itemSetListCluster<NODETYPE>& ptrList, 
 			odbc::ResultSet* resultAllBody,
 			// The following parameters describe the data set
-			const HeadBodySourceRowDescription& srDescription,
+			const SourceRowColumnIds& srDescription,
 			size_t lastElem,
 			// The following parameters will be passed to the
 			// mergeItemSetHead function
 			Connection& connection,
-			const SourceRowDescriptor& srd) {
+			const SourceRowMetaInfo& srd) {
   LevelInfoStack levelStack;
   //  levelStack.push_back(NODETYPE(), this);
   levelStack.push_back(this);
@@ -1261,7 +1261,7 @@ void itemSetCluster< NODETYPE >::mergeItemSetHeadBase(
 				odbc::PreparedStatement * statement,
 				const std::string& fHead,
 				const NODETYPE& item,
-				const SourceRowDescriptor& srd)
+				const SourceRowMetaInfo& srd)
  {
    itemSetListCluster <NODETYPE> prtListH;
    typename MapType::iterator k;
@@ -1288,7 +1288,7 @@ void itemSetCluster< NODETYPE >::mergeItemSetHead(
 			    odbc::PreparedStatement * statement,
 			    itemSetListCluster<NODETYPE>& ptrList,
 			    const std::string& fHead,
-			    const SourceRowDescriptor& srd)
+			    const SourceRowMetaInfo& srd)
  {
 
    odbc::ResultSet* resultHead;
@@ -1298,7 +1298,7 @@ void itemSetCluster< NODETYPE >::mergeItemSetHead(
 
    statement->setString(1,fHead);
    
-   HeadBodySourceRowDescription srDescription;
+   SourceRowColumnIds srDescription;
    lastElem=srDescription.setHeadElems(2,srd.getHead().getColumnsCount());
 
    resultHead=statement->executeQuery();
@@ -1316,7 +1316,7 @@ template< class NODETYPE >
 void itemSetCluster< NODETYPE >::mergeItemSetHeadHelper(
 			itemSetListCluster<NODETYPE>& ptrList, 
 			odbc::ResultSet* resultHead,
-			const HeadBodySourceRowDescription& srDescription) {
+			const SourceRowColumnIds& srDescription) {
   LevelInfoStack levelStack;
   //levelStack.push_back(NODETYPE(), this);
   levelStack.push_back(this);

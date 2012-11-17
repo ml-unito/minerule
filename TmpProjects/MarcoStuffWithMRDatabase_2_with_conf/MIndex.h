@@ -4,7 +4,7 @@
 #define MINDEX_H
 #include "Utils/MineruleOptions.h"
 #include "Database/SourceRowAttribute.h"
-#include "Database/SourceRowCommon.h"
+#include "Database/SourceRowColumnIds.h"
 #include "Database/SourceRowAttributeCollection.h"
 using namespace minerule;
 #include <ansidecl.h>

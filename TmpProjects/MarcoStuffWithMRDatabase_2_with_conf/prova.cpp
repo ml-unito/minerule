@@ -158,7 +158,7 @@ int main(int argc, char *argv[]) {
   odbc::Connection* connection;
   odbc::ResultSet* result;
   string outTableName;
-  minerule::HeadBodySourceRowDescription rowDes;
+  minerule::SourceRowColumnIds rowDes;
   minerule::AlgorithmsOptions options;
   MineruleOptions::PartitionAlgorithms partOpt;
   MineruleOptions& mrOpts =  MineruleOptions::getSharedOptions();

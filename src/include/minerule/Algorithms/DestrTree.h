@@ -26,8 +26,8 @@ class DestrTree : public IncrementalAlgorithm {
   MIndexIterator* mh1nh2;
   odbc::ResultSet* rb1nb2;
   odbc::ResultSet* rh1nh2;
-  HeadBodySourceRowDescription bodyDes;
-  HeadBodySourceRowDescription headDes;
+  SourceRowColumnIds bodyDes;
+  SourceRowColumnIds headDes;
 
   void adjustSuppRSet();
   void adjustSuppMIndex();

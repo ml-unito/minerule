@@ -18,7 +18,7 @@ namespace minerule {
 
     options.setMiningAlgorithmsOptions(mrOptions.getMiningAlgorithms());
     
-    minerule::HeadBodySourceRowDescription rowDes;
+    minerule::SourceRowColumnIds rowDes;
     connection = mrOptions.getODBC().getODBCConnection();
     
     options.setSupport( minerule.getParsedMinerule().sup );

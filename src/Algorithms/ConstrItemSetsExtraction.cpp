@@ -87,7 +87,7 @@ namespace minerule {
     connection.setBodyCardinalities(minerule.getParsedMinerule().bodyCardinalities);
     //connection.setHeadCardinalities(minerule.getParsedMinerule().headCardinalities);
     connection.setHeadCardinalities(MinMaxPair(0,1000));
-    connection.createResultTables(SourceRowDescriptor(connection.getODBCConnection(), minerule.getParsedMinerule()));
+    connection.createResultTables(SourceRowMetaInfo(connection.getODBCConnection(), minerule.getParsedMinerule()));
     connection.init();
 
     MRDebug() << "ConstrainedItemsets: body queries:" << bodyQry.c_str() << std::endl;

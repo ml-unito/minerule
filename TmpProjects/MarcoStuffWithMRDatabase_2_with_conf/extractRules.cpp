@@ -55,9 +55,9 @@ ItemType& operator=(int value) { item = value; return *this; }
 
 
 class Transaction : public std::set<ItemType> {
-  HeadBodySourceRowDescription srd;
+  SourceRowColumnIds srd;
 public:
-  Transaction(HeadBodySourceRowDescription& rowDes) : std::set<ItemType>(), srd(rowDes) {}
+  Transaction(SourceRowColumnIds& rowDes) : std::set<ItemType>(), srd(rowDes) {}
   void load(ItemType& gid, odbc::ResultSet *rs) {
     HeadBodySourceRow hbsr(rs,srd);
 
@@ -68,7 +68,7 @@ public:
 	hbsr.init(rs,srd);
     }
   }
-  static bool findGid(ItemType& gid, odbc::ResultSet *rs, HeadBodySourceRowDescription& srd, bool init=false) {
+  static bool findGid(ItemType& gid, odbc::ResultSet *rs, SourceRowColumnIds& srd, bool init=false) {
     if (init) { rs->next(); return true; }
     
     HeadBodySourceRow hbsr(rs,srd);
@@ -437,7 +437,7 @@ int main(int argc, char *argv[]) {
   assert( argc>1 );
   odbc::Connection* connection;
   string outTableName;
-  minerule::HeadBodySourceRowDescription rowDes;
+  minerule::SourceRowColumnIds rowDes;
   MineruleOptions::PartitionAlgorithms partOpt;
   MineruleOptions& mrOpts =  MineruleOptions::getSharedOptions();
   mrOpts.readFromFile(MROPTIONFILE);

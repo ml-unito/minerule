@@ -33,7 +33,7 @@ using namespace minerule;
 bool
 readSourceTable(
 		itemSet<ItemType>& kItem,
-		const minerule::HeadBodySourceRowDescription& rowDes,
+		const minerule::SourceRowColumnIds& rowDes,
 		const minerule::AlgorithmsOptions& options,
 		bool conditionalInsert,
 		double& totGroups
@@ -152,7 +152,7 @@ void partitionWithoutClusters( const minerule::AlgorithmsOptions& options  )
 {
   odbc::Connection* connection = options.getODBCConnection();
   odbc::PreparedStatement* statement = options.getStatement();
-  const minerule::HeadBodySourceRowDescription& 
+  const minerule::SourceRowColumnIds& 
     rowDes = options.getSourceRowDescription();
 
 
@@ -195,7 +195,7 @@ void partitionWithoutClusters( const minerule::AlgorithmsOptions& options  )
   int logPartId = MRLogGetNewID();
   bool readMorePartitions=result->next();
   if (readMorePartitions) {
-  SourceRowDescriptor srDescriptor(result->getResultSet(), rowDes);
+  SourceRowMetaInfo srDescriptor(result->getResultSet(), rowDes);
 
   connection.create_tmp_db(0, srDescriptor.getBody(), srDescriptor.getHead());
 

@@ -24,7 +24,7 @@ using namespace minerule;
 
 void
 readDataBase(odbc::ResultSet* result,
-	     const minerule::HeadBodySourceRowDescription& rowDes,
+	     const minerule::SourceRowColumnIds& rowDes,
 	     Tree<ItemType>&  tree,
 	     Counter<ItemType>& gCount,
 	     double& totGroups) {
@@ -81,7 +81,7 @@ void newFPGrowth( const minerule::AlgorithmsOptions& options ) {
 
   odbc::Connection* odbc_connection = options.getODBCConnection();
   odbc::PreparedStatement* statement = options.getStatement();
-  const minerule::HeadBodySourceRowDescription& rowDes =
+  const minerule::SourceRowColumnIds& rowDes =
     options.getSourceRowDescription();
 
   //  int val;
@@ -140,7 +140,7 @@ void newFPGrowth( const minerule::AlgorithmsOptions& options ) {
   connection.deleteDestTables();
   
   throw std::runtime_error("Algorithm to be updated to use new createResiltTables API");
-  // connection.createResultTables(SourceRowDescriptor(connection.getODBCConnection(), minerule.getParsedMinerule()));
+  // connection.createResultTables(SourceRowMetaInfo(connection.getODBCConnection(), minerule.getParsedMinerule()));
 
 // Genera tutti i fp-tree conditional. 
 // Eliminando quelli relativi a itemset a supporto non sufficiente

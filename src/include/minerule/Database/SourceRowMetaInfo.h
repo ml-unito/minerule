@@ -6,7 +6,7 @@
 #include <vector>
 #include <odbc++/resultset.h>
 
-#include "Database/SourceRowCommon.h"
+#include "Database/SourceRowColumnIds.h"
 #include "Parsers/ParsedMinerule.h"
 
 
@@ -35,7 +35,7 @@ namespace minerule {
 		std::string questionMarks() const;
 	};
 
-	class SourceRowDescriptor {
+	class SourceRowMetaInfo {
 	private:
 		SourceRowAttrCollectionDescriptor groupBody;
 		SourceRowAttrCollectionDescriptor clusterBody;
@@ -44,12 +44,12 @@ namespace minerule {
 		SourceRowAttrCollectionDescriptor head;
     
 	public:
-		// Builds a SourceRowDescriptor from an HeadBodySourceRowDescription and 
+		// Builds a SourceRowMetaInfo from an SourceRowColumnIds and 
 		// the source dataset
-		SourceRowDescriptor(odbc::ResultSet* rs, const HeadBodySourceRowDescription& rowDes);
+		SourceRowMetaInfo(odbc::ResultSet* rs, const SourceRowColumnIds& rowDes);
 		
-		// Builds a SourceRowDescriptor from a ParsedMinerule
-		SourceRowDescriptor(odbc::Connection*, const ParsedMinerule& minerule);
+		// Builds a SourceRowMetaInfo from a ParsedMinerule
+		SourceRowMetaInfo(odbc::Connection*, const ParsedMinerule& minerule);
 
 
 		const SourceRowAttrCollectionDescriptor& getGroupBody() const {

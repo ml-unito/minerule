@@ -31,7 +31,7 @@ int main(int argc, char *argv[]) {
   odbc::Connection* connection;
   odbc::ResultSet* result;
   string outTableName;
-  minerule::HeadBodySourceRowDescription rowDes;
+  minerule::SourceRowColumnIds rowDes;
   minerule::AlgorithmsOptions options, options1;
   MineruleOptions::MiningAlgorithms::RulesMiningAlgorithms::PartitionBase partOpt;
   //MineruleOptions::PartitionAlgorithms partOpt;

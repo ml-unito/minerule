@@ -6,7 +6,7 @@
 #include <odbc++/resultsetmetadata.h>
 
 #include "Database/SourceRowAttribute.h"
-#include "Database/SourceRowCommon.h"
+#include "Database/SourceRowColumnIds.h"
 #include "Database/SourceRowAttributeCollection.h"
 
 using namespace std;
@@ -33,7 +33,7 @@ namespace minerule {
   public:
     // create a new item as a copy of the current row of the result set
     HeadBodySourceRow(odbc::ResultSet* resultSet,
-		      const HeadBodySourceRowDescription& srd);
+		      const SourceRowColumnIds& srd);
 
     // copy constructor
     HeadBodySourceRow(const HeadBodySourceRow& item);
@@ -43,7 +43,7 @@ namespace minerule {
 
     void
       init(odbc::ResultSet* resultSet,
-	   const HeadBodySourceRowDescription& srd);
+	   const SourceRowColumnIds& srd);
 
 
     const SourceRowElement&

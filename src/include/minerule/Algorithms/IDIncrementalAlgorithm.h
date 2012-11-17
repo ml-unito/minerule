@@ -29,7 +29,7 @@ class IDIncrementalAlgorithm : public IncrementalAlgorithm {
 
   std::set<ItemType>* fillValidItems(const std::string& constraints) const throw(odbc::SQLException);
 
-  void getItemInfos( std::string& itemDescr, HeadBodySourceRowDescription& hbsr ) const;
+  void getItemInfos( std::string& itemDescr, SourceRowColumnIds& hbsr ) const;
   bool checkInclusion(const std::set<ItemType>& validOnes, const ItemSet& foundOnes) const;
   bool checkInValidRules(const ValidRules& validRules, Rule& r) const;
   void filterQueries(const ValidRules& validRules) throw(MineruleException,odbc::SQLException);

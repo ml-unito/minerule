@@ -10,7 +10,7 @@ namespace minerule {
 /* ************ */
 
   HeadBodySourceRow::HeadBodySourceRow(odbc::ResultSet* resultSet,
-				       const HeadBodySourceRowDescription& srd) {
+				       const SourceRowColumnIds& srd) {
 
     odbc::ResultSetMetaData* rsmd = resultSet->getMetaData();
 
@@ -49,7 +49,7 @@ HeadBodySourceRow::~HeadBodySourceRow() {
 
 void 
 HeadBodySourceRow::init(odbc::ResultSet* resultSet,
-			const HeadBodySourceRowDescription& srd) {
+			const SourceRowColumnIds& srd) {
 
 #define DESTROY(a) if((a)!=NULL) delete a;
 

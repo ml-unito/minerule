@@ -1,6 +1,6 @@
 #include "Algorithms/CCSMSequence.h"
 
-#include "Database/SourceRowCommon.h"
+#include "Database/SourceRowColumnIds.h"
 #include "Database/SourceRow.h"
 
 #include "time.h"
@@ -8,7 +8,7 @@
 
 namespace minerule{
 	
-	void CCSMSequence::read(odbc::ResultSet* rs, const HeadBodySourceRowDescription& rowDes){
+	void CCSMSequence::read(odbc::ResultSet* rs, const SourceRowColumnIds& rowDes){
 	HeadBodySourceRow hbsr(rs,rowDes);
 	ItemType gid;
 	if(!rs->isAfterLast()) 

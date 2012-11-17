@@ -34,7 +34,7 @@ bool
 readSourceTable(
 		itemSet<ItemType>& kItem,
 		odbc::ResultSet* result,
-		const minerule::HeadBodySourceRowDescription& rowDes,
+		const minerule::SourceRowColumnIds& rowDes,
 		const minerule::AlgorithmsOptions& options,
 		bool conditionalInsert,
 		int& gid,
@@ -159,7 +159,7 @@ void partitionWithoutClusters( const minerule::AlgorithmsOptions& options  )
 {
   odbc::Connection* odbc_connection = options.getODBCConnection();
   odbc::PreparedStatement* statement = options.getStatement();
-  const minerule::HeadBodySourceRowDescription& 
+  const minerule::SourceRowColumnIds& 
     rowDes = options.getSourceRowDescription();
 
 
@@ -209,7 +209,7 @@ void partitionWithoutClusters( const minerule::AlgorithmsOptions& options  )
   result = statement->executeQuery();
 
   bool readMorePartitions=result->next();
-  SourceRowDescriptor srDescriptor(result, rowDes);
+  SourceRowMetaInfo srDescriptor(result, rowDes);
 
   connection.create_tmp_db(0, srDescriptor.getBody(), srDescriptor.getHead());
 
@@ -304,7 +304,7 @@ void partitionWithoutClusters( const minerule::AlgorithmsOptions& options  )
  connection.deleteDestTables();
 
  throw std::runtime_error("Algorithm to be updated to use new createResiltTables API");
- // connection.createResultTables(SourceRowDescriptor(connection.getODBCConnection(), minerule.getParsedMinerule()));
+ // connection.createResultTables(SourceRowMetaInfo(connection.getODBCConnection(), minerule.getParsedMinerule()));
  
  MRLogPush("Extracting rules...");
  kItem.extractRule(connection, options.getTotGroups(), kItem);

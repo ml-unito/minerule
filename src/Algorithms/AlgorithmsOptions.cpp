@@ -23,7 +23,7 @@ void AlgorithmsOptions::setStatement(odbc::PreparedStatement* stat) {
   statement=stat;
 }
 
-void AlgorithmsOptions::setSourceRowDescription(const HeadBodySourceRowDescription& srdes) {
+void AlgorithmsOptions::setSourceRowDescription(const SourceRowColumnIds& srdes) {
   sourceRowDescription = srdes;
 }
 
@@ -49,6 +49,6 @@ odbc::PreparedStatement* AlgorithmsOptions::getStatement() const {
   return statement;
 }
 
-const HeadBodySourceRowDescription& AlgorithmsOptions::getSourceRowDescription() const {
+const SourceRowColumnIds& AlgorithmsOptions::getSourceRowDescription() const {
   return sourceRowDescription;
 }

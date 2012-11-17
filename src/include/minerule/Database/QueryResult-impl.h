@@ -82,7 +82,7 @@ namespace minerule {
 		connection.setHeadCardinalities(mr.headCardinalities);
 		connection.useODBCConnection( MineruleOptions::getSharedOptions().getODBC().getODBCConnection());
 		
-		connection.createResultTables(SourceRowDescriptor(connection.getODBCConnection(), mr));
+		connection.createResultTables(SourceRowMetaInfo(connection.getODBCConnection(), mr));
 
 		typename ResultSet<Sorter>::const_iterator it;
 		for(it=this->begin();it!=this->end();it++) {

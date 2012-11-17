@@ -27,7 +27,7 @@ class AlgorithmsOptions {
   // when the MRResultSetIterator will be integrated in the proj.
   MRResultSetIterator* mriterator;
 
-  HeadBodySourceRowDescription sourceRowDescription;
+  SourceRowColumnIds sourceRowDescription;
  std::string outTableName;
 
   MineruleOptions::MiningAlgorithms miningAlgorithmsOptions;
@@ -50,7 +50,7 @@ class AlgorithmsOptions {
   }
   void setConnection(odbc::Connection*);
   void setStatement(odbc::PreparedStatement*);
-  void setSourceRowDescription(const HeadBodySourceRowDescription& srdes);
+  void setSourceRowDescription(const SourceRowColumnIds& srdes);
   void setOutTableName(const std::string& fname) {
     outTableName=fname;
   }
@@ -104,7 +104,7 @@ class AlgorithmsOptions {
   
   odbc::Connection* getODBCConnection() const;
   odbc::PreparedStatement* getStatement() const;
-  const HeadBodySourceRowDescription& 
+  const SourceRowColumnIds& 
     getSourceRowDescription() const;
 };
 

@@ -27,9 +27,9 @@ class NewRule;
 
 //class Transaction : public std::set<std::pair<ItemType, ItemType> > {
 class Transaction : public std::set<ItemType> {
-  HeadBodySourceRowDescription srd;
+  SourceRowColumnIds srd;
   public:
-	Transaction(HeadBodySourceRowDescription& rowDes) : std::set<ItemType>(), srd(rowDes) {}
+	Transaction(SourceRowColumnIds& rowDes) : std::set<ItemType>(), srd(rowDes) {}
  std::vector<int> values;
 	void loadBody(ItemType& gid, odbc::ResultSet *rs, int nFields) {
 		HeadBodySourceRow hbsr(rs,srd);
@@ -49,7 +49,7 @@ class Transaction : public std::set<ItemType> {
 			if(!rs->isAfterLast()) hbsr.init(rs,srd);
 		}
 	}
-	static bool findGid(ItemType& gid, odbc::ResultSet *rs, HeadBodySourceRowDescription& srd, bool init=false) {
+	static bool findGid(ItemType& gid, odbc::ResultSet *rs, SourceRowColumnIds& srd, bool init=false) {
 		if (init) { rs->next(); return true; }
 		HeadBodySourceRow hbsr(rs,srd);
 		while (!rs->isAfterLast() && gid > hbsr.getGroupBody()) {

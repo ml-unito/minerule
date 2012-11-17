@@ -9,9 +9,9 @@ namespace minerule {
 	class BFSWithGidsNoCross : public MiningAlgorithm {
 
 		class Transaction : public std::set<ItemType> {
-			HeadBodySourceRowDescription srd;
+			SourceRowColumnIds srd;
 		public:
-			Transaction(HeadBodySourceRowDescription& rowDes) : std::set<ItemType>(), srd(rowDes) {}
+			Transaction(SourceRowColumnIds& rowDes) : std::set<ItemType>(), srd(rowDes) {}
 			void loadBody(ItemType& gid, odbc::ResultSet *rs) {
 				HeadBodySourceRow hbsr(rs,srd);
 
@@ -39,7 +39,7 @@ namespace minerule {
 				}
 			}
 
-			static bool findGid(ItemType& gid, odbc::ResultSet *rs, HeadBodySourceRowDescription& srd, bool init=false) {
+			static bool findGid(ItemType& gid, odbc::ResultSet *rs, SourceRowColumnIds& srd, bool init=false) {
 				if (init) { 
 					if(!rs->isAfterLast()) {
 						rs->next(); 
@@ -147,7 +147,7 @@ namespace minerule {
 		private:
 			AlgorithmsOptions options;
 			Connection connection;
-			HeadBodySourceRowDescription rowDes;
+			SourceRowColumnIds rowDes;
 			odbc::PreparedStatement* statementBody;
 			odbc::PreparedStatement* statementHead;
 			static bool mineruleHasSameBodyHead;

@@ -6,7 +6,7 @@
 #include <string>
 #include <iostream>
 #include "Database/ItemType.h"
-#include "Database/SourceRowCommon.h"
+#include "Database/SourceRowColumnIds.h"
 
 #define PRESENT 1
 #define ABSENT 0
@@ -318,7 +318,7 @@ public:
 		return suffix.size()>0 && prefix.size()>0; 
 	}
 	
-	void read(odbc::ResultSet* rs, const HeadBodySourceRowDescription& rowDes);
+	void read(odbc::ResultSet* rs, const SourceRowColumnIds& rowDes);
 
 };
 

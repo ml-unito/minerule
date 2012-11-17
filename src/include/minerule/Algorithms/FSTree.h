@@ -116,7 +116,7 @@ class FSTree{
   /**
    * insert all couple present in the dataSet in the map link_S
    */
-  void createLinkSTable(odbc::ResultSet*, const HeadBodySourceRowDescription&);
+  void createLinkSTable(odbc::ResultSet*, const SourceRowColumnIds&);
 	
   /**
    * insert all no frequent couple in the map link_NS
@@ -190,7 +190,7 @@ class FSTree{
    * @see fraziona(sequence *s)
    * @see insertTree(node* r, sequence* t)
    */
-  void construct_Tree(odbc::ResultSet*, const HeadBodySourceRowDescription&);
+  void construct_Tree(odbc::ResultSet*, const SourceRowColumnIds&);
 
   /**
    * the destructor of the FSTree

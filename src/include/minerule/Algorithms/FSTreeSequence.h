@@ -4,7 +4,7 @@
 #include <string>
 #include <iostream>
 #include "Database/ItemType.h"
-#include "Database/SourceRowCommon.h"
+#include "Database/SourceRowColumnIds.h"
 
 namespace minerule {
 
@@ -116,7 +116,7 @@ namespace minerule {
      * every item in thestd::string must be separated with a space
      * @param s thestd::string that you want decompose
      */
-    void read(odbc::ResultSet* rs, const HeadBodySourceRowDescription&);
+    void read(odbc::ResultSet* rs, const SourceRowColumnIds&);
 
     // ItemType pre_proc();
     /**

@@ -1,5 +1,5 @@
-#include "Database/SourceRowDescriptor.h"
-#include "Database/SourceRowCommon.h"
+#include "Database/SourceRowMetaInfo.h"
+#include "Database/SourceRowColumnIds.h"
 #include <odbc++/resultsetmetadata.h>
 #include <iostream>
 #include <string.h>
@@ -10,7 +10,7 @@ using namespace minerule;
 
 
 /* **********************************
- * SourceRowDescriptor methods
+ * SourceRowMetaInfo methods
  * **********************************/
 
 void
@@ -108,10 +108,10 @@ SourceRowAttrCollectionDescriptor::getSQLColumnNames() const {
 
 
 /* **********************************
- * SourceRowDescriptor methods
+ * SourceRowMetaInfo methods
  * **********************************/
 
-SourceRowDescriptor::SourceRowDescriptor(odbc::ResultSet* rs, const HeadBodySourceRowDescription& rowDes) 
+SourceRowMetaInfo::SourceRowMetaInfo(odbc::ResultSet* rs, const SourceRowColumnIds& rowDes) 
 	 : groupBody(rs,rowDes.groupBodyElems),
 	   clusterBody(rs,rowDes.clusterBodyElems),
 	   body(rs,rowDes.bodyElems),
@@ -143,7 +143,7 @@ SourceRowDescriptor::SourceRowDescriptor(odbc::ResultSet* rs, const HeadBodySour
 	 }
  };
  
- SourceRowDescriptor::SourceRowDescriptor(odbc::Connection* odbc_connection, const ParsedMinerule& minerule) {
+ SourceRowMetaInfo::SourceRowMetaInfo(odbc::Connection* odbc_connection, const ParsedMinerule& minerule) {
 	 ParsedMinerule::AttrVector attr_list;
 	 attr_list.insert(attr_list.end(), minerule.ga.begin(), minerule.ga.end());
 	 attr_list.insert(attr_list.end(), minerule.ca.begin(), minerule.ca.end()); 

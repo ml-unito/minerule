@@ -5,9 +5,9 @@
 #include "Database/Connection.h"
 
   class Transaction : public std::set<ItemType> {
-    HeadBodySourceRowDescription srd;
+    SourceRowColumnIds srd;
   public:
-    Transaction(HeadBodySourceRowDescription& rowDes) : std::set<ItemType>(), srd(rowDes) {}
+    Transaction(SourceRowColumnIds& rowDes) : std::set<ItemType>(), srd(rowDes) {}
     void loadBody(ItemType& gid, odbc::ResultSet *rs, int n) {
       HeadBodySourceRow hbsr(rs,srd);
 
@@ -30,7 +30,7 @@
       }
     }
 
-    static bool findGid(ItemType& gid, odbc::ResultSet *rs, HeadBodySourceRowDescription& srd, bool init=false) {
+    static bool findGid(ItemType& gid, odbc::ResultSet *rs, SourceRowColumnIds& srd, bool init=false) {
       if (init) { 
 	if(!rs->isAfterLast()) {
 	  rs->next(); 

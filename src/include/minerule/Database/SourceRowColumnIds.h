@@ -8,18 +8,7 @@
 
 namespace minerule {
 
-  // The following function is used from sourcerow* classes to build valid SQL column
-  // names out of column ID. It is used when the user asks for the column names to use
-  // for storing sourcerows "abstracted" elements.
-
-inline std::string
-getCodedColumnName(int colId) {
-  char buf[255];
-  std::sprintf(buf, "cn%d", colId);
-  return std::string(buf);
-}
-
-class HeadBodySourceRowDescription {
+class SourceRowColumnIds {
   public:
   std::vector<int> groupBodyElems;
   std::vector<int> clusterBodyElems;
@@ -27,17 +16,17 @@ class HeadBodySourceRowDescription {
   std::vector<int> clusterHeadElems;
   std::vector<int> headElems;
     
-  HeadBodySourceRowDescription() {
+  SourceRowColumnIds() {
   }
   
-  ~HeadBodySourceRowDescription() {
+  ~SourceRowColumnIds() {
   }
   
   
   // The following function is a generalization of the set???Elem function defined below (see the 
   // corresponding comment for explanation about start, numCols and return values). Its intended usage
   // is: 
-  //   HeadBodySourceRowDescription des;
+  //   SourceRowColumnIds des;
   //   des.setElems(des.bodyElems, 1, 5)
   // which is equivalent to
   //   des.setBodyElems(1,5).
@@ -57,7 +46,7 @@ class HeadBodySourceRowDescription {
   //       body : from column 6 to 10
   //       clusterHead: from column 11 to 12
   //       head : from column 13 to 18 */
-  //    HeadBodySourceRowDescription des;
+  //    SourceRowColumnIds des;
   //    int lastCol;
   //    lastCol = des.setGroupBodyElems(1,3);
   //    lastCol = des.setClusterBodyElems(lastCol+1,2);
@@ -74,7 +63,7 @@ class HeadBodySourceRowDescription {
 
 };
 
-inline std::ostream& operator<<(std::ostream& o, const HeadBodySourceRowDescription& rowDes) {
+inline std::ostream& operator<<(std::ostream& o, const SourceRowColumnIds& rowDes) {
 	o << "head:"; copy( rowDes.headElems.begin(), rowDes.headElems.end(), std::ostream_iterator<int>(o, " ") ); 
 	o << " - ";
 	o << "body:"; copy( rowDes.bodyElems.begin(), rowDes.bodyElems.end(), std::ostream_iterator<int>(o, " ") ); 

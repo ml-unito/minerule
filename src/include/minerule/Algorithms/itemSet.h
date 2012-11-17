@@ -129,7 +129,7 @@ private:
     void checkSupportBaseDef(double, newItemSetHashMap<NODETYPE>&,itemSetList<NODETYPE>& );
     void mergeItemSet(Connection& connection,
 		      itemSetList<NODETYPE>& ptrList,
-		      const SourceRowDescriptor& srd);
+		      const SourceRowMetaInfo& srd);
     void remove(itemSetList<NODETYPE>& ptrList);
     bool existEntry(NODETYPE item);
     void extractRule(Connection& connection, double totGroups, itemSet<NODETYPE>& root);
@@ -155,12 +155,12 @@ private:
 			    itemSetList<NODETYPE>& ptrList, 
 			    odbc::ResultSet* resultAllBody,
 			    // The following parameters describe the data set
-			    const HeadBodySourceRowDescription& srDescription,
+			    const SourceRowColumnIds& srDescription,
 			    size_t lastElem,
 			    // The following parameters will be passed to the
 			    // mergeItemSetHead function
 			    Connection& connection,
-			    const SourceRowDescriptor& srd);
+			    const SourceRowMetaInfo& srd);
 
     void updatePtrList(				     
 		     itemSetList<NODETYPE>& ptrList,
@@ -624,7 +624,7 @@ template< class NODETYPE >
 void itemSet< NODETYPE >::mergeItemSet(
 				     Connection& connection,
 				     itemSetList<NODETYPE>& ptrList,
-				     const SourceRowDescriptor& srd) {
+				     const SourceRowMetaInfo& srd) {
    std::string Qry;
    HASHTYPE anc;
    NODETYPE temp;
@@ -641,7 +641,7 @@ void itemSet< NODETYPE >::mergeItemSet(
 
    //   std::cerr << std::endl << "QRY:" << Qry << std::endl;
 
-   HeadBodySourceRowDescription srDescription;
+   SourceRowColumnIds srDescription;
    lastElem = srDescription.setBodyElems(2,srd.getBody().getColumnsCount());
 
    resultAllBody=statement->executeQuery(Qry.c_str());
@@ -670,12 +670,12 @@ void itemSet< NODETYPE >::mergeItemSetHelper(
 			itemSetList<NODETYPE>& ptrList, 
 			odbc::ResultSet* resultAllBody,
 			// The following parameters describe the data set
-			const HeadBodySourceRowDescription& srDescription,
+			const SourceRowColumnIds& srDescription,
 			size_t lastElem,
 			// The following parameters will be passed to the
 			// mergeItemSetHead function
 			Connection& connection,
-			const SourceRowDescriptor& srd) {
+			const SourceRowMetaInfo& srd) {
   LevelInfoStack levelStack;
   levelStack.push_back(this);
 

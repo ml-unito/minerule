@@ -60,7 +60,7 @@ void Connection::deleteTable(const char * tableName)
 
 // Bisogna controllare che non esista già la tabella
 // altrimenti va in errore !!
-void Connection::createResultTables(const SourceRowDescriptor& srd) {
+void Connection::createResultTables(const SourceRowMetaInfo& srd) {
 	if(MineruleOptions::getSharedOptions().getSafety().getOverwriteHomonymMinerules())
 		deleteDestTables();
 		

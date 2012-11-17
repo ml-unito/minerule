@@ -13,7 +13,7 @@ int main(int argc, char *argv[]) {
   }
   odbc::Connection* connection;
   string outTableName;
-  minerule::HeadBodySourceRowDescription rowDes;
+  minerule::SourceRowColumnIds rowDes;
   minerule::AlgorithmsOptions options, options1;
   MineruleOptions& mrOpts =  MineruleOptions::getSharedOptions();
   //MineruleOptions::MiningAlgorithms::PartitionBase& partOpt = mrOpts.getMiningAlgorithms().getPartitionBase();

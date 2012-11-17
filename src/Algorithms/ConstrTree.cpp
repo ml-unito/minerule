@@ -113,7 +113,7 @@ namespace minerule {
     connection.setOutTableName(minerule->getParsedMinerule().tab_result);
     connection.useODBCConnection(
        MineruleOptions::getSharedOptions().getODBC().getODBCConnection());
-    connection.createResultTables(SourceRowDescriptor(connection.getODBCConnection(), minerule->getParsedMinerule()));
+    connection.createResultTables(SourceRowMetaInfo(connection.getODBCConnection(), minerule->getParsedMinerule()));
 
     if (mb2!=NULL  &&  mh2!=NULL) {
       adjustSuppMIndex();

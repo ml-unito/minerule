@@ -12,7 +12,7 @@ namespace minerule {
   private:
     AlgorithmsOptions options;
     Connection connection;
-    HeadBodySourceRowDescription rowDes;
+    SourceRowColumnIds rowDes;
     odbc::PreparedStatement* statement;
 
     void prepareData();

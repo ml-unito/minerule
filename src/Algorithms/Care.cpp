@@ -75,7 +75,7 @@ namespace minerule {
 	  connection.setOutTableName(minerule.getParsedMinerule().tab_result);
 	  connection.setBodyCardinalities(minerule.getParsedMinerule().bodyCardinalities);
 	  connection.setHeadCardinalities(minerule.getParsedMinerule().headCardinalities);
-	  connection.createResultTables(SourceRowDescriptor(connection.getODBCConnection(), minerule.getParsedMinerule()));
+	  connection.createResultTables(SourceRowMetaInfo(connection.getODBCConnection(), minerule.getParsedMinerule()));
 	  connection.init();
 
 	  MRDebug() << "CARE: body queries:" << bodyQry.c_str() << std::endl;

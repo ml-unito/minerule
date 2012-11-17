@@ -115,9 +115,9 @@ namespace minerule {
 // 	As more algorithms become available it will choose among them
 // 	using some (hopefully) good heuristic... In modifying it please
 // 	remember that any future criteria must ensure that the chosen
-// 	algorithm is able to deal with HeadBodySourceRowDescription that
+// 	algorithm is able to deal with SourceRowColumnIds that
 // 	will be passed to it.
-// 	Remember that the informations stored in HeadBodySourceRowDescription
+// 	Remember that the informations stored in SourceRowColumnIds
 // 	depends upon mr.mineruleRequiresClusters(). 
 //  
 	MiningAlgorithm* Algorithms::newAlgorithm(const OptimizedMinerule& mr) {

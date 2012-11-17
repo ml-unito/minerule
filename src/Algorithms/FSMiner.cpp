@@ -33,7 +33,7 @@ namespace minerule {
 		connection.setBodyCardinalities(minerule.getParsedMinerule().bodyCardinalities);
 
 	    throw std::runtime_error("Algorithm to be updated to use new createResiltTables API");
-	    // connection.createResultTables(SourceRowDescriptor(connection.getODBCConnection(), minerule.getParsedMinerule()));
+	    // connection.createResultTables(SourceRowMetaInfo(connection.getODBCConnection(), minerule.getParsedMinerule()));
 
 		MRDebug() << "FSMiner query:" << sqlQuery.c_str() << std::endl;
 

@@ -3,7 +3,7 @@
 #include "Algorithms/Care.h"
 
 #include "PredicateUtils/HeadBodyPredicatesSeparator.h"
-#include "Algorithms/PrepareDataUtils.h"
+#include "Database/PrepareDataUtils.h"
 
 #define MROPTIONFILE "mroptions"
 

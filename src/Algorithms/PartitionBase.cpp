@@ -1,7 +1,7 @@
 #include "Algorithms/PartitionBase.h"
 #include "Algorithms/AlgorithmsOptions.h"
 #include "Utils/MineruleOptions.h"
-#include "Algorithms/PrepareDataUtils.h"
+#include "Database/PrepareDataUtils.h"
 
 
 void partitionWithoutClusters(const minerule::AlgorithmsOptions& algoOptions);

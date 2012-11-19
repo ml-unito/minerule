@@ -16,7 +16,7 @@
 #include "Database/Connection.h"
 #include "Algorithms/BFSWithGidsAndCross.h"
 #include "PredicateUtils/HeadBodyPredicatesSeparator.h"
-#include "Algorithms/PrepareDataUtils.h"
+#include "Database/PrepareDataUtils.h"
 
 namespace minerule {
 

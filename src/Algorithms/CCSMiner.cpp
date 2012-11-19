@@ -8,7 +8,7 @@
 #include <time.h>
 #include "Algorithms/Bit_vector.h"
 #include "Algorithms/CCSMiner.h"
-#include "Algorithms/PrepareDataUtils.h"
+#include "Database/PrepareDataUtils.h"
 
 namespace minerule {
 

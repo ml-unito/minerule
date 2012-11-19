@@ -34,8 +34,7 @@ namespace minerule {
     
 	public:
     // create a new item as a copy of the current row of the result set
-		SourceRow(odbc::ResultSet* resultSet,
-			const SourceRowColumnIds& srd);
+		SourceRow(odbc::ResultSet* resultSet, const SourceRowColumnIds& srd);
 
     // copy constructor
 		SourceRow(const SourceRow& item);

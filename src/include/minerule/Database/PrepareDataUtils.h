@@ -41,17 +41,14 @@ class PrepareDataUtils {
 			    const std::string& alias2) const;
 
    void
-      buildSimpleSourceTableQuery(string& queryText,
-				  SourceRowColumnIds& rowDes) const;
+      buildSimpleSourceTableQuery(string& queryText, SourceRowColumnIds& rowDes) const;
    
    void
-     buildExtendedSourceTableQuery(string& queryText,
-				   SourceRowColumnIds& rowDes) const;
+     buildExtendedSourceTableQuery(string& queryText, SourceRowColumnIds& rowDes) const;
 
 
    void
-    buildSourceTableQuery(string& queryText,
-			  SourceRowColumnIds& rowDes) const;
+    buildSourceTableQuery(string& queryText, SourceRowColumnIds& rowDes) const;
   
 
    static void
@@ -66,8 +63,7 @@ class PrepareDataUtils {
      * also throw an SQLException in case something goes wrong 
      * during the query evaluation.
      */
-   static size_t evaluateTotGroups(const ParsedMinerule& pmr) 
-      throw(MineruleException, odbc::SQLException);
+   static size_t evaluateTotGroups(const ParsedMinerule& pmr) throw(MineruleException, odbc::SQLException);
 
    size_t evaluateTotGroups() const throw(MineruleException, odbc::SQLException) {
      return evaluateTotGroups(mr.getParsedMinerule());

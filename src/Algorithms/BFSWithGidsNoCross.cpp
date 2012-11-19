@@ -16,7 +16,7 @@
 #include "Database/Connection.h"
 #include "Algorithms/BFSWithGidsNoCross.h"
 #include "PredicateUtils/HeadBodyPredicatesSeparator.h"
-#include "Algorithms/PrepareDataUtils.h"
+#include "Database/PrepareDataUtils.h"
 
 namespace minerule {
   bool BFSWithGidsNoCross::mineruleHasSameBodyHead = false;	
@@ -228,7 +228,7 @@ namespace minerule {
     ParsedMinerule::AttrVector::const_iterator it = attr.begin();
     for( ; it!=attr.end(); it++ ) {
       if(it!=attr.begin()) {
-	attrStr+=",";
+		  attrStr+=",";
       }
 
       attrStr+=*it;

@@ -2,7 +2,7 @@
 #include "PredicateUtils/HeadBodyPredicatesSeparator.h"
 #include "Utils/MineruleOptions.h"
 #include <iterator>
-#include "Algorithms/PrepareDataUtils.h"
+#include "Database/PrepareDataUtils.h"
 #include <cmath>
 
 

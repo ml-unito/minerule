@@ -14,24 +14,23 @@ namespace minerule {
 		friend class SourceTable;			
 
 		private:
-			SourceRow* _sourceRow;
-			const SourceRowColumnIds& _columnIds;
 			odbc::ResultSet* _resultSet;
+			const SourceRowColumnIds* _columnIds;
+			SourceRow* _sourceRow;
 
-			Iterator( odbc::ResultSet* resultSet, const SourceRowColumnIds& columnIds) : _resultSet(resultSet), _columnIds(columnIds) {
-				_sourceRow = new SourceRow(_resultSet, _columnIds);
-			}
-
-		public:			
-			virtual ~Iterator() { delete _sourceRow; }
+			Iterator( odbc::ResultSet* resultSet, const SourceRowColumnIds& columnIds) : _resultSet(resultSet), _columnIds(&columnIds), _sourceRow(new SourceRow(resultSet, columnIds)) {	}
+		public:
+			Iterator() : _resultSet(NULL), _columnIds(NULL), _sourceRow(NULL) {}
+			Iterator( const Iterator& it ) : _resultSet(it._resultSet), _columnIds(it._columnIds), _sourceRow(it._sourceRow) {}
+			virtual ~Iterator() {  }
 			
 			bool next();
 			bool isAfterLast() const;
 			
 			SourceRow* get() { assert(_sourceRow!=NULL); return _sourceRow; }
-			SourceRow& operator->() { return *get(); }
+			SourceRow* operator->() { return get(); }
 			
-			void operator++() { next(); }			
+			Iterator& operator++() { next(); return *this; }			
 		};
 		
 		
@@ -44,7 +43,7 @@ namespace minerule {
 		void init();
 		size_t getTotGroups();
 	
-		Iterator* newIterator(IteratorKind);
+		Iterator newIterator(IteratorKind);
 	private:
 	/* data */
 		const MiningAlgorithm& _algorithm;
@@ -53,6 +52,8 @@ namespace minerule {
 		odbc::PreparedStatement* _bodyStatement;
 		odbc::PreparedStatement* _headStatement;
 		odbc::PreparedStatement* _fullStatement;
+		
+		std::vector<odbc::ResultSet*> _managedResults;
 		
 	/* methods */
 		void initBodyHeadResultSets();	

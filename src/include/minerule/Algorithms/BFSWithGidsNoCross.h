@@ -3,60 +3,46 @@
 
 #include "Algorithms/MiningAlgorithmBase.h"
 #include "Database/Connection.h"
+#include "Database/SourceTable.h"
 
 namespace minerule {
 
 	class BFSWithGidsNoCross : public MiningAlgorithm {
 
 		class Transaction : public std::set<ItemType> {
-			SourceRowColumnIds srd;
 		public:
-			Transaction(SourceRowColumnIds& rowDes) : std::set<ItemType>(), srd(rowDes) {}
-			void loadBody(ItemType& gid, odbc::ResultSet *rs) {
-				SourceRow hbsr(rs,srd);
-
-				while (!rs->isAfterLast() && gid == hbsr.getGroupBody()) {
-					// MRDebug() << "Body:" << hbsr.getBody() << std::endl;
-					
-					insert(hbsr.getBody());
-					rs->next();
-					if(!rs->isAfterLast())
-						hbsr.init(rs,srd);
-				}
-			}
-
-			void loadHead(ItemType& gid, odbc::ResultSet *rs) {
-				SourceRow hbsr(rs,srd);
+			Transaction() : std::set<ItemType>() {}
 			
-				// MRDebug() << "\n" << std::endl;
-				while (!rs->isAfterLast() && gid == hbsr.getGroupBody()) {
-					// MRDebug() << "Head:" << hbsr.getHead() << std::endl;
-					// MRDebug() << "rs head:" << rs->getString(2) << std::endl;
-					insert(hbsr.getHead());
-					rs->next();
-					if(!rs->isAfterLast())
-						hbsr.init(rs,srd);
+			void loadBody(ItemType& gid, SourceTable::Iterator it) {
+				while (!it.isAfterLast() && gid == it->getGroupBody()) {
+
+					insert(it->getBody());
+					++it;					
 				}
 			}
 
-			static bool findGid(ItemType& gid, odbc::ResultSet *rs, SourceRowColumnIds& srd, bool init=false) {
+			void loadHead(ItemType& gid, SourceTable::Iterator it) {
+				while (!it.isAfterLast() && gid == it->getGroupBody()) {
+
+					insert(it->getHead());
+					++it;
+				}
+			}
+
+			static bool findGid(ItemType& gid, SourceTable::Iterator it, bool init=false) {
 				if (init) { 
-					if(!rs->isAfterLast()) {
-						rs->next(); 
+					if(!it.isAfterLast()) {
+						++it; 						
 						return true;
-						} else
-							return false;
+					} else
+						return false;
 					}      
       
-					SourceRow hbsr(rs,srd);
-					while (!rs->isAfterLast() && gid > hbsr.getGroupBody() ) {
-						rs->next();
-      
-						if(!rs->isAfterLast())
-							hbsr.init(rs,srd);
+					while (!it.isAfterLast() && gid > it->getGroupBody() ) {
+						++it;
 					}
     
-					return !rs->isAfterLast() && gid == hbsr.getGroupBody();
+					return !it.isAfterLast() && gid == it->getGroupBody();
 				}
 			};
 
@@ -67,8 +53,8 @@ namespace minerule {
 				int count;
 				MapElement() : count(0) {}
 			};
+			
 			typedef MapElement GidList;
-
 
 			class BodyMapElement : public MapElement {
 			public:
@@ -146,29 +132,19 @@ namespace minerule {
 			};
 		private:
 			AlgorithmsOptions options;
-			Connection connection;
-			SourceRowColumnIds rowDes;
-			odbc::PreparedStatement* statementBody;
-			odbc::PreparedStatement* statementHead;
 			static bool mineruleHasSameBodyHead;
-
-
+			SourceTable* sourceTable;
+			
+			SourceTable::Iterator bodyIterator;
+			SourceTable::Iterator headIterator;
+			
+			Connection connection;
 
 			void insertRules( const NewRuleSet& rs, double totGroups );
-			size_t buildAttrStr(const ParsedMinerule::AttrVector& attr,
-				size_t startIndex,
-					std::string& attrStr, 
-						std::vector<int>& des) const;
 
-			std::string buildQry( const std::string& groupAttrStr,
-				const std::string& attrStr,
-					const std::string& constraints) const;
-
-			void prepareData();
-    
+			void prepareData();    
 		public:
-			BFSWithGidsNoCross(const OptimizedMinerule& mr) : 
-			MiningAlgorithm(mr), statementBody(NULL), statementHead(NULL) {
+			BFSWithGidsNoCross(const OptimizedMinerule& mr) : MiningAlgorithm(mr) {
 				mineruleHasSameBodyHead = mr.getParsedMinerule().hasSameBodyHead();				
 			}
 
@@ -183,8 +159,8 @@ namespace minerule {
 			virtual bool canHandleMinerule() const {
 				return 
 					!minerule.getParsedMinerule().hasCrossConditions() &&
-						!minerule.getParsedMinerule().requiresClusters() &&
-							!minerule.getParsedMinerule().hasDisjuctionsInMC();
+					!minerule.getParsedMinerule().requiresClusters() &&
+					!minerule.getParsedMinerule().hasDisjuctionsInMC();
 			}
 
 		};

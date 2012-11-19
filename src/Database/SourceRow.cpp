@@ -11,6 +11,8 @@ namespace minerule {
 
   SourceRow::SourceRow(odbc::ResultSet* resultSet,
 				       const SourceRowColumnIds& srd) {
+   if(resultSet->isBeforeFirst())
+	   resultSet->next();
 
     odbc::ResultSetMetaData* rsmd = resultSet->getMetaData();
 

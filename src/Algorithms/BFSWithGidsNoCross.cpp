@@ -219,38 +219,6 @@ namespace minerule {
     }
   }
 
-  // Preprocessing functions
-
-  size_t BFSWithGidsNoCross::buildAttrStr(const ParsedMinerule::AttrVector& attr,
-					  size_t startIndex,
-					  std::string& attrStr, 
-					  std::vector<int>& des) const {
-    ParsedMinerule::AttrVector::const_iterator it = attr.begin();
-    for( ; it!=attr.end(); it++ ) {
-      if(it!=attr.begin()) {
-		  attrStr+=",";
-      }
-
-      attrStr+=*it;
-      des.push_back(++startIndex);
-    }
-
-    return startIndex;
-  }
-
-
-
-  
- std::string BFSWithGidsNoCross::buildQry( const std::string& groupAttrStr, const std::string& attrStr, const std::string& constraints) const {
-    std::string whereClause = (constraints.size()>0 ? "WHERE "+constraints+" " : "");
-
-    return std::string(
-		  "SELECT "+groupAttrStr+","+attrStr+" "
-		  "FROM "+minerule.getParsedMinerule().tab_source+" " + 
-		   whereClause +
-		   "ORDER BY "+groupAttrStr+","+attrStr);
-  }
-
 
   void BFSWithGidsNoCross::prepareData() {
 	  MineruleOptions& mrOptions = MineruleOptions::getSharedOptions();
@@ -261,31 +229,12 @@ namespace minerule {
 	  options.setHeadCardinalities( minerule.getParsedMinerule().headCardinalities);
 	  options.getBodyCardinalities().applyConstraints(mrOptions.getParsers().getBodyCardinalities());
 	  options.getHeadCardinalities().applyConstraints(mrOptions.getParsers().getHeadCardinalities());
-
-	  PrepareDataUtils pdu(minerule, *this);
-	  options.setTotGroups(pdu.evaluateTotGroups());
-
-	  MRLog() << "Building db queries" << std::endl;
-	  std::string bodyConstraints;
-	  std::string headConstraints;
-    
-	  list_AND_node* miningCondition = (minerule.getParsedMinerule().mc!=NULL ? minerule.getParsedMinerule().mc->l_and : NULL);
-	  HeadBodyPredicatesSeparator::separate(miningCondition, bodyConstraints, headConstraints);
 	  
-	  size_t index;
-	  std::string groupAttr;
-	  std::string bodyAttr;
-	  std::string headAttr;
-    
-	  index=buildAttrStr(minerule.getParsedMinerule().ga, 0, groupAttr, rowDes.groupBodyElems );
+	  sourceTable = new SourceTable(*this);
+	  bodyIterator = sourceTable->newIterator(SourceTable::BodyIterator);
+	  headIterator = sourceTable->newIterator(SourceTable::HeadIterator);
 
-	  buildAttrStr(minerule.getParsedMinerule().ba, index, bodyAttr, rowDes.bodyElems);
-	  buildAttrStr(minerule.getParsedMinerule().ha, index, headAttr, rowDes.headElems);
-		 
-	  std::string bodyQry = buildQry( groupAttr, bodyAttr, bodyConstraints);
-	  std::string headQry = buildQry( groupAttr, headAttr, headConstraints);
-
-	  MRLog() << "Preparing queries" << std::endl;
+	  options.setTotGroups(sourceTable->getTotGroups());
 
 	  connection.useODBCConnection(MineruleOptions::getSharedOptions().getODBC().getODBCConnection());
 	  connection.setOutTableName(minerule.getParsedMinerule().tab_result);
@@ -293,12 +242,6 @@ namespace minerule {
 	  connection.setHeadCardinalities(minerule.getParsedMinerule().headCardinalities);
 	  connection.createResultTables(SourceRowMetaInfo(connection.getODBCConnection(), minerule.getParsedMinerule()));
 	  connection.init();
-
-	  MRDebug( std::string("BFSWithGids: body queries:") + bodyQry.c_str() );
-	  MRDebug( std::string("BFSWithGids: head queries:") + headQry.c_str() );
-
-	  statementBody = connection.getODBCConnection()->prepareStatement(bodyQry.c_str());
-	  statementHead = connection.getODBCConnection()->prepareStatement(headQry.c_str());
   }
 
 
@@ -308,22 +251,15 @@ namespace minerule {
     MRLog() << "Preparing data sources..." << std::endl;
     prepareData();
 
-    odbc::ResultSet* resultBody, *resultHead;
-
     float support = options.getSupport();
     int maxBody = options.getBodyCardinalities().getMax();
     int maxHead = options.getHeadCardinalities().getMax();
 
-	MRLogPush("Executing queries...");
-    resultBody = statementBody->executeQuery();
-    resultHead = statementHead->executeQuery();
-	MRLogPop();
-
     ItemType gid1;
 	
-    if(!Transaction::findGid(gid1,resultHead, rowDes, true))
+    if(!Transaction::findGid(gid1, bodyIterator, true))
 		throw new MineruleException(MR_ERROR_INTERNAL,"Cannot find initial GID for body elements");
-    if(!Transaction::findGid(gid1,resultBody,rowDes,true))
+    if(!Transaction::findGid(gid1, headIterator, true))
 		throw new MineruleException(MR_ERROR_INTERNAL,"Cannot find initial GID for head elements");
 	
 	MRLogPush("Reading data");
@@ -333,16 +269,15 @@ namespace minerule {
     int howManyRows = 0;
     int howManyGroups = 0;
 
-    while (!resultBody->isAfterLast()) {		
-      SourceRow hbsr(resultBody, rowDes);
-      ItemType gid = hbsr.getGroupBody();
+    while (!bodyIterator.isAfterLast()) {		
+      ItemType gid = bodyIterator->getGroupBody();
       
-	  Transaction t1(rowDes), t2(rowDes);
-      t1.loadBody(gid,resultBody);
+	  Transaction t1, t2;
+      t1.loadBody(gid,bodyIterator);
 
-      bool found2 = t2.findGid(gid,resultHead,rowDes);
+      bool found2 = t2.findGid(gid,headIterator);
       if (found2) {
-		  t2.loadHead(gid,resultHead);
+		  t2.loadHead(gid,headIterator);
       }
 
       howManyRows += bodyMap.add(howManyGroups,t1,t2);
@@ -368,9 +303,6 @@ namespace minerule {
     MRLogPop();
 
     connection.finalize();
-
-    delete statementBody;
-    delete statementHead;
   }
 
 

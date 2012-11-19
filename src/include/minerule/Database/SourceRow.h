@@ -31,7 +31,7 @@ namespace minerule {
 
 		/* The element that is returned when the value cannot be retrieved (e.g., when it is null)*/
 		static const SourceRowEmptyElement emptyElement;
-    
+
 	public:
     // create a new item as a copy of the current row of the result set
 		SourceRow(odbc::ResultSet* resultSet, const SourceRowColumnIds& srd);

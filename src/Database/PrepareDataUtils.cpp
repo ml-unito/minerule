@@ -156,7 +156,7 @@ namespace minerule {
 					      
 		unsigned int lastElem;
 		lastElem= rowDes.setgroupElems(1,mr.getParsedMinerule().ga.size());
-		rowDes.setBodyElems(lastElem+1,mr.getParsedMinerule().ha.size());
+		rowDes.setHeadElems(lastElem+1,mr.getParsedMinerule().ha.size());
 		
 		return queryText;
 	}

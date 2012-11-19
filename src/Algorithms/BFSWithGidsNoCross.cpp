@@ -17,6 +17,7 @@
 #include "Algorithms/BFSWithGidsNoCross.h"
 #include "PredicateUtils/HeadBodyPredicatesSeparator.h"
 #include "Database/PrepareDataUtils.h"
+#include "Database/ItemSetLoader.h"
 
 namespace minerule {
   bool BFSWithGidsNoCross::mineruleHasSameBodyHead = false;	
@@ -257,9 +258,9 @@ namespace minerule {
 
     ItemType gid1;
 	
-    if(!Transaction::findGid(gid1, bodyIterator, true))
+    if(bodyIterator.isAfterLast())
 		throw new MineruleException(MR_ERROR_INTERNAL,"Cannot find initial GID for body elements");
-    if(!Transaction::findGid(gid1, headIterator, true))
+    if(headIterator.isAfterLast())
 		throw new MineruleException(MR_ERROR_INTERNAL,"Cannot find initial GID for head elements");
 	
 	MRLogPush("Reading data");

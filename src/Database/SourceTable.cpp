@@ -63,11 +63,12 @@ namespace minerule {
 	
 		std::string bodyQuery = _pdu.buildBodyTableQuery(_columnIds, bodyCondition);
 		std::string headQuery = _pdu.buildHeadTableQuery(_columnIds, headCondition);
+		
 		_bodyStatement = connection->prepareStatement( bodyQuery );		
 		_headStatement = connection->prepareStatement( headQuery );	
 		
 		MRLog("Body Query:"+bodyQuery);
-		MRLog("Head Query:"+headQuery);
+		MRLog("Head Query:"+headQuery);		
 	}
 
 	void SourceTable::initFullResultSet() {

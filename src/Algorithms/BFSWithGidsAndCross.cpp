@@ -291,8 +291,7 @@ namespace minerule {
     MRDebug() << "Preparing data sources..." << std::endl;
 	rowDes.setGroupBodyElems(1,minerule.getParsedMinerule().ga.size());
    	
-	std::string queryText;
-    pdu.buildSourceTableQuery( queryText, rowDes );
+	std::string queryText = pdu.buildSourceTableQuery( rowDes );
 
     MRDebug() << "BFSWithGidsAndCross: query:" << queryText.c_str() << std::endl;
     statement= connection.getODBCConnection()->prepareStatement(queryText.c_str());

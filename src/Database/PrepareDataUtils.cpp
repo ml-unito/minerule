@@ -119,21 +119,46 @@ namespace minerule {
 	}
 
 
-	void
-	PrepareDataUtils::buildSimpleSourceTableQuery(string& queryText,SourceRowColumnIds& rowDes) const {
+	
+
+	std::string
+	PrepareDataUtils::buildBodyTableQuery(SourceRowColumnIds& rowDes, const std::string& body_mining_condition) const {
+		std::string queryText;		
+		
 		queryText = "SELECT ";
 		queryText += buildAttrListDescription(mr.getParsedMinerule().ga);
 		queryText += "," + buildAttrListDescription(mr.getParsedMinerule().ba);
 		queryText += " FROM "+mr.getParsedMinerule().tab_source;
-#ifdef MRUSERWARNING
-#warning Bisogna aggiungere la parte di gestione dei filtri...
-#endif
+		queryText += " WHERE "+body_mining_condition;
+
 		if( miningAlgo.needsGidSortedSourceTable() )
 			queryText += " ORDER BY "+buildAttrListDescription(mr.getParsedMinerule().ga);
 					      
 		unsigned int lastElem;
 		lastElem= rowDes.setGroupBodyElems(1,mr.getParsedMinerule().ga.size());
 		rowDes.setBodyElems(lastElem+1,mr.getParsedMinerule().ba.size());
+		
+		return queryText;
+	}
+	
+	std::string
+	PrepareDataUtils::buildHeadTableQuery(SourceRowColumnIds& rowDes, const std::string& head_mining_condition) const {
+		std::string queryText;		
+		
+		queryText = "SELECT ";
+		queryText += buildAttrListDescription(mr.getParsedMinerule().ga);
+		queryText += "," + buildAttrListDescription(mr.getParsedMinerule().ba);
+		queryText += " FROM "+mr.getParsedMinerule().tab_source;
+		queryText += " WHERE "+head_mining_condition;
+
+		if( miningAlgo.needsGidSortedSourceTable() )
+			queryText += " ORDER BY "+buildAttrListDescription(mr.getParsedMinerule().ga);
+					      
+		unsigned int lastElem;
+		lastElem= rowDes.setGroupBodyElems(1,mr.getParsedMinerule().ga.size());
+		rowDes.setBodyElems(lastElem+1,mr.getParsedMinerule().ha.size());
+		
+		return queryText;
 	}
 
 	std::string PrepareDataUtils::buildAndList(const list_AND_node* l) const {
@@ -155,7 +180,7 @@ namespace minerule {
 		return result;
 	}
 
-	string
+	std::string
 	PrepareDataUtils::buildConditionFilter(const list_OR_node* current) const {
 		std::string result;
 
@@ -176,12 +201,7 @@ namespace minerule {
 	void
 	PrepareDataUtils::dropTableIfExists(odbc::Connection* conn, const std::string& tname)  {
 		std::auto_ptr<odbc::Statement> state(conn->createStatement());
-		try {
-			state->executeQuery("DROP TABLE "+tname);
-		} catch(odbc::SQLException& s) {
-      // simply ignore any error (i.e., table not exists error, all the others
-      // will be handled by the forthcoming queries).
-		}
+		state->executeQuery("DROP TABLE "+tname+" IF EXISTS");
 	}
 
 	string
@@ -219,9 +239,6 @@ namespace minerule {
 		if(clusterCond!="") {
 			queryText += " AND (" + clusterCond +")";
 		}
-#ifdef MRUSERWARNING
-#warning Bisogna aggiungere la parte di gestione dei filtri...
-#endif
 
 		if( miningAlgo.needsGidSortedSourceTable() )
 			queryText += " ORDER BY "+buildAttrListDescription(mr.getParsedMinerule().ga, aliasA,false);
@@ -250,10 +267,10 @@ namespace minerule {
 	}
 
 
-	void PrepareDataUtils::buildExtendedSourceTableQuery(std::string& queryText, SourceRowColumnIds& rowDes) const  {
+	std::string PrepareDataUtils::buildExtendedSourceTableQuery(SourceRowColumnIds& rowDes) const  {
 		std::string tableName = createSourceTable();
 
-		queryText = "SELECT * FROM "+tableName;
+		std::string queryText = "SELECT * FROM "+tableName;
 					      
 		unsigned int lastElem;
 		lastElem= rowDes.setGroupBodyElems(1,mr.getParsedMinerule().ga.size());
@@ -261,17 +278,17 @@ namespace minerule {
 		lastElem= rowDes.setBodyElems(lastElem+1,mr.getParsedMinerule().ba.size());
 		lastElem= rowDes.setClusterHeadElems(lastElem+1,mr.getParsedMinerule().ca.size());
 		rowDes.setHeadElems(lastElem+1, mr.getParsedMinerule().ha.size());
+		
+		return queryText;
 	}
 
 
-	void
-		PrepareDataUtils::buildSourceTableQuery(
-			std::string& queryText,
-	SourceRowColumnIds& rowDes) const {
+	std::string PrepareDataUtils::buildSourceTableQuery(SourceRowColumnIds& rowDes) const {
 		if(miningAlgo.needsCrossProductOfSourceTable() ) {
-			buildExtendedSourceTableQuery(queryText,rowDes);
+			return buildExtendedSourceTableQuery(rowDes);
 		} else {
-			buildSimpleSourceTableQuery(queryText,rowDes);
+			throw MineruleException(MR_ERROR_INTERNAL, "Check for consistency with previous implementation");
+			return buildBodyTableQuery(rowDes,"");
 		}
 	}
 

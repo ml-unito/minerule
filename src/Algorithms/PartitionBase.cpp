@@ -31,8 +31,7 @@ namespace minerule {
     options.getHeadCardinalities().applyConstraints(mrOptions.getParsers().getHeadCardinalities());
 
     MRLogPush("Preparing data sources..."); 
-   std::string queryText;
-    pdu.buildSourceTableQuery( queryText, rowDes );
+   std::string queryText = pdu.buildSourceTableQuery( rowDes );
     MRDebug() << "PartitionBase: query: " << queryText << std::endl;
 
     odbc::PreparedStatement* statement= 

@@ -15,6 +15,11 @@ class SourceRowColumnIds {
   std::vector<int> bodyElems;
   std::vector<int> clusterHeadElems;
   std::vector<int> headElems;
+  
+  SourceRowColumnIds(const SourceRowColumnIds& rhs) 
+	  : groupElems(rhs.groupElems), clusterBodyElems(rhs.clusterBodyElems),
+		bodyElems(rhs.bodyElems), clusterHeadElems(rhs.clusterHeadElems),
+		headElems(rhs.headElems) {}
     
   SourceRowColumnIds() {
   }

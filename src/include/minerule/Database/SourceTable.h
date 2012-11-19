@@ -15,19 +15,22 @@ namespace minerule {
 
 		private:
 			odbc::ResultSet* _resultSet;
-			const SourceRowColumnIds* _columnIds;
+			SourceRowColumnIds _columnIds;
 			SourceRow* _sourceRow;
 
-			Iterator( odbc::ResultSet* resultSet, const SourceRowColumnIds& columnIds) : _resultSet(resultSet), _columnIds(&columnIds), _sourceRow(new SourceRow()) {	
+			Iterator( odbc::ResultSet* resultSet, const SourceRowColumnIds& columnIds) : _resultSet(resultSet), _columnIds(columnIds), _sourceRow(new SourceRow()) {	
+				
 				assert(_resultSet!=NULL);
 				if(_resultSet->isBeforeFirst()) {
 					next();
 				}
 			}
 		public:
-			Iterator() : _resultSet(NULL), _columnIds(NULL), _sourceRow(NULL) {}
-			Iterator( const Iterator& it ) : _resultSet(it._resultSet), _columnIds(it._columnIds), _sourceRow(it._sourceRow) {}
-			virtual ~Iterator() {  /* delete _sourceRow; */ }
+			Iterator() : _resultSet(NULL), _columnIds(), _sourceRow(NULL) {}
+			Iterator( const Iterator& it ) : _resultSet(it._resultSet), _sourceRow(it._sourceRow), _columnIds(it._columnIds) {
+			}
+			
+			virtual ~Iterator() {  }
 			
 			bool next();
 			bool isAfterLast() const;

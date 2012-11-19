@@ -8,7 +8,7 @@ namespace minerule {
 	public:
 		ItemSetLoader() : ItemSetType() {}
 			
-		void loadBody(ItemType& gid, SourceTable::Iterator it) {
+		void loadBody(ItemType& gid, SourceTable::Iterator& it) {
 			while (!it.isAfterLast() && gid == it->getGroup()) {
 
 				ItemSetType::insert(it->getBody());
@@ -16,7 +16,7 @@ namespace minerule {
 			}
 		}
 
-		void loadHead(ItemType& gid, SourceTable::Iterator it) {
+		void loadHead(ItemType& gid, SourceTable::Iterator& it) {
 			while (!it.isAfterLast() && gid == it->getGroup()) {
 					
 				ItemSetType::insert(it->getHead());
@@ -24,7 +24,7 @@ namespace minerule {
 			}
 		}
 
-		static bool findGid(ItemType& gid, SourceTable::Iterator it) {      
+		static bool findGid(ItemType& gid, SourceTable::Iterator& it) {      
 			while (!it.isAfterLast() && gid > it->getGroup() ) {
 				++it;
 			}

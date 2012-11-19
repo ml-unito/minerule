@@ -5,9 +5,9 @@
 namespace minerule {
 
 	bool SourceTable::Iterator::next() { 
-		assert( _sourceRow != NULL && _resultSet != NULL && _columnIds!=NULL);
+		assert( _sourceRow != NULL && _resultSet != NULL );
 		if( _resultSet->next() ) {
-			_sourceRow->init(_resultSet, *_columnIds);
+			_sourceRow->init(_resultSet, _columnIds);
 
 			return true;
 		} else {
@@ -25,12 +25,18 @@ namespace minerule {
 			case BodyIterator:
 				{
 					_managedResults.push_back(_bodyStatement->executeQuery());
-					return Iterator(_managedResults.back(), _columnIds);
+					SourceRowColumnIds bodyCols = _columnIds;
+					bodyCols.headElems.clear();
+
+					return Iterator(_managedResults.back(), bodyCols);
 				}
 			case HeadIterator:
 				{
 					_managedResults.push_back(_headStatement->executeQuery());
-					return Iterator(_managedResults.back(), _columnIds);
+					SourceRowColumnIds headCols = _columnIds;
+					headCols.bodyElems.clear();
+					
+					return Iterator(_managedResults.back(), headCols);
 				}
 			case FullIterator:
 				{

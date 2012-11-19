@@ -22,7 +22,7 @@ namespace minerule {
   class SourceRow {
     friend  ostream& operator<<(ostream& os, const SourceRow& item);
   private:
-    SourceRowElement* groupBody;
+    SourceRowElement* group;
     SourceRowElement* clusterBody;
     SourceRowElement* body;
     SourceRowElement* clusterHead;
@@ -47,11 +47,11 @@ namespace minerule {
 
 
     const SourceRowElement&
-      getGroupBody() const {
-      if(groupBody==NULL) 
+      getGroup() const {
+      if(group==NULL) 
 	return emptyElement;
       else
-	return *groupBody;
+	return *group;
     }
 
     const SourceRowElement& 

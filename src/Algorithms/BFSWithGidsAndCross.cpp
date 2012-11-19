@@ -289,7 +289,7 @@ namespace minerule {
     connection.init();
 
     MRDebug() << "Preparing data sources..." << std::endl;
-	rowDes.setGroupBodyElems(1,minerule.getParsedMinerule().ga.size());
+	rowDes.setgroupElems(1,minerule.getParsedMinerule().ga.size());
    	
 	std::string queryText = pdu.buildSourceTableQuery( rowDes );
 
@@ -324,7 +324,7 @@ namespace minerule {
     result->next();
     SourceRow hbsr(result, rowDes);
 	while (!result->isAfterLast()) {
-		gid1 = hbsr.getGroupBody();
+		gid1 = hbsr.getGroup();
 		howManyGroups++;
 		Transaction t1(rowDes);
 		t1.load(gid1,result);

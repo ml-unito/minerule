@@ -14,7 +14,7 @@ namespace minerule {
 
     odbc::ResultSetMetaData* rsmd = resultSet->getMetaData();
 
-    groupBody =    SourceRowElement::createElement(rsmd,resultSet,srd.groupBodyElems);
+    group =    SourceRowElement::createElement(rsmd,resultSet,srd.groupElems);
     clusterBody =  SourceRowElement::createElement(rsmd,resultSet,srd.clusterBodyElems);
     body =         SourceRowElement::createElement(rsmd,resultSet,srd.bodyElems);
     clusterHead =  SourceRowElement::createElement(rsmd,resultSet,srd.clusterHeadElems);
@@ -24,7 +24,7 @@ namespace minerule {
   SourceRow::SourceRow(const SourceRow& rhs) {
 #define CREATE(a) (((rhs.a)!=NULL)?(a)=rhs.a->copy():(a)=NULL)
 
-    CREATE(groupBody);
+    CREATE(group);
     CREATE(clusterBody);
     CREATE(body);
     CREATE(clusterHead);
@@ -38,7 +38,7 @@ namespace minerule {
 SourceRow::~SourceRow() {
 #define DESTROY(a) if((a)!=NULL) delete a;
 
-  DESTROY(groupBody);
+  DESTROY(group);
   DESTROY(clusterBody);
   DESTROY(body);
   DESTROY(clusterHead);
@@ -53,7 +53,7 @@ SourceRow::init(odbc::ResultSet* resultSet,
 
 #define DESTROY(a) if((a)!=NULL) delete a;
 
-  DESTROY(groupBody);
+  DESTROY(group);
   DESTROY(clusterBody);
   DESTROY(body);
   DESTROY(clusterHead);
@@ -61,7 +61,7 @@ SourceRow::init(odbc::ResultSet* resultSet,
 
   odbc::ResultSetMetaData* rsmd = resultSet->getMetaData();
 
-  groupBody =    SourceRowElement::createElement(rsmd,resultSet,srd.groupBodyElems);
+  group =    SourceRowElement::createElement(rsmd,resultSet,srd.groupElems);
   clusterBody =  SourceRowElement::createElement(rsmd,resultSet,srd.clusterBodyElems);
   body =         SourceRowElement::createElement(rsmd,resultSet,srd.bodyElems);
   clusterHead =  SourceRowElement::createElement(rsmd,resultSet,srd.clusterHeadElems);
@@ -108,7 +108,7 @@ ostream& operator<<(ostream& os, const SourceRowAttributeCollection& attrColl) {
 
 ostream& 
 operator<<(ostream& os, const SourceRow& sr) {
-  os << "groupBody:" << sr.getGroupBody() << endl;
+  os << "group:" << sr.getGroup() << endl;
   os << " clusterBody:" << sr.getClusterBody() << endl;
   os << " body:" << sr.getBody() << endl;
   os << " clusterHead:" << sr.getClusterHead() << endl;

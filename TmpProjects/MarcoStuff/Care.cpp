@@ -68,7 +68,7 @@ namespace minerule {
     index=buildAttrStr(minerule.getParsedMinerule().ga,
                        0,
                        groupAttr,
-                       rowDes.groupBodyElems );
+                       rowDes.groupElems );
 
     buildAttrStr(minerule.getParsedMinerule().ba,
                  index,
@@ -133,7 +133,7 @@ namespace minerule {
   //  int nFields = rsmd->getColumnCount();
     while (!result->isAfterLast()) {
 	SourceRow hbsr(result, rowDes);
-	ItemType gid = hbsr.getGroupBody();
+	ItemType gid = hbsr.getGroup();
 	Transaction t1(rowDes), t2(rowDes);
 	t1.loadBody(gid,result,0);
 	bool found2 = t2.findGid(gid,result1,rowDes);

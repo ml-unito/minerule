@@ -32,7 +32,7 @@ int main(int argc, char *argv[]) {
 
  // Descrizione righe nella tabella sorgente
  
-  rowDes.groupBodyElems.push_back(1);
+  rowDes.groupElems.push_back(1);
 //  rowDes.clusterBodyElems.push_back(2);
   rowDes.bodyElems.push_back(2);
 //  rowDes.clusterHeadElems.push_back(4);
@@ -97,7 +97,7 @@ int maxHead = 5;
   cout << "Reading partition " << howManyPart << " ..." << endl;
   while (!result->isAfterLast()) {
 	SourceRow hbsr(result, rowDes);
-	ItemType gid = hbsr.getGroupBody();
+	ItemType gid = hbsr.getGroup();
 	Transaction t1(rowDes), t2(rowDes);
 	t1.loadBody(gid,result,0);
 	bool found2 = t2.findGid(gid,result1,rowDes);
@@ -160,7 +160,7 @@ totalGroups = 99920;
   int n = 0;
   while (!result->isAfterLast()) {
 	SourceRow hbsr(result,rowDes);
-	ItemType gid=hbsr.getGroupBody();
+	ItemType gid=hbsr.getGroup();
 	Transaction t1(rowDes), t2(rowDes);
 	t1.loadBody(gid,result,0);
 	bool found2 = t2.findGid(gid,result1,rowDes);

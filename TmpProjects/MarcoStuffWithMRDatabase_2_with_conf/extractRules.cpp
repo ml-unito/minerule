@@ -61,7 +61,7 @@ public:
   void load(ItemType& gid, odbc::ResultSet *rs) {
     SourceRow hbsr(rs,srd);
 
-    while (!rs->isAfterLast() && gid == hbsr.getGroupBody()) {
+    while (!rs->isAfterLast() && gid == hbsr.getGroup()) {
       insert(hbsr.getBody());
       rs->next();
       if(!rs->isAfterLast())
@@ -72,14 +72,14 @@ public:
     if (init) { rs->next(); return true; }
     
     SourceRow hbsr(rs,srd);
-    while (!rs->isAfterLast() &&  ItemType(hbsr.getGroupBody()) < gid ) {
+    while (!rs->isAfterLast() &&  ItemType(hbsr.getGroup()) < gid ) {
       rs->next();
       
       if(!rs->isAfterLast())
 	hbsr.init(rs,srd);
     }
     
-    return !rs->isAfterLast() && gid == hbsr.getGroupBody();
+    return !rs->isAfterLast() && gid == hbsr.getGroup();
   }
 };
 
@@ -458,7 +458,7 @@ int main(int argc, char *argv[]) {
 
   // Descrizione righe nella tabella sorgente
  
-  rowDes.groupBodyElems.push_back(1);
+  rowDes.groupElems.push_back(1);
   //  rowDes.clusterBodyElems.push_back(2);
   rowDes.bodyElems.push_back(2);
   //  rowDes.clusterHeadElems.push_back(4);
@@ -529,7 +529,7 @@ int main(int argc, char *argv[]) {
   cout << "Reading partition " << howManyPart << " ..." << endl;
   while (!result->isAfterLast()) {
     SourceRow hbsr(result, rowDes);
-    ItemType gid = hbsr.getGroupBody();
+    ItemType gid = hbsr.getGroup();
     Transaction t1(rowDes), t2(rowDes);
     t1.load(gid,result);
     bool found2 = t2.findGid(gid,result1,rowDes);
@@ -588,7 +588,7 @@ int main(int argc, char *argv[]) {
     cout << "Reading again database " << " ..." << endl;
     while (!result->isAfterLast()) {
       SourceRow hbsr(result,rowDes);
-      ItemType gid=hbsr.getGroupBody();
+      ItemType gid=hbsr.getGroup();
       Transaction t1(rowDes), t2(rowDes);
       t1.load(gid,result);
       bool found2 = t2.findGid(gid,result1,rowDes);

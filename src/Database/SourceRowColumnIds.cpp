@@ -14,8 +14,8 @@ namespace minerule {
 
 
 	unsigned int 
-	SourceRowColumnIds::setGroupBodyElems(unsigned int start,unsigned int numCols) {
-		return setElems(groupBodyElems, start, numCols);
+	SourceRowColumnIds::setgroupElems(unsigned int start,unsigned int numCols) {
+		return setElems(groupElems, start, numCols);
 	}
 
 	unsigned int 

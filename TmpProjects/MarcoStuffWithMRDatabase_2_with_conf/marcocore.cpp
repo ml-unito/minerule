@@ -54,7 +54,7 @@ int main(int argc, char *argv[]) {
 
  // Descrizione righe nella tabella sorgente
  
-  rowDes.groupBodyElems.push_back(1);
+  rowDes.groupElems.push_back(1);
 //  rowDes.clusterBodyElems.push_back(2);
   rowDes.bodyElems.push_back(2);
 //  rowDes.clusterHeadElems.push_back(4);

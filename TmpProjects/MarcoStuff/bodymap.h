@@ -72,7 +72,7 @@ class Transaction : public std::set<ItemType> {
 	vector<int> values;
 	void loadBody(ItemType& gid, odbc::ResultSet *rs, int nFields) {
 		SourceRow hbsr(rs,srd);
-		while (!rs->isAfterLast() && gid == hbsr.getGroupBody()) {
+		while (!rs->isAfterLast() && gid == hbsr.getGroup()) {
 			insert(hbsr.getBody());
 			//for (int j=3; j<=nFields; j++) values.insert(values.end(),rs->getInt(j));
 			rs->next();
@@ -81,7 +81,7 @@ class Transaction : public std::set<ItemType> {
 	}
 	void loadHead(ItemType& gid, odbc::ResultSet *rs, int nFields) {
 		SourceRow hbsr(rs,srd);
-		while (!rs->isAfterLast() && gid == hbsr.getGroupBody()) {
+		while (!rs->isAfterLast() && gid == hbsr.getGroup()) {
 			insert(hbsr.getHead());
 			//for (int j=3; j<=nFields; j++) values.insert(values.end(),rs->getInt(j));
 			rs->next();
@@ -91,11 +91,11 @@ class Transaction : public std::set<ItemType> {
 	static bool findGid(ItemType& gid, odbc::ResultSet *rs, SourceRowColumnIds& srd, bool init=false) {
 		if (init) { rs->next(); return true; }
 		SourceRow hbsr(rs,srd);
-		while (!rs->isAfterLast() && ItemType(hbsr.getGroupBody()) < gid) {
+		while (!rs->isAfterLast() && ItemType(hbsr.getGroup()) < gid) {
 			rs->next();
 			if(!rs->isAfterLast()) hbsr.init(rs,srd);
 		}
-		return !rs->isAfterLast() && gid == hbsr.getGroupBody();
+		return !rs->isAfterLast() && gid == hbsr.getGroup();
 	}
 };
 

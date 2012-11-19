@@ -128,9 +128,9 @@ namespace minerule {
 	b1=new ItemSet();
 	b1nb2=new ItemSet();
         SourceRow curRowb1(rb1, bodyDes);
-        gb=curRowb1.getGroupBody();
+        gb=curRowb1.getGroup();
 
-        while(b1notend && ItemType(curRowb1.getGroupBody())==gb){
+        while(b1notend && ItemType(curRowb1.getGroup())==gb){
 	  b1->push_back(curRowb1.getBody());
 	  if((b1notend=rb1->next())) {
 	    curRowb1.init(rb1, bodyDes);
@@ -138,7 +138,7 @@ namespace minerule {
         }
         if(b1nb2notend){
          SourceRow curRowb12(rb1nb2, bodyDes);
-         while(b1nb2notend && ItemType(curRowb12.getGroupBody())==gb){
+         while(b1nb2notend && ItemType(curRowb12.getGroup())==gb){
 	   b1nb2->push_back(curRowb12.getBody());
 	   if((b1nb2notend=rb1nb2->next())) {
 	     curRowb12.init(rb1nb2, bodyDes);
@@ -154,9 +154,9 @@ namespace minerule {
         h1=new ItemSet();
 	h1nh2=new ItemSet();
 	SourceRow curRowh1(rh1, headDes);
-        gh=curRowh1.getGroupBody();
+        gh=curRowh1.getGroup();
 
-	  while(h1notend && ItemType(curRowh1.getGroupBody())==gh ){
+	  while(h1notend && ItemType(curRowh1.getGroup())==gh ){
 	    h1->push_back(curRowh1.getHead());
 	    if ((h1notend=rh1->next())) {
 	      curRowh1.init(rh1, headDes);
@@ -164,7 +164,7 @@ namespace minerule {
 	  }
 	  if(h1nh2notend){
            SourceRow curRowh12(rh1nh2, headDes);
-	   while(h1nh2notend && ItemType(curRowh12.getGroupBody())==gh ){
+	   while(h1nh2notend && ItemType(curRowh12.getGroup())==gh ){
 	     h1nh2->push_back(curRowh12.getHead());
 	     if ((h1nh2notend=rh1nh2->next())) {
 	       curRowh12.init(rh1nh2, headDes);
@@ -236,8 +236,8 @@ namespace minerule {
 
      /*cout<<"gruppo di b1: "<<gb<<std::endl;
      std::cout<<"gruppo di h1: "<<gh<<std::endl;*/
-     //cout<<"gruppo di b1nb2: "<<ItemType(curRowb12.getGroupBody() <<std::endl;
-     //cout<<"gruppo di h1nh2: "<<ItemType(curRowh12.getGroupBody()<<std::endl;
+     //cout<<"gruppo di b1nb2: "<<ItemType(curRowb12.getGroup() <<std::endl;
+     //cout<<"gruppo di h1nh2: "<<ItemType(curRowh12.getGroup()<<std::endl;
      if (!b1notend && !h1notend) notend=0;
 
 
@@ -372,9 +372,9 @@ namespace minerule {
     index=buildAttrStr(minerule->getParsedMinerule().ga,
 		       0,
 		       groupAttr,
-		       bodyDes.groupBodyElems );
+		       bodyDes.groupElems );
 
-    headDes.groupBodyElems=bodyDes.groupBodyElems;
+    headDes.groupElems=bodyDes.groupElems;
 
     buildAttrStr(minerule->getParsedMinerule().ba,
 		 index,
@@ -419,8 +419,8 @@ namespace minerule {
     MRDebugPush("Body description");
     std::ostream& dbg = MRDebug();
     dbg << "Group ids:";
-    copy( bodyDes.groupBodyElems.begin(),
-	  bodyDes.groupBodyElems.end(),
+    copy( bodyDes.groupElems.begin(),
+	  bodyDes.groupElems.end(),
 	  std::ostream_iterator<int>(dbg, ",") );
     dbg << std::endl;
     MRDebug() << "Body ids:";
@@ -441,8 +441,8 @@ namespace minerule {
     /*
     MRDebugPush("Head description");
     MRDebug() << "Group ids:";
-    copy( headDes.groupBodyElems.begin(),
-	  headDes.groupBodyElems.end(),
+    copy( headDes.groupElems.begin(),
+	  headDes.groupElems.end(),
 	  std::ostream_iterator<int>(dbg, ",") );
     dbg << std::endl;
     MRDebug() << "Head ids:";

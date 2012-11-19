@@ -82,7 +82,7 @@ readSourceTable(
     SourceRow curRow(result, rowDes);
     
      
-    gidB = curRow.getGroupBody();
+    gidB = curRow.getGroup();
     itemBody = curRow.getBody();
     
     // La prima volta che entro gidOld non e' inizializzato...

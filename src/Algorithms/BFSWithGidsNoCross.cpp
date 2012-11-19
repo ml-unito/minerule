@@ -270,7 +270,7 @@ namespace minerule {
     int howManyGroups = 0;
 
     while (!bodyIterator.isAfterLast()) {		
-      ItemType gid = bodyIterator->getGroupBody();
+      ItemType gid = bodyIterator->getGroup();
       
 	  Transaction t1, t2;
       t1.loadBody(gid,bodyIterator);

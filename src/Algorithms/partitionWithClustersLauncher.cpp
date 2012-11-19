@@ -82,7 +82,7 @@ readSourceTable(
     SourceRow curRow(result, rowDes);
    
      
-    gidB = curRow.getGroupBody();
+    gidB = curRow.getGroup();
     cidB = curRow.getClusterBody();
     itemBody = curRow.getBody();
     cidH = curRow.getClusterHead();

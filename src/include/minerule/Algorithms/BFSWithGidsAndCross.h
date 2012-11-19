@@ -15,7 +15,7 @@ namespace minerule {
     void load(ItemType& gid, odbc::ResultSet *rs) {
 		SourceRow hbsr(rs,srd);
 
-		while (!rs->isAfterLast() && gid == hbsr.getGroupBody()) {
+		while (!rs->isAfterLast() && gid == hbsr.getGroup()) {
 			insert(end(),std::pair<ItemType,ItemType>(hbsr.getBody(),hbsr.getHead()));
 			rs->next();
 			if(!rs->isAfterLast())
@@ -33,14 +33,14 @@ namespace minerule {
 			}      
       
 			SourceRow hbsr(rs,srd);
-			while (!rs->isAfterLast() &&  gid > hbsr.getGroupBody() ) {
+			while (!rs->isAfterLast() &&  gid > hbsr.getGroup() ) {
 				rs->next();
       
 				if(!rs->isAfterLast())
 					hbsr.init(rs,srd);
 			}
     
-			return !rs->isAfterLast() && gid == hbsr.getGroupBody();
+			return !rs->isAfterLast() && gid == hbsr.getGroup();
 		}
 	};
 

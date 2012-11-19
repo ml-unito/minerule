@@ -14,7 +14,7 @@ namespace minerule {
 			Transaction() : std::set<ItemType>() {}
 			
 			void loadBody(ItemType& gid, SourceTable::Iterator it) {
-				while (!it.isAfterLast() && gid == it->getGroupBody()) {
+				while (!it.isAfterLast() && gid == it->getGroup()) {
 
 					insert(it->getBody());
 					++it;					
@@ -22,8 +22,8 @@ namespace minerule {
 			}
 
 			void loadHead(ItemType& gid, SourceTable::Iterator it) {
-				while (!it.isAfterLast() && gid == it->getGroupBody()) {
-
+				while (!it.isAfterLast() && gid == it->getGroup()) {
+					
 					insert(it->getHead());
 					++it;
 				}
@@ -38,11 +38,11 @@ namespace minerule {
 						return false;
 					}      
       
-					while (!it.isAfterLast() && gid > it->getGroupBody() ) {
+					while (!it.isAfterLast() && gid > it->getGroup() ) {
 						++it;
 					}
     
-					return !it.isAfterLast() && gid == it->getGroupBody();
+					return !it.isAfterLast() && gid == it->getGroup();
 				}
 			};
 

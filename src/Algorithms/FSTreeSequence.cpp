@@ -99,8 +99,8 @@ namespace minerule {
 	SourceRow hbsr(rs,rowDes);
 	ItemType gid;
 	if(!rs->isAfterLast()) 
-		gid = hbsr.getGroupBody();
-	while (!rs->isAfterLast() && gid == hbsr.getGroupBody()) {
+		gid = hbsr.getGroup();
+	while (!rs->isAfterLast() && gid == hbsr.getGroup()) {
 		seq->push_back( hbsr.getBody() );
 
 		rs->next();

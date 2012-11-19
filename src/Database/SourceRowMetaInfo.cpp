@@ -112,7 +112,7 @@ SourceRowAttrCollectionDescriptor::getSQLColumnNames() const {
  * **********************************/
 
 SourceRowMetaInfo::SourceRowMetaInfo(odbc::ResultSet* rs, const SourceRowColumnIds& rowDes) 
-	 : groupBody(rs,rowDes.groupBodyElems),
+	 : group(rs,rowDes.groupElems),
 	   clusterBody(rs,rowDes.clusterBodyElems),
 	   body(rs,rowDes.bodyElems),
 	   clusterHead(rs,rowDes.clusterHeadElems),
@@ -159,7 +159,7 @@ SourceRowMetaInfo::SourceRowMetaInfo(odbc::ResultSet* rs, const SourceRowColumnI
 	 odbc::ResultSet* rs = state->executeQuery(query);
 	 
 	 AttributesUtil attrUtils;
-	 groupBody.init(rs, attrUtils.generatePositions(minerule.ga) );
+	 group.init(rs, attrUtils.generatePositions(minerule.ga) );
 	 clusterBody.init(rs, attrUtils.generatePositions(minerule.ca) );
 	 body.init(rs, attrUtils.generatePositions(minerule.ba));
 	 clusterHead.init(rs, attrUtils.generatePositions(minerule.ca));

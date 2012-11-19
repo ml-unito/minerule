@@ -11,7 +11,7 @@
     void loadBody(ItemType& gid, odbc::ResultSet *rs, int n) {
       SourceRow hbsr(rs,srd);
 
-      while (!rs->isAfterLast() && gid == hbsr.getGroupBody()) {
+      while (!rs->isAfterLast() && gid == hbsr.getGroup()) {
 	insert(hbsr.getBody());
 	rs->next();
 	if(!rs->isAfterLast())
@@ -22,7 +22,7 @@
     void loadHead(ItemType& gid, odbc::ResultSet *rs, int n) {
       SourceRow hbsr(rs,srd);
 
-      while (!rs->isAfterLast() && gid == hbsr.getGroupBody()) {
+      while (!rs->isAfterLast() && gid == hbsr.getGroup()) {
 	insert(hbsr.getHead());
 	rs->next();
 	if(!rs->isAfterLast())
@@ -40,14 +40,14 @@
       }      
       
       SourceRow hbsr(rs,srd);
-      while (!rs->isAfterLast() && gid > hbsr.getGroupBody() ) {
+      while (!rs->isAfterLast() && gid > hbsr.getGroup() ) {
 	rs->next();
       
 	if(!rs->isAfterLast())
 	  hbsr.init(rs,srd);
       }
     
-      return !rs->isAfterLast() && gid == hbsr.getGroupBody();
+      return !rs->isAfterLast() && gid == hbsr.getGroup();
     }
   };
 

@@ -11,12 +11,9 @@ namespace minerule {
 
   SourceRow::SourceRow(odbc::ResultSet* resultSet,
 				       const SourceRowColumnIds& srd) {
-   if(resultSet->isBeforeFirst())
-	   resultSet->next();
-
     odbc::ResultSetMetaData* rsmd = resultSet->getMetaData();
 
-    groupBody =    SourceRowElement::createElement(rsmd,resultSet,srd.groupBodyElems);
+    group =    SourceRowElement::createElement(rsmd,resultSet,srd.groupElems);
     clusterBody =  SourceRowElement::createElement(rsmd,resultSet,srd.clusterBodyElems);
     body =         SourceRowElement::createElement(rsmd,resultSet,srd.bodyElems);
     clusterHead =  SourceRowElement::createElement(rsmd,resultSet,srd.clusterHeadElems);
@@ -26,7 +23,7 @@ namespace minerule {
   SourceRow::SourceRow(const SourceRow& rhs) {
 #define CREATE(a) (((rhs.a)!=NULL)?(a)=rhs.a->copy():(a)=NULL)
 
-    CREATE(groupBody);
+    CREATE(group);
     CREATE(clusterBody);
     CREATE(body);
     CREATE(clusterHead);
@@ -40,7 +37,7 @@ namespace minerule {
 SourceRow::~SourceRow() {
 #define DESTROY(a) if((a)!=NULL) delete a;
 
-  DESTROY(groupBody);
+  DESTROY(group);
   DESTROY(clusterBody);
   DESTROY(body);
   DESTROY(clusterHead);
@@ -55,7 +52,7 @@ SourceRow::init(odbc::ResultSet* resultSet,
 
 #define DESTROY(a) if((a)!=NULL) delete a;
 
-  DESTROY(groupBody);
+  DESTROY(group);
   DESTROY(clusterBody);
   DESTROY(body);
   DESTROY(clusterHead);
@@ -63,7 +60,7 @@ SourceRow::init(odbc::ResultSet* resultSet,
 
   odbc::ResultSetMetaData* rsmd = resultSet->getMetaData();
 
-  groupBody =    SourceRowElement::createElement(rsmd,resultSet,srd.groupBodyElems);
+  group =    SourceRowElement::createElement(rsmd,resultSet,srd.groupElems);
   clusterBody =  SourceRowElement::createElement(rsmd,resultSet,srd.clusterBodyElems);
   body =         SourceRowElement::createElement(rsmd,resultSet,srd.bodyElems);
   clusterHead =  SourceRowElement::createElement(rsmd,resultSet,srd.clusterHeadElems);
@@ -80,7 +77,7 @@ SourceRow::init(odbc::ResultSet* resultSet,
 
 std::ostream& 
 operator<<(std::ostream& os, const SourceRow& sr) {
-  os << "groupBody:" << sr.getGroupBody() << std::endl;
+  os << "group:" << sr.getGroup() << std::endl;
   os << " clusterBody:" << sr.getClusterBody() << std::endl;
   os << " body:" << sr.getBody() << std::endl;
   os << " clusterHead:" << sr.getClusterHead() << std::endl;

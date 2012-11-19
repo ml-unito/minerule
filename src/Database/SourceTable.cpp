@@ -8,6 +8,7 @@ namespace minerule {
 		assert( _sourceRow != NULL && _resultSet != NULL && _columnIds!=NULL);
 		if( _resultSet->next() ) {
 			_sourceRow->init(_resultSet, *_columnIds);
+
 			return true;
 		} else {
 			return false;
@@ -60,9 +61,13 @@ namespace minerule {
 		list_AND_node* miningCondition = (minerule.getParsedMinerule().mc!=NULL ? minerule.getParsedMinerule().mc->l_and : NULL);
 		HeadBodyPredicatesSeparator::separate(miningCondition, bodyCondition, headCondition);
 	
-	
-		_bodyStatement = connection->prepareStatement( _pdu.buildBodyTableQuery(_columnIds, bodyCondition) );
-		_headStatement = connection->prepareStatement( _pdu.buildHeadTableQuery(_columnIds, headCondition) );	
+		std::string bodyQuery = _pdu.buildBodyTableQuery(_columnIds, bodyCondition);
+		std::string headQuery = _pdu.buildHeadTableQuery(_columnIds, headCondition);
+		_bodyStatement = connection->prepareStatement( bodyQuery );		
+		_headStatement = connection->prepareStatement( headQuery );	
+		
+		MRLog("Body Query:"+bodyQuery);
+		MRLog("Head Query:"+headQuery);
 	}
 
 	void SourceTable::initFullResultSet() {

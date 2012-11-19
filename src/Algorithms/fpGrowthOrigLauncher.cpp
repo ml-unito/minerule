@@ -53,7 +53,7 @@ readDataBaseOrig(odbc::ResultSet* result,
     rowCount++;
     SourceRow curRow(result, rowDes);    
 
-    gid=curRow.getGroupBody();
+    gid=curRow.getGroup();
     item=curRow.getBody();
 
     if(rowCount==1)

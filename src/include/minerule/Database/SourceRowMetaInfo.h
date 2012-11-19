@@ -37,7 +37,7 @@ namespace minerule {
 
 	class SourceRowMetaInfo {
 	private:
-		SourceRowAttrCollectionDescriptor groupBody;
+		SourceRowAttrCollectionDescriptor group;
 		SourceRowAttrCollectionDescriptor clusterBody;
 		SourceRowAttrCollectionDescriptor body;
 		SourceRowAttrCollectionDescriptor clusterHead;
@@ -52,8 +52,8 @@ namespace minerule {
 		SourceRowMetaInfo(odbc::Connection*, const ParsedMinerule& minerule);
 
 
-		const SourceRowAttrCollectionDescriptor& getGroupBody() const {
-			return groupBody;
+		const SourceRowAttrCollectionDescriptor& getGroup() const {
+			return group;
 		}
 
 		const SourceRowAttrCollectionDescriptor& getClusterBody() const {

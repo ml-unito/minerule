@@ -71,12 +71,12 @@ namespace minerule {
 
       SourceRow curRowb(rb2, bodyDes);
       //std::string g=mb2->getCurrentGID();
-      gidb=curRowb.getGroupBody();
+      gidb=curRowb.getGroup();
     
       ItemSet* body=new ItemSet();
       //cout<<"in adjustSupp:"<<std::endl;
 
-      while(bodynotend && ItemType(curRowb.getGroupBody())==gidb){
+      while(bodynotend && ItemType(curRowb.getGroup())==gidb){
 	body->push_back(curRowb.getBody());
 	if((bodynotend=rb2->next())) {
 	  curRowb.init(rb2, bodyDes);
@@ -85,11 +85,11 @@ namespace minerule {
       
       if(headnotend) {
 	SourceRow curRowh(rh2, headDes);
-	if (gidb!=curRowh.getGroupBody())
+	if (gidb!=curRowh.getGroup())
 	  this->root->findBodiesInTree(body);
 	else{
 	  ItemSet* head=new ItemSet();
-	  while(headnotend && ItemType(curRowh.getGroupBody())==gidb ){
+	  while(headnotend && ItemType(curRowh.getGroup())==gidb ){
 	    head->push_back(curRowh.getHead());
 	    if ((headnotend=rh2->next())) {
 	      curRowh.init(rh2, headDes);
@@ -211,9 +211,9 @@ namespace minerule {
     index=buildAttrStr(minerule->getParsedMinerule().ga,
 		       0,
 		       groupAttr,
-		       bodyDes.groupBodyElems );
+		       bodyDes.groupElems );
 
-    headDes.groupBodyElems=bodyDes.groupBodyElems;
+    headDes.groupElems=bodyDes.groupElems;
     
     buildAttrStr(minerule->getParsedMinerule().ba,
 		 index,
@@ -248,8 +248,8 @@ namespace minerule {
     MRDebugPush("Body description");
     std::ostream& dbg = MRDebug();
     dbg << "Group ids:";
-    copy( bodyDes.groupBodyElems.begin(),
-	  bodyDes.groupBodyElems.end(),
+    copy( bodyDes.groupElems.begin(),
+	  bodyDes.groupElems.end(),
 	  std::ostream_iterator<int>(dbg, ",") );
     dbg << std::endl;
     MRDebug() << "Body ids:";
@@ -270,8 +270,8 @@ namespace minerule {
     /*
     MRDebugPush("Head description");
     MRDebug() << "Group ids:";
-    copy( headDes.groupBodyElems.begin(),
-	  headDes.groupBodyElems.end(),
+    copy( headDes.groupElems.begin(),
+	  headDes.groupElems.end(),
 	  std::ostream_iterator<int>(dbg, ",") );
     dbg << std::endl;
     MRDebug() << "Head ids:";

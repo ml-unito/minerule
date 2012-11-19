@@ -135,7 +135,7 @@ namespace minerule {
 			queryText += " ORDER BY "+buildAttrListDescription(mr.getParsedMinerule().ga);
 					      
 		unsigned int lastElem;
-		lastElem= rowDes.setGroupBodyElems(1,mr.getParsedMinerule().ga.size());
+		lastElem= rowDes.setgroupElems(1,mr.getParsedMinerule().ga.size());
 		rowDes.setBodyElems(lastElem+1,mr.getParsedMinerule().ba.size());
 		
 		return queryText;
@@ -147,7 +147,7 @@ namespace minerule {
 		
 		queryText = "SELECT ";
 		queryText += buildAttrListDescription(mr.getParsedMinerule().ga);
-		queryText += "," + buildAttrListDescription(mr.getParsedMinerule().ba);
+		queryText += "," + buildAttrListDescription(mr.getParsedMinerule().ha);
 		queryText += " FROM "+mr.getParsedMinerule().tab_source;
 		queryText += " WHERE "+head_mining_condition;
 
@@ -155,7 +155,7 @@ namespace minerule {
 			queryText += " ORDER BY "+buildAttrListDescription(mr.getParsedMinerule().ga);
 					      
 		unsigned int lastElem;
-		lastElem= rowDes.setGroupBodyElems(1,mr.getParsedMinerule().ga.size());
+		lastElem= rowDes.setgroupElems(1,mr.getParsedMinerule().ga.size());
 		rowDes.setBodyElems(lastElem+1,mr.getParsedMinerule().ha.size());
 		
 		return queryText;
@@ -273,7 +273,7 @@ namespace minerule {
 		std::string queryText = "SELECT * FROM "+tableName;
 					      
 		unsigned int lastElem;
-		lastElem= rowDes.setGroupBodyElems(1,mr.getParsedMinerule().ga.size());
+		lastElem= rowDes.setgroupElems(1,mr.getParsedMinerule().ga.size());
 		lastElem= rowDes.setClusterBodyElems(lastElem+1,mr.getParsedMinerule().ca.size());
 		lastElem= rowDes.setBodyElems(lastElem+1,mr.getParsedMinerule().ba.size());
 		lastElem= rowDes.setClusterHeadElems(lastElem+1,mr.getParsedMinerule().ca.size());

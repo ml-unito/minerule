@@ -23,7 +23,7 @@ namespace minerule {
 	class SourceRow {
 		friend  std::ostream& operator<<(std::ostream& os, const SourceRow& item);
 	private:
-		SourceRowElement* groupBody;
+		SourceRowElement* group;
 		SourceRowElement* clusterBody;
 		SourceRowElement* body;
 		SourceRowElement* clusterHead;
@@ -33,6 +33,7 @@ namespace minerule {
 		static const SourceRowEmptyElement emptyElement;
 
 	public:
+		SourceRow() : group(NULL), clusterBody(NULL), body(NULL), clusterHead(NULL), head(NULL) { }
     // create a new item as a copy of the current row of the result set
 		SourceRow(odbc::ResultSet* resultSet, const SourceRowColumnIds& srd);
 
@@ -48,8 +49,8 @@ namespace minerule {
 		
 		// --- GETTERS ---
 		const SourceRowElement&
-		getGroupBody() const {
-			ELEM_OR_EMPTY(groupBody)
+		getGroup() const {
+			ELEM_OR_EMPTY(group)
 		}
 
 		const SourceRowElement& 

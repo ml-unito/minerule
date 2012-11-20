@@ -201,7 +201,7 @@ namespace minerule {
 	void
 	PrepareDataUtils::dropTableIfExists(odbc::Connection* conn, const std::string& tname)  {
 		std::auto_ptr<odbc::Statement> state(conn->createStatement());
-		state->executeQuery("DROP TABLE IF EXISTS "+tname);
+		state->execute("DROP TABLE IF EXISTS "+tname);
 	}
 
 	string

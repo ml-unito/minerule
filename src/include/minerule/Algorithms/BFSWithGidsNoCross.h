@@ -4,7 +4,7 @@
 #include "Algorithms/MiningAlgorithmBase.h"
 #include "Database/Connection.h"
 #include "Database/SourceTable.h"
-#include "Database/ItemSetLoader.h"
+#include "Database/SetLoader.h"
 
 namespace minerule {
 

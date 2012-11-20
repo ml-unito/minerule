@@ -231,40 +231,6 @@ namespace minerule {
     }
   }
 
-  // Preprocessing functions
-
-  size_t BFSWithGidsAndCross::buildAttrStr(const ParsedMinerule::AttrVector& attr,
-					  size_t startIndex,
-					  std::string& attrStr, 
-					  std::vector<int>& des) const {
-    ParsedMinerule::AttrVector::const_iterator it = attr.begin();
-    for( ; it!=attr.end(); it++ ) {
-      if(it!=attr.begin()) {
-	attrStr+=",";
-      }
-
-      attrStr+=*it;
-      des.push_back(++startIndex);
-    }
-
-    return startIndex;
-  }
-
-
-
-  
- std::string BFSWithGidsAndCross::buildQry( const std::string& groupAttrStr,
-				       const std::string& attrStr,
-				       const std::string& constraints) const {
-    
-    return std::string("SELECT "+groupAttrStr+","+attrStr+" "
-		  "FROM "+minerule.getParsedMinerule().tab_source+" "+
-		  (constraints.size()>0 ?
-		   "WHERE "+constraints+" " :
-		   "")
-		  +"ORDER BY "+groupAttrStr+","+attrStr);
-  }
-
 
   void BFSWithGidsAndCross::prepareData() {
     MineruleOptions& mrOptions = MineruleOptions::getSharedOptions();
@@ -276,25 +242,18 @@ namespace minerule {
     options.getBodyCardinalities().applyConstraints(mrOptions.getParsers().getBodyCardinalities());
     options.getHeadCardinalities().applyConstraints(mrOptions.getParsers().getHeadCardinalities());
 
-    PrepareDataUtils pdu(minerule, *this);
-    options.setTotGroups(pdu.evaluateTotGroups());
 
-    MRLog() << "Building db queries" << std::endl;
+	sourceTable = new SourceTable(*this);
+	ruleIterator = sourceTable->newIterator(SourceTable::FullIterator);
 
+    options.setTotGroups(sourceTable->getTotGroups());
+	
     connection.useODBCConnection(MineruleOptions::getSharedOptions().getODBC().getODBCConnection());
     connection.setOutTableName(minerule.getParsedMinerule().tab_result);
     connection.setBodyCardinalities(minerule.getParsedMinerule().bodyCardinalities);
     connection.setHeadCardinalities(minerule.getParsedMinerule().headCardinalities);
     connection.createResultTables(SourceRowMetaInfo(connection.getODBCConnection(), minerule.getParsedMinerule()));
     connection.init();
-
-    MRDebug() << "Preparing data sources..." << std::endl;
-	rowDes.setgroupElems(1,minerule.getParsedMinerule().ga.size());
-   	
-	std::string queryText = pdu.buildSourceTableQuery( rowDes );
-
-    MRDebug() << "BFSWithGidsAndCross: query:" << queryText.c_str() << std::endl;
-    statement= connection.getODBCConnection()->prepareStatement(queryText.c_str());
   }
 
 
@@ -304,13 +263,10 @@ namespace minerule {
     MRLog() << "Preparing data sources..." << std::endl;
     prepareData();
 
-    odbc::ResultSet* result/*, *result1*/;
 
     float support = options.getSupport();
     int maxBody = options.getBodyCardinalities().getMax();
     int maxHead = options.getHeadCardinalities().getMax();
-
-    result = statement->executeQuery();
 
     ItemType gid1;
     BodyMap bodyMap(connection);
@@ -321,15 +277,15 @@ namespace minerule {
 
 
 	MRLogPush("Reading data...");
-    result->next();
-    SourceRow hbsr(result, rowDes);
-	while (!result->isAfterLast()) {
-		gid1 = hbsr.getGroup();
+
+	while (!ruleIterator.isAfterLast()) {
+		gid1 = ruleIterator->getGroup();
 		howManyGroups++;
-		Transaction t1(rowDes);
-		t1.load(gid1,result);
+		
+		Transaction t1;
+		
+		t1.load(gid1,ruleIterator);
 		howManyRows += bodyMap.add(howManyGroups,t1);
-		if(!result->isAfterLast()) hbsr.init(result,rowDes);
 	}
 
     MRLog() << "Total groups: " << totalGroups << std::endl;
@@ -350,9 +306,6 @@ namespace minerule {
     connection.finalize();
 
     MRLogPop();
-
-    delete statement;
-    delete stmt1;
   }
 
 

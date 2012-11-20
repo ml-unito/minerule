@@ -3,46 +3,13 @@
 
 #include "Algorithms/MiningAlgorithmBase.h"
 #include "Database/Connection.h"
+#include "Database/SetLoader.h"
 
 namespace minerule {
 
   class BFSWithGidsAndCross : public MiningAlgorithm {
 
-  class Transaction : public std::vector<std::pair<ItemType,ItemType> > {
-    SourceRowColumnIds srd;
-  public:
-    Transaction(SourceRowColumnIds& rowDes) : std::vector<std::pair<ItemType, ItemType> >(), srd(rowDes) {}
-    void load(ItemType& gid, odbc::ResultSet *rs) {
-		SourceRow hbsr(rs,srd);
-
-		while (!rs->isAfterLast() && gid == hbsr.getGroup()) {
-			insert(end(),std::pair<ItemType,ItemType>(hbsr.getBody(),hbsr.getHead()));
-			rs->next();
-			if(!rs->isAfterLast())
-				hbsr.init(rs,srd);
-		}
-    }
-
-    static bool findGid(ItemType& gid, odbc::ResultSet *rs, SourceRowColumnIds& srd, bool init=false) {
-		if (init) { 
-			if(!rs->isAfterLast()) {
-				rs->next(); 
-				return true;
-				} else
-					return false;
-			}      
-      
-			SourceRow hbsr(rs,srd);
-			while (!rs->isAfterLast() &&  gid > hbsr.getGroup() ) {
-				rs->next();
-      
-				if(!rs->isAfterLast())
-					hbsr.init(rs,srd);
-			}
-    
-			return !rs->isAfterLast() && gid == hbsr.getGroup();
-		}
-	};
+	  typedef RuleSetLoader< std::vector<std::pair<ItemType,ItemType> > > Transaction;
 
 
   //class MapElement : public std::set<ItemType> {
@@ -136,20 +103,19 @@ namespace minerule {
     AlgorithmsOptions options;
     Connection connection;
     SourceRowColumnIds rowDes;
-    odbc::PreparedStatement* statement;
-    odbc::PreparedStatement* stmt1;
 	static bool mineruleHasSameBodyHead;
+	
+	SourceTable* sourceTable;
+	SourceTable::Iterator ruleIterator;
 
 
     void insertRules( const NewRuleSet& rs, double totGroups );
-    size_t buildAttrStr(const ParsedMinerule::AttrVector& attr, size_t startIndex, std::string& attrStr, std::vector<int>& des) const;
-    std::string buildQry( const std::string& groupAttrStr, const std::string& attrStr, const std::string& constraints) const;
 
     void prepareData();
     
   public:
     BFSWithGidsAndCross(const OptimizedMinerule& mr) : 
-      MiningAlgorithm(mr), statement(NULL), stmt1(NULL) {}
+      MiningAlgorithm(mr) {}
 
     virtual ~BFSWithGidsAndCross() {}
 

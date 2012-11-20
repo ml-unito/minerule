@@ -1,6 +1,6 @@
 #ifndef CCSMSequence__H
 #define CCSMSequence__H
-#include "Bit_vector.h"
+#include "BitVector.h"
 
 #include <list>
 #include <string>
@@ -23,7 +23,7 @@ public:
 private:
 	bool singleton;
 	//typedef std::vector<std::pair<int,int> > Eid_List;
-	Bit_vector listSid;
+	BitVector listSid;
 	typedef std::vector<ItemType> List_Type;
 	List_Type* seq;
 	int count;
@@ -123,7 +123,7 @@ public:
 		//le performance dell'algoritmo e l'occupazione di memoria
 		//time(&init);
 		i=0;
-		Bit_vector ris;
+		BitVector ris;
 		for (size_t f =0;f<listSid.size();++f){
 			if (f!=k[i]){
 				ris.push_back(listSid[f]);	
@@ -243,7 +243,7 @@ public:
 		time_t init,end;
 	 std::vector<size_t> k;
 	 std::vector<CCSMSequence*>::iterator it;
-		Bit_vector ris;
+		BitVector ris;
 		if (vec->size()==0)
 			return k;
 		it=vec->begin();
@@ -259,7 +259,7 @@ public:
 		}
 		time(&end);
 		//cout<<"----------"<<vec->size()<<"------"<<difftime(end,init)<<"----------------------"<<std::endl;
-		Bit_vector::iterator b_it;
+		BitVector::iterator b_it;
 		b_it=ris.begin();
 		size_t i =0;
 		

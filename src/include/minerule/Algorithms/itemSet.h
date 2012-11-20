@@ -19,7 +19,6 @@
 #include "newItemSetHashMap.h"
 #include "Database/Connection.h"
 
-#include "utils.h"
 
 
 using namespace minerule;

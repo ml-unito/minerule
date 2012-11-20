@@ -5,8 +5,8 @@
 // #include <unordered_set>
 #include <tr1/unordered_set>
 #include <vector>
-#include "utils.h"
 #include <iterator>
+#include <assert.h>
 
 #define hash_set std::tr1::unordered_set
 

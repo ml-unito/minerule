@@ -3,7 +3,6 @@
 
 #include "Algorithms/MiningAlgorithmBase.h"
 #include "Database/Connection.h"
-//#include "bodymap.h"
 #include "Algorithms/Bodymap.h"
 
 namespace minerule {

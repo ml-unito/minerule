@@ -14,7 +14,6 @@
 #include "itemSetEntryCluster.h"
 #include "itemSetListCluster.h"
 #include "newItemSetHashMap.h"
-using namespace minerule;
 
 #include "Database/Connection.h"
 

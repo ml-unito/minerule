@@ -86,7 +86,7 @@ namespace minerule{
 		ris->seq->push_back((*second->seq)[0]);
 		
 		ris->count=0;
-		Bit_vector::iterator it_ris, it_second;
+		BitVector::iterator it_ris, it_second;
 		it_ris=ris->listSid.begin();
 		it_second = second->listSid.begin();
 		//////////////////////////////////

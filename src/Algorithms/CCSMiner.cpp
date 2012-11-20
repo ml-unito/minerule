@@ -6,7 +6,7 @@
 #include <assert.h>
 #include <set>
 #include <time.h>
-#include "Algorithms/Bit_vector.h"
+#include "Algorithms/BitVector.h"
 #include "Algorithms/CCSMiner.h"
 #include "Database/PrepareDataUtils.h"
 

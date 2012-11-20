@@ -12,7 +12,6 @@ Vedi file Counter.doc per la struttura ed esempio
 #include <list>
 #include <fstream>
 #include <iterator>
-#include "utils.h"
 #include "Database/Connection.h"
 #include "Utils/MineruleOptions.h"
 #include "Database/SourceRowAttribute.h"

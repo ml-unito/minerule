@@ -113,36 +113,7 @@ class Counter
 template< class NODETYPE >
 Counter< NODETYPE >::Counter() { }
 
-/*
-// Serve per inizializzare la tabella contatore generale.
-// Apre il file ncoppie.txt e legge tutti gli id che esistono e li inserisce nella struttura.
-// Simulo quello che dovrà essere fatto da una query.
-template< class NODETYPE >
-void Counter< NODETYPE >::pushElements() {
-  NODETYPE elem;
-  char buffer[255];
-  FILE *infile2;
- std::string tokenT;
 
-// Qui ci vorrà la query SQL per vedere quanti n sono presenti nella tavola
-
-  if ( (infile2=fopen("example/ncoppie.txt","r"))==NULL)
-    { std::cout << "Error opening file ncoppie"; exit (0); }
-
-    if (fgets(buffer,255,infile2)==NULL )
-      { std::cout << "Error read"; exit (0); }
-
-      tokenT=buffer;
-  StringTokenizer mytoken2((string&)tokenT,";\r\n");
-
-  while (mytoken2.hasMoreTokens()) {
-    elem= (NODETYPE) mytoken2.nextToken();
-    add(elem);
-  }
-
-  fclose(infile2);
-}
-*/
 
 // Inserisce un valore e inizializza i valori.
 template< class NODETYPE >
@@ -203,18 +174,6 @@ void Counter< NODETYPE >::sortVector(deque<NODETYPE>& elems) const {
   sort(elems.begin(), elems.end(), *this  );
 }
 
-/*
-// Come sopra ma passa un valore di incremento
-template< class NODETYPE >
-void Counter< NODETYPE >::addValues(StringTokenizer& mytoken,int peso) {
-  NODETYPE value;
-
-  value= (NODETYPE) mytoken.nextToken();
-  incrCount(value,peso);
-  if (mytoken.hasMoreTokens())
-    { addValues(mytoken,peso); }
-}
-*/
 
 // In questa procedura nessun controllo poichè so che le posizioni esistono tutte
 // Incremento il contatore assoluto
@@ -365,12 +324,7 @@ void Counter< NODETYPE >::estrai_cammini(TreeNode<NODETYPE>* tnd, std::vector<NO
     path.push_back(dad->getData());
     if (!tnd->isMarked()) {
       peso=tnd->getCount();
-      // std::cout<<"add walk"<< path<<" in node "<<(String)node<<" peso "<<peso<<std::endl;
-      //#warning DEBUG 
-      //      std::cout << "before addWalk:";
-      //      std::cout << node << std::endl;
-      //      copy(path.begin(), path.end(), std::ostream_iterator<NODETYPE>(cout,";"));
-      //      std::cout << std::endl;
+
 
       addWalk(node,path,peso);
       tnd->setMarked();

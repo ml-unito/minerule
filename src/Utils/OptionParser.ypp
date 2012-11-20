@@ -1,3 +1,48 @@
+/* 
+  --------------------------------------------------------------------------------
+  Minerule Option Parser 	
+  --------------------------------------------------------------------------------
+
+  A parser for the minerule option file. Minerule options are defined inside 
+  (possibly nested) option namespaces. Each namespace is a subclass of OptionBase.
+  Each OptionBase subclass defines the sub-namespace and the options it supports.
+  The root namespace is defined in 'MineruleOptions_implementations/root.h'.
+  
+  The syntax for accessing a namespace is:
+	  namespace::
+  after a namespace declaration one can instantly declare an option or open a context
+  for subsequent operations.
+  The syntax for setting an option is:
+  	+optionName=optionValue
+  Putting both things together:
+	  namespace::+optionName=optionValue
+  sets option 'optionName' in namespace 'namespace' to the value 'optionValue'.
+  Nested namespace are simply appended one to another:
+	  ns1::ns2::ns3::option=optionValue
+  sets  'option' in namespace ns3 which is a sub-namespace of ns2 which is sub-namespace of ns1.
+  
+  The parser supports an additional syntax that simplifies setting many options in the
+  same namespace:
+  namespace::{
+	  ....
+  }  
+  everything in the braces are interpreted in the context of 'namespace'.
+  
+  *NOTE*
+  The syntax namespace1::namespace2::+option=optionValue is meant to be used to set options
+  from the command line.
+  The syntax 
+  	namespace1::{
+		namespace2::{
+			+option=optionValue
+		}
+  	}
+  is meant for option files. This is important to know because using the first syntax in an option
+  file will not work since the parser does *not* support more than one option set using the first
+  syntax (this is ok using command line options since a new instance of the parser will be 
+  instantiated for each option).
+*/
+
 %{
 #define YYSTYPE std::string
 

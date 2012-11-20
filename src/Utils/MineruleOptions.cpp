@@ -346,7 +346,7 @@ namespace minerule {
 	  setDBMS(value);
     else {
       std::cerr << "Error while parsing options, expecting an odbc option in:" <<std::endl
-	   << "{name, userName, password, cacheWrites,odbc} and: " << std::endl
+	   << "{name, userName, password, cacheWrites,dbms} and: " << std::endl
 	   << "\"" << name << "\" found." << std::endl;
       throw MineruleException(MR_ERROR_OPTION_PARSING, MINERULE_OPTIONS_PARSING_ERROR);
     }

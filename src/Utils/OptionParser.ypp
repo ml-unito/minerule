@@ -10,13 +10,16 @@ using namespace minerule;
 extern int yylex();
 extern int yyerror(char const*);
 
-
 %}
+
+%error-verbose
+%locations
 
 %token STRING
 %token QUOTEDSTRING
 %token EQSIM
 %token NSSEP
+%token STARTOPT
 %token LEFTBRACE
 %token RIGHTBRACE
 
@@ -25,19 +28,21 @@ extern int yyerror(char const*);
 option_list: option option_list
 	|option
 	;
-option: STRING EQSIM  STRING  { 
-	       setOption($1,$3); 
+	
+option: STARTOPT STRING EQSIM  STRING  { 
+	       setOption($2,$4); 
 	   }
-	|STRING NSSEP STRING EQSIM  STRING  {
-		pushOptionClassIntoContext($1);
-		setOption($3,$5);
+	| LEFTBRACE option_list RIGHTBRACE { 
 		popOptionClassFromContext();
 	   }
-	|nsdecl LEFTBRACE option_list RIGHTBRACE { 
-		popOptionClassFromContext();
-	   }
+    | nsdecl_list option
 	;
+	
 nsdecl: STRING NSSEP { 
 	       pushOptionClassIntoContext($1);
 	   }
 	;
+	
+nsdecl_list: nsdecl nsdecl_list 
+	| nsdecl
+	

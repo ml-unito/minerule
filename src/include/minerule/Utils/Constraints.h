@@ -7,7 +7,6 @@
 namespace minerule { 
 
 class BodyMap;
-class Transaction;
 
 class AggregateConstraint {
   public:

@@ -11,10 +11,9 @@ namespace minerule {
   private:
     AlgorithmsOptions options;
     Connection connection;
-    SourceRowColumnIds rowDes;
-    odbc::PreparedStatement* statement;
-    odbc::PreparedStatement* stmt1;
-
+	SourceTable* sourceTable;
+	SourceTable::Iterator bodyIterator;
+	SourceTable::Iterator headIterator;
 
 
     size_t buildAttrStr(const ParsedMinerule::AttrVector& attr,
@@ -30,7 +29,7 @@ namespace minerule {
 
   public:
     CARE(const OptimizedMinerule& mr) :
-      MiningAlgorithm(mr), statement(NULL), stmt1(NULL) {}
+      MiningAlgorithm(mr) {}
 
     virtual ~CARE() {}
 

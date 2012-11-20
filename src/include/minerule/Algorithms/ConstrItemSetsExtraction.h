@@ -11,26 +11,16 @@ namespace minerule {
   private:
     AlgorithmsOptions options;
     Connection connection;
-    SourceRowColumnIds rowDes;
-    odbc::PreparedStatement* statement;
-    odbc::PreparedStatement* stmt1;
+	SourceTable* sourceTable;
+	SourceTable::Iterator bodyIterator;
 
 
-
-    size_t buildAttrStr(const ParsedMinerule::AttrVector& attr,
-                        size_t startIndex,
-                        std::string& attrStr,
-                        std::vector<int>& des) const;
-
-    std::string buildQry( const std::string& groupAttrStr,
-                          const std::string& attrStr,
-                          const std::string& constraints) const;
 
     void prepareData();
 
   public:
     ConstrItemSetsExtraction(const OptimizedMinerule& mr) :
-      MiningAlgorithm(mr), statement(NULL), stmt1(NULL) {}
+      MiningAlgorithm(mr) {}
 
     virtual ~ConstrItemSetsExtraction() {}
 

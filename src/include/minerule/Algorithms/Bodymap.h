@@ -16,6 +16,7 @@
 #include "Database/ItemType.h"
 #include "Utils/Converter.h"
 #include "Database/Connection.h"
+#include "Database/SetLoader.h"
 #include "Utils/Bitstring.h"
 
 namespace minerule {
@@ -24,40 +25,9 @@ namespace minerule {
 	class AggregateAntiMonoConstraint;
 	class NewRule;
 
-
-//class Transaction : public std::set<std::pair<ItemType, ItemType> > {
-	class Transaction : public std::set<ItemType> {
-		SourceRowColumnIds srd;
+	class Transaction : public ItemSetLoader< std::set<ItemType> >  {
 	public:
-		Transaction(SourceRowColumnIds& rowDes) : std::set<ItemType>(), srd(rowDes) {}
 		std::vector<int> values;
-		void loadBody(ItemType& gid, odbc::ResultSet *rs, int nFields) {
-			SourceRow hbsr(rs,srd);
-			while (!rs->isAfterLast() && gid == hbsr.getGroup()) {
-				insert(hbsr.getBody());
-			//for (int j=3; j<=nFields; j++) values.insert(values.end(),rs->getInt(j));
-				rs->next();
-				if(!rs->isAfterLast()) hbsr.init(rs,srd);
-			}
-		}
-		void loadHead(ItemType& gid, odbc::ResultSet *rs, int nFields) {
-			SourceRow hbsr(rs,srd);
-			while (!rs->isAfterLast() && gid == hbsr.getGroup()) {
-				insert(hbsr.getHead());
-			//for (int j=3; j<=nFields; j++) values.insert(values.end(),rs->getInt(j));
-				rs->next();
-				if(!rs->isAfterLast()) hbsr.init(rs,srd);
-			}
-		}
-		static bool findGid(ItemType& gid, odbc::ResultSet *rs, SourceRowColumnIds& srd, bool init=false) {
-			if (init) { rs->next(); return true; }
-			SourceRow hbsr(rs,srd);
-			while (!rs->isAfterLast() && gid > hbsr.getGroup()) {
-				rs->next();
-				if(!rs->isAfterLast()) hbsr.init(rs,srd);
-			}
-			return !rs->isAfterLast() && gid == hbsr.getGroup();
-		}
 	};
 
 //class MapElement : public std::set<ItemType> {

@@ -11,9 +11,6 @@ namespace minerule {
 
   static const std::string algoNames[] = {
 	  				"None", 
-					"PartitionWithClusters",
-					"PartitionBase",
-					"FPGrowth",
 					"BFSWithGidsNoCross",
 					"BFSWithGidsAndCross",
 					"Care",

@@ -28,9 +28,6 @@ namespace minerule {
 
   typedef enum {
     ATNone=0, // dummy algorithm type
-    ATPartitionWithClusters,
-    ATPartitionBase,
-    ATFPGrowth,
     ATBFSWithGidsNoCross,
     ATBFSWithGidsAndCross,
     ATCare,

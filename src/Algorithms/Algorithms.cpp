@@ -1,9 +1,6 @@
 #include "Algorithms/Algorithms.h"
 #include "Algorithms/MiningAlgorithmBase.h"
 #include "Parsers/ParsedMinerule.h"
-#include "Algorithms/PartitionWithClusters.h"
-#include "Algorithms/PartitionBase.h"
-#include "Algorithms/FPGrowth.h"
 #include "Utils/MineruleOptions.h"
 #include "Algorithms/IDIncrementalAlgorithm.h"
 #include "Algorithms/ConstrTree.h"
@@ -50,11 +47,6 @@ namespace minerule {
 
 		MRDebug() << "BFSWithGidsAndCross cannot handle it." << std::endl;
 
-
-		if( PartitionWithClusters(mr).canHandleMinerule() ) {
-			MRDebug() << "Selected PartitionWithClusters" << std::endl;
-			return new PartitionWithClusters(mr);
-		}
   
 		MRDebug() << "Panic! No known algorithm can handle it." << std::endl;
 		throw MineruleException( MR_ERROR_INTERNAL, "No known algorithm can handle the given minerule!" );

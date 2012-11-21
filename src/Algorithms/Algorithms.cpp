@@ -13,13 +13,13 @@
 
 namespace minerule {
 
-	MiningAlgorithm* Algorithms::getBestRulesMiningAlgorithm(const OptimizedMinerule& mr) {
+	MiningAlgorithmBase* Algorithms::getBestRulesMiningAlgorithm(const OptimizedMinerule& mr) {
 		MRDebugPusher pusher("Choosing the best algorithm for the given MR");
 
 		AlgorithmTypes userChoiceOfAT = 
 			MineruleOptions::getSharedOptions().getMiningAlgorithms().getRulesMiningAlgorithms().getPreferredAlgorithm();
 
-		MiningAlgorithm* userChoice= MiningAlgorithm::algorithmForType(userChoiceOfAT, mr);
+		MiningAlgorithmBase* userChoice= MiningAlgorithm::algorithmForType(userChoiceOfAT, mr);
 		if( userChoice->canHandleMinerule() ) {
 			MRDebug() << "Selected the algorithm given by the user preference" << std::endl;
 			return userChoice;
@@ -54,14 +54,14 @@ namespace minerule {
 	
 	
 
-	MiningAlgorithm*
+	MiningAlgorithmBase*
 	Algorithms::getBestItemsetsMiningAlgorithm(const OptimizedMinerule& mr) {
 		MRDebugPusher pusher("Choosing the best algorithm for the given MR");
 
 		AlgorithmTypes userChoiceOfAT = 
 			MineruleOptions::getSharedOptions().getMiningAlgorithms().getRulesMiningAlgorithms().getPreferredAlgorithm();
 
-		MiningAlgorithm* userChoice= MiningAlgorithm::algorithmForType(userChoiceOfAT, mr);
+		MiningAlgorithmBase* userChoice= MiningAlgorithm::algorithmForType(userChoiceOfAT, mr);
 		if( userChoice->canHandleMinerule() ) {
 			MRDebug() << "Selected the algorithm given by the user preference" << std::endl;
 			return userChoice;
@@ -86,7 +86,7 @@ namespace minerule {
 
 
 
-	MiningAlgorithm*
+	MiningAlgorithmBase*
 	Algorithms::getBestSequencesMiningAlgorithm( const OptimizedMinerule& mr ) {
 		AlgorithmsOptions opts;
 
@@ -112,7 +112,7 @@ namespace minerule {
 // 	Remember that the informations stored in SourceRowColumnIds
 // 	depends upon mr.mineruleRequiresClusters(). 
 //  
-	MiningAlgorithm* Algorithms::newAlgorithm(const OptimizedMinerule& mr) {
+	MiningAlgorithmBase* Algorithms::newAlgorithm(const OptimizedMinerule& mr) {
 		switch( mr.getParsedMinerule().miningTask ) {
 			case MTMineRules: 		return getBestRulesMiningAlgorithm(mr);
 			case MTMineItemsets:  	return getBestItemsetsMiningAlgorithm(mr);
@@ -140,7 +140,7 @@ namespace minerule {
 
 
 	void Algorithms::executeExtractionAlgorithm(OptimizedMinerule& mr) throw(MineruleException,odbc::SQLException, std::exception) {
-		MiningAlgorithm* algo =  Algorithms::newAlgorithm(mr);
+		MiningAlgorithmBase* algo =  Algorithms::newAlgorithm(mr);
 		algo->execute();
 		delete algo;
 	}
@@ -192,6 +192,8 @@ namespace minerule {
 			// EQUIVALENCE
 			case OptimizedMinerule::Equivalence:
 				{
+					MRLog("Using equivalence relationship.");
+					
 					CatalogueInfo catInfo;
 					OptimizerCatalogue::getMRQueryInfo( mr.getOptimizationInfo().minerule.tab_result, catInfo );
 					result.resultset = catInfo.resName;
@@ -205,25 +207,30 @@ namespace minerule {
 			// DOMINANCE
 			case OptimizedMinerule::Dominance:
 				unsupportedRelation = "Dominance";
+				MRLog("Using dominance relationship.");
 			
 			// COMBINATION
 			case OptimizedMinerule::Combination:
 				if(unsupportedRelation=="") {
+					MRLog("Using combination relationship.");
+					
 					unsupportedRelation="Combination";
-      
-					if(executeIncrementalAlgorithm(mr)) {	 
-						OptimizerCatalogue::addMineruleResult(result);
-						break;
-					} else {
-						MRLog() << "The support for the found dominance relationship is not yet implemented"
-							<< " switching back to the non-incremental mining algorithm;" << std::endl;
-					}
+      			}
+				
+				if(executeIncrementalAlgorithm(mr)) {	 
+					OptimizerCatalogue::addMineruleResult(result);
+					break;
+				} else {
+					MRLog() << "The support for the found dominance relationship is not yet implemented"
+						<< " switching back to the non-incremental mining algorithm;" << std::endl;
 				}
 			
 			// INCLUSION
 			case OptimizedMinerule::Inclusion:
-				if( unsupportedRelation=="" )
+				if( unsupportedRelation=="" ) {
 					unsupportedRelation = "Inclusion";
+					MRLog("Using inclusion relationship.");					
+				}
 				
 			// NO RELATION FOUND
 			case OptimizedMinerule::None:
@@ -233,7 +240,9 @@ namespace minerule {
 						<< "current one. Unfortunately such kind of relationship is still" << std::endl
 						<< "not supported and hence I will switch to the default algorithm" << std::endl;
 				}
+				
 				executeExtractionAlgorithm(mr);
+				
 				if( mr.getParsedMinerule().miningTask==MTMineRules || mr.getParsedMinerule().miningTask==MTMineItemsets )
 						OptimizerCatalogue::addMineruleResult(result);
 				break;

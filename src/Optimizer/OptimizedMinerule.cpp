@@ -190,6 +190,8 @@ namespace minerule {
 
     //lettura delle minerules precedenti
 		try	{
+			MRLogPusher _("Determining if a relationship exists with previous minerules...");
+			
 			MRLog() << "Reading past minerules" << std::endl;	
 			for(std::vector<CatalogueInfo>::const_iterator it=catInfos.begin(); it!=catInfos.end(); ++it) {
 				ParsedMinerule mr;
@@ -258,9 +260,7 @@ namespace minerule {
 
 			if(optInfo.relationship==Dominance) 
 				MRLog() << "The best promising dominant minerule found is ``" 
-					<< optInfo.minerule.tab_result << "''" << std::endl;
-	
-			MRLogPop();
+					<< optInfo.minerule.tab_result << "''" << std::endl;	
 		} catch (odbc::SQLException& e) {
 			MRErr() << e.what() << std::endl;
 			throw;

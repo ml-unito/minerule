@@ -162,11 +162,6 @@ namespace minerule {
 
 	void OptimizedMinerule::optimize()
 	{
-#ifdef MRUSERWARNING
-#warning minerule qui sotto viene inizializzata piu'' volte senza motivo. \
-		converrebbe eliminarla del tutto e usare dappertutto optInfo.minerule.
-#endif
-
 		if(minerule.miningTask!=MTMineRules) {
 			MRLog() << "Skipping optimization, " << miningTaskToString(minerule.miningTask) << " task is still unsupported by the optimizer" << std::endl;
 			MRDebug() << "Skipping optimization, " << miningTaskToString(minerule.miningTask) << " task is still unsupported by the optimizer" << std::endl;
@@ -190,21 +185,15 @@ namespace minerule {
 		optInfo.relationship = None;
 		MRDebug("Minerule text after normalization:" + minerule.getText());
 
-		odbc::Connection* connection = MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
-
-		odbc::Statement* statement = NULL;
-		ResultSet* rs = NULL;
+		std::vector<CatalogueInfo> catInfos;
+		OptimizerCatalogue::getMRQueryInfos(catInfos);
 
     //lettura delle minerules precedenti
 		try	{
-			MRLogPush("Optimization phase..");
-			statement = connection->createStatement();
-			ResultSet* rs = statement->executeQuery("SELECT query_text,query_name FROM mr_query WHERE query_name <> '"+minerule.tab_result+"'");
-
 			MRLog() << "Reading past minerules" << std::endl;	
-			while(rs->next()) {
+			for(std::vector<CatalogueInfo>::const_iterator it=catInfos.begin(); it!=catInfos.end(); ++it) {
 				ParsedMinerule mr;
-				mr.init(rs->getString(1).c_str());
+				mr.init(it->qryText);
 				MRDebug("Optimize: trying minerule:" + mr.getText());
 
 				if( !avoidCombinationDetection && isACandidateQuery(mr,minerule) ) {
@@ -219,7 +208,7 @@ namespace minerule {
 				switch( currentRel ) {
 					case Equivalence:
 						MRLog() << "A past minerule found which includes the current one!" << std::endl;
-						MRLog() << "Name of the found minerule:" << rs->getString(2) << std::endl;
+						MRLog() << "Name of the found minerule:" << it->qryName << std::endl;
 						MRLog() << "(The algorithm will store this information in the catalogue" << std::endl;
 						MRLog() << " and exit)" << std::endl;
 						optInfo.relationship = Equivalence;
@@ -235,16 +224,13 @@ namespace minerule {
 								MRLog() << "Minerule " << "``" << mr.tab_result <<"'' is now the best promising" 
 									<< " dominant minerule." << std::endl;
 							} else {
-			// we must keep the current minerule only if its result set
-			// is smaller than the one of the past Dominant query found
-								CatalogueInfo newQryInfo;
+								// we must keep the current minerule only if its result set
+								// is smaller than the one of the past Dominant query found
 								CatalogueInfo oldQryInfo;
-								OptimizerCatalogue::getMRQueryInfo( mr.tab_result, newQryInfo );
 								OptimizerCatalogue::getMRQueryInfo( optInfo.minerule.tab_result, oldQryInfo );
-								if( newQryInfo.resSize<oldQryInfo.resSize) {
+								if( it->resSize<oldQryInfo.resSize) {
 									optInfo.minerule = mr;
-									MRLog() << "Minerule " << "``" << mr.tab_result 
-										<<"'' is now the best promising" 
+									MRLog() << "Minerule " << "``" << mr.tab_result <<"'' is now the best promising" 
 											<< " dominant minerule." << std::endl;
 								} else {
 									MRLog() << "Keeping the previously found dominant minerule" << std::endl;
@@ -277,8 +263,6 @@ namespace minerule {
 			MRLogPop();
 		} catch (odbc::SQLException& e) {
 			MRErr() << e.what() << std::endl;
-			if(rs!=NULL)        delete rs;
-			if(statement!=NULL) delete statement;
 			throw;
 		}
 
@@ -287,9 +271,6 @@ namespace minerule {
 			if(optInfo.relationship==None)
 				optInfo.minerulesToCombine.clear();
 		}
-    
-		delete statement;
-		delete rs;
 	}
 
 

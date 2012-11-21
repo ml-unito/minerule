@@ -214,9 +214,7 @@ namespace minerule {
     /**
      * As getMRQueryInfos, but the user specify a single qryName to be searched.
      */
-    static void getMRQueryInfo(const std::string& qryName, 
-			       CatalogueInfo& catInfo, bool includeResultSize=true)
-      throw(odbc::SQLException, MineruleException);
+    static void getMRQueryInfo(const std::string& qryName, CatalogueInfo& catInfo, bool includeResultSize=true) throw(odbc::SQLException, MineruleException);
 
     /**
      * It updates the QueryResultIterator so that it iterates through the 

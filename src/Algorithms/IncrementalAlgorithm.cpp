@@ -9,8 +9,7 @@ namespace minerule {
 	IncrementalAlgorithm* 
 	IncrementalAlgorithm::newIncrementalAlgorithm(const OptimizedMinerule& mr) {
     // if mr has only ItemDependent constraints
-		MRLog() << "Checking if the current minerule " 
-			<< "is item dependent..." << std::endl;
+		MRLog() << "Checking if the current minerule is item dependent..." << std::endl;
     
 		if( mr.getParsedMinerule().hasIDConstraints() ) {
 			MRLog() << "The minerule is item dependent!" << std::endl;

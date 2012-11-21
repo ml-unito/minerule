@@ -36,7 +36,7 @@ namespace minerule {
 			bhSep=rsSep=scSep=_fieldSeparationString;
 
 		if( suppressLog() ) {
-			cout << "\t" 
+			std::cout << "\t" 
 				<< quoteElems(*rule.body) << bhSep 
 				<< quoteElems(*rule.head) << rsSep 
 				<< rule.support << scSep << rule.confidence << std::endl;

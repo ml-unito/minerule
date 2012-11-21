@@ -72,7 +72,7 @@ parseOptions(int argc, char** argv, MineruleOptions& opt, RuleFormatter*& rf, do
     rf=NULL;
     for( int i=0; i<argc; i++ ) {
         // checking -f options
-        if(argv[i]==string("-f")) {
+        if(argv[i]==std::string("-f")) {
             if(i+1<argc) {
                 if( minerule::FileUtils::fileExists( argv[i+1] ) ) {
                     // all ok
@@ -99,12 +99,12 @@ parseOptions(int argc, char** argv, MineruleOptions& opt, RuleFormatter*& rf, do
             }
         }
         
-        if(argv[i]==string("-h")) {
+        if(argv[i]==std::string("-h")) {
             printHelp(argc, argv);
             exit(0);
         }
         
-        if(argv[i]==string("-x")) {
+        if(argv[i]==std::string("-x")) {
             if((i+1)<argc) {
                 sepString = argv[i+1];
             } else {
@@ -115,35 +115,35 @@ parseOptions(int argc, char** argv, MineruleOptions& opt, RuleFormatter*& rf, do
         }
         
         
-        if(argv[i]==string("-v")) {
+        if(argv[i]==std::string("-v")) {
             printVersion();
             exit(0);
         }
         
-        if(argv[i]==string("-c")) {
+        if(argv[i]==std::string("-c")) {
             conf=0;
         }
 		
-		if(argv[i]==string("-0")) {
+		if(argv[i]==std::string("-0")) {
 			suppressLog = true;
 		}
         
-        if(argv[i]==string("-s")) {
+        if(argv[i]==std::string("-s")) {
             if((i+1)<argc) {
                 std::string arg = argv[i+1];
-                if(string(arg)=="no") {
+                if(std::string(arg)=="no") {
                     rf=new SimpleRuleFormatter();
-                } else if(string(arg)=="scbh") {
+                } else if(std::string(arg)=="scbh") {
                     rf=new SortedRuleFormatter<QueryResult::SortSuppConfBodyHead>();
-                } else if(string(arg)=="bhsc") {
+                } else if(std::string(arg)=="bhsc") {
                     rf=new SortedRuleFormatter<QueryResult::SortBodyHeadSuppConf>();
-                } else if(string(arg)=="hbsc") {
+                } else if(std::string(arg)=="hbsc") {
                     rf=new SortedRuleFormatter<QueryResult::SortHeadBodySuppConf>();
-                } else if(string(arg)=="csbh") {
+                } else if(std::string(arg)=="csbh") {
                     rf=new SortedRuleFormatter<QueryResult::SortConfSuppBodyHead>();
-                } else if(string(arg)=="cbhs") {
+                } else if(std::string(arg)=="cbhs") {
                     rf=new SortedRuleFormatter<QueryResult::SortConfBodyHeadSupp>();
-                } else if(string(arg)=="cbsh") {
+                } else if(std::string(arg)=="cbsh") {
                     rf=new SortedRuleFormatter<QueryResult::SortConfBodySuppHead>();
                 }
             } else {

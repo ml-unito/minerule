@@ -417,13 +417,12 @@ namespace minerule {
 						attrList=&ha;
 					else throw MineruleException( MR_ERROR_MINERULETEXT_PARSING,
 						"Found a condition defined over an attribute,"
-							" but neither HEAD nor BODY selector has been"
-								" specified.");
+						" but neither HEAD nor BODY selector has been"
+						" specified.");
       
 					SQLUtils::removeHeadBodyFromAttrName(theAttr);
 
-					if((attr1 || attr2) &&
-						!optcat.isIDAttribute(tab_source,*attrList,theAttr))
+					if((attr1 || attr2) && !optcat.isIDAttribute(tab_source,*attrList,theAttr))
 							return false;
 				}
 			}

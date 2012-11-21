@@ -426,6 +426,12 @@ namespace minerule {
   OptimizerCatalogue::isIDAttribute(const std::string& table,const ParsedMinerule::AttrVector& itemCols,const std::string& attribute) const throw(MineruleException)  {
     std::set<std::string> itemColsSet;
     copy( itemCols.begin(), itemCols.end(), std::insert_iterator< std::set<std::string> >(itemColsSet,itemColsSet.begin()));
+	
+	if(itemColsSet.find(attribute)!=itemColsSet.end()) {
+		// if I am checking over the attributes that composes the attrlist then 
+		// the attribute is trivially item dependent.
+		return true;
+	}
 
     Catalogue::const_iterator cat_it = depFunCatalogue.find(table);
     if(cat_it==depFunCatalogue.end())
@@ -435,7 +441,7 @@ namespace minerule {
     CatalogueEntry::const_iterator ce_it;
     for( ce_it=ce.begin(); ce_it!=ce.end(); ce_it++ ) {
       // if I can find the attribute in the rhs of the fd
-			 // and I the item cols includes the lhs of the fd 
+	  // and the item cols includes the lhs of the fd 
       if(ce_it->second.first.find(attribute)!=ce_it->second.first.end() && 
 		  includes(itemColsSet.begin(), itemColsSet.end(), ce_it->first.begin(), ce_it->first.end()))
 			  // then the attribute is item dependent

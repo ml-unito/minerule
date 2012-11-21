@@ -1,6 +1,8 @@
 #include "Utils/StringUtils.h"
 
 namespace minerule {
+	bool StringUtils::enableColors = true;
+	
 	const std::string StringUtils::BOLD 	= "\x1B[1m";
 	const std::string StringUtils::RED 		= "\x1B[31m";
 	const std::string StringUtils::GREEN 	= "\x1B[32m";

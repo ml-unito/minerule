@@ -21,6 +21,7 @@ namespace mrc {
 	       << "           [-n <queryname>] [-l] [-F formatSpecs] [-d <queryname>]"
 	       << std::endl
 	       << "The program allow to inspect the MR catalogue" << std::endl
+	   	   << StringUtils::to_bold("-c") << " - Disables color output" << std::endl
 	       << StringUtils::to_bold("-h") << " - Output this message and returns NOTHING_TO_DO" << std::endl
 	       << StringUtils::to_bold("-s") << " - Change thestd::string used to separate different elements in" << std::endl
 	       << "     the output. The default is ' '" << std::endl
@@ -72,11 +73,14 @@ namespace mrc {
 	parseOptions(int argc, char** argv, 
 		      minerule::MineruleOptions& mopt,
 		      Options& popt) {
-	  const char* optstr = "hf:lF:n:d:s:v";
+	  const char* optstr = "chf:lF:n:d:s:v";
 	  int opt;
 	  bool didLoadOptions=false;
 	  while((opt=getopt(argc, argv, optstr))!=-1) {
 	    switch( opt ) {
+		case 'c':
+		  minerule::StringUtils::setColorsEnabled(false);
+		  break;
 	    case 'f': 
 	      doLoadOptions(optarg, mopt);
 	      didLoadOptions=true;

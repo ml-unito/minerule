@@ -6,8 +6,9 @@
 
 namespace minerule {
 	class StringUtils {
-	private:		
-		static std::string colorize(const std::string& str, const std::string& color) { return color + str + CLOSE; }
+	private:
+		static bool enableColors;		
+		static std::string colorize(const std::string& str, const std::string& color) { return enableColors ? color + str + CLOSE : str; }
 		
 	public:
 		static std::vector<std::string>* split_to_length(const std::string& str, size_t len);
@@ -21,6 +22,7 @@ namespace minerule {
 		static const std::string WHITE;
 		static const std::string CLOSE;
 		
+		static void setColorsEnabled(bool newVal) { enableColors = newVal; }
 		static std::string to_bold(const std::string& str){ return colorize(str, BOLD); }
 		static std::string to_red(const std::string& str)   { return colorize(str,RED);   }
 		static std::string to_green(const std::string& str) { return colorize(str,GREEN); }

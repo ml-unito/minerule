@@ -30,10 +30,11 @@ using namespace minerule;
 void
 printHelp(char* progName) {
 	std::cout << StringUtils::to_bold("Usage:") << std::endl
-		<< "  " << StringUtils::to_bold(progName) << " [-i <mineruletextfile>] [-m '<mineruletext>'] " << std::endl
+		<< "  " << StringUtils::to_bold(progName) << " [-c] [-i <mineruletextfile>] [-m '<mineruletext>'] " << std::endl
 		<< "     -f <mineruleoptionfile> -O <optionlist> -v -h " << std::endl << std::endl;
 	
 	std::cout 
+		<< StringUtils::to_bold("   -c") << " -- disable colors in messages" << std::endl
 		<< StringUtils::to_bold("   -i") << " -- specify a file name containing the text of the minerule" << std::endl
 		<< StringUtils::to_bold("   -m") << " -- the argument is the text of the minerule" << std::endl
 		<< StringUtils::to_bold("   -f") << " -- specify a file name containing the Options to be used." << std::endl
@@ -123,8 +124,11 @@ parseOptions(int argc, char** argv, MineruleOptions& mrOpts, std::string& mrtext
 	bool okMROptions=false;
 	std::vector<std::string> cmd_line_mr_options;
 	
-	while((opt=getopt(argc,argv,"hi:f:m:O:ev"))!=-1) {
+	while((opt=getopt(argc,argv,"chi:f:m:O:ev"))!=-1) {
 		switch(opt) {
+			case 'c':
+				StringUtils::setColorsEnabled(false);
+				break;
 			case 'h':
 				printVersion();
 				printHelp(argv[0]);

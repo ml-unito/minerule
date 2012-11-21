@@ -57,7 +57,7 @@ printHelp(int argc, char** argv) {
 	<< std::endl
 	<< StringUtils::to_bold("-h") << " - prints this message " << std::endl
 	<< StringUtils::to_bold("-0") << " - suppresses logging output " << std::endl
-    << StringUtils::to_bold("-c") << " - do not filter out rules having low confidence" << std::endl	
+    << StringUtils::to_bold("-l") << " - do not filter out rules having low confidence" << std::endl	
 	<< StringUtils::to_bold("-n") << " - specifies a query number to be printed (this is an alternative to" << std::endl
 	<< "     specifying the query name)" << std::endl
     << StringUtils::to_bold("-s") << " - allows one to sort the rules in a given order." << std::endl
@@ -133,6 +133,10 @@ parseOptions(int argc, char** argv, MineruleOptions& opt, RuleFormatter*& rf, do
             }
         }
 		
+		if(argv[i]==std::string("-c")) {
+			StringUtils::setColorsEnabled(false);
+		}
+		
 		if(argv[i]==std::string("-n")) {
 			if(i+1<argc && Converter(argv[i+1]).isNumber() ) {
 				queryName = getQueryName( Converter(argv[i+1]).toLong() );
@@ -165,7 +169,7 @@ parseOptions(int argc, char** argv, MineruleOptions& opt, RuleFormatter*& rf, do
             exit(0);
         }
         
-        if(argv[i]==std::string("-c")) {
+        if(argv[i]==std::string("-l")) {
             conf=0;
         }
 		

@@ -196,6 +196,11 @@ namespace minerule {
 
     static void deleteMinerule(const std::string& mrname) 
       throw(MineruleException, odbc::SQLException);
+	
+	/**
+	 * Returns the name of the i-th query in the catalogue.
+	 */
+	static std::string getMRQueryName(size_t i) throw(odbc::SQLException, MineruleException);
 
     /**
      * The procedure fills the vector nameVec with the names of all

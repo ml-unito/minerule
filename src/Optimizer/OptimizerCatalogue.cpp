@@ -300,17 +300,26 @@ namespace minerule {
     
     return rs->getString(1);
   }
+  
+  std::string OptimizerCatalogue::getMRQueryName(size_t i) throw(odbc::SQLException, MineruleException) {
+	  std::string queryNumber = Converter(i-1).toString();
+      odbc::Connection* connection = MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
 
-  void 
-  OptimizerCatalogue::getMRQueryNames(std::vector<std::string>& nameVec) 
-    throw(odbc::SQLException, MineruleException) {
-    odbc::Connection* connection =
-      MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
+      std::auto_ptr<odbc::Statement> statement(connection->createStatement());
+      std::auto_ptr<odbc::ResultSet> rs(statement->executeQuery("SELECT query_name FROM mr_query LIMIT 1 OFFSET "+queryNumber));
+
+      if( rs->next() && !rs->isAfterLast() ) {
+		  return rs->getString(1);
+	  } else {
+		  throw MineruleException(MR_ERROR_CATALOGUE_ERROR, "Query number "+Converter(i).toString()+" not found");
+	  }  	
+  }
+
+  void OptimizerCatalogue::getMRQueryNames(std::vector<std::string>& nameVec) throw(odbc::SQLException, MineruleException) {
+    odbc::Connection* connection = MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
 
     std::auto_ptr<odbc::Statement> statement(connection->createStatement());
-    std::auto_ptr<odbc::ResultSet> rs(
-				 statement->executeQuery("SELECT query_name "
-							 "FROM mr_query"));
+    std::auto_ptr<odbc::ResultSet> rs(statement->executeQuery("SELECT query_name FROM mr_query"));
 
     while( rs->next() ) {
       nameVec.push_back(rs->getString(1));

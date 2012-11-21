@@ -17,6 +17,20 @@
 
 using namespace minerule;
 
+struct CharPtrComp
+{
+	const char* _str;
+	
+	CharPtrComp(const char* str) {
+		_str = str;
+	}
+};
+
+bool operator==(const char* s1, const CharPtrComp& cmp) {
+	return !strcmp(s1, cmp._str);
+}
+
+
 void
 printRules(std::string queryname,
            RuleFormatter& formatter,
@@ -38,12 +52,15 @@ printRules(std::string queryname,
 void
 printHelp(int argc, char** argv) {
     std::cout << StringUtils::to_bold("Usage:") << std::endl
-    << "   " << StringUtils::to_bold(argv[0]) << " [-0] [-c] [-h] [-s <order>] [-x <sepString>] [-f <optionfile>] resultsetname" << std::endl
+    << "   " << StringUtils::to_bold(argv[0]) << " [-h] [-0] [-c] [-n minerule-number] [-s <order>] [-x <sepString>] [-f <optionfile>] resultsetname" << std::endl
 	<< "The program allows printing results of minerule queries." << std::endl 
 	<< std::endl
+	<< StringUtils::to_bold("-h") << " - prints this message " << std::endl
 	<< StringUtils::to_bold("-0") << " - suppresses logging output " << std::endl
     << StringUtils::to_bold("-c") << " - do not filter out rules having low confidence" << std::endl	
-    << StringUtils::to_bold("-s -") << " allows one to sort the rules in a given order." << std::endl
+	<< StringUtils::to_bold("-n") << " - specifies a query number to be printed (this is an alternative to" << std::endl
+	<< "     specifying the query name)" << std::endl
+    << StringUtils::to_bold("-s") << " - allows one to sort the rules in a given order." << std::endl
     << "   supported orders are: " << std::endl
     << "     'no' -> no particular order (fastest display)" << std::endl
     << "     'scbh' -> order is support, confidence, body, head"<<std::endl
@@ -63,11 +80,29 @@ void printVersion() {
     std::cout << "PrintRules v:" << MR_VERSION << std::endl;
 }
 
-void
+std::string	getQueryName(size_t queryNumber) {
+	return OptimizerCatalogue::getMRQueryName(queryNumber);
+}
+
+bool hasOption(int argc, char** argv, const char* opt) {
+	return std::find(&argv[0], &argv[argc], CharPtrComp(opt)) != &argv[argc];
+}
+
+std::string
 parseOptions(int argc, char** argv, MineruleOptions& opt, RuleFormatter*& rf, double& conf) {
-    bool didReadMROpts=false;
     std::string sepString="";
 	bool suppressLog = false;
+	std::string queryName;
+	
+    if( !hasOption(argc, argv, "-f") ) {
+        if(FileUtils::fileExists(MineruleOptions::DEFAULT_FILE_NAME))
+            opt.readFromFile(MineruleOptions::DEFAULT_FILE_NAME);
+        else {
+            std::cout << "Cannot open "+MineruleOptions::DEFAULT_FILE_NAME+" and not -f option has been given" << std::endl;
+            exit(MR_ERROR_NO_OPTIONFILE_SPECIFIED);
+        }
+    }
+	
 		
     rf=NULL;
     for( int i=0; i<argc; i++ ) {
@@ -77,7 +112,6 @@ parseOptions(int argc, char** argv, MineruleOptions& opt, RuleFormatter*& rf, do
                 if( minerule::FileUtils::fileExists( argv[i+1] ) ) {
                     // all ok
                     opt.readFromFile(argv[i+1]);
-                    didReadMROpts=true;
                 } else {
                     std::string errstr;
                     if(errno==0) {
@@ -98,6 +132,17 @@ parseOptions(int argc, char** argv, MineruleOptions& opt, RuleFormatter*& rf, do
                 exit(2);
             }
         }
+		
+		if(argv[i]==std::string("-n")) {
+			if(i+1<argc && Converter(argv[i+1]).isNumber() ) {
+				queryName = getQueryName( Converter(argv[i+1]).toLong() );
+			} else {
+				std::cerr << "-n option recognized but its argument has not been given or is not a number"
+					<< std::endl;
+				printHelp(argc,argv);
+				exit(5);
+			}
+		}
         
         if(argv[i]==std::string("-h")) {
             printHelp(argc, argv);
@@ -157,39 +202,33 @@ parseOptions(int argc, char** argv, MineruleOptions& opt, RuleFormatter*& rf, do
     if(rf==NULL) {
         rf = new SimpleRuleFormatter();
     }
-    
-    if( !didReadMROpts ) {
-        if(FileUtils::fileExists(MineruleOptions::DEFAULT_FILE_NAME))
-            opt.readFromFile(MineruleOptions::DEFAULT_FILE_NAME);
-        else {
-            std::cout << "Cannot open "+MineruleOptions::DEFAULT_FILE_NAME+" and not -f option has been given"
-            << std::endl;
-            exit(MR_ERROR_NO_OPTIONFILE_SPECIFIED);
-        }
-    }
-    
+        
     if( sepString!="" )
         rf->setFieldSeparationString(sepString);
 	
 	if( suppressLog )
 		rf->setSuppressLog(true);
+	
+	if( queryName.empty() ) {
+		queryName = argv[argc-1];
+	}
+	
+	return queryName;
 }
 
 
 int
 main(int argc, char** argv) {
     assert(argc>1);
-    // The last parameter MUST be the query name
-    std::string qryname = argv[argc-1];
     
     try {
         MineruleOptions& mr = MineruleOptions::getSharedOptions();
         RuleFormatter* rf=NULL;
         double conf=-1;
-        parseOptions(argc, argv, mr, rf, conf);
+        std::string queryName = parseOptions(argc, argv, mr, rf, conf);
         
         if(!rf->suppressLog()) MRLogPush("Printing result set...");
-        printRules( qryname, *rf, conf);
+        printRules( queryName, *rf, conf);
 		if(!rf->suppressLog()) MRLogPop();
     } catch ( minerule::MineruleException& e ) {
         MRErr() << "MineruleError:" << e.what() << std::endl;

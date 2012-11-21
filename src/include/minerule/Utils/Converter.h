@@ -35,6 +35,13 @@ class Converter {
     ss << val;// << std::ends;
     value=ss.str();
   }
+  
+  explicit Converter(unsigned long val)  {
+    std::stringstream ss;
+    ss << val;// << std::ends;
+    value=ss.str();
+  }
+  
 
   explicit Converter(bool val) {
     if(val)

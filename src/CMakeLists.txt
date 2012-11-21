@@ -25,16 +25,16 @@ LIST(APPEND LIBS mralgorithms mrdatabase mroptimizer mrpredicateutils mrutils mr
 LIST(APPEND LIBS ${LIBGA_LIBRARIES})
 LIST(APPEND LIBS ${LIBODBC++_LIBRARIES})
 
-add_executable(minerule Programs/Minerule/minerule.cpp)
-target_link_libraries(minerule ${LIBS})
+add_executable(mr Programs/Minerule/minerule.cpp)
+target_link_libraries(mr ${LIBS})
 
-add_executable(mrcatalogue 
+add_executable(mr-catalogue 
 	Programs/MRCatalogue/mrcatalogue.cpp 
 	Programs/MRCatalogue/MRCUtils.cpp
 	Programs/MRCatalogue/Printer.cpp
 	Programs/MRCatalogue/Options.cpp)
 	
-target_link_libraries(mrcatalogue 
+target_link_libraries(mr-catalogue 
 	mrpredicateutils 
 	mroptimizer
 	mrdatabase 
@@ -42,11 +42,11 @@ target_link_libraries(mrcatalogue
 	mrparsers 
 	${LIBODBC++_LIBRARIES})
 
-add_executable(mrprintrules 
+add_executable(mr-printrules 
 	Programs/MRPrintRules/PrintRules.cpp 	
 	Programs/MRPrintRules/RuleFormatter.cpp)
 	
-target_link_libraries(mrprintrules 
+target_link_libraries(mr-printrules 
 	mroptimizer 
 	mrdatabase 
 	mrpredicateutils 
@@ -54,10 +54,10 @@ target_link_libraries(mrprintrules
 	mrparsers 
 	${LIBODBC++_LIBRARIES})
 
-add_executable(mrdefaultoptions 
+add_executable(mr-defaults 
 	Programs/MRDefaultOptions/MRDefaultOptions.cpp)
 	
-target_link_libraries(mrdefaultoptions 
+target_link_libraries(mr-defaults 
 	mrutils 
 	${LIBODBC++_LIBRARIES})
 

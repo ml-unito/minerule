@@ -233,27 +233,10 @@ namespace minerule {
 
 
   void BFSWithGidsAndCross::prepareData() {
-    MineruleOptions& mrOptions = MineruleOptions::getSharedOptions();
-
-    options.setSupport( minerule.getParsedMinerule().sup );
-    options.setConfidence( minerule.getParsedMinerule().conf );
-    options.setBodyCardinalities( minerule.getParsedMinerule().bodyCardinalities);
-    options.setHeadCardinalities( minerule.getParsedMinerule().headCardinalities);
-    options.getBodyCardinalities().applyConstraints(mrOptions.getParsers().getBodyCardinalities());
-    options.getHeadCardinalities().applyConstraints(mrOptions.getParsers().getHeadCardinalities());
-
-
 	sourceTable = new SourceTable(*this);
 	ruleIterator = sourceTable->newIterator(SourceTable::FullIterator);
 
     options.setTotGroups(sourceTable->getTotGroups());
-	
-    connection.useODBCConnection(MineruleOptions::getSharedOptions().getODBC().getODBCConnection());
-    connection.setOutTableName(minerule.getParsedMinerule().tab_result);
-    connection.setBodyCardinalities(minerule.getParsedMinerule().bodyCardinalities);
-    connection.setHeadCardinalities(minerule.getParsedMinerule().headCardinalities);
-    connection.createResultTables(SourceRowMetaInfo(connection.getODBCConnection(), minerule.getParsedMinerule()));
-    connection.init();
   }
 
 

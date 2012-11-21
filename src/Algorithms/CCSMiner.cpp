@@ -33,12 +33,7 @@ namespace minerule {
 		last_elem = rowDes.setgroupElems(1,pm.ga.size());
 
 		rowDes.setBodyElems(last_elem+1, pm.ba.size());
-
-		connection.useODBCConnection(MineruleOptions::getSharedOptions().getODBC().getODBCConnection());
-		//connection.setOutTableName(minerule.getParsedMinerule().tab_result);
-		//connection.setBodyCardinalities(minerule.getParsedMinerule().bodyCardinalities);
-		//connection.createResultTables();
-
+		
 		MRDebug() << "FSMiner query:" << sqlQuery.c_str() << std::endl;
 
 		statement = connection.getODBCConnection()->prepareStatement(sqlQuery.c_str());

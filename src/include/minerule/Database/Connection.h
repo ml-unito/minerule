@@ -19,7 +19,7 @@
 #include <iostream>
 #include <stdio.h>
 
-#include "Algorithms/Algorithms.h"
+// #include "Algorithms/Algorithms.h"
 
 namespace minerule {
 
@@ -65,7 +65,7 @@ namespace minerule {
 
 		class CachedDBInserter : public DBInserter {
 		private:
-			ofstream outR, outH, outB;
+			std::ofstream outR, outH, outB;
 			std::string filename;
 		public:
 			CachedDBInserter(Connection& cc) : DBInserter(cc) {};

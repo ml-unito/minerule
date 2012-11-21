@@ -129,7 +129,8 @@ namespace minerule {
 		queryText += buildAttrListDescription(mr.getParsedMinerule().ga);
 		queryText += "," + buildAttrListDescription(mr.getParsedMinerule().ba);
 		queryText += " FROM "+mr.getParsedMinerule().tab_source;
-		queryText += " WHERE "+body_mining_condition;
+		if(!body_mining_condition.empty())
+			queryText += " WHERE "+body_mining_condition;
 
 		if( miningAlgo.needsGidSortedSourceTable() )
 			queryText += " ORDER BY "+buildAttrListDescription(mr.getParsedMinerule().ga);
@@ -149,7 +150,9 @@ namespace minerule {
 		queryText += buildAttrListDescription(mr.getParsedMinerule().ga);
 		queryText += "," + buildAttrListDescription(mr.getParsedMinerule().ha);
 		queryText += " FROM "+mr.getParsedMinerule().tab_source;
-		queryText += " WHERE "+head_mining_condition;
+		
+		if(!head_mining_condition.empty())
+			queryText += " WHERE "+head_mining_condition;
 
 		if( miningAlgo.needsGidSortedSourceTable() )
 			queryText += " ORDER BY "+buildAttrListDescription(mr.getParsedMinerule().ga);

@@ -9,8 +9,6 @@ namespace minerule {
 
   class CARE : public MiningAlgorithm {
   private:
-    AlgorithmsOptions options;
-    Connection connection;
 	SourceTable* sourceTable;
 	SourceTable::Iterator bodyIterator;
 	SourceTable::Iterator headIterator;
@@ -28,8 +26,7 @@ namespace minerule {
     void prepareData();
 
   public:
-    CARE(const OptimizedMinerule& mr) :
-      MiningAlgorithm(mr) {}
+    CARE(const OptimizedMinerule& mr) : MiningAlgorithm(mr) {}
 
     virtual ~CARE() {}
 

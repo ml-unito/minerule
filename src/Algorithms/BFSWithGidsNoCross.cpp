@@ -44,7 +44,6 @@ namespace minerule {
   }
 
 
-//  int BFSWithGidsNoCross::BodyMap::add(ItemType& gid, Transaction& t1, Transaction& t2, bool secondPass) {
   int BFSWithGidsNoCross::BodyMap::add(int gid, Transaction& t1, Transaction& t2, bool secondPass) {	  	  
 	  int howMany = 0;
 	  MapElement me;
@@ -59,35 +58,22 @@ namespace minerule {
 		  }
 		  found->second.insert(gid);
 		  for (Transaction::iterator j = t2.begin(); j != t2.end(); j++)
-			  if (!BFSWithGidsNoCross::getMineruleHasSameBodyHead() || *i != *j /*&& i->price < j->price*/) {
-				  howMany++;
-				  found->second.insert(*j,me,secondPass);
-			  }
+		  if (!BFSWithGidsNoCross::getMineruleHasSameBodyHead() || *i != *j /*&& i->price < j->price*/) {
+			  howMany++;
+			  found->second.insert(*j,me,secondPass);
+		  }
 	  }
 	  return howMany;
   }
 
-  /*void BodyMap::saveMap (std::ostream& out, bool withGids) {
-    for (iterator i = begin(); i != end(); i++) {
-    out << i->first;
-    i->second.saveMap(out, withGids);
-    }
-    }
-
-    void BodyMap::loadMap (istream& in, bool withGids) {
-    ItemType item;
-    while (!in.eof()) {
-    in >> item;
-    if (in.eof()) break;
-    (*this)[item].loadMap(in, withGids);
-    }
-    }
-  */
   void BFSWithGidsNoCross::BodyMap::pruneMap (float threshold) {
-    BodyMap newMap(*connection);
-    for (iterator i = begin(); i != end(); i++)
-      if (i->second.pruneMap(threshold)) newMap[i->first] = i->second;
-    (*this) = newMap;
+	  BodyMap newMap(*connection);
+	  for (iterator i = begin(); i != end(); i++) {
+		  if (i->second.pruneMap(threshold)) 
+			  newMap[i->first] = i->second;
+	  }
+	  
+	  (*this) = newMap;
   }
 
   void BFSWithGidsNoCross::BodyMap::updateCount () {
@@ -95,90 +81,95 @@ namespace minerule {
       i->second.updateCount();
   }
 
-
   void BFSWithGidsNoCross::BodyMap::createBodies (NewRuleSet& rs, float threshold, size_t maxBody) {
-    for (iterator i = begin(); i != end(); i++) {
-      NewRule r(i,i->second);
-      rs.insert(rs.end(),r);
-    }
-    for (unsigned int n = 0; n < rs.size(); n++) {
-      NewRuleSet::iterator i = rs.begin()+n;
-      NewRule& rc = *i;
-      if (rc.body.size() < maxBody) {
-	BodyMap::iterator lb = rc.lastBody;
-	for (BodyMap::iterator j = ++lb; j != end(); j++) {
-	  GidList newGidList;
-	  NewRule& rc2 = *(rs.begin()+n);
-	  set_intersection(rc2.gids.begin(),rc2.gids.end(),
-			   j->second.begin(), j->second.end(),
-			   inserter(newGidList,newGidList.begin()));
-	  if (newGidList.size() >= threshold) {
-	    NewRule r(rc2,j,newGidList);
-	    rs.insert(rs.end(),r);
+	  for (iterator i = begin(); i != end(); i++) {
+		  NewRule r(i,i->second);
+		  rs.insert(rs.end(),r);
 	  }
-	}
-      }
-    }
+	
+	  for (unsigned int n = 0; n < rs.size(); n++) {
+		  NewRuleSet::iterator i = rs.begin()+n;
+		  NewRule& rc = *i;
+		  
+		  if (rc.body.size() < maxBody) {
+			  
+			  BodyMap::iterator lb = rc.lastBody;
+			  for (BodyMap::iterator j = ++lb; j != end(); j++) {
+				  GidList newGidList;
+				  NewRule& rc2 = *(rs.begin()+n);
+				  
+				  set_intersection(rc2.gids.begin(),rc2.gids.end(),
+					  j->second.begin(), j->second.end(),inserter(newGidList,newGidList.begin()));
+				  
+				  if (newGidList.size() >= threshold) {
+					  NewRule r(rc2,j,newGidList);
+					  rs.insert(rs.end(),r);
+				  }
+			  }
+			  
+		  } // if(rc.body.size())
+		  
+	  } // for
   }
 
 
   void BFSWithGidsNoCross::BodyMap::createHeads (NewRuleSet& rs, NewRuleSet& rs1, float threshold, size_t maxHead) {
-    for (size_t n = 0; n < rs.size(); n++) {
-      NewRule& rc = rs[n];
-      if (rc.head.size() < maxHead) {
-	map<ItemType, MapElement>::iterator lh = rc.lastHead;
-	map<ItemType, MapElement>::iterator eh = rc.lastBody->second.heads.end();
-	double supportBody = rc.gids.size();
+	  for (size_t n = 0; n < rs.size(); n++) {
+		  NewRule& rc = rs[n];
+		  if (rc.head.size() < maxHead) {
+			  map<ItemType, MapElement>::iterator lh = rc.lastHead;
+			  map<ItemType, MapElement>::iterator eh = rc.lastBody->second.heads.end();
+			  double supportBody = rc.gids.size();
 
-	for (map<ItemType, MapElement>::iterator j = lh; j != eh; j++) {
-	  GidList newGidList;
-	  if (!BFSWithGidsNoCross::getMineruleHasSameBodyHead() || std::find(rc.body.begin(), rc.body.end(), j->first) == rc.body.end()/* &&
-										     rc.head.find(j->first) == rc.head.end()*/) {
-	    set_intersection(rc.gids.begin(),rc.gids.end(),
-			     j->second.begin(), j->second.end(),
-			     inserter(newGidList,newGidList.begin()));
-	    if (newGidList.size() >= threshold) {
-	      NewRule r(rc,j,newGidList);
-	      r.lastHead++;
-	      r.conf = newGidList.size() / supportBody;
-	      rs1.insert(rs1.end(),r);
-	    }
-	  }
-	}
-      }
-    }
+			  for (map<ItemType, MapElement>::iterator j = lh; j != eh; j++) {
+				  GidList newGidList;
+				  if (!BFSWithGidsNoCross::getMineruleHasSameBodyHead() || std::find(rc.body.begin(), rc.body.end(), j->first) == rc.body.end()) {
+					  
+					  set_intersection(rc.gids.begin(),rc.gids.end(),
+						  j->second.begin(), j->second.end(), inserter(newGidList,newGidList.begin()));
+					  
+					  if (newGidList.size() >= threshold) {
+						  NewRule r(rc,j,newGidList);
+						  r.lastHead++;
+						  r.conf = newGidList.size() / supportBody;
+						  rs1.insert(rs1.end(),r);
+					  }
+				  }
+			  } // for
+		  } // if
+	  } // for
   }
 
   int BFSWithGidsNoCross::BodyMap::generateRules (float support, int totGroups, int maxBody, int maxHead) {
-    NewRuleSet rs1;
-    int howManyRules = 0;
-    float threshold = support*totGroups;
-    for (iterator i = begin(); i != end(); i++) {
-      NewRule r(i,i->second);
-      rs1.insert(rs1.end(),r);
-    }
-    for (size_t n = 0; n < rs1.size(); n++) {
-      NewRule& rc = *(rs1.begin()+n);
-      NewRuleSet rs;
-      addHead(rs, threshold, maxHead, rc.gids.size(), rc);
-      howManyRules += rs.size();
-      insertRules(rs, totGroups);
-      if (rc.body.size() < (size_t)maxBody) {
-	BodyMap::iterator lb = rc.lastBody;
-	for (BodyMap::iterator j = ++lb; j != end(); j++) {
-	  NewRule& rc2 = *(rs1.begin()+n);
-	  GidList newGidList;
-	  set_intersection(rc2.gids.begin(),rc2.gids.end(),
-			   j->second.begin(), j->second.end(),
-			   inserter(newGidList,newGidList.begin()));
-	  if (newGidList.size() >= threshold) {
-	    NewRule r(rc2,j,newGidList);
-	    rs1.insert(rs1.end(),r);
+	  NewRuleSet rs1;
+	  int howManyRules = 0;
+	  float threshold = support*totGroups;
+	  for (iterator i = begin(); i != end(); i++) {
+		  NewRule r(i,i->second);
+		  rs1.insert(rs1.end(),r);
 	  }
-	}
-      }
-    }
-    return howManyRules;
+	  for (size_t n = 0; n < rs1.size(); n++) {
+		  NewRule& rc = *(rs1.begin()+n);
+		  NewRuleSet rs;
+		  addHead(rs, threshold, maxHead, rc.gids.size(), rc);
+		  howManyRules += rs.size();
+		  insertRules(rs, totGroups);
+		  if (rc.body.size() < (size_t)maxBody) {
+			  BodyMap::iterator lb = rc.lastBody;
+			  for (BodyMap::iterator j = ++lb; j != end(); j++) {
+				  NewRule& rc2 = *(rs1.begin()+n);
+				  GidList newGidList;
+				  set_intersection(rc2.gids.begin(),rc2.gids.end(),
+					  j->second.begin(), j->second.end(),
+						  inserter(newGidList,newGidList.begin()));
+				  if (newGidList.size() >= threshold) {
+					  NewRule r(rc2,j,newGidList);
+					  rs1.insert(rs1.end(),r);
+				  }
+			  }
+		  }
+	  }
+	  return howManyRules;
   }
 
   void BFSWithGidsNoCross::BodyMap::addHead (NewRuleSet& rs, float threshold, int maxHead, int suppBody, NewRule& rc) {
@@ -187,10 +178,6 @@ namespace minerule {
       std::map<ItemType, MapElement>::iterator eh = rc.lastBody->second.heads.end();
       for (map<ItemType, MapElement>::iterator j = lh; j != eh; j++) {
 		GidList newGidList;
-
-		// FIXME: il find non può funzionare quando ci sono head e body di tipo diverso
-		// Bisogna usare la funzione ItemType::getFullElementType() per verificare che
-		// gli element abbiano lo stesso tipo
 
 		if (!BFSWithGidsNoCross::getMineruleHasSameBodyHead() || std::find(rc.body.begin(), rc.body.end(), j->first) == rc.body.end()/* &&
 											   rc.head.find(j->first) == rc.head.end()*/) {
@@ -213,36 +200,17 @@ namespace minerule {
 			     double totGroups ) {
     NewRuleSet::const_iterator it;
     for(it=rs.begin(); it!=rs.end(); it++) {
-      connection->insert( it->body, 
-			  it->head, 
-			  it->gids.size()/totGroups, 
-			  it->conf );
+      connection->insert( it->body, it->head, it->gids.size()/totGroups, it->conf );
     }
   }
 
 
-  void BFSWithGidsNoCross::prepareData() {
-	  MineruleOptions& mrOptions = MineruleOptions::getSharedOptions();
-
-	  options.setSupport( minerule.getParsedMinerule().sup );
-	  options.setConfidence( minerule.getParsedMinerule().conf );
-	  options.setBodyCardinalities( minerule.getParsedMinerule().bodyCardinalities);
-	  options.setHeadCardinalities( minerule.getParsedMinerule().headCardinalities);
-	  options.getBodyCardinalities().applyConstraints(mrOptions.getParsers().getBodyCardinalities());
-	  options.getHeadCardinalities().applyConstraints(mrOptions.getParsers().getHeadCardinalities());
-	  
+  void BFSWithGidsNoCross::prepareData() {	  
 	  sourceTable = new SourceTable(*this);
 	  bodyIterator = sourceTable->newIterator(SourceTable::BodyIterator);
 	  headIterator = sourceTable->newIterator(SourceTable::HeadIterator);
 
 	  options.setTotGroups(sourceTable->getTotGroups());
-
-	  connection.useODBCConnection(MineruleOptions::getSharedOptions().getODBC().getODBCConnection());
-	  connection.setOutTableName(minerule.getParsedMinerule().tab_result);
-	  connection.setBodyCardinalities(minerule.getParsedMinerule().bodyCardinalities);
-	  connection.setHeadCardinalities(minerule.getParsedMinerule().headCardinalities);
-	  connection.createResultTables(SourceRowMetaInfo(connection.getODBCConnection(), minerule.getParsedMinerule()));
-	  connection.init();
   }
 
 

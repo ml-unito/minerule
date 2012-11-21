@@ -5,8 +5,8 @@
 #include "Algorithms/ConstrItemSetsExtraction.h"
 
 
-MiningAlgorithm*
-MiningAlgorithm::algorithmForType(AlgorithmTypes t, const OptimizedMinerule& mr) throw(MineruleException) {
+MiningAlgorithmBase*
+MiningAlgorithmBase::algorithmForType(AlgorithmTypes t, const OptimizedMinerule& mr) throw(MineruleException) {
   switch(t) {
   case ATNone:
     return new MiningAlgorithm(mr);

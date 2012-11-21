@@ -4,6 +4,7 @@
 #include "AlgorithmsOptions.h"
 #include "Optimizer/OptimizedMinerule.h"
 #include "Utils/AlgorithmTypes.h"
+#include "Database/Connection.h"
 
 namespace minerule {
 
@@ -11,12 +12,12 @@ namespace minerule {
  * Base class from which each new mining algorithm will be derived
  */
 
-class MiningAlgorithm {
+class MiningAlgorithmBase {
  protected:
   const OptimizedMinerule& minerule;
  public:
-  MiningAlgorithm( const OptimizedMinerule& mr ) : minerule(mr) {}
-  virtual ~MiningAlgorithm() {}
+  MiningAlgorithmBase( const OptimizedMinerule& mr ) : minerule(mr) {}
+  virtual ~MiningAlgorithmBase() {}
   
   virtual void execute() {
     throw MineruleException( MR_ERROR_INTERNAL, "This method should never be executed!");
@@ -37,8 +38,33 @@ class MiningAlgorithm {
   virtual const OptimizedMinerule& optimizedMinerule() const { return minerule; }
 
   // Instantiate the algorithm specified by t
-  static MiningAlgorithm* algorithmForType(AlgorithmTypes t, const OptimizedMinerule&) 
+  static MiningAlgorithmBase* algorithmForType(AlgorithmTypes t, const OptimizedMinerule&) 
     throw(MineruleException);
+};
+
+class MiningAlgorithm : public MiningAlgorithmBase {
+protected:
+	AlgorithmsOptions options;
+	Connection connection;
+public:
+	MiningAlgorithm(const OptimizedMinerule& m) : MiningAlgorithmBase(m) {		
+  	  MineruleOptions& mrOptions = MineruleOptions::getSharedOptions();
+
+  	  options.setSupport( minerule.getParsedMinerule().sup );
+  	  options.setConfidence( minerule.getParsedMinerule().conf );
+  	  options.setBodyCardinalities( minerule.getParsedMinerule().bodyCardinalities);
+  	  options.setHeadCardinalities( minerule.getParsedMinerule().headCardinalities);
+  	  options.getBodyCardinalities().applyConstraints(mrOptions.getParsers().getBodyCardinalities());
+  	  options.getHeadCardinalities().applyConstraints(mrOptions.getParsers().getHeadCardinalities());		
+	  
+	  connection.useODBCConnection(MineruleOptions::getSharedOptions().getODBC().getODBCConnection());
+	  connection.setOutTableName(minerule.getParsedMinerule().tab_result);
+	  connection.setBodyCardinalities(minerule.getParsedMinerule().bodyCardinalities);
+	  connection.setHeadCardinalities(minerule.getParsedMinerule().headCardinalities);
+	  connection.createResultTables(SourceRowMetaInfo(connection.getODBCConnection(), minerule.getParsedMinerule()));
+	  connection.init();	  
+	}
+	
 };
 
 

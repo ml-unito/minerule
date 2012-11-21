@@ -6,7 +6,8 @@
 
 #include "IncrementalAlgorithm.h"
 #include "Database/ItemType.h"
-#include "IncrAlgoClasses.h"
+#include "Algorithms/IncrAlgoClasses.h"
+#include "Database/MIndex.h"
 
 namespace minerule {
 

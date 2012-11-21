@@ -100,8 +100,6 @@ namespace minerule {
 
   };
   private:
-    AlgorithmsOptions options;
-    Connection connection;
     SourceRowColumnIds rowDes;
 	static bool mineruleHasSameBodyHead;
 	

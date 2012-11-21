@@ -95,15 +95,12 @@ namespace minerule {
 
 		};
 	private:
-		AlgorithmsOptions options;
 		static bool mineruleHasSameBodyHead;
 		SourceTable* sourceTable;
 			
 		SourceTable::Iterator bodyIterator;
 		SourceTable::Iterator headIterator;
 			
-		Connection connection;
-
 		void insertRules( const NewRuleSet& rs, double totGroups );
 
 		void prepareData();    

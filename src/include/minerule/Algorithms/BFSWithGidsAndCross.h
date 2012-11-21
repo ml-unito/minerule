@@ -115,9 +115,11 @@ namespace minerule {
     
   public:
     BFSWithGidsAndCross(const OptimizedMinerule& mr) : 
-      MiningAlgorithm(mr) {}
+      MiningAlgorithm(mr), sourceTable(NULL) {}
 
-    virtual ~BFSWithGidsAndCross() {}
+    virtual ~BFSWithGidsAndCross() {
+    	if(sourceTable!=NULL) delete sourceTable;
+    }
 
     virtual bool needsCrossProductOfSourceTable() const {
       return true;

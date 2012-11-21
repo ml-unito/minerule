@@ -3,12 +3,17 @@
 #include <odbc++/resultset.h>
 
 namespace minerule {
+	
+	SourceTable::~SourceTable() {
+		for(std::vector<odbc::ResultSet*>::const_iterator it = _managedResults.begin(); it!=_managedResults.end(); ++it) {
+			delete *it;
+		}
+	}	
 
 	bool SourceTable::Iterator::next() { 
 		assert( _sourceRow != NULL && _resultSet != NULL );
 		if( _resultSet->next() ) {
 			_sourceRow->init(_resultSet, _columnIds);
-
 			return true;
 		} else {
 			return false;
@@ -48,12 +53,6 @@ namespace minerule {
 		throw MineruleException(MR_ERROR_INTERNAL, "Uknown IteratorKind. This is a bug, please report it!");
 	}
 	
-	SourceTable::~SourceTable() {
-		for(std::vector<odbc::ResultSet*>::const_iterator it = _managedResults.begin(); it!=_managedResults.end(); ++it) {
-			delete *it;
-		}
-	}
-
 	size_t SourceTable::getTotGroups() {
 		return _pdu.evaluateTotGroups();
 	}

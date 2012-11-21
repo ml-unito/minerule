@@ -46,7 +46,7 @@ namespace minerule {
 			init(); 
 		};
 		
-		virtual ~SourceTable ();
+		virtual ~SourceTable();
 
 		void init();
 		size_t getTotGroups();

@@ -10,6 +10,11 @@ int
 main(int argc, char** argv) {
   int resultVal;
   try {
+    if( argc < 2 ) {
+    	mrc::printHelp(argc, argv);
+		exit(0);
+    }
+	  
     MineruleOptions& mr = MineruleOptions::getSharedOptions();
     mrc::Options options;
     mrc::parseOptions(argc, argv, mr, options);

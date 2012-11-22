@@ -26,7 +26,10 @@ LIST(APPEND LIBS ${LIBGA_LIBRARIES})
 LIST(APPEND LIBS ${LIBODBC++_LIBRARIES})
 
 add_executable(mr Programs/Minerule/minerule.cpp)
-target_link_libraries(mr ${LIBS})
+target_link_libraries(mr mrutils ${LIBODBC++_LIBRARIES})
+
+add_executable(mr-query Programs/MRQuery/mrquery.cpp)
+target_link_libraries(mr-query  ${LIBS})
 
 add_executable(mr-catalogue 
 	Programs/MRCatalogue/mrcatalogue.cpp 
@@ -42,11 +45,11 @@ target_link_libraries(mr-catalogue
 	mrparsers 
 	${LIBODBC++_LIBRARIES})
 
-add_executable(mr-printrules 
+add_executable(mr-print 
 	Programs/MRPrintRules/PrintRules.cpp 	
 	Programs/MRPrintRules/RuleFormatter.cpp)
 	
-target_link_libraries(mr-printrules 
+target_link_libraries(mr-print 
 	mroptimizer 
 	mrdatabase 
 	mrpredicateutils 

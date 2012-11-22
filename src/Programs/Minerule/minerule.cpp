@@ -43,7 +43,11 @@ void execSubCommand( std::string cmd, int argc, char** argv, std::string cmdPath
 void printMRHelp() {
 	std::cout << StringUtils::to_bold("Usage:") << std::endl
 		<< StringUtils::to_bold("mr [-h] <sub-command> [-h] [options]") << std::endl
-		<< "   Available sub-commands are: query, print, catalogue, and defaults." << std::endl
+		<< "   Available sub-commands are: " 
+		<<	StringUtils::to_bold("query") << ", " 
+		<<  StringUtils::to_bold("print") << ", "
+		<<  StringUtils::to_bold("catalogue") << " and "
+		<<  StringUtils::to_bold("defaults") << std::endl
 		<< StringUtils::to_bold("   Note:") << "Sub-commands can be shortened at will" << std::endl
 		<<                      "        e.g.: 'mr pr' is equivalent to 'mr print'" << std::endl
 		<< StringUtils::to_bold("   -h ") << " -- shows help for the given command if given after a sub-command name." << std::endl
@@ -64,14 +68,11 @@ std::string expandSubCommand(std::string cmdPrefix) {
 
 
 void checkSubCommands(int argc, char** argv) {
-	if(argc >= 2 && std::string(argv[1]) == "-h") {
+	if(argc < 2 || std::string(argv[1]) == "-h") {
 		printMRHelp();
 		exit(0);
 	}
-	
-	if(argc < 2) 
-		throw MineruleException( MR_ERROR_OPTION_PARSING, "Command not recognized, see help for a list of available commands." );
-	
+		
 	std::string subCmd( expandSubCommand(argv[1]) );
 	if(subCmd == "print") {
 		execSubCommand(subCmd, argc-2, &argv[2], buildPath(argv[0]));

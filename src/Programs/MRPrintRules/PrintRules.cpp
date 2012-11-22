@@ -222,10 +222,13 @@ parseOptions(int argc, char** argv, MineruleOptions& opt, RuleFormatter*& rf, do
 
 
 int
-main(int argc, char** argv) {
-    assert(argc>1);
-    
+main(int argc, char** argv) {    
     try {
+		if(argc < 2) {
+			printHelp(argc, argv);
+			exit(0);
+		}
+		
         MineruleOptions& mr = MineruleOptions::getSharedOptions();
         RuleFormatter* rf=NULL;
         double conf=-1;

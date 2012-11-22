@@ -1,6 +1,7 @@
 #ifndef __QUERY_RESULT_IMPL_H__
 #define __QUERY_RESULT_IMPL_H__
 
+#include <algorithm>
 #include "Database/QueryResult.h"
 #include "Database/Connection.h"
 #include "Optimizer/OptimizerCatalogue.h"

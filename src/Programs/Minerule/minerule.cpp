@@ -3,6 +3,9 @@
 #include<unistd.h>
 #include<assert.h>
 #include<errno.h>
+#include<malloc.h>
+#include<string.h>
+#include<stdlib.h>
 
 #include "Utils/MineruleException.h"
 #include "Utils/MineruleErrors.h"

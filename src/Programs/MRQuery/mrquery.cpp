@@ -1,29 +1,14 @@
-#include<cstdio>
-#include<cstdlib>
-#include<string>
-#include<iostream>
-#include<sstream>
-#include<fstream>
-#include<cstdlib>
-#include<iterator>
-#include<cstring>
-#include<cctype>
-#include<unistd.h>
+#include <iostream>
+#include <string>
+#include <fstream>
 
-#include<odbc++/drivermanager.h>
-#include<odbc++/connection.h>
-#include<odbc++/resultset.h>
-#include<odbc++/statement.h>
-#include<odbc++/resultsetmetadata.h>
-
-#include "Parsers/ParsedMinerule.h"
-#include "Algorithms/Algorithms.h"
-#include "Optimizer/OptimizedMinerule.h"
-#include "Utils/MineruleOptions.h"
+#include "Utils/StringUtils.h"
 #include "Utils/MineruleErrors.h"
+#include "Utils/MineruleLogs.h"
+#include "Utils/MineruleOptions.h"
 #include "Utils/FileUtils.h"
-
-
+#include "Optimizer/OptimizedMinerule.h"
+#include "Algorithms/Algorithms.h"
 
 using namespace minerule;
 
@@ -75,8 +60,8 @@ parseMineruleName(const std::string& mrtext) {
 	std::string mstring;
 
 	size_t minerulepos;
-	size_t startnamepos = string::npos;
-	size_t endnamepos = string::npos;
+	size_t startnamepos = std::string::npos;
+	size_t endnamepos = std::string::npos;
 
   // strlwr seems to be not standard and hence not
   // present in all systems. The following substitue it
@@ -85,24 +70,24 @@ parseMineruleName(const std::string& mrtext) {
 		mrtextcopy[i]=tolower(mrtextcopy[i]);
 	}
 
-	if(mrtextcopy.find(mstringrule,0)!=string::npos)
+	if(mrtextcopy.find(mstringrule,0)!=std::string::npos)
 		mstring=mstringrule;
-	else if(mrtextcopy.find(mstringitemset,0)!=string::npos)
+	else if(mrtextcopy.find(mstringitemset,0)!=std::string::npos)
 		mstring=mstringitemset;
 	else
 		mstring=mstringsequence;
   
 	minerulepos = mrtextcopy.find(mstring,0);
   
-	if(minerulepos!=string::npos) 
+	if(minerulepos!=std::string::npos) 
 		startnamepos = mrtextcopy.find_first_not_of(spacechars ,
 			minerulepos+mstring.size());
 
-	if(startnamepos!=string::npos)
+	if(startnamepos!=std::string::npos)
 		endnamepos = mrtextcopy.find_first_of(spacechars,startnamepos);
 
   
-	if(endnamepos==string::npos ) {
+	if(endnamepos==std::string::npos ) {
     // notice we will be here, if any of the searches above fails
 		MRErr() << "Error in retrieving the minerule name from the " 
 			<< "text which define the minerule. I could not "
@@ -147,7 +132,7 @@ parseOptions(int argc, char** argv, MineruleOptions& mrOpts, std::string& mrtext
 						"(you cannot specify more than one {-i,-m} options)" << std::endl;
 					exit(MR_ERROR_OPTION_PARSING);
 				}
-				ifstream infile(optarg);
+				std::ifstream infile(optarg);
 				if(!infile) {
 					MRErr() << "Cannot open input file" << std::endl;
 					std::cerr <<  "Cannot open input file" << std::endl;
@@ -174,7 +159,7 @@ parseOptions(int argc, char** argv, MineruleOptions& mrOpts, std::string& mrtext
 				okMROptions = true;
 				break;
 			case 'O':
-				cmd_line_mr_options.push_back(string(optarg));
+				cmd_line_mr_options.push_back(std::string(optarg));
 				break;
 			case 'm':
 				if( okMRText ) {

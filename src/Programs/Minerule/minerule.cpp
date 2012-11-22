@@ -3,7 +3,6 @@
 #include<unistd.h>
 #include<assert.h>
 #include<errno.h>
-#include<malloc.h>
 #include<string.h>
 #include<stdlib.h>
 
@@ -24,7 +23,7 @@ std::string buildPath(std::string cmdName) {
 
 
 void execSubCommand( std::string cmd, int argc, char** argv, std::string cmdPath ) {
-	const char** cmdArgv = (const char**) malloc( sizeof(char*[argc+2]) );
+	const char** cmdArgv = new char const*[argc+2];
 	assert(cmdArgv != NULL );
 	std::string executableName = cmdPath + std::string("mr-")+cmd;
 	

@@ -6,11 +6,13 @@
 #include <iostream>
 #include <assert.h>
 #include <string>
+#include <algorithm>
 
 #include "MRCUtils.h"
 #include "Printer.h"
 #include "Utils/FileUtils.h"
 #include "Utils/StringUtils.h"
+
 
 namespace mrc {
 	void

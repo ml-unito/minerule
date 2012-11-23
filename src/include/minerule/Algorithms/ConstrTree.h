@@ -25,11 +25,14 @@ class ConstrTree : public IncrementalAlgorithm {
   odbc::ResultSet* rh2;
   SourceRowColumnIds bodyDes;
   SourceRowColumnIds headDes;
+  odbc::Statement* stateb2;
+  odbc::Statement* stateh2;
 
   void adjustSuppRSet();
   void adjustSuppMIndex();
   void insertRulesInStructure();
   void adjustSupp();
+  void prepareData();
 
   size_t buildAttrStr(const ParsedMinerule::AttrVector& attr,
 		      size_t startIndex,
@@ -42,22 +45,22 @@ class ConstrTree : public IncrementalAlgorithm {
 
   Body* getRoot(){return root;}
  public:
-  ConstrTree(const OptimizedMinerule& mr) :
-    IncrementalAlgorithm(mr),
-    root(new Body()), 
-    ngroups(0), 
-    mb2(NULL), 
-    mh2(NULL), 
-    rb2(NULL), 
-    rh2(NULL) {
-  }
+  ConstrTree(const OptimizedMinerule& mr) : IncrementalAlgorithm(mr), root(new Body()), ngroups(0), mb2(NULL), mh2(NULL), rb2(NULL), rh2(NULL) { }
 
   virtual ~ConstrTree() {
-    delete root;
+    // Trashing the trashable
+    if(rh2!=NULL) delete rh2;
+    if(stateh2!=NULL) delete stateh2;
+    if(rb2!=NULL) delete rb2;
+    if(stateb2!=NULL) delete stateb2;
+    	
+    rb2=rh2=NULL;
+    stateh2=stateb2=NULL;
+    
+	delete root;
   }
 
-  virtual void execute() 
-    throw(MineruleException,odbc::SQLException);
+  virtual void execute() throw(MineruleException,odbc::SQLException);
 };
 
 } // namespace

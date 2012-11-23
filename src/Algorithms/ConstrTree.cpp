@@ -106,6 +106,8 @@ namespace minerule {
 
 
   void ConstrTree::adjustSupp(){
+    MRLogPusher _("Starting the mining algorithm...");
+	  
     MRLog() << "Reading previous result and preparing data structures..." << std::endl;
     insertRulesInStructure();
 
@@ -176,6 +178,45 @@ namespace minerule {
   }
 
 
+  void ConstrTree::prepareData() {
+      MRLogPusher _("Building source information");
+
+	  MRLog() << "Separating the constraints in the HEAD and BODY parts..."<<std::endl;
+	  std::string bodyConstraints;
+	  std::string headConstraints;
+	  HeadBodyPredicatesSeparator::separate(minerule->getParsedMinerule().mc->l_and,
+		  bodyConstraints,
+			  headConstraints);
+
+	  MRLog() << "Building db queries" << std::endl;
+	  size_t index;
+	  std::string groupAttr;
+	  std::string bodyAttr;
+	  std::string headAttr;
+	  index=buildAttrStr(minerule->getParsedMinerule().ga, 0, groupAttr, bodyDes.groupElems );
+
+	  headDes.groupElems=bodyDes.groupElems;
+    
+	  buildAttrStr(minerule->getParsedMinerule().ba, index, bodyAttr, bodyDes.bodyElems);
+	  buildAttrStr(minerule->getParsedMinerule().ha, index, headAttr, headDes.headElems);
+		 
+	  std::string bodyQry = buildQry( groupAttr, bodyAttr, bodyConstraints);
+
+	  std::string headQry = buildQry( groupAttr, headAttr, headConstraints);
+
+	  MRLog() << "Body query" << bodyQry << std::endl;
+	  MRLog() << "Head query" << headQry << std::endl;
+	  MRLog() << "Executing queries" << std::endl;
+	  odbc::Connection* con = MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
+
+	  stateb2 = con->createStatement();
+	  rb2 = stateb2->executeQuery(bodyQry);
+
+
+	  stateh2 = con->createStatement();
+	  rh2 = stateh2->executeQuery(headQry);
+	  ngroups = PrepareDataUtils::evaluateTotGroups(minerule->getParsedMinerule());
+  }
 
   void ConstrTree::execute() 
     throw(MineruleException,odbc::SQLException) {
@@ -183,149 +224,9 @@ namespace minerule {
     assert( minerule->getParsedMinerule().mc!=NULL &&
 	    minerule->getParsedMinerule().mc->next==NULL);
 
-#ifdef SAVE_TIMINGS_ON_FILE
-    #warning Temporary code...
-    MineruleOptions& opts = MineruleOptions::getSharedOptions();
-    ofstream outfile("/home/minerule/mrweb/timings.txt", ios_base::out | ios_base::app);
-    assert(outfile);
-    outfile << minerule->getParsedMinerule().mc->l_and->sp->val2 << " ";
-// temporary code ends
-#endif
-
-
-    MRLogPush("This is the Context Dependent Constructive Mining Algorithm...");
-    MRLogPush("Building source information");
-
-    MRLog() << "Separating the constraints in the HEAD and BODY parts..."<<std::endl;
-   std::string bodyConstraints;
-   std::string headConstraints;
-    HeadBodyPredicatesSeparator::separate(minerule->getParsedMinerule().mc->l_and,
-					  bodyConstraints,
-					  headConstraints);
-
-    MRLog() << "Building db queries" << std::endl;
-    size_t index;
-   std::string groupAttr;
-   std::string bodyAttr;
-   std::string headAttr;
-    index=buildAttrStr(minerule->getParsedMinerule().ga,
-		       0,
-		       groupAttr,
-		       bodyDes.groupElems );
-
-    headDes.groupElems=bodyDes.groupElems;
-    
-    buildAttrStr(minerule->getParsedMinerule().ba,
-		 index,
-		 bodyAttr,
-		 bodyDes.bodyElems);
-    buildAttrStr(minerule->getParsedMinerule().ha,
-		 index,
-		 headAttr,
-		 headDes.headElems);
-		 
-   std::string bodyQry =
-      buildQry( groupAttr,
-		bodyAttr,
-		bodyConstraints);
-
-   std::string headQry =
-      buildQry( groupAttr,
-		headAttr,
-		headConstraints);
-
-    MRLog() << "Body query" << bodyQry << std::endl;
-    MRLog() << "Head query" << headQry << std::endl;
-    MRLog() << "Executing queries" << std::endl;
-    odbc::Connection* con =
-      MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
-
-    odbc::Statement* stateb2;
-    odbc::Statement* stateh2;
-
-    // Debugging code starts 
-    /*
-    MRDebugPush("Body description");
-    std::ostream& dbg = MRDebug();
-    dbg << "Group ids:";
-    copy( bodyDes.groupElems.begin(),
-	  bodyDes.groupElems.end(),
-	  std::ostream_iterator<int>(dbg, ",") );
-    dbg << std::endl;
-    MRDebug() << "Body ids:";
-    copy( bodyDes.bodyElems.begin(),
-	  bodyDes.bodyElems.end(),
-	  std::ostream_iterator<int>(dbg, ",") );
-    dbg<< std::endl;
-    MRDebug() << "Body query:" << bodyQry << std::endl;
-    MRDebugPop();
-    */
-    // Debugging code ends 
-
-    stateb2 = con->createStatement();
-    rb2 = stateb2->executeQuery(bodyQry);
-
-
-    // Debugging code starts 
-    /*
-    MRDebugPush("Head description");
-    MRDebug() << "Group ids:";
-    copy( headDes.groupElems.begin(),
-	  headDes.groupElems.end(),
-	  std::ostream_iterator<int>(dbg, ",") );
-    dbg << std::endl;
-    MRDebug() << "Head ids:";
-    copy( headDes.headElems.begin(),
-	  headDes.headElems.end(),
-	  std::ostream_iterator<int>(dbg, ",") );
-    dbg<< std::endl;
-    MRDebug() << "Head query:" << headQry << std::endl;
-    MRDebugPop();
-    */
-    // Debugging code ends
-
-    stateh2 = con->createStatement();
-    rh2 = stateh2->executeQuery(headQry);
-    ngroups = PrepareDataUtils::evaluateTotGroups(minerule->getParsedMinerule());
-
-#ifdef SAVE_TIMINGS_ON_FILE
-#warning temporary    
-outfile << opts.getLogStreamObj().getLogger().getCurrentTimeDelta()<< " ";
-//end
-#endif
-
-    MRLogPop();
-
-    MRLogPush("Starting the mining algorithm...");
+    MRLogPusher _("This is the Context Dependent Constructive Mining Algorithm...");
+	
+	prepareData();
     adjustSupp();
-
-#ifdef SAVE_TIMINGS_ON_FILE
-#warning temporary    
-outfile << opts.getLogStreamObj().getLogger().getCurrentTimeDelta() << " ";
-//end    
-#endif
-
-    MRLogPop();
-
-#ifdef SAVE_TIMINGS_ON_FILE
-#warning temporary    
-outfile << opts.getLogStreamObj().getLogger().getCurrentTimeDelta()<< std::endl;
-//end
-#endif
-    MRLogPop();
-
-#ifdef SAVE_TIMINGS_ON_FILE
-#warning temporary code
-outfile.close();
-//end
-#endif
-    
-    // Trashing the trashable
-    delete rh2;
-    delete stateh2;
-    delete rb2;
-    delete stateb2;
-    rb2=rh2=NULL;
-    stateh2=stateb2=NULL;
   }
 } // namespace

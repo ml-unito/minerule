@@ -12,6 +12,7 @@
 #include "Parsers/ParsedMinerule.h"
 #include "Database/ItemType.h"
 #include "Database/QueryResult-header.h"
+#include "Optimizer/CatalogueInstaller.h"
 
 
 
@@ -178,6 +179,8 @@ namespace minerule {
 	 * @return true if the catalogue tables appear to be present.
 	 */
 	static bool checkInstallation();
+    static void install(CatalogueInstaller::SupportedDbms) throw(MineruleException, odbc::SQLException);
+    static void uninstall(CatalogueInstaller::SupportedDbms) throw(MineruleException, odbc::SQLException);
 	
 
     static void addMineruleResult( const MineruleResultInfo& mri ) throw(odbc::SQLException, MineruleException);

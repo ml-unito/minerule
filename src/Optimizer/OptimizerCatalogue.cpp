@@ -10,8 +10,6 @@
 #include <algorithm>
 #include <iomanip>
 
-
-
 namespace minerule {
 
 	bool OptimizerCatalogue::existsMinerule(const std::string& mrname) {
@@ -41,7 +39,7 @@ namespace minerule {
 			"SELECT query_id "
 				"FROM mr_query "
 					"WHERE query_name="+SQLUtils::quote(mrname)+
-						" OR tab_results_name="+SQLUtils::quote(mrname);
+		" OR tab_results_name="+SQLUtils::quote(mrname);
 
 		std::auto_ptr<odbc::Statement> stat(conn.getODBCConnection()->createStatement());
 		odbc::ResultSet* rs=stat->executeQuery(query);
@@ -90,9 +88,9 @@ namespace minerule {
 
 			std::string getKeyQuery = 
 				std::string("SELECT "+getSchemaInfo("tab_cols_col_name")+" "+
-					"FROM "+getSchemaInfo("tab_cols")+" "+
-						"WHERE "+getSchemaInfo("tab_cols_key_id")+"=") + 
-							Converter((long)refKey).toString();
+			"FROM "+getSchemaInfo("tab_cols")+" "+
+			"WHERE "+getSchemaInfo("tab_cols_key_id")+"=") + 
+			Converter((long)refKey).toString();
 
 			std::auto_ptr<odbc::ResultSet> rs( stat1->executeQuery(getKeyQuery) );
 			KeyCols refKeyCols;
@@ -134,13 +132,13 @@ namespace minerule {
 			std::auto_ptr<odbc::Statement> stat1( connection->createStatement() );
 			std::string getCatalogueQuery = (std::string)
 				"SELECT A."+getSchemaInfo("tab_main_tab_name")+
-					",B."+getSchemaInfo("tab_cols_col_name")+
-						",A."+getSchemaInfo("tab_main_rhs_key_id")+
-							",A."+getSchemaInfo("tab_main_order_type")+" "+
-								"FROM "+getSchemaInfo("tab_main")+" AS A,"+
-									getSchemaInfo("tab_cols")+" AS B "+
-										"WHERE A."+getSchemaInfo("tab_main_lhs_key_id")+"=B."+
-											getSchemaInfo("tab_cols_key_id");
+			",B."+getSchemaInfo("tab_cols_col_name")+
+			",A."+getSchemaInfo("tab_main_rhs_key_id")+
+			",A."+getSchemaInfo("tab_main_order_type")+" "+
+			"FROM "+getSchemaInfo("tab_main")+" AS A,"+
+			getSchemaInfo("tab_cols")+" AS B "+
+			"WHERE A."+getSchemaInfo("tab_main_lhs_key_id")+"=B."+
+			getSchemaInfo("tab_cols_key_id");
      
 			std::auto_ptr<odbc::ResultSet> rs( stat1->executeQuery(getCatalogueQuery) );
 			KeyCols origKey;
@@ -203,8 +201,8 @@ namespace minerule {
 			if(!rs->next())
 				throw MineruleException(MR_ERROR_INSTALLATION_PROBLEM,
 					"Cannot find the autoincrement value for table "+ tableName+
-						" in Optimizer catalogue (i.e. in table:`mr_autoincrement'),"
-							" please check your installation");
+			" in Optimizer catalogue (i.e. in table:`mr_autoincrement'),"
+				" please check your installation");
 
 			size_t id = rs->getInt(1);
 			idstr = Converter((long)++id).toString();
@@ -217,8 +215,8 @@ namespace minerule {
 
 			updateStatement = connection->createStatement();
 			updateStatement->execute("UPDATE mr_autoincrement SET current_id="+
-				idstr+" "
-					"WHERE table_name="+SQLUtils::quote(tableName));
+			idstr+" "
+				"WHERE table_name="+SQLUtils::quote(tableName));
 
 			delete updateStatement;
 
@@ -265,12 +263,12 @@ namespace minerule {
 		typedef std::pair<std::string, bool> TableInfo;
 		std::vector<TableInfo> tables;
 		tables.push_back(TableInfo("mr_query", false));
- 		tables.push_back(TableInfo("mr_att_lists", false));
- 		tables.push_back(TableInfo("mr_eq_keys", false));
- 		tables.push_back(TableInfo("mr_eq_keys_col", false));
- 		tables.push_back(TableInfo("mr_dep_fun", false));
- 		tables.push_back(TableInfo("mr_dep_fun_col", false));
- 		tables.push_back(TableInfo("mr_autoincrement", false));
+		tables.push_back(TableInfo("mr_att_lists", false));
+		tables.push_back(TableInfo("mr_eq_keys", false));
+		tables.push_back(TableInfo("mr_eq_keys_col", false));
+		tables.push_back(TableInfo("mr_dep_fun", false));
+		tables.push_back(TableInfo("mr_dep_fun_col", false));
+		tables.push_back(TableInfo("mr_autoincrement", false));
 		
 		rs->next();
 		while(!rs->isAfterLast()) {
@@ -294,7 +292,20 @@ namespace minerule {
 			}
 		}
 		
-	  	return allTablePresents;
+		return allTablePresents;
+	}
+	
+	
+	void OptimizerCatalogue::install(CatalogueInstaller::SupportedDbms dbms) throw(MineruleException, odbc::SQLException) {
+		CatalogueInstaller* installer = CatalogueInstaller::newInstaller(dbms);
+		installer->install();
+		delete installer;		
+	}
+	
+	void OptimizerCatalogue::uninstall(CatalogueInstaller::SupportedDbms dbms) throw(MineruleException, odbc::SQLException) {
+		CatalogueInstaller* installer = CatalogueInstaller::newInstaller(dbms);
+		installer->uninstall();
+		delete installer;		
 	}
 
 	void OptimizerCatalogue::addMineruleResult(const OptimizerCatalogue::MineruleResultInfo& mri )
@@ -311,16 +322,16 @@ namespace minerule {
 		std::auto_ptr<odbc::Statement> statement( connection->createStatement() );
     //std::cout<<"PLUTO"<<std::endl;
 		statement->execute( std::string("INSERT INTO mr_query ") +
-			"(query_id, query_text, query_name, tab_results_name, source_tab_name," +
-			"gal,ral,cal) VALUES ("+
-			qryid+","+
-			SQLUtils::quote(mri.getText())+","+
-			SQLUtils::quote(mri.tab_result)+","+
-			SQLUtils::quote(mri.resultset)+","+
-			SQLUtils::quote(mri.tab_source)+","+
-			galid+","+
-			ralid+","+
-			calid+")");
+		"(query_id, query_text, query_name, tab_results_name, source_tab_name," +
+		"gal,ral,cal) VALUES ("+
+		qryid+","+
+		SQLUtils::quote(mri.getText())+","+
+		SQLUtils::quote(mri.tab_result)+","+
+		SQLUtils::quote(mri.resultset)+","+
+		SQLUtils::quote(mri.tab_source)+","+
+		galid+","+
+		ralid+","+
+		calid+")");
 	}
   
 	std::string OptimizerCatalogue::getResultsetName(const std::string& queryname) 
@@ -332,13 +343,13 @@ namespace minerule {
 		std::auto_ptr<odbc::ResultSet> rs(
 			statement->executeQuery("SELECT tab_results_name "
 				"FROM mr_query "
-				"WHERE query_name="+SQLUtils::quote(queryname)));
+					"WHERE query_name="+SQLUtils::quote(queryname)));
 		
 		if( !rs->next() )
 			throw MineruleException(MR_ERROR_CATALOGUE_ERROR,
 				"Cannot find the query named:" + queryname +" "
-				"either there is some problem with the optimizer catalogue "
-				"or a wrong query name has been specified");
+					"either there is some problem with the optimizer catalogue "
+						"or a wrong query name has been specified");
     
 		return rs->getString(1);
 	}
@@ -411,16 +422,16 @@ namespace minerule {
 		std::auto_ptr<odbc::ResultSet> rs(
 			statement->executeQuery("SELECT query_name,query_text, "
 				"  tab_results_name, source_tab_name "
-				"FROM mr_query "
-				"WHERE query_name='"+qryName+"'"));
+					"FROM mr_query "
+						"WHERE query_name='"+qryName+"'"));
 
 		if( rs->next() ) {
 			setMRQueryInfoFromResultSet(rs.get(), info, includeResultSize);
 		} else {
 			throw MineruleException(MR_ERROR_CATALOGUE_ERROR,
 				"Cannot find the query named:" + qryName +" "
-				"Either there is some problem with the optimizer catalogue "
-				"or a wrong query name has been specified");
+					"Either there is some problem with the optimizer catalogue "
+						"or a wrong query name has been specified");
 		}
 	}
 
@@ -447,9 +458,9 @@ namespace minerule {
     
 		std::string qry = 
 			"SELECT count(*) "
-			"FROM "+resName+" "+
-			"WHERE supp>="+Converter(p.sup).toString()+
-			" AND con>="+Converter(p.conf).toString();
+				"FROM "+resName+" "+
+		"WHERE supp>="+Converter(p.sup).toString()+
+		" AND con>="+Converter(p.conf).toString();
 
 		odbc::Connection* connection =
 			MineruleOptions::getSharedOptions().getODBC().getODBCConnection();

@@ -78,8 +78,8 @@ namespace minerule {
     knownStreams["<stdout>"]=stdlog;
     knownStreams["<stderr>"]=errlog;
 
-    setMineruleSourceName("mr");
-    setMineruleName("mr");
+    setMineruleSourceName("default-mr-name");
+    setMineruleName("default-mr-name");
 
     ready = true;
   }
@@ -588,30 +588,27 @@ namespace minerule {
 
 
   void 
-  MineruleOptions::OutStream::setOption(const std::string& name, 
-					const std::string& value) 
-                                 throw(MineruleException) {
+  MineruleOptions::OutStream::setOption(const std::string& name, const std::string& value) throw(MineruleException) {
     // we need to modify value, hence we made a copy of it
     // and use it in the rest of the procedure
-   std::string valueCopy=value;
-    std::map<std::string, MRLogger* >& knownStreams =
-      getSharedOptions().knownStreams;
+   std::string valueCopy=value; 
+   std::map<std::string, MRLogger* >& knownStreams = getSharedOptions().knownStreams;
 
     if(name=="stream") {
       size_t markerPos;
       if((markerPos=valueCopy.find("%i"))!=valueCopy.npos) {
-	valueCopy.erase(markerPos,2);
-	valueCopy.insert(markerPos, options->getMineruleSourceName());
+		valueCopy.erase(markerPos,2);
+		valueCopy.insert(markerPos, options->getMineruleSourceName());
       }
 
       if((markerPos=valueCopy.find("%m"))!=valueCopy.npos) {
-	valueCopy.erase(markerPos,2);
-	valueCopy.insert(markerPos, options->getMineruleName());
+		valueCopy.erase(markerPos,2);
+		valueCopy.insert(markerPos, options->getMineruleName());
       }
 
 
       if(knownStreams.find(valueCopy)==knownStreams.end()) {
-	std::ostream* ostrptr(new std::ofstream(valueCopy.c_str()));
+		  std::ostream* ostrptr(new std::ofstream(valueCopy.c_str()));
 
 	if(!*ostrptr) {
 	  std::cerr << "Error while parsing options, failure while trying to" 

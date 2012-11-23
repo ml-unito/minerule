@@ -29,11 +29,16 @@ class DestrTree : public IncrementalAlgorithm {
   odbc::ResultSet* rh1nh2;
   SourceRowColumnIds bodyDes;
   SourceRowColumnIds headDes;
+  
+  odbc::Statement* stateb1, *stateb1nb2;
+  odbc::Statement* stateh1, *stateh1nh2;
+  
 
   void adjustSuppRSet();
   void adjustSuppMIndex();
   void insertRulesInStructure();
   void adjustSupp();
+  void prepareData();
 
   size_t buildAttrStr(const ParsedMinerule::AttrVector& attr,
 		      size_t startIndex,
@@ -51,26 +56,21 @@ class DestrTree : public IncrementalAlgorithm {
 
   Body* getRoot(){return root;}
  public:
-  DestrTree(const OptimizedMinerule& mr) :
-    IncrementalAlgorithm(mr),
-    root(new Body()),
-    ngroups(0),
-    mb1(NULL),
-    mh1(NULL),
-    rb1(NULL),
-    rh1(NULL),
-    mb1nb2(NULL),
-    mh1nh2(NULL),
-    rb1nb2(NULL),
-    rh1nh2(NULL) {
-  }
+  DestrTree(const OptimizedMinerule& mr) : IncrementalAlgorithm(mr), root(new Body()), ngroups(0), mb1(NULL), mh1(NULL), rb1(NULL), rh1(NULL), mb1nb2(NULL), mh1nh2(NULL), rb1nb2(NULL), rh1nh2(NULL) { }
 
   virtual ~DestrTree() {
+  // Trashing the trashable
+	if(rh1!=NULL) delete rh1;
+	if(stateh1!=NULL) delete stateh1;
+	if(rb1!=NULL) delete rb1;
+	if(stateb1!=NULL) delete stateb1;
+	rb1=rh1=NULL;
+	stateh1=stateb1=NULL;
+	  
     delete root;
   }
 
-  virtual void execute()
-    throw(MineruleException,odbc::SQLException);
+  virtual void execute() throw(MineruleException,odbc::SQLException);
 };
 
 } // namespace

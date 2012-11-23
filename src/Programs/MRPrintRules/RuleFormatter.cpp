@@ -1,4 +1,5 @@
 #include "RuleFormatter.h"
+#include <iomanip>
 
 
 
@@ -29,22 +30,29 @@ namespace minerule {
 	void
 	SimpleRuleFormatter::printRule(const Rule& rule) {
 		std::string bhSep = " => ";   // separates body from head 
-		std::string rsSep = "\t";   // separates rule from support
-		std::string scSep = "\t\t"; // separates support from confidence
-
-		if(_fieldSeparationString!="")
-			bhSep=rsSep=scSep=_fieldSeparationString;
+		int bodyWidth = 30;  // width of the body column
+		int headWidth = 30;  // width of the head column
+		int suppWidth = 9;
+		int confWidth = 9;
 
 		if( suppressLog() ) {
-			std::cout << "\t" 
-				<< quoteElems(*rule.body) << bhSep 
-				<< quoteElems(*rule.head) << rsSep 
-				<< rule.support << scSep << rule.confidence << std::endl;
+			std::cout 
+				<< std::setw(bodyWidth) << quoteElems(*rule.body) 
+				<< bhSep 
+				<< std::left << std::setw(headWidth) << quoteElems(*rule.head) << std::right
+				<< " "
+				<< std::setw(suppWidth) << rule.support 
+				<< " "
+				<< std::setw(confWidth) << rule.confidence << std::endl;
 		} else {
-			MRLog() << "\t" 
-				<< quoteElems(*rule.body) << bhSep 
-				<< quoteElems(*rule.head) << rsSep 
-				<< rule.support << scSep << rule.confidence << std::endl;				
+			MRLog()
+				<< std::setw(bodyWidth) << quoteElems(*rule.body) 
+				<< bhSep 
+				<< std::left << std::setw(headWidth) << quoteElems(*rule.head) << std::right 
+				<< " "
+				<< std::setw(suppWidth) << rule.support 
+				<< " "
+				<< std::setw(confWidth) << rule.confidence << std::endl;
 		}
 	}
 

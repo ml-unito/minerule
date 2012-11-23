@@ -174,6 +174,11 @@ namespace minerule {
 
     // ==================== STATIC METHODS ====================
 
+	/**
+	 * @return true if the catalogue tables appear to be present.
+	 */
+	static bool checkInstallation();
+	
 
     static void addMineruleResult( const MineruleResultInfo& mri ) throw(odbc::SQLException, MineruleException);
     static std::string addMineruleAttributeList(const ParsedMinerule::AttrVector& l) throw(odbc::SQLException, MineruleException);

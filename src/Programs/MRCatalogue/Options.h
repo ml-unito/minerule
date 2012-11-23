@@ -7,7 +7,7 @@ namespace mrc {
 	
 	class Options {
 	public:
-		typedef enum {NoCommand,ShowList,SearchQry,DeleteQry} Command;
+		typedef enum {NoCommand,ShowList,SearchQry,DeleteQry, CheckCatalogue} Command;
 
 		class ListFormat {
 		public:
@@ -54,6 +54,14 @@ namespace mrc {
 			}
 
 			command = DeleteQry;
+		}
+		
+		void setCheckCatalogue() {
+			if(command!=NoCommand && command != CheckCatalogue) {
+				throw Exception( mrc::ERROR_OPTION_PARSING, "Too many different options have been given, check out the parameters");
+			}
+			
+			command = CheckCatalogue;
 		}
 
 		void setSearchParam(QryParams qryParam, const std::string& param) {

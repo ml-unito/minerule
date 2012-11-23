@@ -41,14 +41,10 @@ namespace minerule {
       dropTableIfExists(odbc::Connection*, const std::string& tname) const;
 
     // ??? with respect to what the relationship should be???
-    MineruleRelationship
-      getRelationshipType();
+    MineruleRelationship getRelationshipType();
 
     static void attributesInPredicate( const list_OR_node* l, std::set<std::string>& result );
-
-    static bool predicateAttributesAreIncluded( const ParsedMinerule& mr1,
-						const ParsedMinerule& mr2 );
-
+    static bool predicateAttributesAreIncluded( const ParsedMinerule& mr1, const ParsedMinerule& mr2 );
     void checkForCombinedQueries(  );
 
   public:
@@ -73,25 +69,14 @@ namespace minerule {
       return optInfo;
     }
 
-    static bool
-      isACandidateQuery( const ParsedMinerule& mr1, // candidate
-			 const ParsedMinerule& mr2  // target
-			 );
-
-    static bool
-      firstMineruleIncludesSecondMinerule(const ParsedMinerule&, 
-					  const ParsedMinerule&);
-
-    static bool
-      firstMineruleDominatesSecondMinerule(const ParsedMinerule&, 
-					   const ParsedMinerule&);
-
+    static bool isACandidateQuery( const ParsedMinerule& candidate, const ParsedMinerule& target );
+	static bool firstMineruleIncludesSecondMinerule(const ParsedMinerule&, const ParsedMinerule&);
+	static bool firstMineruleDominatesSecondMinerule(const ParsedMinerule&, const ParsedMinerule&);
 
     // Returns None || Dominance || Inclusion || Equivalence
     // the relation is to be intended as: "the first RELATION the second"
     // i.e. if Dominance is returned it means: "the first dominates the second".
-    static MineruleRelationship
-      getMineruleRelationship(const ParsedMinerule&, const ParsedMinerule&);
+    static MineruleRelationship getMineruleRelationship(const ParsedMinerule&, const ParsedMinerule&);
   };
 
 } // namespace 

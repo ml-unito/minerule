@@ -16,7 +16,7 @@ using namespace minerule;
 %option noinput
 %option nounput
 
-STR [a-zA-Z0-9\.\/\-]*
+STR [a-zA-Z0-9\.\/\-_]*
 COMMSTR .*
   
 %%

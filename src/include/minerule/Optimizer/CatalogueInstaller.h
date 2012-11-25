@@ -19,6 +19,7 @@ namespace minerule {
 		};
 	
 		static CatalogueInstaller* newInstaller(SupportedDbms dbms);
+		static CatalogueInstaller* newInstaller();
 	
 		virtual void installMRQuery() 			throw(MineruleException, odbc::SQLException) = 0;
 		virtual void installMRAttList() 		throw(MineruleException, odbc::SQLException) = 0;	

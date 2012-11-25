@@ -27,7 +27,6 @@ namespace mrc {
 		std::string searchParam[LastParam];
 		ListFormat listFormat;
 		std::string sepString; // the string that should be used to separate output elements
-		minerule::CatalogueInstaller::SupportedDbms dbms;  // for catalogue installation
 	public:
 
 		Options():	command(NoCommand), sepString(" ")  {  }
@@ -66,44 +65,22 @@ namespace mrc {
 			command = CheckCatalogue;
 		}
 		
-		void setInstallCatalogue(std::string name) {
+		void setInstallCatalogue() {
 			if(command!=NoCommand && command != InstallCatalogue) {
 				throw Exception( mrc::ERROR_OPTION_PARSING, "Too many different options have been given, check out the parameters");				
 			}
 			
-			command = InstallCatalogue;
-			
-			if(name == "mysql") {
-				dbms = minerule::CatalogueInstaller::MySql;
-			} else if(name == "postgres") {
-				dbms = minerule::CatalogueInstaller::Postgres;
-			} else {
-				throw Exception( mrc::ERROR_OPTION_PARSING, "You supplied value "+name+" to -I option."
-							" This dbms is not actually supported (please choose between mysql and postgres)");
-			}			
+			command = InstallCatalogue;	
 		}
 		
-		void setUninstallCatalogue(std::string name) {
+		void setUninstallCatalogue() {
 			if(command!=NoCommand && command != UninstallCatalogue) {
 				throw Exception( mrc::ERROR_OPTION_PARSING, "Too many different options have been given, check out the parameters");				
 			}
 			
-			command = UninstallCatalogue;
-			
-			if(name == "mysql") {
-				dbms = minerule::CatalogueInstaller::MySql;
-			} else if(name == "postgres") {
-				dbms = minerule::CatalogueInstaller::Postgres;
-			} else {
-				throw Exception( mrc::ERROR_OPTION_PARSING, "You supplied value "+name+" to -U option."
-							" This dbms is not actually supported (please choose between mysql and postgres)");
-			}			
+			command = UninstallCatalogue;			
 		}
 		
-		minerule::CatalogueInstaller::SupportedDbms getDbms() const {
-			return dbms;
-		}
-
 		void setSearchParam(QryParams qryParam, const std::string& param) {
 			searchParam[qryParam]=param;
 		}

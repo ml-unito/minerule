@@ -15,4 +15,16 @@ namespace minerule {
 			return new PostgresCatalogueInstaller();
 		}
 	}
+	
+	CatalogueInstaller* CatalogueInstaller::newInstaller() {
+		std::string dbmsStr = MineruleOptions::getSharedOptions().getODBC().getDBMS();
+
+		if(dbmsStr == "mysql") return newInstaller(MySql);
+		if(dbmsStr == "postgres") return newInstaller(Postgres);
+		
+		throw MineruleException(MR_ERROR_OPTION_CONFIGURATION,std::string("Option odbc::dbms is set to an unsupported value.") +
+			" Current value is:"+dbmsStr+ ". Supported values are 'postgres' and 'mysql'.");
+	}
+
+	
 }

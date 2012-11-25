@@ -179,8 +179,8 @@ namespace minerule {
 	 * @return true if the catalogue tables appear to be present.
 	 */
 	static bool checkInstallation();
-    static void install(CatalogueInstaller::SupportedDbms) throw(MineruleException, odbc::SQLException);
-    static void uninstall(CatalogueInstaller::SupportedDbms) throw(MineruleException, odbc::SQLException);
+    static void install() throw(MineruleException, odbc::SQLException);
+    static void uninstall() throw(MineruleException, odbc::SQLException);
 	
 
     static void addMineruleResult( const MineruleResultInfo& mri ) throw(odbc::SQLException, MineruleException);

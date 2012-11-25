@@ -19,14 +19,14 @@ namespace mrc {
 	printHelp(int argc, char** argv) {
 		using namespace minerule;
 		std::cout << StringUtils::to_bold("Usage:") << std::endl
-			<< "   " << StringUtils::to_bold(argv[0]) << " [-h] [-c] [-C] [-I <dbms>] [-U <dbms>] [-s <sepstring>] [-f <optionfile>] "
+			<< "   " << StringUtils::to_bold(argv[0]) << " [-h] [-c] [-C] [-I] [-U] [-s <sepstring>] [-f <optionfile>] "
 			<< "[-n <queryname>] [-l] [-F formatSpecs] [-d <queryname>]" 
 			<< std::endl << std::endl
 			<< "The program allow to inspect the MR catalogue" << std::endl
 			<< StringUtils::to_bold("-h") << " - Output this message and returns NOTHING_TO_DO" << std::endl
 			<< StringUtils::to_bold("-c") << " - Disables color output" << std::endl
 			<< StringUtils::to_bold("-C") << " - Checks if the optimizer catalogue is installed correctly and exits." <<std::endl
-			<< StringUtils::to_bold("-I") << " - Installs the optimizer catalogue and exits. dbms must be either 'mysql' or 'postgres'" <<std::endl
+			<< StringUtils::to_bold("-I") << " - Installs the optimizer catalogue and exits." <<std::endl
 			<< StringUtils::to_bold("-U") << " - Uninstall the catalogue (be careful, this cannot be undone!). dbms must be either 'mysql' or 'postgres'" << std::endl
 			<< StringUtils::to_bold("-s") << " - Change the string used to separate different elements in" << std::endl
 			<< "     the output. The default is ' '" << std::endl
@@ -76,7 +76,7 @@ namespace mrc {
 	}
 
 	void parseOptions(int argc, char** argv, minerule::MineruleOptions& mopt, Options& popt) { 
-		const char* optstr = "cCI:U:hf:lF:n:d:s:v";
+		const char* optstr = "cCIUhf:lF:n:d:s:v";
 		
 		int opt;
 		bool didLoadOptions=false;
@@ -89,10 +89,10 @@ namespace mrc {
 				popt.setCheckCatalogue();
 				break;
 			case 'U':
-				popt.setUninstallCatalogue(optarg);
+				popt.setUninstallCatalogue();
 				break;
 			case 'I':
-				popt.setInstallCatalogue(optarg);
+				popt.setInstallCatalogue();
 				break;
 			case 'f': 
 				doLoadOptions(optarg, mopt);
@@ -177,7 +177,7 @@ namespace mrc {
 		}		
 	}
 	
-	Results installCatalogue(minerule::CatalogueInstaller::SupportedDbms dbms) {
+	Results installCatalogue() {
 		minerule::MRLog() << "Checking current installation status." << std::endl;
 		if(minerule::OptimizerCatalogue::checkInstallation()) {
 			minerule::MRLog() << minerule::StringUtils::to_bold("Minerule catalogue seems already installed.") << std::endl;
@@ -187,7 +187,7 @@ namespace mrc {
 			minerule::MRLog() << "Checking if everything is ok." << std::endl;
 			minerule::MRLog() << minerule::StringUtils::to_bold("The catalogue is not installed (properly).") << std::endl;
 			minerule::MRLog() << "Proceeding with the installation..." << std::endl;
-			minerule::OptimizerCatalogue::install(dbms);
+			minerule::OptimizerCatalogue::install();
 			minerule::MRLog() << "Done!" << std::endl;
 			minerule::MRLog() << "Checking the installation..." << std::endl;			
 			if(!minerule::OptimizerCatalogue::checkInstallation()) {
@@ -200,7 +200,7 @@ namespace mrc {
 		}
 	}
 	
-	Results uninstallCatalogue(minerule::CatalogueInstaller::SupportedDbms dbms) {
+	Results uninstallCatalogue() {
 		minerule::MRLog() << "You choose to " << minerule::StringUtils::to_bold(" uninstall ") << "the minerule catalogue" << std::endl;
 		minerule::MRLog() << "This implies " << minerule::StringUtils::to_bold(" destroying ") << "all its tables" << std::endl;
 
@@ -214,7 +214,7 @@ namespace mrc {
 		}
 		
 		minerule::MRLog() << "Uninstalling the catalogue..." << std::endl;
-		minerule::OptimizerCatalogue::uninstall(dbms);			
+		minerule::OptimizerCatalogue::uninstall();			
 		minerule::MRLog() << "Done" << std::endl;
 		
 		return SUCCESS;
@@ -242,11 +242,11 @@ namespace mrc {
 		}
 
 		if( options.getCommand()==Options::InstallCatalogue ) {
-			return installCatalogue(options.getDbms());
+			return installCatalogue();
 		}
 
 		if( options.getCommand()==Options::UninstallCatalogue ) {
-			return uninstallCatalogue(options.getDbms());
+			return uninstallCatalogue();
 		}
 
 

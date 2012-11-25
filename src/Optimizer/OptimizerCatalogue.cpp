@@ -300,14 +300,14 @@ namespace minerule {
 	}
 	
 	
-	void OptimizerCatalogue::install(CatalogueInstaller::SupportedDbms dbms) throw(MineruleException, odbc::SQLException) {
-		CatalogueInstaller* installer = CatalogueInstaller::newInstaller(dbms);
+	void OptimizerCatalogue::install() throw(MineruleException, odbc::SQLException) {		
+		CatalogueInstaller* installer = CatalogueInstaller::newInstaller();
 		installer->install();
 		delete installer;		
 	}
 	
-	void OptimizerCatalogue::uninstall(CatalogueInstaller::SupportedDbms dbms) throw(MineruleException, odbc::SQLException) {
-		CatalogueInstaller* installer = CatalogueInstaller::newInstaller(dbms);
+	void OptimizerCatalogue::uninstall() throw(MineruleException, odbc::SQLException) {
+		CatalogueInstaller* installer = CatalogueInstaller::newInstaller();
 		installer->uninstall();
 		delete installer;		
 	}

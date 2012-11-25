@@ -258,7 +258,11 @@ namespace minerule {
 	bool OptimizerCatalogue::checkInstallation() {
 		odbc::Connection* connection =  MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
 		odbc::DatabaseMetaData* meta = connection->getMetaData();
-		odbc::ResultSet* rs = meta->getTables("","","mr_%", std::vector<std::string>());
+		// The set of table should be retrieved with ->getTables(), it appears that the postgres odbc driver
+		// has some problem with this function (our tests receives an empty set no matter the parameters).
+		// The following uses getColumns instead, it is slower (it retrieves all columns for all tables), but
+		// is works.
+		odbc::ResultSet* rs = meta->getColumns("","","mr_%", "");
 		
 		typedef std::pair<std::string, bool> TableInfo;
 		std::vector<TableInfo> tables;

@@ -9,6 +9,7 @@ namespace mrc { // minerule catalogue
 	// --------------------------------------------------------------------------------
 	// Functions 
 	// --------------------------------------------------------------------------------
+	void printVersion();
 	void printHelp(int argc, char** argv);
 	void parseOptions(int argc, char** argv, minerule::MineruleOptions& mopt, Options& popt);
 	int  performCommands(Options& options);

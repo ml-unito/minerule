@@ -26,10 +26,9 @@ namespace mrc {
 
 		std::string searchParam[LastParam];
 		ListFormat listFormat;
-		std::string sepString; // the string that should be used to separate output elements
 	public:
 
-		Options():	command(NoCommand), sepString(" ")  {  }
+		Options():	command(NoCommand)  {  }
 
 		void setListFormat(const char* format) throw (Exception);
 
@@ -87,14 +86,6 @@ namespace mrc {
 
 		const std::string& getSearchParam(QryParams qryParam) const {
 			return searchParam[qryParam];
-		}
-
-		void setSepString(const std::string& s) {
-			sepString=s;
-		}
-
-		const std::string& getSepString() const {
-			return sepString;
 		}
 
 		Command getCommand() const {

@@ -15,46 +15,11 @@
 
 
 namespace mrc {
-	void
-	printHelp(int argc, char** argv) {
-		using namespace minerule;
-		std::cout << StringUtils::to_bold("Usage:") << std::endl
-			<< "   " << StringUtils::to_bold(argv[0]) << " [-h] [-c] [-C] [-I] [-U] [-s <sepstring>] [-f <optionfile>] "
-			<< "[-n <queryname>] [-l] [-F formatSpecs] [-d <queryname>]" 
-			<< std::endl << std::endl
-			<< "The program allow to inspect the MR catalogue" << std::endl
-			<< StringUtils::to_bold("-h") << " - Output this message and returns NOTHING_TO_DO" << std::endl
-			<< StringUtils::to_bold("-c") << " - Disables color output" << std::endl
-			<< StringUtils::to_bold("-C") << " - Checks if the optimizer catalogue is installed correctly and exits." <<std::endl
-			<< StringUtils::to_bold("-I") << " - Installs the optimizer catalogue and exits." <<std::endl
-			<< StringUtils::to_bold("-U") << " - Uninstall the catalogue (be careful, this cannot be undone!). dbms must be either 'mysql' or 'postgres'" << std::endl
-			<< StringUtils::to_bold("-s") << " - Change the string used to separate different elements in" << std::endl
-			<< "     the output. The default is ' '" << std::endl
-			<< StringUtils::to_bold("-n") << " - Look in the catalogue for the specified query" << std::endl
-			<< "     it returns QUERY_NAME_FOUND, or QUERY_NAME_NOT_FOUND" << std::endl
-			<< "     accordingly to whether the query could be found."<<std::endl 
-			<< StringUtils::to_bold("-l") << " - Print the list of already executed queries, returns" << std::endl
-			<< "     SUCCESS upon completion" << std::endl
-			<< StringUtils::to_bold("-d") << " - Delete the given minerule from the system (notice that" << std::endl
-			<< "     the safety options in the option file must be setted" << std::endl
-			<< "     in such a way to allow the deletion. " << std::endl
-			<< StringUtils::to_bold("-F") << " - Format specifiers for printing the list of queries (-l)" <<std::endl
-			<< "     Valid specifiers: s - Print the size of the result set" << std::endl
-			<< "                       t - Print the text of the original mr" <<std::endl
-			<< "                       r - Print the result set table names" << std::endl
-			<< "     the default is '', i.e.: print onlty the qry name" << std::endl
-			<< StringUtils::to_bold("Return values:") << std::endl
-			<< "      SUCCESS = " << mrc::SUCCESS << std::endl
-			<< "      NOTHING_TO_DO = " << mrc::NOTHING_TO_DO << std::endl
-			<< "      QUERY_NAME_FOUND = " << mrc::QUERY_NAME_FOUND << std::endl
-			<< "      CATALOGUE_NOT_INSTALLED = " << mrc::CATALOGUE_NOT_INSTALLED << std::endl
-			<< "      QUERY_NAME_NOT_FOUND = " << mrc::QUERY_NAME_NOT_FOUND << std::endl
-			<< "      ERROR_OPTION_PARSING = " << mrc::ERROR_OPTION_PARSING << std::endl
-																																<< "      ERROR_CANNOT_OPEN_OPTION_FILE = " << mrc::ERROR_CANNOT_OPEN_OPTION_FILE <<std::endl;
-	}
-
-	void 
-	doLoadOptions(const char* fname, minerule::MineruleOptions& opt) {
+	// --------------------------------------------------------------------------------
+	// OPTION HANDLING 
+	// --------------------------------------------------------------------------------
+	
+	void doLoadOptions(const char* fname, minerule::MineruleOptions& opt) {
   
 		if( minerule::FileUtils::fileExists(fname) ) {
 			opt.readFromFile(fname);
@@ -71,12 +36,8 @@ namespace mrc {
 		}
 	}
 
-	void printVersion() {
-		std::cout << "MRCatalogue v:" << MR_VERSION << std::endl;
-	}
-
 	void parseOptions(int argc, char** argv, minerule::MineruleOptions& mopt, Options& popt) { 
-		const char* optstr = "cCIUhf:lF:n:d:s:v";
+		const char* optstr = "cCIUhf:lF:n:d:v";
 		
 		int opt;
 		bool didLoadOptions=false;
@@ -115,9 +76,6 @@ namespace mrc {
 				popt.setDeleteQry();
 				popt.setSearchParam(Options::QryName, optarg);
 				break;
-			case 's':
-				popt.setSepString(optarg);
-				break;
 			case 'v':
 				printVersion();
 				exit(0);
@@ -134,7 +92,62 @@ namespace mrc {
 		}
 	}
 
+	void printVersion() {
+		std::cout << "MRCatalogue v:" << MR_VERSION << std::endl;
+	}
+	
+	// --------------------------------------------------------------------------------
+	// ACTIONS 
+	// --------------------------------------------------------------------------------
 
+	void printHelp(int argc, char** argv) {
+		using namespace minerule;
+		std::cout << StringUtils::to_bold("Usage:") << std::endl
+			<< "   " << StringUtils::to_bold(argv[0]) << " [-v] [-h] [-f  <optionfile>] [-C] [-I] [-U] [-n <queryname>] [-l] [-d] [-c] [-F <formatSpecs>]" << std::endl
+			<< std::endl << std::endl 
+			<< "Handles the minerule catalogue." << std::endl
+			<< std::endl
+			<< StringUtils::to_bold("Program Information") << std::endl
+			<< StringUtils::to_bold("-v") << " - Output the version message and exits." << std::endl
+			<< StringUtils::to_bold("-h") << " - Output this message and returns NOTHING_TO_DO." << std::endl 
+			<< std::endl 
+			<< StringUtils::to_bold("Option Handling") << std::endl
+			<< StringUtils::to_bold("-f") << " - file name of the option file (if omitted the program will)" << std::endl
+			<< "     look for a file named 'option.txt' in the current directory" << std::endl
+			<< std::endl 
+			<< StringUtils::to_bold("Installation") << std::endl
+			<< StringUtils::to_bold("-C") << " - Checks if the optimizer catalogue is installed correctly and exits." <<std::endl
+			<< StringUtils::to_bold("-I") << " - Installs the optimizer catalogue and exits." <<std::endl
+			<< StringUtils::to_bold("-U") << " - Uninstall the catalogue (be careful, this cannot be undone!). dbms must be either 'mysql' or 'postgres'." << std::endl
+			<< std::endl 
+			<< StringUtils::to_bold("Dealing with Catalogue Entries") << std::endl
+			<< StringUtils::to_bold("-n") << " - Look in the catalogue for the specified query." << std::endl
+			<< "     it returns QUERY_NAME_FOUND, or QUERY_NAME_NOT_FOUND" << std::endl
+			<< "     accordingly to whether the query could be found."<<std::endl 
+			<< StringUtils::to_bold("-l") << " - Print the list of already executed queries, returns" << std::endl
+			<< "     SUCCESS upon completion." << std::endl
+			<< StringUtils::to_bold("-d") << " - Delete the given minerule from the system (notice that" << std::endl
+			<< "     the safety options in the option file must be setted" << std::endl
+			<< "     in such a way to allow the deletion. " << std::endl
+			<< std::endl 
+			<< StringUtils::to_bold("Output Handling") << std::endl				
+			<< StringUtils::to_bold("-c") << " - Disables color output." << std::endl
+			<< StringUtils::to_bold("-F") << " - Format specifiers for printing the list of queries (-l)" <<std::endl
+			<< "     Valid specifiers: s - Print the size of the result set" << std::endl
+			<< "                       t - Print the text of the original mr" <<std::endl
+			<< "                       r - Print the result set table names" << std::endl
+			<< "     the default is '', i.e.: print onlty the qry name." << std::endl
+			<< std::endl 
+			<< StringUtils::to_bold("Return Values:") << std::endl
+			<< "      SUCCESS = " << mrc::SUCCESS << std::endl
+			<< "      NOTHING_TO_DO = " << mrc::NOTHING_TO_DO << std::endl
+			<< "      QUERY_NAME_FOUND = " << mrc::QUERY_NAME_FOUND << std::endl
+			<< "      CATALOGUE_NOT_INSTALLED = " << mrc::CATALOGUE_NOT_INSTALLED << std::endl
+			<< "      QUERY_NAME_NOT_FOUND = " << mrc::QUERY_NAME_NOT_FOUND << std::endl
+			<< "      ERROR_OPTION_PARSING = " << mrc::ERROR_OPTION_PARSING << std::endl
+																																<< "      ERROR_CANNOT_OPEN_OPTION_FILE = " << mrc::ERROR_CANNOT_OPEN_OPTION_FILE <<std::endl;
+	}
+	
 	int checkQueryName(const Options& options) {
 		const std::string& tablename = 
 			options.getSearchParam(Options::QryName);
@@ -151,8 +164,6 @@ namespace mrc {
 
 		return mrc::QUERY_NAME_FOUND;
 	}
-
-
 
 	void printMRQueryList(const Options& options) {
 		Printer printer(std::cout, options);
@@ -220,9 +231,11 @@ namespace mrc {
 		return SUCCESS;
 	}
 
-
-	int
-	performCommands(Options& options) {
+	// --------------------------------------------------------------------------------
+	// MAIN ACTION HANDLER 
+	// --------------------------------------------------------------------------------
+	
+	int	performCommands(Options& options) {
 		if( options.getCommand()==Options::ShowList ) {
 			printMRQueryList(options);
 			return mrc::SUCCESS;

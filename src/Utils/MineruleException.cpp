@@ -9,13 +9,13 @@ namespace minerule {
 		errorCode=errCode;
 		std::stringstream ss;
 
-		ss << "\n\t" << StringUtils::to_bold("class:") << "\tMineruleException " << std::endl
-			<< StringUtils::to_bold("\tsource:\t") << file << ":" << line << std::endl
-			<< StringUtils::to_bold("\tcode:\t")<< errorCode  
+		ss << "\n\t" << StringUtils::toBold("class:") << "\tMineruleException " << std::endl
+			<< StringUtils::toBold("\tsource:\t") << file << ":" << line << std::endl
+			<< StringUtils::toBold("\tcode:\t")<< errorCode  
 			<< " - " << me_error_name((MineruleErrors) errorCode) << std::endl
-			<< StringUtils::to_bold("\tmessage:");
+			<< StringUtils::toBold("\tmessage:");
 	
-		std::vector<std::string>* chunks = StringUtils::split_to_length(msg, 70);
+		std::vector<std::string>* chunks = StringUtils::splitToLength(msg, 70);
 		ss << StringUtils::join(*chunks, "\n\t\t");
 	
 		message = ss.str();

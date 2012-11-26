@@ -91,7 +91,7 @@ namespace minerule {
     logStack.push_back(li);
 
     indent();
-    *os<<insetSep<<"+"<< StringUtils::to_bold(descr) <<std::endl;
+    *os<<insetSep<<"+"<< StringUtils::toBold(descr) <<std::endl;
     updateIndentString();
   }
 
@@ -115,16 +115,16 @@ namespace minerule {
     indent();
 
     if(!logStack.empty())
-      *os<<indentInset<<END_SEPARATOR<< StringUtils::to_bold(timeMemInfo) <<std::endl;
+      *os<<indentInset<<END_SEPARATOR<< StringUtils::toBold(timeMemInfo) <<std::endl;
     else
-	  *os<<END_SEPARATOR<<StringUtils::to_bold(timeMemInfo)<<std::endl;
+	  *os<<END_SEPARATOR<<StringUtils::toBold(timeMemInfo)<<std::endl;
 
     indent();
     *os<<std::endl;
   }
   
   void MRLogger::logMeasurement(const std::string& description, const MeasurementInfo& data) {	  
-	  log() << StringUtils::to_green("tag: ") << description << StringUtils::to_green(" cpu time:") << data.totCpu << StringUtils::to_green(" time:") << data.totTime << std::endl;
+	  log() << StringUtils::toGreen("tag: ") << description << StringUtils::toGreen(" cpu time:") << data.totCpu << StringUtils::toGreen(" time:") << data.totTime << std::endl;
   }
   
   void MRLogger::logMeasurements() {

@@ -51,16 +51,16 @@ printRules(std::string queryname,
 
 void
 printHelp(int argc, char** argv) {
-    std::cout << StringUtils::to_bold("Usage:") << std::endl
-    << "   " << StringUtils::to_bold(argv[0]) << " [-h] [-0] [-c] [-n minerule-number] [-s <order>] [-x <sepString>] [-f <optionfile>] resultsetname" << std::endl
+    std::cout << StringUtils::toBold("Usage:") << std::endl
+    << "   " << StringUtils::toBold(argv[0]) << " [-h] [-0] [-c] [-n minerule-number] [-s <order>] [-x <sepString>] [-f <optionfile>] resultsetname" << std::endl
 	<< "The program allows printing results of minerule queries." << std::endl 
 	<< std::endl
-	<< StringUtils::to_bold("-h") << " - prints this message " << std::endl
-	<< StringUtils::to_bold("-0") << " - suppresses logging output " << std::endl
-    << StringUtils::to_bold("-l") << " - do not filter out rules having low confidence" << std::endl	
-	<< StringUtils::to_bold("-n") << " - specifies a query number to be printed (this is an alternative to" << std::endl
+	<< StringUtils::toBold("-h") << " - prints this message " << std::endl
+	<< StringUtils::toBold("-0") << " - suppresses logging output " << std::endl
+    << StringUtils::toBold("-l") << " - do not filter out rules having low confidence" << std::endl	
+	<< StringUtils::toBold("-n") << " - specifies a query number to be printed (this is an alternative to" << std::endl
 	<< "     specifying the query name)" << std::endl
-    << StringUtils::to_bold("-s") << " - allows one to sort the rules in a given order." << std::endl
+    << StringUtils::toBold("-s") << " - sorts the rules in a specified order." << std::endl
     << "   supported orders are: " << std::endl
     << "     'no' -> no particular order (fastest display)" << std::endl
     << "     'scbh' -> order is support, confidence, body, head"<<std::endl
@@ -70,9 +70,8 @@ printHelp(int argc, char** argv) {
     << "     'cbhs' -> order is conf, body, head, supp" << std::endl
     << "     'cbsh' -> order is conf, body, supp, head" << std::endl
     << "   the default is 'no'" << std::endl
-    << StringUtils::to_bold("-x") << " - allows one to specify if a particular std::string needs to be" << std::endl
-    << "   used in order to specify fields in the output (if none is given" << std::endl
-    << "   the program uses ',')." <<std::endl
+    << StringUtils::toBold("-x") << " - specifies the string to separate fields in the output" << std::endl 
+	<< "   (default is: \",\")." <<std::endl
     << std::endl << std::endl;
 }
 

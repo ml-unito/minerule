@@ -280,7 +280,7 @@ namespace minerule {
 			std::vector<TableInfo>::iterator it = find(tables.begin(), tables.end(), std::pair<std::string,bool>(currentTable,false) );
 			
 			if(it!=tables.end()) {
-				MRLog() << "Table: " << std::left << std::setw(50) << currentTable << StringUtils::to_green(" OK")<< std::endl;
+				MRLog() << "Table: " << std::left << std::setw(50) << currentTable << StringUtils::toGreen(" OK")<< std::endl;
 				it->second = true;
 			}
 			rs->next();
@@ -292,7 +292,7 @@ namespace minerule {
 		for(std::vector<TableInfo>::iterator it=tables.begin(); it!=tables.end();++it) {
 			allTablePresents &= it->second;
 			if( !it->second ) {
-				MRLog() << "Table: " << std::left << std::setw(50) << it->first << StringUtils::to_red(" MISSING") << std::endl;				
+				MRLog() << "Table: " << std::left << std::setw(50) << it->first << StringUtils::toRed(" MISSING") << std::endl;				
 			}
 		}
 		

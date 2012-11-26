@@ -11,7 +11,7 @@ namespace minerule {
 		static std::string colorize(const std::string& str, const std::string& color) { return enableColors ? color + str + CLOSE : str; }
 		
 	public:
-		static std::vector<std::string>* split_to_length(const std::string& str, size_t len);
+		static std::vector<std::string>* splitToLength(const std::string& str, size_t len);
 		static std::string join(const std::vector<std::string>&, const std::string& sep );
 		
 		static const std::string RED;
@@ -23,13 +23,13 @@ namespace minerule {
 		static const std::string CLOSE;
 		
 		static void setColorsEnabled(bool newVal) { enableColors = newVal; }
-		static std::string to_bold(const std::string& str){ return colorize(str, BOLD); }
-		static std::string to_red(const std::string& str)   { return colorize(str,RED);   }
-		static std::string to_green(const std::string& str) { return colorize(str,GREEN); }
-		static std::string to_white(const std::string& str) { return colorize(str,WHITE); }
-		static std::string to_blue(const std::string& str) 	{ return colorize(str,BLUE); }
-		static std::string to_yellow(const std::string& str){ return colorize(str,YELLOW); }
-		static std::string to_orange(const std::string& str){ return colorize(colorize(str,YELLOW), BOLD); }
+		static std::string toBold(const std::string& str){ return colorize(str, BOLD); }
+		static std::string toRed(const std::string& str)   { return colorize(str,RED);   }
+		static std::string toGreen(const std::string& str) { return colorize(str,GREEN); }
+		static std::string toWhite(const std::string& str) { return colorize(str,WHITE); }
+		static std::string toBlue(const std::string& str) 	{ return colorize(str,BLUE); }
+		static std::string toYellow(const std::string& str){ return colorize(str,YELLOW); }
+		static std::string toOrange(const std::string& str){ return colorize(colorize(str,YELLOW), BOLD); }
 		
 	};
 }

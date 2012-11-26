@@ -15,23 +15,23 @@ using namespace minerule;
 
 void
 printHelp(char* progName) {
-	std::cout << StringUtils::to_bold("Usage:") << std::endl
-		<< "  " << StringUtils::to_bold(progName) << " [-c] [-i <mineruletextfile>] [-m '<mineruletext>'] " << std::endl
+	std::cout << StringUtils::toBold("Usage:") << std::endl
+		<< "  " << StringUtils::toBold(progName) << " [-c] [-i <mineruletextfile>] [-m '<mineruletext>'] " << std::endl
 		<< "     -f <mineruleoptionfile> -O <optionlist> -v -h " << std::endl << std::endl;
 	
 	std::cout 
-		<< StringUtils::to_bold("   -c") << " -- disable colors in messages" << std::endl
-		<< StringUtils::to_bold("   -i") << " -- specify a file name containing the text of the minerule" << std::endl
-		<< StringUtils::to_bold("   -m") << " -- the argument is the text of the minerule" << std::endl
-		<< StringUtils::to_bold("   -f") << " -- specify a file name containing the Options to be used." << std::endl
+		<< StringUtils::toBold("   -c") << " -- disable colors in messages" << std::endl
+		<< StringUtils::toBold("   -i") << " -- specify a file name containing the text of the minerule" << std::endl
+		<< StringUtils::toBold("   -m") << " -- the argument is the text of the minerule" << std::endl
+		<< StringUtils::toBold("   -f") << " -- specify a file name containing the Options to be used." << std::endl
 		<< "         more than one is allowed and later ones override the options"<< std::endl
 		<< "         read from previous ones" << std::endl
-		<< StringUtils::to_bold("   -O") << " -- Allows to specify some options from the command line" << std::endl
+		<< StringUtils::toBold("   -O") << " -- Allows to specify some options from the command line" << std::endl
 		<< "         whether those options overrides or not the ones given by -f"<<std::endl
 		<< "         commands depends on which comes first" <<std::endl
-		<< StringUtils::to_bold("   -v") << " -- version informations" << std::endl
-		<< StringUtils::to_bold("   -h") << " -- this message" << std::endl
-		<< StringUtils::to_bold(" exit codes:") << std::endl;
+		<< StringUtils::toBold("   -v") << " -- version informations" << std::endl
+		<< StringUtils::toBold("   -h") << " -- this message" << std::endl
+		<< StringUtils::toBold(" exit codes:") << std::endl;
 	for(int i=me_error_begin(); i<me_error_end(); i++) {
 		std::cout 
 		<<  "\t" << i << "\t- " << me_error_name((MineruleErrors) i) << std::endl;
@@ -41,7 +41,7 @@ printHelp(char* progName) {
 }
 
 void printVersion() {
-	std::cout << StringUtils::to_bold("Minerule v:") << MR_VERSION << std::endl;
+	std::cout << StringUtils::toBold("Minerule v:") << MR_VERSION << std::endl;
 }
 
 

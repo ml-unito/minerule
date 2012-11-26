@@ -11,7 +11,7 @@ namespace minerule {
 	const std::string StringUtils::WHITE 	= "\x1B[37m";	
 	const std::string StringUtils::CLOSE 	= "\x1B[0m";	
 
-	std::vector<std::string>* StringUtils::split_to_length(const std::string& str, size_t out_len) {
+	std::vector<std::string>* StringUtils::splitToLength(const std::string& str, size_t out_len) {
 		std::vector<std::string>* result = new std::vector<std::string>;
 		size_t len = str.size();
 		size_t cur_pos = 0;

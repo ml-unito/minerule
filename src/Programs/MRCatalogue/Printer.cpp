@@ -9,16 +9,16 @@ namespace mrc {
 	void Printer::printIndex() const {
 		std::stringstream ss;
 		ss <<  _result_index;
-		_out << "-" << minerule::StringUtils::to_bold( ss.str() ) << "- ";
+		_out << "-" << minerule::StringUtils::toBold( ss.str() ) << "- ";
 	}
 		
 	void Printer::format(std::string header, std::string info) {
 		printIndex();
-		std::vector<std::string>* chunks = minerule::StringUtils::split_to_length(info, OUTPUT_MAX_LEN);
+		std::vector<std::string>* chunks = minerule::StringUtils::splitToLength(info, OUTPUT_MAX_LEN);
 		assert(chunks->size()!=0);
 		
 		std::vector<std::string>::const_iterator it = chunks->begin();
-		_out << minerule::StringUtils::to_green(header) << "\t" << *it << std::endl;					
+		_out << minerule::StringUtils::toGreen(header) << "\t" << *it << std::endl;					
 		++it;
 		
 		for(; it!=chunks->end(); ++it) {
@@ -30,7 +30,7 @@ namespace mrc {
 	
 	void Printer::format(std::string header, size_t info) {
 		printIndex();
-		_out << minerule::StringUtils::to_green(header) << "\t"  << info << std::endl;
+		_out << minerule::StringUtils::toGreen(header) << "\t"  << info << std::endl;
 	}
 
 	

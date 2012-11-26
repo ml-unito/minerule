@@ -102,43 +102,43 @@ namespace mrc {
 
 	void printHelp(int argc, char** argv) {
 		using namespace minerule;
-		std::cout << StringUtils::to_bold("Usage:") << std::endl
-			<< "   " << StringUtils::to_bold(argv[0]) << " [-v] [-h] [-f  <optionfile>] [-C] [-I] [-U] [-n <queryname>] [-l] [-d] [-c] [-F <formatSpecs>]" << std::endl
+		std::cout << StringUtils::toBold("Usage:") << std::endl
+			<< "   " << StringUtils::toBold(argv[0]) << " [-v] [-h] [-f  <optionfile>] [-C] [-I] [-U] [-n <queryname>] [-l] [-d] [-c] [-F <formatSpecs>]" << std::endl
 			<< std::endl << std::endl 
 			<< "Handles the minerule catalogue." << std::endl
 			<< std::endl
-			<< StringUtils::to_bold("Program Information") << std::endl
-			<< StringUtils::to_bold("-v") << " - Output the version message and exits." << std::endl
-			<< StringUtils::to_bold("-h") << " - Output this message and returns NOTHING_TO_DO." << std::endl 
+			<< StringUtils::toBold("Program Information") << std::endl
+			<< StringUtils::toBold("-v") << " - Output the version message and exits." << std::endl
+			<< StringUtils::toBold("-h") << " - Output this message and returns NOTHING_TO_DO." << std::endl 
 			<< std::endl 
-			<< StringUtils::to_bold("Option Handling") << std::endl
-			<< StringUtils::to_bold("-f") << " - file name of the option file (if omitted the program will)" << std::endl
+			<< StringUtils::toBold("Option Handling") << std::endl
+			<< StringUtils::toBold("-f") << " - file name of the option file (if omitted the program will)" << std::endl
 			<< "     look for a file named 'option.txt' in the current directory" << std::endl
 			<< std::endl 
-			<< StringUtils::to_bold("Installation") << std::endl
-			<< StringUtils::to_bold("-C") << " - Checks if the optimizer catalogue is installed correctly and exits." <<std::endl
-			<< StringUtils::to_bold("-I") << " - Installs the optimizer catalogue and exits." <<std::endl
-			<< StringUtils::to_bold("-U") << " - Uninstall the catalogue (be careful, this cannot be undone!). dbms must be either 'mysql' or 'postgres'." << std::endl
+			<< StringUtils::toBold("Installation") << std::endl
+			<< StringUtils::toBold("-C") << " - Checks if the optimizer catalogue is installed correctly and exits." <<std::endl
+			<< StringUtils::toBold("-I") << " - Installs the optimizer catalogue and exits." <<std::endl
+			<< StringUtils::toBold("-U") << " - Uninstall the catalogue (be careful, this cannot be undone!). dbms must be either 'mysql' or 'postgres'." << std::endl
 			<< std::endl 
-			<< StringUtils::to_bold("Dealing with Catalogue Entries") << std::endl
-			<< StringUtils::to_bold("-n") << " - Look in the catalogue for the specified query." << std::endl
+			<< StringUtils::toBold("Dealing with Catalogue Entries") << std::endl
+			<< StringUtils::toBold("-n") << " - Look in the catalogue for the specified query." << std::endl
 			<< "     it returns QUERY_NAME_FOUND, or QUERY_NAME_NOT_FOUND" << std::endl
 			<< "     accordingly to whether the query could be found."<<std::endl 
-			<< StringUtils::to_bold("-l") << " - Print the list of already executed queries, returns" << std::endl
+			<< StringUtils::toBold("-l") << " - Print the list of already executed queries, returns" << std::endl
 			<< "     SUCCESS upon completion." << std::endl
-			<< StringUtils::to_bold("-d") << " - Delete the given minerule from the system (notice that" << std::endl
+			<< StringUtils::toBold("-d") << " - Delete the given minerule from the system (notice that" << std::endl
 			<< "     the safety options in the option file must be setted" << std::endl
 			<< "     in such a way to allow the deletion. " << std::endl
 			<< std::endl 
-			<< StringUtils::to_bold("Output Handling") << std::endl				
-			<< StringUtils::to_bold("-c") << " - Disables color output." << std::endl
-			<< StringUtils::to_bold("-F") << " - Format specifiers for printing the list of queries (-l)" <<std::endl
+			<< StringUtils::toBold("Output Handling") << std::endl				
+			<< StringUtils::toBold("-c") << " - Disables color output." << std::endl
+			<< StringUtils::toBold("-F") << " - Format specifiers for printing the list of queries (-l)" <<std::endl
 			<< "     Valid specifiers: s - Print the size of the result set" << std::endl
 			<< "                       t - Print the text of the original mr" <<std::endl
 			<< "                       r - Print the result set table names" << std::endl
 			<< "     the default is '', i.e.: print onlty the qry name." << std::endl
 			<< std::endl 
-			<< StringUtils::to_bold("Return Values:") << std::endl
+			<< StringUtils::toBold("Return Values:") << std::endl
 			<< "      SUCCESS = " << mrc::SUCCESS << std::endl
 			<< "      NOTHING_TO_DO = " << mrc::NOTHING_TO_DO << std::endl
 			<< "      QUERY_NAME_FOUND = " << mrc::QUERY_NAME_FOUND << std::endl
@@ -183,7 +183,7 @@ namespace mrc {
 			minerule::MRLog() << "The catalogue appear to be installed properly." << std::endl;
 			return SUCCESS;					
 		} else {
-			minerule::MRLog() << "The catalogue is " << minerule::StringUtils::to_red("NOT") <<" installed" << std::endl;
+			minerule::MRLog() << "The catalogue is " << minerule::StringUtils::toRed("NOT") <<" installed" << std::endl;
 			exit(CATALOGUE_NOT_INSTALLED);
 		}		
 	}
@@ -191,12 +191,12 @@ namespace mrc {
 	Results installCatalogue() {
 		minerule::MRLog() << "Checking current installation status." << std::endl;
 		if(minerule::OptimizerCatalogue::checkInstallation()) {
-			minerule::MRLog() << minerule::StringUtils::to_bold("Minerule catalogue seems already installed.") << std::endl;
-			minerule::MRLog() << minerule::StringUtils::to_red("Cowardly refusing to install over a working catalogue...") << std::endl;
+			minerule::MRLog() << minerule::StringUtils::toBold("Minerule catalogue seems already installed.") << std::endl;
+			minerule::MRLog() << minerule::StringUtils::toRed("Cowardly refusing to install over a working catalogue...") << std::endl;
 			return NOTHING_TO_DO;
 		} else {
 			minerule::MRLog() << "Checking if everything is ok." << std::endl;
-			minerule::MRLog() << minerule::StringUtils::to_bold("The catalogue is not installed (properly).") << std::endl;
+			minerule::MRLog() << minerule::StringUtils::toBold("The catalogue is not installed (properly).") << std::endl;
 			minerule::MRLog() << "Proceeding with the installation..." << std::endl;
 			minerule::OptimizerCatalogue::install();
 			minerule::MRLog() << "Done!" << std::endl;
@@ -205,17 +205,17 @@ namespace mrc {
 				minerule::MRLog() << "Something went wrong. This is likely a bug. Please report it!" << std::endl;
 				return CATALOGUE_NOT_INSTALLED;
 			} else {
-				minerule::MRLog() << minerule::StringUtils::to_bold("The catalogue is now properly installed.") << std::endl;				
+				minerule::MRLog() << minerule::StringUtils::toBold("The catalogue is now properly installed.") << std::endl;				
 				return SUCCESS;
 			}
 		}
 	}
 	
 	Results uninstallCatalogue() {
-		minerule::MRLog() << "You choose to " << minerule::StringUtils::to_bold(" uninstall ") << "the minerule catalogue" << std::endl;
-		minerule::MRLog() << "This implies " << minerule::StringUtils::to_bold(" destroying ") << "all its tables" << std::endl;
+		minerule::MRLog() << "You choose to " << minerule::StringUtils::toBold(" uninstall ") << "the minerule catalogue" << std::endl;
+		minerule::MRLog() << "This implies " << minerule::StringUtils::toBold(" destroying ") << "all its tables" << std::endl;
 
-		std::cout << "Are you " << minerule::StringUtils::to_bold("sure ") << "you want to proceed? (y/N): ";
+		std::cout << "Are you " << minerule::StringUtils::toBold("sure ") << "you want to proceed? (y/N): ";
 		std::string confirm;
 		std::cin >> confirm;
 		transform(confirm.begin(), confirm.end(), confirm.begin(), ::toupper);

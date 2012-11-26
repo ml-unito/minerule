@@ -8,7 +8,7 @@ namespace minerule {
 	
 	void logRespectingMaxLogLength(std::ostream& (*logger)(void), size_t indentLen, const std::string& msg ) {
 		
-		std::vector<std::string>* chunks = StringUtils::split_to_length(msg, MAX_LOG_LENGTH-indentLen);
+		std::vector<std::string>* chunks = StringUtils::splitToLength(msg, MAX_LOG_LENGTH-indentLen);
 		
 		std::vector<std::string>::const_iterator it= chunks->begin();
 		if( it != chunks->end() ) {
@@ -18,7 +18,7 @@ namespace minerule {
 		++it;
 		
 		for( ; it!=chunks->end(); ++it ) {
-			logger() << StringUtils::to_green("  +") << *it << std::endl;			
+			logger() << StringUtils::toGreen("  +") << *it << std::endl;			
 		}
 			
 		delete chunks;		

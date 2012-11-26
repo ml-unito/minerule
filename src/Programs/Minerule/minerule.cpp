@@ -43,15 +43,15 @@ void execSubCommand( std::string cmd, int argc, char** argv, std::string cmdPath
 }
 
 void printMRHelp() {
-	std::cout << StringUtils::to_bold("Usage:") << std::endl
-		<< StringUtils::to_bold("   mr -h                          ") << " - shows this message." << std::endl
-		<< StringUtils::to_bold("   mr <sub-command> [-h] [options]") 
+	std::cout << StringUtils::toBold("Usage:") << std::endl
+		<< StringUtils::toBold("   mr -h                          ") << " - shows this message." << std::endl
+		<< StringUtils::toBold("   mr <sub-command> [-h] [options]") 
 			<< " - executes a sub-command. Use the -h option for further information." << std::endl
 		<< std::endl
-		<< StringUtils::to_bold("Available sub-commands are: ") 
+		<< StringUtils::toBold("Available sub-commands are: ") 
 		<< "query, catalogue, print, and defaults."
 		<< std::endl
-		<< StringUtils::to_bold("Note: ") << "Sub-commands can be shortened at will" 
+		<< StringUtils::toBold("Note: ") << "Sub-commands can be shortened at will" 
 		<< ", e.g.: 'mr pr' is equivalent to 'mr print'" << std::endl;
 }
 

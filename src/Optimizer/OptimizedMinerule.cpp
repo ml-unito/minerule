@@ -111,7 +111,7 @@ namespace minerule {
 		Predicate target(minerule.mc);
     
 	// FIXME: The third parameters ("Sales") seems to be obsoleted and not used any more
-		GAQueryCombinator qCombinator(target, candidates, "Sales");
+		GAQueryCombinator qCombinator(target, candidates);
 		MineruleOptions::Optimizations::Combinator& combopt =
 			MineruleOptions::getSharedOptions().getOptimizations().getCombinator();
 	

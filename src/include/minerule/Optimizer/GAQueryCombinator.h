@@ -29,7 +29,7 @@
 
 
 namespace minerule {
-  class TimeOutException : public exception { 
+  class TimeOutException : public std::exception { 
   };
 
   
@@ -54,7 +54,7 @@ namespace minerule {
    *       C(R[R.size()-1][R[R.size()-1].size()-1])
    */ 
 
-  class GAQueryCombinator : public GAEvaluatorBase {
+  class GAQueryCombinator {
     float  startingTime;
 
   public:
@@ -135,15 +135,6 @@ namespace minerule {
 					    size_t& numAssertedBits) const;
     
     /**
-     * This is the fitness function. 
-     * @param g the GA1DBinaryStringGenome object representing the genome
-     *          that need to be evaluated
-     * @return the score of this genome (in the current implementation the
-     *         best score is zero, being all the others negative numbers.
-     */
-    virtual float operator()(GAGenome& g);
-
-    /**
      * It builds the QueryOrList representation of the solution
      * expressed found by ga.
      */
@@ -163,18 +154,25 @@ namespace minerule {
      *   maxDistinctPredicates=10
      */
 
-    GAQueryCombinator(Predicate& _mr_target,
-		      std::vector<Predicate>& _mr_candidates,
-		      const std::string& _tab_source)
+    GAQueryCombinator(Predicate& _mr_target, std::vector<Predicate>& _mr_candidates)
       : mr_target(_mr_target), 
         mr_candidates(_mr_candidates),
-        tab_source(_tab_source),
         timeOut(4.0),
         maxDisjuncts(3),
         maxQueries(5),
-        maxDistinctPredicates(10) {}
+        maxDistinctPredicates(10) {}	 
 
     virtual ~GAQueryCombinator() {}
+	
+   /**
+    * This is the fitness function. 
+    * @param g the GA1DBinaryStringGenome object representing the genome
+    *          that need to be evaluated
+    * @return the score of this genome (in the current implementation the
+    *         best score is zero, being all the others negative numbers.
+    */
+   static float evaluator(GAGenome& g);
+	
     
     /**
      * The termination criterion for the GA.

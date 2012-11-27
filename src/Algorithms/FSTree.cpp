@@ -346,7 +346,7 @@ double FSTree::getThreshold(){
 }
 
 	 
-map<FSTreeSequence,int,FSTreeSequence::less_sequence>* FSTree::getResult(){
+std::map<FSTreeSequence,int,FSTreeSequence::less_sequence>* FSTree::getResult(){
   std::map<FSTreeSequence,int,FSTreeSequence::less_sequence>::iterator res_it;
   std::map<FSTreeSequence,int,FSTreeSequence::less_sequence> t(*result);
   std::map<FSTreeSequence,int,FSTreeSequence::less_sequence>* t2 = new  std::map<FSTreeSequence,int,FSTreeSequence::less_sequence>(); 

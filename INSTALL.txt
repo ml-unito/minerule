@@ -8,7 +8,9 @@ MINERULE INSTALLATION INSTRUCTIONS
 3. install dependencies
    install cmake
    cd into ExtLibs where you will find as snapshot of the libraries needed by minerule.
-	  - unzip, build, and install libodbc++
+	  - unzip, build, and install libodbc++. if you are installing on OS X, you may consider
+	  		to install the library using homebrew through the command:
+				brew install https://raw.github.com/boborbt/homebrew/libodbc++/Library/Formula/libodbc++.rb		)
       - unzip, build, and install galib245 (be sure to verify that the include files in /usr/local/include/ga have read permissions for your user)
       - unzip libgist (there is no need to install it since only few headers are needed)
 4. build the system

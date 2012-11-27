@@ -56,8 +56,11 @@ namespace minerule {
 
 
 
-	float GAQueryCombinator::operator()(GAGenome& g) {
-		if((clock()-startingTime)/CLOCKS_PER_SEC > timeOut )
+	float GAQueryCombinator::evaluator(GAGenome& g) {
+		GAQueryCombinator* qc = (GAQueryCombinator*) g.userData();
+		assert(qc!=NULL);
+		
+		if((clock()-qc->startingTime)/CLOCKS_PER_SEC > qc->timeOut )
 			throw TimeOutException();
 
 		size_t numUsedDisjuncts=0;
@@ -65,16 +68,12 @@ namespace minerule {
 		size_t numAssertedBits=0;
 
 		Predicate p2;
-		buildAssociatedPredicate(g,p2, 
-			numUsedDisjuncts, 
-				numUsedQueries, 
-					numAssertedBits);
+		qc->buildAssociatedPredicate(g,p2, numUsedDisjuncts, numUsedQueries, numAssertedBits);
 
-		if(numUsedDisjuncts>maxDisjuncts ||
-			numUsedQueries>maxQueries) 
+		if(numUsedDisjuncts > qc->maxDisjuncts ||	numUsedQueries > qc->maxQueries) 
 				return 0;
 
-		Predicate& p1=mr_target;
+		Predicate& p1=qc->mr_target;
 
     // The following two lines assign unique variables id
     // to elements in p1,p2. It do so setting the variable id
@@ -97,7 +96,7 @@ namespace minerule {
 		p1.setNumVariables(counter);
 		p2.setNumVariables(counter);
 
-		InvalidConfigurationFilter filter( tab_source, allPreds );
+		InvalidConfigurationFilter filter( qc->tab_source, allPreds );
 
 		ExpressionNFCoder e1(filter);
 		ExpressionNFCoder e2(filter);
@@ -109,8 +108,8 @@ namespace minerule {
 		if( ham_distance==0 )
 			return HUGE_VAL;
 
-		return ( (1<<maxDistinctPredicates)* HAM_LOSS 
-			+ mr_candidates.size()*maxDisjuncts - ham_distance*HAM_LOSS - numAssertedBits);
+		return ( (1 << qc->maxDistinctPredicates)* HAM_LOSS 
+			+ qc->mr_candidates.size()*qc->maxDisjuncts - ham_distance*HAM_LOSS - numAssertedBits);
 
 	}
 
@@ -127,7 +126,7 @@ namespace minerule {
 
 	void GAQueryCombinator::evolve() throw(TimeOutException) {
     // create a genome
-		GA1DBinaryStringGenome genome(mr_candidates.size()*maxDisjuncts, this); 
+		GA1DBinaryStringGenome genome(mr_candidates.size()*maxDisjuncts, GAQueryCombinator::evaluator, this); 
     // create the genetic algorithm
 		GASimpleGA ga(genome);
 		ga.populationSize(10);

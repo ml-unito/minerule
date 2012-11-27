@@ -4,12 +4,11 @@
 
 
 namespace minerule {
-	std::string 
-	RuleFormatter::quote(const std::string& elem) {
+	std::string RuleFormatter::quote(const std::string& elem) {
 		return "["+elem+"]";
 	}
-	std::string 
-	RuleFormatter::quoteElems(const ItemSet& elems) {
+	
+	std::string RuleFormatter::quoteElems(const ItemSet& elems) {
 		std::string result;
 
 		ItemSet::const_iterator it=elems.begin();

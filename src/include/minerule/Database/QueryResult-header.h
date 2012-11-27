@@ -64,6 +64,17 @@ namespace minerule {
      
 			void getRule( Rule& r ) throw( MineruleException, odbc::SQLException, std::exception );
 		};
+		
+		// --------------------------------------------------------------------------------
+		// FastSorter 
+		// --------------------------------------------------------------------------------
+		// Implements the fastest possible sorting mechanisms.
+		class FastSorter {
+		public:
+			bool operator()(const Rule& r1, const Rule& r2) {
+				return &r1 < &r2;
+			}
+		};
 
 
 		// --------------------------------------------------------------------------------

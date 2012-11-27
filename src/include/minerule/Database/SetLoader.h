@@ -5,13 +5,19 @@
 
 namespace minerule {
 	
+	// --------------------------------------------------------------------------------
+	// Classes declared here load source tables into memory in group sized chunks. 
+	// --------------------------------------------------------------------------------
+
+	
+	// Base class. Provides the findGid method.
 	template <class SetType>
 	class SetLoader : public SetType {
 	public:
 		SetLoader() : SetType() {}
 					
 		static bool findGid(ItemType& gid, SourceTable::Iterator& it) {      
-			while (!it.isAfterLast() && gid > it->getGroup() ) {
+			while( !it.isAfterLast() && gid > it->getGroup() ) {
 				++it;
 			}
     
@@ -20,7 +26,9 @@ namespace minerule {
 	};
 	
 	
-	
+	// Loader for result set organized as item lists (i.e., the underlying
+	// query does *not* need a dataset in the form of a joint table that 
+	// differentiates between body and head attributes.
 	template <class ItemSetType>
 	class ItemSetLoader : public SetLoader<ItemSetType> {
 	public:
@@ -43,6 +51,9 @@ namespace minerule {
 		}
 	};
 	
+	// Loader for result set organized as item lists (i.e., the underlying
+	// query needs a dataset in the form of a joint table that differentiates between
+	// body and head attributes.
 	template <class RuleSetType>	
 	class RuleSetLoader : public SetLoader<RuleSetType> {
 	public:

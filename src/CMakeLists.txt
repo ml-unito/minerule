@@ -68,3 +68,13 @@ target_link_libraries(mr-defaults
 	${LIBODBC++_LIBRARIES})
 
 
+add_executable(mr-match 
+	Programs/MRMatch/mrmatch.cpp
+	Programs/MRMatch/options.cpp)
+	
+target_link_libraries(mr-match 
+	mrcatalogue
+	mrresult
+	mrutils)
+
+

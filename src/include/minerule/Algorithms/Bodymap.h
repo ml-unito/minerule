@@ -16,7 +16,7 @@
 #include "Database/ItemType.h"
 #include "Utils/Converter.h"
 #include "Database/Connection.h"
-#include "Database/SetLoader.h"
+#include "Database/Transaction.h"
 #include "Utils/Bitstring.h"
 
 namespace minerule {
@@ -25,7 +25,7 @@ namespace minerule {
 	class AggregateAntiMonoConstraint;
 	class NewRule;
 
-	class Transaction : public ItemSetLoader< std::set<ItemType> >  {
+	class Transaction : public ItemTransaction< std::set<ItemType> >  {
 	public:
 		std::vector<int> values;
 	};

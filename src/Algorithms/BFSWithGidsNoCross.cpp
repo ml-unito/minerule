@@ -17,7 +17,7 @@
 #include "Algorithms/BFSWithGidsNoCross.h"
 #include "PredicateUtils/HeadBodyPredicatesSeparator.h"
 #include "Database/PrepareDataUtils.h"
-#include "Database/SetLoader.h"
+#include "Database/Transaction.h"
 
 namespace minerule {
   bool BFSWithGidsNoCross::mineruleHasSameBodyHead = false;	

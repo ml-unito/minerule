@@ -51,8 +51,8 @@ namespace minerule {
  //INSERIMENTO DI ItemSet BODY
 
  //funzione ricorsiva
- Head* Body::insertItemSetB(ItemSet:: iterator ite,
-                           ItemSet:: iterator itend, double s ){
+ Head* Body::insertItemSetB(ItemSet::iterator ite,
+                            ItemSet::iterator itend, double s ){
   RowBContainer::iterator itr;
   itr=NRB->find(*ite);
   Head* hr=NULL;

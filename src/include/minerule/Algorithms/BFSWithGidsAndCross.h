@@ -3,13 +3,13 @@
 
 #include "Algorithms/MiningAlgorithmBase.h"
 #include "Database/Connection.h"
-#include "Database/SetLoader.h"
+#include "Database/Transaction.h"
 
 namespace minerule {
 
   class BFSWithGidsAndCross : public MiningAlgorithm {
 
-	  typedef RuleSetLoader< std::vector<std::pair<ItemType,ItemType> > > Transaction;
+	  typedef RuleTransaction< std::vector<std::pair<ItemType,ItemType> > > Transaction;
 
 
   //class MapElement : public std::set<ItemType> {

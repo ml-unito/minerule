@@ -4,7 +4,7 @@
 #include <vector>
 #include <iostream>
 #include <set>
-#include "Database/QueryResult.h"
+#include "Result/QueryResult.h"
 
 
 namespace minerule {

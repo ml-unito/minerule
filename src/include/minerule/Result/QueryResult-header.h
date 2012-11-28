@@ -4,7 +4,7 @@
 #include "Database/ItemType.h"
 #include "Parsers/ParsedMinerule.h"
 #include "odbc++/preparedstatement.h"
-#include "Database/Rule.h"
+#include "Result/Rule.h"
 
 namespace minerule {
 
@@ -84,16 +84,16 @@ namespace minerule {
 		class SortBodyHeadSuppConf {
 		public:
 			bool operator()(const Rule& r1, const Rule& r2) const {
-				if( *r1.body > *r2.body ) 
+				if( r1.getBody() > r2.getBody() ) 
 					return true;
 	
-				if( *r1.body == *r2.body ) {
-					if(*r1.head > *r2.head )
+				if( r1.getBody() == r2.getBody() ) {
+					if(r1.getHead() > r2.getHead() )
 						return true;
 	  
-					if(*r1.head == *r2.head) {
-						return r1.support > r2.support || 
-							(r1.support==r2.support && r1.confidence > r2.confidence);
+					if(r1.getHead() == r2.getHead()) {
+						return r1.getSupport() > r2.getSupport() || 
+							(r1.getSupport()==r2.getSupport() && r1.getConfidence() > r2.getConfidence());
 					}
 				}
 
@@ -109,11 +109,11 @@ namespace minerule {
 		class SortBodyHead {
 		public:
 			bool operator()(const Rule& r1, const Rule& r2) const {
-				if( *r1.body > *r2.body ) 
+				if( r1.getBody() > r2.getBody() ) 
 					return true;
 	
-				if( *r1.body == *r2.body ) {
-					if(*r1.head > *r2.head )
+				if( r1.getBody() == r2.getBody() ) {
+					if(r1.getHead() > r2.getHead() )
 						return true;
 				}
 
@@ -129,16 +129,16 @@ namespace minerule {
 		class SortHeadBodySuppConf {
 		public:
 			bool operator()(const Rule& r1, const Rule& r2) const {
-				if( *r1.head > *r2.head ) 
+				if( r1.getHead() > r2.getHead() ) 
 					return true;
 	
-				if( *r1.head == *r2.head ) {
-					if(*r1.body > *r2.body )
+				if( r1.getHead() == r2.getHead() ) {
+					if(r1.getBody() > r2.getBody() )
 						return true;
 	  
-					if(*r1.body == *r2.body) {
-						return r1.support > r2.support || 
-							(r1.support==r2.support && r1.confidence > r2.confidence);
+					if(r1.getBody() == r2.getBody()) {
+						return r1.getSupport() > r2.getSupport() || 
+							(r1.getSupport()==r2.getSupport() && r1.getConfidence() > r2.getConfidence());
 					}
 				}
 	
@@ -154,26 +154,26 @@ namespace minerule {
 		class SortSuppConfBodyHead {
 		public:
 			bool operator()(const Rule& r1, const Rule& r2) const {
-				if(r1.support > r2.support)
+				if(r1.getSupport() > r2.getSupport())
 					return true;
-				if(r1.support < r2.support)
+				if(r1.getSupport() < r2.getSupport())
 					return false;
 
-	// here r1.support == r2.support
-				if(r1.confidence > r2.confidence)
+	// here r1.getSupport() == r2.getSupport()
+				if(r1.getConfidence() > r2.getConfidence())
 					return true;
-				if(r1.confidence < r2.confidence)
+				if(r1.getConfidence() < r2.getConfidence())
 					return false;
 
 	// here r1.sup=r2.sup && r1.conf=r2.conf
-				if(*r1.body > *r2.body)
+				if(r1.getBody() > r2.getBody())
 					return true;
-				if(*r1.body < *r2.body)
+				if(r1.getBody() < r2.getBody())
 					return false;
 
-				if(*r1.head > *r2.head)
+				if(r1.getHead() > r2.getHead())
 					return true;
-				if(*r1.head < *r2.head)
+				if(r1.getHead() < r2.getHead())
 					return false;
 
 	// here all fields are equals
@@ -189,24 +189,24 @@ namespace minerule {
 		class SortConfSuppBodyHead {
 		public:
 			bool operator()(const Rule& r1, const Rule& r2) const {
-				if(r1.confidence > r2.confidence)
+				if(r1.getConfidence() > r2.getConfidence())
 					return true;
-				if(r1.confidence < r2.confidence)
+				if(r1.getConfidence() < r2.getConfidence())
 					return false;
 
-				if(r1.support > r2.support)
+				if(r1.getSupport() > r2.getSupport())
 					return true;
-				if(r1.support < r2.support)
+				if(r1.getSupport() < r2.getSupport())
 					return false;
 
-				if(*r1.body > *r2.body)
+				if(r1.getBody() > r2.getBody())
 					return true;
-				if(*r1.body < *r2.body)
+				if(r1.getBody() < r2.getBody())
 					return false;
 
-				if(*r1.head > *r2.head)
+				if(r1.getHead() > r2.getHead())
 					return true;
-				if(*r1.head < *r2.head)
+				if(r1.getHead() < r2.getHead())
 					return false;
 
 	// here all fields are equals
@@ -222,24 +222,24 @@ namespace minerule {
 		class SortConfBodyHeadSupp {
 		public:
 			bool operator()(const Rule& r1, const Rule& r2) const {
-				if(r1.confidence > r2.confidence)
+				if(r1.getConfidence() > r2.getConfidence())
 					return true;
-				if(r1.confidence < r2.confidence)
+				if(r1.getConfidence() < r2.getConfidence())
 					return false;
 	
-				if(*r1.body > *r2.body)
+				if(r1.getBody() > r2.getBody())
 					return true;
-				if(*r1.body < *r2.body)
+				if(r1.getBody() < r2.getBody())
 					return false;
 
-				if(*r1.head > *r2.head)
+				if(r1.getHead() > r2.getHead())
 					return true;
-				if(*r1.head < *r2.head)
+				if(r1.getHead() < r2.getHead())
 					return false;
 
-				if(r1.support > r2.support)
+				if(r1.getSupport() > r2.getSupport())
 					return true;
-				if(r1.support < r2.support)
+				if(r1.getSupport() < r2.getSupport())
 					return false;
 
 				return false;
@@ -254,24 +254,24 @@ namespace minerule {
 		class SortConfBodySuppHead {
 		public:
 			bool operator()(const Rule& r1, const Rule& r2) const {
-				if(r1.confidence > r2.confidence)
+				if(r1.getConfidence() > r2.getConfidence())
 					return true;
-				if(r1.confidence < r2.confidence)
+				if(r1.getConfidence() < r2.getConfidence())
 					return false;
 
-				if(*r1.body > *r2.body)
+				if(r1.getBody() > r2.getBody())
 					return true;
-				if(*r1.body < *r2.body)
+				if(r1.getBody() < r2.getBody())
 					return false;
 
-				if(r1.support > r2.support)
+				if(r1.getSupport() > r2.getSupport())
 					return true;
-				if(r1.support < r2.support)
+				if(r1.getSupport() < r2.getSupport())
 					return false;
 
-				if(*r1.head > *r2.head)
+				if(r1.getHead() > r2.getHead())
 					return true;
-				if(*r1.head < *r2.head)
+				if(r1.getHead() < r2.getHead())
 					return false;
 
 	// here all fields are equals

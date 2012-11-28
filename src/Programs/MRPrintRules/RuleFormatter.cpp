@@ -36,22 +36,22 @@ namespace minerule {
 
 		if( suppressLog() ) {
 			std::cout 
-				<< std::setw(bodyWidth) << quoteElems(*rule.body) 
+				<< std::setw(bodyWidth) << quoteElems(rule.getBody()) 
 				<< bhSep 
-				<< std::left << std::setw(headWidth) << quoteElems(*rule.head) << std::right
+				<< std::left << std::setw(headWidth) << quoteElems(rule.getHead()) << std::right
 				<< " "
-				<< std::setw(suppWidth) << rule.support 
+				<< std::setw(suppWidth) << rule.getSupport()
 				<< " "
-				<< std::setw(confWidth) << rule.confidence << std::endl;
+				<< std::setw(confWidth) << rule.getConfidence() << std::endl;
 		} else {
 			MRLog()
-				<< std::setw(bodyWidth) << quoteElems(*rule.body) 
+				<< std::setw(bodyWidth) << quoteElems(rule.getBody()) 
 				<< bhSep 
-				<< std::left << std::setw(headWidth) << quoteElems(*rule.head) << std::right 
+				<< std::left << std::setw(headWidth) << quoteElems(rule.getHead()) << std::right 
 				<< " "
-				<< std::setw(suppWidth) << rule.support 
+				<< std::setw(suppWidth) << rule.getSupport()
 				<< " "
-				<< std::setw(confWidth) << rule.confidence << std::endl;
+				<< std::setw(confWidth) << rule.getConfidence() << std::endl;
 		}
 	}
 

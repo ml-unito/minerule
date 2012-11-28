@@ -6,7 +6,7 @@
 
 #include "IncrementalAlgorithm.h"
 #include "Database/ItemType.h"
-#include "Database/QueryResult.h"
+#include "Result/QueryResult.h"
 
 namespace minerule {
 

@@ -4,7 +4,6 @@
 #include "Database/SourceTable.h"
 
 namespace minerule {
-	
 	// --------------------------------------------------------------------------------
 	// Classes declared here load source tables into memory in group sized chunks. 
 	// --------------------------------------------------------------------------------
@@ -12,9 +11,9 @@ namespace minerule {
 	
 	// Base class. Provides the findGid method.
 	template <class SetType>
-	class SetLoader : public SetType {
+	class TransactionBase : public SetType {
 	public:
-		SetLoader() : SetType() {}
+		TransactionBase() : SetType() {}
 					
 		static bool findGid(ItemType& gid, SourceTable::Iterator& it) {      
 			while( !it.isAfterLast() && gid > it->getGroup() ) {
@@ -30,9 +29,9 @@ namespace minerule {
 	// query does *not* need a dataset in the form of a joint table that 
 	// differentiates between body and head attributes.
 	template <class ItemSetType>
-	class ItemSetLoader : public SetLoader<ItemSetType> {
+	class ItemTransaction : public TransactionBase<ItemSetType> {
 	public:
-		ItemSetLoader() : SetLoader<ItemSetType>() {}
+		ItemTransaction() : TransactionBase<ItemSetType>() {}
 			
 		void loadBody(ItemType& gid, SourceTable::Iterator& it) {
 			while (!it.isAfterLast() && gid == it->getGroup()) {
@@ -55,9 +54,9 @@ namespace minerule {
 	// query needs a dataset in the form of a joint table that differentiates between
 	// body and head attributes.
 	template <class RuleSetType>	
-	class RuleSetLoader : public SetLoader<RuleSetType> {
+	class RuleTransaction : public TransactionBase<RuleSetType> {
 	public:
-		RuleSetLoader() : SetLoader<RuleSetType>() {}
+		RuleTransaction() : TransactionBase<RuleSetType>() {}
 			
 	    void load(ItemType& gid, SourceTable::Iterator& it) {
 

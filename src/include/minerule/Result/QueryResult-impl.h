@@ -2,7 +2,7 @@
 #define __QUERY_RESULT_IMPL_H__
 
 #include <algorithm>
-#include "Database/QueryResult.h"
+#include "Result/QueryResult.h"
 #include "Database/Connection.h"
 #include "Optimizer/OptimizerCatalogue.h"
 
@@ -87,7 +87,7 @@ namespace minerule {
 
 		typename ResultSet<Sorter>::const_iterator it;
 		for(it=this->begin();it!=this->end();it++) {
-			connection.insert( *it->body, *it->head, it->support, it->confidence );
+			connection.insert( it->getBody(), it->getHead(), it->getSupport(), it->getConfidence() );
 		}
 	}
 }

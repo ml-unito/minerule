@@ -91,13 +91,12 @@ bool IDIncrementalAlgorithm::checkInclusion(const std::set<ItemType>& validOnes,
 
 	bool
 	IDIncrementalAlgorithm::checkInValidRules(const ValidRules& validRules, Rule& r) const {
-		assert(r.body!=NULL && r.head!=NULL );
 		ValidRules::const_iterator it = validRules.begin();
 		bool found = false;
 		while(it!=validRules.end() && !found) {
 			found=
-				(it->first==NULL || checkInclusion(*it->first, *r.body)) &&
-					(it->second==NULL|| checkInclusion(*it->second, *r.head));
+				(it->first==NULL || checkInclusion(*it->first, r.getBody())) &&
+					(it->second==NULL|| checkInclusion(*it->second, r.getHead()));
 
 			it++;
 		}
@@ -131,7 +130,7 @@ bool IDIncrementalAlgorithm::checkInclusion(const std::set<ItemType>& validOnes,
 			Rule r;
 			qri.getRule(r);
 			if(checkInValidRules(validRules, r))
-				connection.insert(*r.body, *r.head, r.support, r.confidence);
+				connection.insert(r.getBody(), r.getHead(), r.getSupport(), r.getConfidence());
 
 			rcount++;
 		}

@@ -60,12 +60,14 @@ namespace minerule {
 	}
 
 	void QueryResult::Iterator::getRule( Rule& r ) throw(MineruleException, odbc::SQLException, std::exception) {
-		r.body = new ItemSet();
-		r.head = new ItemSet();
-		readElems(  rs_rules->getInt(1), *r.body, body_elems );
-		readElems(  rs_rules->getInt(2), *r.head, head_elems );
-		r.support = rs_rules->getFloat(3);
-		r.confidence = rs_rules->getFloat(4);
+		ItemSet* body = new ItemSet();
+		ItemSet* head = new ItemSet();
+		readElems(  rs_rules->getInt(1), *body, body_elems );
+		readElems(  rs_rules->getInt(2), *head, head_elems );
+		r.setBody(body);
+		r.setHead(head);
+		r.setSupport(rs_rules->getFloat(3));
+		r.setConfidence(rs_rules->getFloat(4));
 	}
 
 } // namespace

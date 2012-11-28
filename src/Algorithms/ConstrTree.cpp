@@ -23,8 +23,8 @@ namespace minerule {
       qit.getRule(r);
       //insertRuleInStructure(r);
       //body e head sono due puntatori a ItemSet
-      newhead=root->insertItemSetB(*r.body,0.0);
-      newhead->insertItemSetH(*r.head,0.0);
+      newhead=root->insertItemSetB(r.getBody(),0.0);
+      newhead->insertItemSetH(r.getHead(),0.0);
     }
 
   }

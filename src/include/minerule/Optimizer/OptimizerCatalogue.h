@@ -11,7 +11,7 @@
 #include "Utils/MineruleException.h"
 #include "Parsers/ParsedMinerule.h"
 #include "Database/ItemType.h"
-#include "Database/QueryResult-header.h"
+#include "Result/QueryResult-header.h"
 #include "Optimizer/CatalogueInstaller.h"
 
 

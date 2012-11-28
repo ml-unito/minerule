@@ -4,6 +4,11 @@
 namespace minerule {
 	
 	class Rule {
+	private:
+		ItemSet* body;
+		ItemSet* head;		
+		double support;
+		double confidence;
 	protected:
 		void clear() {
 			if(body!=NULL)
@@ -15,12 +20,7 @@ namespace minerule {
 			head=NULL;
 		}
 
-	public:
-		ItemSet* body;
-		ItemSet* head;
-		double support;
-		double confidence;
-
+	public:			
 		Rule() : body(NULL), head(NULL), support(0), confidence(0) {} 
 
 		Rule(const Rule& rule) : support(rule.support), confidence(rule.confidence) {
@@ -75,7 +75,55 @@ namespace minerule {
 			}
 
 			return *this;
-		}    
+		}
+		
+		void setBody(ItemSet* b) {
+			body = b;
+		}
+		
+		const ItemSet& getBody() const { 
+			assert(body!=NULL);
+			return *body; 
+		}
+		
+		ItemSet& getBody() { 
+			assert(body!=NULL);
+			return *body; 
+		}
+		
+
+
+		void setHead(ItemSet* h) {
+			head = h;
+		}
+		
+		const ItemSet& getHead() const { 
+			assert(head!=NULL);
+			return *head; 
+		}
+		
+		ItemSet& getHead() { 
+			assert(head!=NULL);
+			return *head; 
+		}
+		
+		
+		void setSupport(double s)  {
+			support = s;
+		}
+		
+		double getSupport() const {
+			return support;
+		}
+		
+		void setConfidence(double c) {
+			confidence = c;
+		}
+		
+		double getConfidence() const {
+			return confidence;
+		}
+			
 	};
 
 } // namespace

@@ -18,10 +18,10 @@ namespace minerule {
 		while( qit.next()) {
 			Rule r;
 			qit.getRule(r);
-			double suppr=round(r.support*ngroups);
-			double suppb=round(suppr/r.confidence);
-			newhead=root->insertItemSetB(*r.body,suppb);
-			newhead->insertItemSetH(*r.head,suppr);
+			double suppr=round(r.getSupport()*ngroups);
+			double suppb=round(suppr/r.getConfidence());
+			newhead=root->insertItemSetB(r.getBody(),suppb);
+			newhead->insertItemSetH(r.getHead(),suppr);
 		}
 
 	}

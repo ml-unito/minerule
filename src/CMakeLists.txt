@@ -20,8 +20,9 @@ add_subdirectory(Optimizer)
 add_subdirectory(PredicateUtils)
 add_subdirectory(Utils)
 add_subdirectory(Parsers)
+add_subdirectory(Result)
 
-LIST(APPEND LIBS mralgorithms mrdatabase mroptimizer mrpredicateutils mrutils mrparsers)
+LIST(APPEND LIBS mralgorithms mrdatabase mroptimizer mrpredicateutils mrutils mrparsers mrresult)
 LIST(APPEND LIBS ${LIBGA_LIBRARIES})
 LIST(APPEND LIBS ${LIBODBC++_LIBRARIES})
 
@@ -41,7 +42,8 @@ target_link_libraries(mr-catalogue
 	mrpredicateutils 
 	mroptimizer
 	mrdatabase 
-	mrutils 
+	mrutils
+	mrresult
 	mrparsers 
 	${LIBODBC++_LIBRARIES})
 
@@ -53,7 +55,8 @@ target_link_libraries(mr-print
 	mroptimizer 
 	mrdatabase 
 	mrpredicateutils 
-	mrutils 
+	mrutils
+	mrresult 
 	mrparsers 
 	${LIBODBC++_LIBRARIES})
 

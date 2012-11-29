@@ -13,6 +13,20 @@
 
 using namespace minerule;
 
+const std::vector<std::string>& knownCommands() {
+	static std::vector<std::string> _knownCommands;
+	if( _knownCommands.empty() ) {
+		_knownCommands.push_back("print");
+		_knownCommands.push_back("catalogue");
+		_knownCommands.push_back("defaults");
+		_knownCommands.push_back("match");
+		_knownCommands.push_back("query");
+	}
+	
+	return _knownCommands;
+}
+
+
 std::string buildPath(std::string cmdName) {
 	size_t last_slash_pos = cmdName.find_last_of("/");
 	if(last_slash_pos == std::string::npos)
@@ -49,19 +63,20 @@ void printMRHelp() {
 			<< " - executes a sub-command. Use the -h option for further information." << std::endl
 		<< std::endl
 		<< StringUtils::toBold("Available sub-commands are: ") 
-		<< "query, catalogue, print, and defaults."
+		<< StringUtils::join(knownCommands(), ", ") << "."
 		<< std::endl
 		<< StringUtils::toBold("Note: ") << "Sub-commands can be shortened at will" 
 		<< ", e.g.: 'mr pr' is equivalent to 'mr print'" << std::endl;
 }
 
 
+
 std::string expandSubCommand(std::string cmdPrefix) {
-	static std::string commands[] = { "query", "catalogue", "print", "defaults" };
-	
-	for(size_t i=0; i<4; ++i) {
-		if( commands[i].find(cmdPrefix) == 0 ) // cmdPrefix is a prefix of commands[i]
-			return commands[i];
+	const std::vector<std::string>& cmds  = knownCommands();
+	std::vector<std::string>::const_iterator it;
+	for(it=cmds.begin(); it!=cmds.end(); ++it) {
+		if( it->find(cmdPrefix) == 0 ) // cmdPrefix is a prefix of commands[i]
+			return *it;
 	}
 	
 	return cmdPrefix;
@@ -75,21 +90,11 @@ void checkSubCommands(int argc, char** argv) {
 	}
 		
 	std::string subCmd( expandSubCommand(argv[1]) );
-	if(subCmd == "print") {
-		execSubCommand(subCmd, argc-2, &argv[2], buildPath(argv[0]));
-	}
+	const std::vector<std::string>& cmds = knownCommands();
 	
-	if(subCmd == "catalogue") {
+	if( find( cmds.begin(), cmds.end(), subCmd.c_str() ) != cmds.end() ) {
 		execSubCommand(subCmd, argc-2, &argv[2], buildPath(argv[0]));
-	}
-	
-	if(subCmd == "defaults") {
-		execSubCommand(subCmd, argc-2, &argv[2], buildPath(argv[0]));
-	}
-	
-	if(subCmd == "query") {
-		execSubCommand(subCmd, argc-2, &argv[2], buildPath(argv[0]));
-	}
+	}	
 	
 	throw MineruleException( MR_ERROR_OPTION_PARSING, "Command not recognized, see help for a list of available commands." );
 }

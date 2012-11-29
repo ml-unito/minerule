@@ -7,7 +7,7 @@
 namespace mrmatch {
 	class Options {
 	public:
-		Options() {};
+		Options() : _queryNumber(0) {};
 		virtual ~Options () {};
 		
 		void setQueryName(std::string name) { _queryName=name; }

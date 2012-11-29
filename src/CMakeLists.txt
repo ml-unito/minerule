@@ -73,8 +73,9 @@ add_executable(mr-match
 	Programs/MRMatch/options.cpp)
 	
 target_link_libraries(mr-match 
-	mrcatalogue
+	mroptimizer
 	mrresult
-	mrutils)
+	mrutils
+	${LIBODBC++_LIBRARIES})
 
 

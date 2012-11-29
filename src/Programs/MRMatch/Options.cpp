@@ -1,6 +1,7 @@
 #include "Options.h"
 
 #include "Utils/MineruleOptions.h"
+#include "Utils/FileUtils.h"
 
 using namespace minerule;
 
@@ -12,6 +13,9 @@ bool Options::initMineruleOptions() const {
 	
 	if( !_mrOptionsFileName.empty() ) {
 		options.readFromFile(_mrOptionsFileName);
+		ok=true;
+	} else if( FileUtils::fileExists("options.txt") ) {
+		options.readFromFile("options.txt");
 		ok=true;
 	}
 	

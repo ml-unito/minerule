@@ -42,9 +42,15 @@ namespace minerule {
 		};
 		
 		
-		SourceTable(const MiningAlgorithm& algorithm) : _algorithm(algorithm), _pdu(_algorithm.optimizedMinerule().getParsedMinerule(), _algorithm.sourceTableRequirements()), _bodyStatement(NULL), _headStatement(NULL), _fullStatement(NULL) { 
+		SourceTable(const MiningAlgorithm& algorithm) : _minerule(algorithm.optimizedMinerule().getParsedMinerule()), _sourceTableRequirements(algorithm.sourceTableRequirements()), _pdu(_minerule, _sourceTableRequirements), _bodyStatement(NULL), _headStatement(NULL), _fullStatement(NULL) { 
 			init(); 
 		};
+		
+		SourceTable(const ParsedMinerule& minerule, const SourceTableRequirements& requirements) : _minerule(minerule), _sourceTableRequirements(requirements), _pdu(_minerule,_sourceTableRequirements), _bodyStatement(NULL), _headStatement(NULL), _fullStatement(NULL) { 
+			init(); 		
+		}
+		
+		
 		
 		virtual ~SourceTable();
 
@@ -54,7 +60,8 @@ namespace minerule {
 		Iterator newIterator(IteratorKind);
 	private:
 	/* data */
-		const MiningAlgorithm& _algorithm;
+		const ParsedMinerule& _minerule;
+		SourceTableRequirements _sourceTableRequirements;
 		PrepareDataUtils _pdu;
 		
 		SourceRowColumnIds _columnIds;

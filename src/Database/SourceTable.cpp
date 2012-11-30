@@ -59,11 +59,10 @@ namespace minerule {
 
 	void SourceTable::initBodyHeadResultSets() {
 		odbc::Connection* connection = MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
-		const OptimizedMinerule& minerule = _algorithm.optimizedMinerule();
 	
 		std::string bodyCondition, headCondition;
-	
-		list_AND_node* miningCondition = (minerule.getParsedMinerule().mc!=NULL ? minerule.getParsedMinerule().mc->l_and : NULL);
+		
+		list_AND_node* miningCondition = (_minerule.mc!=NULL ? _minerule.mc->l_and : NULL);
 		HeadBodyPredicatesSeparator::separate(miningCondition, bodyCondition, headCondition);
 	
 		std::string bodyQuery = _pdu.buildBodyTableQuery(_columnIds, bodyCondition);
@@ -87,7 +86,7 @@ namespace minerule {
 
 
 	void SourceTable::init() {
-		if( _algorithm.sourceTableRequirements().crossProduct() )
+		if( _sourceTableRequirements.crossProduct() )
 			initFullResultSet();
 		else {
 			initBodyHeadResultSets();

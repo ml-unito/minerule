@@ -129,9 +129,11 @@ namespace minerule {
   
   void MRLogger::logMeasurements() {
 	  push("Showing measured execution times:");
-	  for( Measurements::const_iterator it=measurements.begin(); it!=measurements.end(); ++it ) {
+	  
+		for( Measurements::const_iterator it=measurements.begin(); it!=measurements.end(); ++it ) {
 		  logMeasurement(it->first, it->second);
 	  }
+		
 	  pop();
   }
 

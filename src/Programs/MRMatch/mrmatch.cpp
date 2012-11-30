@@ -55,9 +55,19 @@ namespace mrmatch {
 	
 		return options;
 	}
+	
+	void execute(const Options& options) {
+		// rebuild source table
+		
+
+		// load past minerule result
+				
+		
+		// perform the match
+		
+	}
+	
 }
-
-
 
 
 int main (int argc, char* const argv[]) {
@@ -74,8 +84,9 @@ int main (int argc, char* const argv[]) {
 
 			exit(mrmatch::MRMATCH_OPTION_PARSING_ERROR);
 		}
+		
+		execute(options);
 	
-		MRLog() << "query name:" << options.queryName() << std::endl;
 	} catch( std::exception& e ) {
 		cerr << e.what() << std::endl;
 	}

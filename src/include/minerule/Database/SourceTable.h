@@ -63,7 +63,7 @@ namespace minerule {
 		const ParsedMinerule& _minerule;
 		SourceTableRequirements _sourceTableRequirements;
 		PrepareDataUtils _pdu;
-		
+				
 		SourceRowColumnIds _columnIds;
 		odbc::PreparedStatement* _bodyStatement;
 		odbc::PreparedStatement* _headStatement;

@@ -9,8 +9,8 @@ namespace minerule {
 	public:
 		typedef std::set<ItemType> SetType;
 		
-		bool match( const Rule& r, const RuleTransaction<SetType>& t );		
-		bool match( const Rule& r, const ItemTransaction<SetType>& bodySet, const ItemTransaction<SetType>& headSet );		
+		static bool match( const Rule& r, const RuleTransaction<SetType>& t );		
+		static bool match( const Rule& r, const ItemTransaction<SetType>& bodySet, const ItemTransaction<SetType>& headSet );		
 	};
 
 }

@@ -56,15 +56,79 @@ namespace mrmatch {
 		return options;
 	}
 	
-	void execute(const Options& options) {
+	SourceTableRequirements sourceTableRequirements(const ParsedMinerule& minerule) {
+		if(minerule.hasCrossConditions() || !minerule.hasIDConstraints()) 
+			return SourceTableRequirements( SourceTableRequirements::CrossProduct | SourceTableRequirements::SortedGids );
+		else
+			return SourceTableRequirements();		
+	}
+	
+	void matchWithCrossProduct(RuleGidsVector& rules, SourceTable& st) {
+		assert( false ); // not yet implemented
+	}
+	
+	void matchWithoutCrossProduct(RuleGidsVector& rules, SourceTable& st) {
+		SourceTable::Iterator bodyIt = st.newIterator(SourceTable::BodyIterator);
+		SourceTable::Iterator headIt = st.newIterator(SourceTable::HeadIterator);
+				
+		while(!bodyIt.isAfterLast()) {
+			ItemType gid = bodyIt->getGroup();
+			
+			ItemTransaction<RulesMatcher::SetType> bodies;
+			ItemTransaction<RulesMatcher::SetType> heads;
+			
+			bodies.loadBody(gid, bodyIt); 			// this advances the body iterator
+			
+			if( TransactionBase<RulesMatcher::SetType>::findGid(gid, headIt) ) // positioning the head iterator 
+				break;								// no more heads to load
+
+			heads.loadHead(gid, headIt);			// loading the heads
+			
+			// populating results
+			for(RuleGidsVector::iterator ruleIt = rules.begin(); ruleIt!=rules.end(); ++ruleIt) {
+				if( RulesMatcher::match( ruleIt->first, bodies, heads ) ) {
+					ruleIt->second.push_back( gid );
+				}
+			}
+			
+		}
+		
+	}
+	
+	void printMatches( const RuleGidsVector& matches ) {
+		for(RuleGidsVector::const_iterator it=matches.begin(); it!=matches.end(); ++it) {
+			
+		}
+	}
+	
+	void execute(const Options& options) {		
 		// rebuild source table
-		SourceTable st( minerule, sourceTableRequirements(minerule) );		
+		CatalogueInfo info;
+		OptimizerCatalogue::getMRQueryInfo(options.queryName(), info, false);
+		ParsedMinerule minerule(info.qryText);
+		
+		SourceTableRequirements requirements = sourceTableRequirements(minerule);		
+		SourceTable st( minerule, requirements);
 
 		// load past minerule result
-		
+		QueryResult::Iterator it;
+		OptimizerCatalogue::getMRQueryResultIterator(options.queryName(), it, minerule.sup, minerule.conf);
+		RuleGidsVector rules;
+
+		while(it.next()) {
+			rules.push_back( std::pair<Rule, std::vector<ItemType> >() );
+			it.getRule(rules.back().first);
+		}
 		
 		// perform the match
+		if( requirements.crossProduct() ) {
+			matchWithCrossProduct(rules, st);			
+		} else {
+			matchWithoutCrossProduct(rules,st);
+		}
 		
+		// show results
+		printMatches( rules );
 	}
 	
 }

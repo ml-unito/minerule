@@ -10,18 +10,17 @@ namespace mrmatch {
 		Options() : _queryNumber(0) {};
 		virtual ~Options () {};
 		
-		void setQueryName(std::string name) { _queryName=name; }
-		void setQueryNumber(size_t number) { _queryNumber=number; }
+		void setQueryName(std::string name) { _queryName   = name; 		}
+		void setQueryNumber(size_t number)  { _queryNumber = number;  }
 		
-		size_t queryNumber() { return _queryNumber; }
-		std::string queryName() { return _queryName; }	
+		std::string queryName() const;
 		
 		bool initMineruleOptions() const;
 	private:
 		std::string _mrOptionsFileName;
 		std::vector<std::string> _mrOptionsInline;
 		
-		std::string _queryName;		
+		std::string _queryName;
 		size_t _queryNumber;
 	};
 

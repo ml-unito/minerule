@@ -73,6 +73,8 @@ add_executable(mr-match
 	Programs/MRMatch/options.cpp)
 	
 target_link_libraries(mr-match 
+  mrdatabase
+	mrparsers
 	mroptimizer
 	mrresult
 	mrutils

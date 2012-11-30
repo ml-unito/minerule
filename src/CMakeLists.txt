@@ -48,8 +48,7 @@ target_link_libraries(mr-catalogue
 	${LIBODBC++_LIBRARIES})
 
 add_executable(mr-print 
-	Programs/MRPrintRules/PrintRules.cpp 	
-	Programs/MRPrintRules/RuleFormatter.cpp)
+	Programs/MRPrintRules/PrintRules.cpp)
 	
 target_link_libraries(mr-print 
 	mroptimizer 
@@ -74,10 +73,7 @@ add_executable(mr-match
 	
 target_link_libraries(mr-match 
   mrdatabase
-	mrparsers
-	mroptimizer
-	mrresult
-	mrutils
-	${LIBODBC++_LIBRARIES})
+  ${LIBS}
+  ${LIBODBC++_LIBRARIES})
 
 

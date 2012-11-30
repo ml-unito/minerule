@@ -11,8 +11,7 @@
 #include "Optimizer/OptimizerCatalogue.h"
 #include "Database/SourceRowElement.h"
 #include "Utils/FileUtils.h"
-
-#include "RuleFormatter.h"
+#include "Result/RuleFormatter.h"
 
 
 using namespace minerule;

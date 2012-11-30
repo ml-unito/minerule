@@ -118,15 +118,11 @@ namespace minerule {
     virtual ~BFSWithGidsAndCross() {
     	if(sourceTable!=NULL) delete sourceTable;
     }
-
-    virtual bool needsCrossProductOfSourceTable() const {
-      return true;
-    }
-
-    virtual bool needsGidSortedSourceTable() const {
-      return true;
-    }
-	
+		
+		virtual SourceTableRequirements sourceTableRequirements() const {
+			return SourceTableRequirements(SourceTableRequirements::CrossProduct | SourceTableRequirements::SortedGids);
+		};
+			
 	static bool getMineruleHasSameBodyHead() { 
 		return mineruleHasSameBodyHead;
 	}

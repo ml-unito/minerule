@@ -122,8 +122,8 @@ namespace minerule {
 		virtual bool canHandleMinerule() const {
 			return 
 				!minerule.getParsedMinerule().hasCrossConditions() &&
-					!minerule.getParsedMinerule().requiresClusters() &&
-						!minerule.getParsedMinerule().hasDisjuctionsInMC();
+				!minerule.getParsedMinerule().requiresClusters() &&
+				!minerule.getParsedMinerule().hasDisjuctionsInMC();
 		}
 
 	};

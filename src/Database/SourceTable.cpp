@@ -88,7 +88,7 @@ namespace minerule {
 
 
 	void SourceTable::init() {
-		if( _algorithm.needsCrossProductOfSourceTable() )
+		if( _algorithm.sourceTableRequirements().crossProduct() )
 			initFullResultSet();
 		else {
 			initBodyHeadResultSets();

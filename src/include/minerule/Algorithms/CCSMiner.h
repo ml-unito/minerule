@@ -29,9 +29,9 @@ namespace minerule {
       return minerule.getParsedMinerule().miningTask == MTMineSequences;
     }
 
-    virtual bool needsGidSortedSourceTable() const {
-      return true;
-    }
+		virtual SourceTableRequirements sourceTableRequirements() const {
+			return SourceTableRequirements(SourceTableRequirements::SortedGids);
+		};
 
     bool find(std::vector<CCSMSequence*>*vec, CCSMSequence* elem); 
 

@@ -19,10 +19,12 @@ namespace minerule {
 			std::string chunk;
 			size_t new_pos = std::min( cur_pos + out_len, len );
 
+			
 			size_t last_space = str.find_last_of(" ", new_pos);
 			if( last_space != std::string::npos &&  // found something AND
-				last_space > cur_pos && 			// still moving forward AND
-				last_space + 10 >= new_pos )		// not too far back w.r.t. from new_pos
+					last_space > cur_pos && 						// still moving forward AND
+					last_space + 10 >= new_pos && 			// not too far back w.r.t. from new_pos
+					!cur_pos == len)										// not at the end of the string
 				new_pos = last_space+1;
 			
 			result->push_back(str.substr(cur_pos, new_pos-cur_pos));

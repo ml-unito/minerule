@@ -58,10 +58,10 @@ namespace mrmatch {
 	
 	void execute(const Options& options) {
 		// rebuild source table
-		
+		SourceTable st( minerule, sourceTableRequirements(minerule) );		
 
 		// load past minerule result
-				
+		
 		
 		// perform the match
 		

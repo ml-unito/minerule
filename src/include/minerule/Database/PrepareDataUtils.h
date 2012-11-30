@@ -11,7 +11,7 @@ namespace minerule {
 
 	class PrepareDataUtils {
 	private:
-		const OptimizedMinerule& mr;
+		const ParsedMinerule& mr;
 		SourceTableRequirements sourceTableRequirements;
 		
 		std::string buildAndList(const list_AND_node* l) const;
@@ -24,7 +24,7 @@ namespace minerule {
 
 		std::string	buildAttrListEquiJoin(const std::string& alias1, const std::string& alias2) const;		
 	public:
-		PrepareDataUtils( const OptimizedMinerule& m, const SourceTableRequirements& requirements) : mr(m), sourceTableRequirements(requirements) {}
+		PrepareDataUtils( const ParsedMinerule& m, const SourceTableRequirements& requirements) : mr(m), sourceTableRequirements(requirements) {}
 
 
 		std::string buildBodyTableQuery(SourceRowColumnIds& rowDes, const std::string& condition) const;
@@ -50,7 +50,7 @@ namespace minerule {
 		static size_t evaluateTotGroups(const ParsedMinerule& pmr) throw(MineruleException, odbc::SQLException);
 
 		size_t evaluateTotGroups() const throw(MineruleException, odbc::SQLException) {
-			return evaluateTotGroups(mr.getParsedMinerule());
+			return evaluateTotGroups(mr);
 		}
 	};
 

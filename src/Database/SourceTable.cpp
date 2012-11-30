@@ -78,7 +78,6 @@ namespace minerule {
 
 	void SourceTable::initFullResultSet() {
 		odbc::Connection* connection = MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
-		const OptimizedMinerule& minerule = _algorithm.optimizedMinerule();
 
 		std::string query = _pdu.buildExtendedSourceTableQuery(_columnIds);
 		

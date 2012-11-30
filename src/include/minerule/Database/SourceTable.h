@@ -42,7 +42,7 @@ namespace minerule {
 		};
 		
 		
-		SourceTable(const MiningAlgorithm& algorithm) : _algorithm(algorithm), _pdu(_algorithm.optimizedMinerule(), _algorithm.sourceTableRequirements()), _bodyStatement(NULL), _headStatement(NULL), _fullStatement(NULL) { 
+		SourceTable(const MiningAlgorithm& algorithm) : _algorithm(algorithm), _pdu(_algorithm.optimizedMinerule().getParsedMinerule(), _algorithm.sourceTableRequirements()), _bodyStatement(NULL), _headStatement(NULL), _fullStatement(NULL) { 
 			init(); 
 		};
 		
@@ -56,6 +56,7 @@ namespace minerule {
 	/* data */
 		const MiningAlgorithm& _algorithm;
 		PrepareDataUtils _pdu;
+		
 		SourceRowColumnIds _columnIds;
 		odbc::PreparedStatement* _bodyStatement;
 		odbc::PreparedStatement* _headStatement;

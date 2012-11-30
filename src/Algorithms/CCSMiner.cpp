@@ -14,7 +14,7 @@ namespace minerule {
 
 	void
 	CCSMiner::prepareData() {
-		PrepareDataUtils pdu(minerule, *this);
+		PrepareDataUtils pdu(minerule, this->sourceTableRequirements());
 		const ParsedMinerule& pm = minerule.getParsedMinerule();
 		std::string groupAttrList = pdu.buildAttrListDescription(pm.ga);
 		std::string ordAttrList = pdu.buildAttrListDescription(pm.oa);

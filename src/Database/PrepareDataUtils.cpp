@@ -132,7 +132,7 @@ namespace minerule {
 		if(!body_mining_condition.empty())
 			queryText += " WHERE "+body_mining_condition;
 
-		if( miningAlgo.sourceTableRequirements().sortedGids() )
+		if( sourceTableRequirements.sortedGids() )
 			queryText += " ORDER BY "+buildAttrListDescription(mr.getParsedMinerule().ga);
 					      
 		unsigned int lastElem;
@@ -154,7 +154,7 @@ namespace minerule {
 		if(!head_mining_condition.empty())
 			queryText += " WHERE "+head_mining_condition;
 
-		if( miningAlgo.sourceTableRequirements().sortedGids() )
+		if( sourceTableRequirements.sortedGids() )
 			queryText += " ORDER BY "+buildAttrListDescription(mr.getParsedMinerule().ga);
 					      
 		unsigned int lastElem;
@@ -243,7 +243,7 @@ namespace minerule {
 			queryText += " AND (" + clusterCond +")";
 		}
 
-		if( miningAlgo.sourceTableRequirements().sortedGids() )
+		if( sourceTableRequirements.sortedGids() )
 			queryText += " ORDER BY "+buildAttrListDescription(mr.getParsedMinerule().ga, aliasA,false);
     
 		std::string clusteredTable 	 = mr.getParsedMinerule().tab_result+"_tmpSource";
@@ -287,7 +287,7 @@ namespace minerule {
 
 
 	std::string PrepareDataUtils::buildSourceTableQuery(SourceRowColumnIds& rowDes) const {
-		if(miningAlgo.sourceTableRequirements().crossProduct() ) {
+		if(sourceTableRequirements.crossProduct() ) {
 			return buildExtendedSourceTableQuery(rowDes);
 		} else {
 			throw MineruleException(MR_ERROR_INTERNAL, "Check for consistency with previous implementation");

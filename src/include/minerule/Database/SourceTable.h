@@ -42,7 +42,7 @@ namespace minerule {
 		};
 		
 		
-		SourceTable(const MiningAlgorithm& algorithm) : _algorithm(algorithm), _pdu(_algorithm.optimizedMinerule(), _algorithm), _bodyStatement(NULL), _headStatement(NULL), _fullStatement(NULL) { 
+		SourceTable(const MiningAlgorithm& algorithm) : _algorithm(algorithm), _pdu(_algorithm.optimizedMinerule(), _algorithm.sourceTableRequirements()), _bodyStatement(NULL), _headStatement(NULL), _fullStatement(NULL) { 
 			init(); 
 		};
 		

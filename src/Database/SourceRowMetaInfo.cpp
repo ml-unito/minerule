@@ -38,8 +38,6 @@ SourceRowAttrCollectionDescriptor::dataDefinitionForElem(odbc::ResultSet* rs, in
   int precision = rsmd->getPrecision(elem);
   int scale = rsmd->getScale(elem);
 	int displaySize = rsmd->getColumnDisplaySize(elem);
-	
-	MRDebug() << "elem:" << elem << " prec:" << precision << " scale:" << scale << " display:" << displaySize << std::endl;
   
   char buf[255];
   if( precision == 0 ) {

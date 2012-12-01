@@ -188,45 +188,24 @@ namespace minerule {
 
 	std::string OptimizerCatalogue::getNewAutoincrementValue(const std::string& tableName)  throw(odbc::SQLException,MineruleException) {
 		odbc::Connection* connection = MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
-		odbc::Statement* statement=NULL;
-		odbc::ResultSet* rs=NULL;
-		odbc::Statement* updateStatement=NULL;
 
 		std::string idstr;
 
-		try {
-			statement=connection->createStatement();
-			rs=statement->executeQuery("SELECT current_id FROM mr_autoincrement WHERE table_name="+SQLUtils::quote(tableName));
+		std::auto_ptr<odbc::Statement> statement(connection->createStatement());
+		std::auto_ptr<odbc::ResultSet> rs(statement->executeQuery("SELECT current_id FROM mr_autoincrement WHERE table_name="+SQLUtils::quote(tableName)));
 
-			if(!rs->next())
-				throw MineruleException(MR_ERROR_INSTALLATION_PROBLEM,
-					"Cannot find the autoincrement value for table "+ tableName+
-			" in Optimizer catalogue (i.e. in table:`mr_autoincrement'),"
+		if(!rs->next())
+			throw MineruleException(MR_ERROR_INSTALLATION_PROBLEM,
+				"Cannot find the autoincrement value for table "+ tableName+
+				" in Optimizer catalogue (i.e. in table:`mr_autoincrement'),"
 				" please check your installation");
 
-			size_t id = rs->getInt(1);
-			idstr = Converter((long)++id).toString();
+		size_t id = rs->getInt(1);
+		idstr = Converter((long)++id).toString();
     
-			delete rs;
-			delete statement;
-			rs=NULL;
-			statement=NULL;
-
-
-			updateStatement = connection->createStatement();
-			updateStatement->execute("UPDATE mr_autoincrement SET current_id="+
-			idstr+" "
-				"WHERE table_name="+SQLUtils::quote(tableName));
-
-			delete updateStatement;
-
-		} catch (std::exception& e) {
-			if( statement!=NULL ) delete statement;
-			if( updateStatement!=NULL ) delete updateStatement;
-			if( rs!=NULL) delete rs;
-
-			throw;
-		}
+		std::auto_ptr<odbc::Statement> updateStatement(connection->createStatement());
+		updateStatement->execute("UPDATE mr_autoincrement SET current_id="+
+			idstr+" WHERE table_name="+SQLUtils::quote(tableName));
 
 		return idstr;
 	}

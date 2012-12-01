@@ -338,17 +338,30 @@ namespace minerule {
 	}
   
 	std::string OptimizerCatalogue::getMRQueryName(size_t i) throw(odbc::SQLException, MineruleException) {
-		std::string queryNumber = Converter(i-1).toString();
-		odbc::Connection* connection = MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
-
-		std::auto_ptr<odbc::Statement> statement(connection->createStatement());
-		std::auto_ptr<odbc::ResultSet> rs(statement->executeQuery("SELECT query_name FROM mr_query LIMIT 1 OFFSET "+queryNumber));
-
-		if( rs->next() && !rs->isAfterLast() ) {
-			return rs->getString(1);
+		//  -- This implementation is much more efficient but does not ensure that the result retrieved
+		//		 are in the same order of the ones returned by getMRQueryInfos
+		//
+		// std::string queryNumber = Converter(i-1).toString();
+		// odbc::Connection* connection = MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
+		// 
+		// std::auto_ptr<odbc::Statement> statement(connection->createStatement());
+		// std::auto_ptr<odbc::ResultSet> rs(statement->executeQuery("SELECT query_name FROM mr_query LIMIT 1 OFFSET "+queryNumber));
+		// 
+		// if( rs->next() && !rs->isAfterLast() ) {
+		// 	return rs->getString(1);
+		// } else {
+		// 	throw MineruleException(MR_ERROR_CATALOGUE_ERROR, "Query number "+Converter(i).toString()+" not found");
+		// }  	
+		//  -- NEW IMPLEMENTATION
+		
+		std::vector<CatalogueInfo> catInfoVec;
+		getMRQueryInfos(catInfoVec);
+		if(i-1<catInfoVec.size()) {
+			return catInfoVec[i-1].resName;
 		} else {
-			throw MineruleException(MR_ERROR_CATALOGUE_ERROR, "Query number "+Converter(i).toString()+" not found");
-		}  	
+			throw MineruleException(MR_ERROR_CATALOGUE_ERROR, "Query number "+Converter(i).toString()+" not found");			
+		}
+		
 	}
 
 	void OptimizerCatalogue::getMRQueryNames(std::vector<std::string>& nameVec) throw(odbc::SQLException, MineruleException) {
@@ -378,8 +391,7 @@ namespace minerule {
 			info.updateQrySize();
 	}
 
-	void 
-		OptimizerCatalogue::getMRQueryInfos(std::vector<CatalogueInfo>& catInfoVec, bool includeResultSize) 
+	void OptimizerCatalogue::getMRQueryInfos(std::vector<CatalogueInfo>& catInfoVec, bool includeResultSize) 
 	throw(odbc::SQLException, MineruleException) {
 		odbc::Connection* connection = MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
 
@@ -413,8 +425,8 @@ namespace minerule {
 		} else {
 			throw MineruleException(MR_ERROR_CATALOGUE_ERROR,
 				"Cannot find the query named:" + qryName +" "
-					"Either there is some problem with the optimizer catalogue "
-						"or a wrong query name has been specified");
+				"Either there is some problem with the optimizer catalogue "
+				"or a wrong query name has been specified");
 		}
 	}
 

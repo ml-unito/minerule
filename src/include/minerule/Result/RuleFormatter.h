@@ -24,8 +24,8 @@ namespace minerule {
 
 		virtual ~RuleFormatter() {}
 
-		virtual void
-			printRule(const Rule&) = 0;
+		virtual std::string formatRule(const Rule&) = 0;
+		virtual void printRule(const Rule&) = 0;
 
 		void setFieldSeparationString(const std::string& s) {
 			_fieldSeparationString=s;
@@ -45,8 +45,8 @@ namespace minerule {
 
 		virtual ~SimpleRuleFormatter() {};
 
-		virtual void
-			printRule(const Rule&);
+		virtual std::string formatRule(const Rule&);
+		virtual void printRule(const Rule&);
 
 		virtual void
 			postExec() {};

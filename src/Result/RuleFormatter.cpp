@@ -1,6 +1,6 @@
 #include "Result/RuleFormatter.h"
 #include <iomanip>
-
+#include <sstream>
 
 
 namespace minerule {
@@ -26,33 +26,36 @@ namespace minerule {
 	}
 
 
-	void
-	SimpleRuleFormatter::printRule(const Rule& rule) {
+	std::string
+	SimpleRuleFormatter::formatRule(const Rule& rule) {
 		std::string bhSep = " => ";   // separates body from head 
 		int bodyWidth = 30;  // width of the body column
 		int headWidth = 30;  // width of the head column
 		int suppWidth = 9;
 		int confWidth = 9;
+		
+		std::stringstream out;
 
+		out	<< std::setw(bodyWidth) << quoteElems(rule.getBody()) 
+			<< bhSep 
+			<< std::left << std::setw(headWidth) << quoteElems(rule.getHead()) << std::right
+			<< " "
+			<< std::setw(suppWidth) << rule.getSupport()
+			<< " "
+			<< std::setw(confWidth) << rule.getConfidence() << std::endl;
+	
+		return out.str();
+	}
+	
+	
+	void
+	SimpleRuleFormatter::printRule(const Rule& rule) {
 		if( suppressLog() ) {
-			std::cout 
-				<< std::setw(bodyWidth) << quoteElems(rule.getBody()) 
-				<< bhSep 
-				<< std::left << std::setw(headWidth) << quoteElems(rule.getHead()) << std::right
-				<< " "
-				<< std::setw(suppWidth) << rule.getSupport()
-				<< " "
-				<< std::setw(confWidth) << rule.getConfidence() << std::endl;
+			std::cout << formatRule(rule);
 		} else {
-			MRLog()
-				<< std::setw(bodyWidth) << quoteElems(rule.getBody()) 
-				<< bhSep 
-				<< std::left << std::setw(headWidth) << quoteElems(rule.getHead()) << std::right 
-				<< " "
-				<< std::setw(suppWidth) << rule.getSupport()
-				<< " "
-				<< std::setw(confWidth) << rule.getConfidence() << std::endl;
+			MRLog() << formatRule(rule);
 		}
 	}
+	
 
 } // namespace

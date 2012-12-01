@@ -2,6 +2,7 @@
 #include <getopt.h>
 
 #include "Result/RulesMatcher.h"
+#include "Result/RuleFormatter.h"
 #include "mrmatch.h"
 #include "Options.h"
 
@@ -95,9 +96,19 @@ namespace mrmatch {
 		
 	}
 	
+	std::string formatGids( const std::vector<ItemType>& gids ) {
+		std::stringstream str;
+		for(std::vector<ItemType>::const_iterator it = gids.begin(); it!=gids.end(); ++it) {
+			str << *it << " ";
+		}
+		
+		return str.str();
+	}
+	
 	void printMatches( const RuleGidsVector& matches ) {
+		SimpleRuleFormatter sf;
 		for(RuleGidsVector::const_iterator it=matches.begin(); it!=matches.end(); ++it) {
-			
+			cout << "Rule:" << sf.formatRule(it->first) << "Gids:" << formatGids(it->second) << endl;
 		}
 	}
 	

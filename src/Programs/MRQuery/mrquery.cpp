@@ -247,8 +247,7 @@ int main (int argc, char *argv[])
 	} catch (std::exception& e) {
 		MRErr() << "Exception:" << e.what() << std::endl;
 		exit( MR_ERROR_UNKNOWN );
-	}
-	catch(...) {
+	}	catch(...) {
 		MRErr() << "An unknown exception has been thrown..." << std::endl;
 		exit( MR_ERROR_UNKNOWN );
 	}

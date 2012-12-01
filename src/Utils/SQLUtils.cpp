@@ -22,6 +22,7 @@ namespace minerule {
 				return Numeric;
 			case odbc::Types::CHAR:
 			case odbc::Types::WCHAR:
+			case odbc::Types::WVARCHAR:
 			case odbc::Types::VARCHAR:
 			case odbc::Types::LONGVARCHAR:
 			case odbc::Types::WLONGVARCHAR:
@@ -37,7 +38,7 @@ namespace minerule {
 			case odbc::Types::BIT:
 				return Bit;
 			default: 
-				throw MineruleException(MR_ERROR_INTERNAL,"Unexpected kind of SQL data type");
+				throw MineruleException(MR_ERROR_INTERNAL,"Unexpected kind of SQL data type:"+Converter(type).toString());
 		}
 	}
 

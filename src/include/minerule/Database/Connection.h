@@ -96,7 +96,7 @@ namespace minerule {
 		void deleteTable(const char * tableName);
 		void deleteDestTables();
 
-		void createResultTables(const SourceRowMetaInfo&);
+		void createResultTables(const SourceRowMetaInfo&) throw(odbc::SQLException, MineruleException);
 		void insert(const char * what);
 
 		// this function should be systematically used in order to

@@ -45,7 +45,9 @@ namespace minerule {
 		AlgorithmsOptions options;
 		Connection connection;
 	public:
-		MiningAlgorithm(const OptimizedMinerule& m) : MiningAlgorithmBase(m) {		
+		MiningAlgorithm(const OptimizedMinerule& m) : MiningAlgorithmBase(m) {}
+		
+		virtual void initialize() {
 			MineruleOptions& mrOptions = MineruleOptions::getSharedOptions();
 
 			options.setSupport( minerule.getParsedMinerule().sup );
@@ -60,7 +62,16 @@ namespace minerule {
 			connection.setBodyCardinalities(minerule.getParsedMinerule().bodyCardinalities);
 			connection.setHeadCardinalities(minerule.getParsedMinerule().headCardinalities);
 			connection.createResultTables(SourceRowMetaInfo(connection.getODBCConnection(), minerule.getParsedMinerule()));
-			connection.init();	  
+			connection.init();			
+		}
+		
+		virtual void execute() {
+			initialize();
+			mineRules();
+		}
+		
+		virtual void mineRules() { 
+				throw MineruleException(MR_ERROR_INTERNAL, "This method should be implemented in sub-classes!");
 		}
 	
 	};

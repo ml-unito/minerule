@@ -258,7 +258,7 @@ namespace minerule {
 
 
 
-			void CCSMiner::execute(){
+			void CCSMiner::mineRules(){
 				double time_tot=0;
 				time_t init, end;
 

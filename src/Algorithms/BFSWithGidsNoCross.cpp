@@ -214,7 +214,7 @@ namespace minerule {
   }
 
 
-  void BFSWithGidsNoCross::execute() {
+  void BFSWithGidsNoCross::mineRules() {
     MRLogPush("Starting BFSWithGidsNoCross mining algorithm...");
     
     MRLog() << "Preparing data sources..." << std::endl;

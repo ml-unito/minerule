@@ -127,7 +127,7 @@ namespace minerule {
 		return mineruleHasSameBodyHead;
 	}
 
-    virtual void execute();
+    virtual void mineRules();
 
     virtual bool canHandleMinerule() const {
       return !minerule.getParsedMinerule().requiresClusters() && !minerule.getParsedMinerule().hasDisjuctionsInMC();

@@ -43,7 +43,7 @@ namespace minerule {
 
 
 	void 
-	FSMiner::execute(){
+	FSMiner::mineRules(){
 		MRLogPush("This is FSMiner. Starting...");
 
 		prepareData();

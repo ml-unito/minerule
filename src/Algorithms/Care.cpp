@@ -48,7 +48,7 @@ namespace minerule {
 		headIterator = sourceTable->newIterator(SourceTable::HeadIterator);
 	}
 
-	void CARE::execute() {
+	void CARE::mineRules() {
 		MRLogPush("Starting CARE mining algorithm...");
 
 		MRLog() << "Preparing data sources..." << std::endl;

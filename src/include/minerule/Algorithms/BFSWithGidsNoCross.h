@@ -113,7 +113,7 @@ namespace minerule {
 			if(sourceTable!=NULL) delete sourceTable;			
 		}
 
-		virtual void execute();
+		virtual void mineRules();
 			
 		static bool getMineruleHasSameBodyHead() { 
 			return mineruleHasSameBodyHead;

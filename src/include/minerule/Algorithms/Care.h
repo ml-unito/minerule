@@ -30,7 +30,7 @@ namespace minerule {
 
     virtual ~CARE() {}
 
-    virtual void execute();
+    virtual void mineRules();
 
     virtual bool canHandleMinerule() const {
       return

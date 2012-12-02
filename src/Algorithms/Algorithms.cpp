@@ -16,8 +16,7 @@ namespace minerule {
 	MiningAlgorithmBase* Algorithms::getBestRulesMiningAlgorithm(const OptimizedMinerule& mr) {
 		MRDebugPusher pusher("Choosing the best algorithm for the given MR");
 
-		AlgorithmTypes userChoiceOfAT = 
-			MineruleOptions::getSharedOptions().getMiningAlgorithms().getRulesMiningAlgorithms().getPreferredAlgorithm();
+		AlgorithmTypes userChoiceOfAT = MineruleOptions::getSharedOptions().getMiningAlgorithms().getRulesMiningAlgorithms().getPreferredAlgorithm();
 
 		MiningAlgorithmBase* userChoice= MiningAlgorithm::algorithmForType(userChoiceOfAT, mr);
 		if( userChoice->canHandleMinerule() ) {

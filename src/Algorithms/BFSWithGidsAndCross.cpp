@@ -240,7 +240,7 @@ namespace minerule {
   }
 
 
-  void BFSWithGidsAndCross::execute() {
+  void BFSWithGidsAndCross::mineRules() {
     MRLogPush("Starting BFSWithGidsAndCross mining algorithm...");
     
     MRLog() << "Preparing data sources..." << std::endl;

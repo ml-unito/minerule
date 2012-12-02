@@ -34,7 +34,7 @@ namespace minerule {
     connection.init();
   }
 
-  void ConstrItemSetsExtraction::execute() {
+  void ConstrItemSetsExtraction::mineRules() {
     MRLogPush("Starting ConstrItemSetsExtraction mining algorithm...");
 
     MRLog() << "Preparing data sources..." << std::endl;

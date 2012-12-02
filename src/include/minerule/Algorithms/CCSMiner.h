@@ -23,7 +23,7 @@ namespace minerule {
 
     virtual ~CCSMiner() {}
 
-    virtual void execute();
+    virtual void mineRules();
 
     virtual bool canHandleMinerule() const {
       return minerule.getParsedMinerule().miningTask == MTMineSequences;

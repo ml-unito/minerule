@@ -15,7 +15,6 @@ namespace minerule {
 	SourceTable::Iterator bodyIterator;
 
 
-
     void prepareData();
 
   public:
@@ -24,7 +23,7 @@ namespace minerule {
 
     virtual ~ConstrItemSetsExtraction() {}
 
-    virtual void execute();
+    virtual void mineRules();
 
     virtual bool canHandleMinerule() const {
       return

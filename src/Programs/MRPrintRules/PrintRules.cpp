@@ -51,11 +51,12 @@ printRules(std::string queryname,
 void
 printHelp(int argc, char** argv) {
     std::cout << StringUtils::toBold("Usage:") << std::endl
-    << "   " << StringUtils::toBold(argv[0]) << " [-h] [-0] [-c] [-n minerule-number] [-s <order>] [-x <sepString>] [-f <optionfile>] resultsetname" << std::endl
+    << "   " << StringUtils::toBold(argv[0]) << " [-h] [-0] [-c] [-n minerule-number] [-s <order>] [-f <optionfile>] resultsetname" << std::endl
 	<< "The program allows printing results of minerule queries." << std::endl 
 	<< std::endl
 	<< StringUtils::toBold("-h") << " - prints this message " << std::endl
-	<< StringUtils::toBold("-0") << " - suppresses logging output " << std::endl
+	<< StringUtils::toBold("-c") << " - suppress colors " << std::endl
+	<< StringUtils::toBold("-0") << " - suppresses logging artifacts " << std::endl
     << StringUtils::toBold("-l") << " - do not filter out rules having low confidence" << std::endl	
 	<< StringUtils::toBold("-n") << " - specifies a query number to be printed (this is an alternative to" << std::endl
 	<< "     specifying the query name)" << std::endl
@@ -69,8 +70,6 @@ printHelp(int argc, char** argv) {
     << "     'cbhs' -> order is conf, body, head, supp" << std::endl
     << "     'cbsh' -> order is conf, body, supp, head" << std::endl
     << "   the default is 'no'" << std::endl
-    << StringUtils::toBold("-x") << " - specifies the string to separate fields in the output" << std::endl 
-	<< "   (default is: \",\")." <<std::endl
     << std::endl << std::endl;
 }
 
@@ -149,18 +148,7 @@ parseOptions(int argc, char** argv, MineruleOptions& opt, RuleFormatter*& rf, do
         if(argv[i]==std::string("-h")) {
             printHelp(argc, argv);
             exit(0);
-        }
-        
-        if(argv[i]==std::string("-x")) {
-            if((i+1)<argc) {
-                sepString = argv[i+1];
-            } else {
-                std::cerr << "-x option recognized, but its argument is missing!" << std::endl;
-                printHelp(argc, argv);
-                exit(4);
-            }
-        }
-        
+        }        
         
         if(argv[i]==std::string("-v")) {
             printVersion();
@@ -205,9 +193,6 @@ parseOptions(int argc, char** argv, MineruleOptions& opt, RuleFormatter*& rf, do
         rf = new SimpleRuleFormatter();
     }
         
-    if( sepString!="" )
-        rf->setFieldSeparationString(sepString);
-	
 	if( suppressLog )
 		rf->setSuppressLog(true);
 	

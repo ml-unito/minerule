@@ -27,22 +27,16 @@ namespace minerule {
 
 
 	std::string
-	SimpleRuleFormatter::formatRule(const Rule& rule) {
-		std::string bhSep = " => ";   // separates body from head 
-		int bodyWidth = 30;  // width of the body column
-		int headWidth = 30;  // width of the head column
-		int suppWidth = 9;
-		int confWidth = 9;
-		
+	SimpleRuleFormatter::formatRule(const Rule& rule) {		
 		std::stringstream out;
 
-		out	<< std::setw(bodyWidth) << quoteElems(rule.getBody()) 
-			<< bhSep 
-			<< std::left << std::setw(headWidth) << quoteElems(rule.getHead()) << std::right
+		out	<< std::setw(_fieldWidths.body) << quoteElems(rule.getBody()) 
+			<< _bhSep 
+			<< std::left << std::setw(_fieldWidths.head) << quoteElems(rule.getHead()) << std::right
 			<< " "
-			<< std::setw(suppWidth) << rule.getSupport()
+			<< std::setw(_fieldWidths.supp) << rule.getSupport()
 			<< " "
-			<< std::setw(confWidth) << rule.getConfidence() << std::endl;
+			<< std::setw(_fieldWidths.conf) << rule.getConfidence();
 	
 		return out.str();
 	}
@@ -51,9 +45,9 @@ namespace minerule {
 	void
 	SimpleRuleFormatter::printRule(const Rule& rule) {
 		if( suppressLog() ) {
-			std::cout << formatRule(rule);
+			std::cout << formatRule(rule)  << std::endl ;
 		} else {
-			MRLog() << formatRule(rule);
+			MRLog() << formatRule(rule)  << std::endl;
 		}
 	}
 	

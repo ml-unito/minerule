@@ -16,10 +16,12 @@ namespace mrmatch {
 		std::cout << StringUtils::toBold("Usage:") << std::endl
 			<< "  " << StringUtils::toBold(progName) << " [-n <num query>] [-O <optionlist>] [-v] [-h] [<query name>] " << std::endl << std::endl;
 	
-		std::cout 
-			<< StringUtils::toBold("   -n") << " -- specifies a query number (instead of a query name)" << std::endl
-			<< StringUtils::toBold("   -O") << " -- specifies a minerule option on the command line (overrides those read from file)" << std::endl
-			<< StringUtils::toBold("   -f") << " -- specify a file name containing the Options to be used." << std::endl
+		std::cout
+			<< StringUtils::toBold("   -h") << " - prints this message." << std::endl
+			<< StringUtils::toBold("   -c") << " - suppress colors."
+			<< StringUtils::toBold("   -n") << " - specifies a query number (instead of a query name)." << std::endl
+			<< StringUtils::toBold("   -O") << " - specifies a minerule option on the command line (overrides those read from file)." << std::endl
+			<< StringUtils::toBold("   -f") << " - specify a file name containing the Options to be used." << std::endl
 			<< "         default is 'optins.txt'"<< std::endl;
 			// << StringUtils::toBold("   -v") << " -- version informations" << std::endl
 			// << StringUtils::toBold("   -h") << " -- this message" << std::endl
@@ -31,16 +33,22 @@ namespace mrmatch {
 		char ch;
 		Options options;
 		
-		while( (ch=getopt(argc, argv, "hn:")) != -1 ) {
+		while( (ch=getopt(argc, argv, "hcn:")) != -1 ) {
 			switch(ch) {
+				case 'h':
+					printUsage(argc, argv);
+					break;
+				case 'c':
+					StringUtils::setColorsEnabled(false);
+					break;
 				case 'n':
-				options.setQueryNumber(Converter(optarg).toLong());
-				break;
-				case '?':
+					options.setQueryNumber(Converter(optarg).toLong());
+					break;
+				case '?':				  
 				default:
-				std::cout << StringUtils::toBold("Option not recognized:") << "-" << ch << endl;
-				printUsage(argc, argv);
-				exit(MRMATCH_OPTION_PARSING_ERROR);
+					std::cout << StringUtils::toBold("Option not recognized:") << "-" << ch << endl;
+					printUsage(argc, argv);
+					exit(MRMATCH_OPTION_PARSING_ERROR);
 			}
 		}
 	
@@ -67,7 +75,7 @@ namespace mrmatch {
 	void matchWithCrossProduct(RuleGidsVector& rules, SourceTable& st) {
 		assert( false ); // not yet implemented
 	}
-	
+		
 	void matchWithoutCrossProduct(RuleGidsVector& rules, SourceTable& st) {
 		SourceTable::Iterator bodyIt = st.newIterator(SourceTable::BodyIterator);
 		SourceTable::Iterator headIt = st.newIterator(SourceTable::HeadIterator);
@@ -79,22 +87,25 @@ namespace mrmatch {
 			ItemTransaction<RulesMatcher::SetType> heads;
 			
 			bodies.loadBody(gid, bodyIt); 			// this advances the body iterator
-			
-			if( TransactionBase<RulesMatcher::SetType>::findGid(gid, headIt) ) // positioning the head iterator 
+						
+			if( !TransactionBase<RulesMatcher::SetType>::findGid(gid, headIt) ) {// positioning the head iterator  
 				break;								// no more heads to load
+			}
 
 			heads.loadHead(gid, headIt);			// loading the heads
 			
 			// populating results
-			for(RuleGidsVector::iterator ruleIt = rules.begin(); ruleIt!=rules.end(); ++ruleIt) {
+			SimpleRuleFormatter sf;
+			
+			for(RuleGidsVector::iterator ruleIt = rules.begin(); ruleIt!=rules.end(); ++ruleIt) {				
 				if( RulesMatcher::match( ruleIt->first, bodies, heads ) ) {
 					ruleIt->second.push_back( gid );
 				}
 			}
 			
-		}
+		} // while
 		
-	}
+	} // matchWithoutCrossProduct
 	
 	std::string formatGids( const std::vector<ItemType>& gids ) {
 		std::stringstream str;
@@ -107,12 +118,15 @@ namespace mrmatch {
 	
 	void printMatches( const RuleGidsVector& matches ) {
 		SimpleRuleFormatter sf;
+		sf.setFieldWidths( SimpleRuleFormatter::FieldWidths(10,10,9,9) );
 		for(RuleGidsVector::const_iterator it=matches.begin(); it!=matches.end(); ++it) {
-			cout << "Rule:" << sf.formatRule(it->first) << "Gids:" << formatGids(it->second) << endl;
+			MRLog() 	<< StringUtils::toBold("Rule: ") << sf.formatRule(it->first) << " "
+						<< StringUtils::toBold("Gids: ") << formatGids(it->second) << endl;
 		}
 	}
 	
-	void execute(const Options& options) {		
+	void execute(const Options& options) {	
+		MRLogPush("Building source table...");
 		// rebuild source table
 		CatalogueInfo info;
 		OptimizerCatalogue::getMRQueryInfo(options.queryName(), info, false);
@@ -120,7 +134,9 @@ namespace mrmatch {
 		
 		SourceTableRequirements requirements = sourceTableRequirements(minerule);		
 		SourceTable st( minerule, requirements);
+		MRLogPop();
 
+		MRLogPusher("Reading rules...");
 		// load past minerule result
 		QueryResult::Iterator it;
 		OptimizerCatalogue::getMRQueryResultIterator(options.queryName(), it, minerule.sup, minerule.conf);
@@ -130,16 +146,23 @@ namespace mrmatch {
 			rules.push_back( std::pair<Rule, std::vector<ItemType> >() );
 			it.getRule(rules.back().first);
 		}
+		MRLogPop();
 		
+		
+		MRLogPush("Matching...");
 		// perform the match
 		if( requirements.crossProduct() ) {
 			matchWithCrossProduct(rules, st);			
 		} else {
 			matchWithoutCrossProduct(rules,st);
 		}
+		MRLogPop();
 		
+		MRLogPush("Printing results:");
 		// show results
 		printMatches( rules );
+		
+		MRLogPop();
 	}
 	
 }

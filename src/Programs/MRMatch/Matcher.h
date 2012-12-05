@@ -3,6 +3,8 @@
 
 #include "Result/Rule.h"
 #include "Database/SourceTable.h"
+#include "Database/Transaction.h"
+#include "Result/RulesMatcher.h"
 
 #include "mrmatch.h"
 
@@ -21,14 +23,16 @@ namespace mrmatch {
 		virtual void match(SourceTable& st) {
 			st.usesCrossProduct() ? matchWithCrossProduct(st) : matchWithoutCrossProduct(st);
 		}
-	
+		
+		virtual void matchWithCrossProduct(SourceTable& st);
+		virtual void matchWithoutCrossProduct(SourceTable& st);		
+		
 	// outputs the results
 		virtual void printMatches() const = 0;
 	
 	protected:
-	
-		virtual void matchWithCrossProduct(SourceTable& st) = 0;
-		virtual void matchWithoutCrossProduct(SourceTable& st) = 0;
+		virtual void matchItemTransaction(const minerule::ItemType& gid, const ItemTransaction<RulesMatcher::ItemSetType>& bodies,const ItemTransaction<RulesMatcher::ItemSetType>& heads) = 0;
+		virtual void matchRuleTransaction(const minerule::ItemType& gid, const RuleTransaction<RulesMatcher::RuleSetType>& transaction) = 0;
 	};
 
 }

@@ -11,51 +11,22 @@ namespace mrmatch {
 		return _ruleGidsVector.back().first;
 	}
 	
-	void RuleGidsMatcher::matchWithCrossProduct(SourceTable& st) {
-		SourceTable::Iterator it = st.newIterator(SourceTable::FullIterator);
-		
-		while(!it.isAfterLast()) {
-			ItemType gid = it->getGroup();
-			
-			RuleTransaction<RulesMatcher::RuleSetType> transaction;
-			transaction.load(gid, it);
-			
-			for(RuleGidsVector::iterator ruleIt=_ruleGidsVector.begin(); ruleIt!=_ruleGidsVector.end(); ++ruleIt) {
-				if( RulesMatcher::match(ruleIt->first, transaction) ) {
-					ruleIt->second.push_back( gid );
-				}
-			}
-		}		
-	}
-		
-	void RuleGidsMatcher::matchWithoutCrossProduct(SourceTable& st) {
-		SourceTable::Iterator bodyIt = st.newIterator(SourceTable::BodyIterator);
-		SourceTable::Iterator headIt = st.newIterator(SourceTable::HeadIterator);
-				
-		while(!bodyIt.isAfterLast()) {
-			ItemType gid = bodyIt->getGroup();
-			
-			ItemTransaction<RulesMatcher::ItemSetType> bodies;
-			ItemTransaction<RulesMatcher::ItemSetType> heads;
-			
-			bodies.loadBody(gid, bodyIt); 			// this advances the body iterator
-						
-			if( !TransactionBase<RulesMatcher::ItemSetType>::findGid(gid, headIt) ) {// positioning the head iterator  
-				break;								// no more heads to load
-			}
-
-			heads.loadHead(gid, headIt);			// loading the heads
-			
-			// populating results
+	void RuleGidsMatcher::matchItemTransaction(const ItemType& gid, const ItemTransaction<RulesMatcher::ItemSetType>& bodies,const ItemTransaction<RulesMatcher::ItemSetType>& heads) {
 			for(RuleGidsVector::iterator ruleIt = _ruleGidsVector.begin(); ruleIt!=_ruleGidsVector.end(); ++ruleIt) {				
 				if( RulesMatcher::match( ruleIt->first, bodies, heads ) ) {
 					ruleIt->second.push_back( gid );
 				}
-			}
-			
-		} // while
+			}		
+	}
+	
+	void RuleGidsMatcher::matchRuleTransaction(const minerule::ItemType& gid, const RuleTransaction<RulesMatcher::RuleSetType>& transaction) {
+			for(RuleGidsVector::iterator ruleIt=_ruleGidsVector.begin(); ruleIt!=_ruleGidsVector.end(); ++ruleIt) {
+				if( RulesMatcher::match(ruleIt->first, transaction) ) {
+					ruleIt->second.push_back( gid );
+				}
+			}		
+	}
 		
-	} // matchWithoutCrossProduct
 	
 	
 	std::string RuleGidsMatcher::formatGids( const Gids& gids ) const {

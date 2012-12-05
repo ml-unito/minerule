@@ -14,8 +14,8 @@ namespace mrmatch {
 		RuleGidsVector _ruleGidsVector;
 		
 	protected:
-		virtual void matchWithCrossProduct(SourceTable& st);
-		virtual void matchWithoutCrossProduct(SourceTable& st);
+		virtual void matchItemTransaction(const minerule::ItemType& gid, const ItemTransaction<RulesMatcher::ItemSetType>& bodies,const ItemTransaction<RulesMatcher::ItemSetType>& heads);
+		virtual void matchRuleTransaction(const minerule::ItemType& gid, const RuleTransaction<RulesMatcher::RuleSetType>& transaction);
 
 		std::string formatGids( const Gids& gids ) const;	
 		

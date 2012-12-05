@@ -7,10 +7,11 @@
 namespace minerule {
 	class RulesMatcher {
 	public:
-		typedef std::set<ItemType> SetType;
+		typedef std::set<ItemType> ItemSetType;
+		typedef std::set< std::pair<ItemType, ItemType> > RuleSetType;
 		
-		static bool match( const Rule& r, const RuleTransaction<SetType>& t );		
-		static bool match( const Rule& r, const ItemTransaction<SetType>& bodySet, const ItemTransaction<SetType>& headSet );		
+		static bool match( const Rule& r, const RuleTransaction<RuleSetType>& t );		
+		static bool match( const Rule& r, const ItemTransaction<ItemSetType>& bodySet, const ItemTransaction<ItemSetType>& headSet );		
 	};
 
 }

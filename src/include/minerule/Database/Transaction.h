@@ -7,7 +7,6 @@ namespace minerule {
 	// --------------------------------------------------------------------------------
 	// Classes declared here load source tables into memory in group sized chunks. 
 	// --------------------------------------------------------------------------------
-
 	
 	// Base class. Provides the findGid method.
 	template <class SetType>
@@ -59,11 +58,10 @@ namespace minerule {
 		RuleTransaction() : TransactionBase<RuleSetType>() {}
 			
 	    void load(ItemType& gid, SourceTable::Iterator& it) {
-
-			while (!it.isAfterLast() && gid == it->getGroup()) {
-				RuleSetType::insert(RuleSetType::end(),std::pair<ItemType,ItemType>(it->getBody(),it->getHead()));
-				++it;				
-			}
+				while (!it.isAfterLast() && gid == it->getGroup()) {
+					RuleSetType::insert(RuleSetType::end(),std::pair<ItemType,ItemType>(it->getBody(),it->getHead()));
+					++it;				
+				}
 	    }
 	};
 	

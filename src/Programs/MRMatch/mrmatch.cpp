@@ -73,7 +73,20 @@ namespace mrmatch {
 	}
 	
 	void matchWithCrossProduct(RuleGidsVector& rules, SourceTable& st) {
-		assert( false ); // not yet implemented
+		SourceTable::Iterator it = st.newIterator(SourceTable::FullIterator);
+		
+		while(!it.isAfterLast()) {
+			ItemType gid = it->getGroup();
+			
+			RuleTransaction<RulesMatcher::RuleSetType> transaction;
+			transaction.load(gid, it);
+			
+			for(RuleGidsVector::iterator rulesIt=rules.begin(); rulesIt!=rules.end(); ++rulesIt) {
+				if( RulesMatcher::match(rulesIt->first, transaction) ) {
+					rulesIt->second.push_back( gid );
+				}
+			}
+		}		
 	}
 		
 	void matchWithoutCrossProduct(RuleGidsVector& rules, SourceTable& st) {
@@ -83,20 +96,18 @@ namespace mrmatch {
 		while(!bodyIt.isAfterLast()) {
 			ItemType gid = bodyIt->getGroup();
 			
-			ItemTransaction<RulesMatcher::SetType> bodies;
-			ItemTransaction<RulesMatcher::SetType> heads;
+			ItemTransaction<RulesMatcher::ItemSetType> bodies;
+			ItemTransaction<RulesMatcher::ItemSetType> heads;
 			
 			bodies.loadBody(gid, bodyIt); 			// this advances the body iterator
 						
-			if( !TransactionBase<RulesMatcher::SetType>::findGid(gid, headIt) ) {// positioning the head iterator  
+			if( !TransactionBase<RulesMatcher::ItemSetType>::findGid(gid, headIt) ) {// positioning the head iterator  
 				break;								// no more heads to load
 			}
 
 			heads.loadHead(gid, headIt);			// loading the heads
 			
 			// populating results
-			SimpleRuleFormatter sf;
-			
 			for(RuleGidsVector::iterator ruleIt = rules.begin(); ruleIt!=rules.end(); ++ruleIt) {				
 				if( RulesMatcher::match( ruleIt->first, bodies, heads ) ) {
 					ruleIt->second.push_back( gid );
@@ -113,15 +124,15 @@ namespace mrmatch {
 			str << *it << " ";
 		}
 		
-		return str.str();
+		return StringUtils::toBold(StringUtils::toGreen(str.str()));
 	}
 	
 	void printMatches( const RuleGidsVector& matches ) {
 		SimpleRuleFormatter sf;
-		sf.setFieldWidths( SimpleRuleFormatter::FieldWidths(10,10,9,9) );
+		sf.setFieldWidths( SimpleRuleFormatter::FieldWidths(1,1,1,1) );
 		for(RuleGidsVector::const_iterator it=matches.begin(); it!=matches.end(); ++it) {
 			MRLog() 	<< StringUtils::toBold("Rule: ") << sf.formatRule(it->first) << " "
-						<< StringUtils::toBold("Gids: ") << formatGids(it->second) << endl;
+						<< StringUtils::toBold("\tGids: ") << formatGids(it->second) << std::endl;
 		}
 	}
 	

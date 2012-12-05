@@ -6,8 +6,7 @@
 
 namespace mrmatch {
 	typedef enum { SUCCESS=0, MRMATCH_OPTION_PARSING_ERROR } ExitCodes;
-	
-	typedef std::vector< std::pair< minerule::Rule, std::vector<minerule::ItemType> > > RuleGidsVector;
+	typedef enum { RuleGids, GidRules, None } MatchKind;
 }
 
 

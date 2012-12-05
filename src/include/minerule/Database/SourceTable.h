@@ -42,17 +42,17 @@ namespace minerule {
 		};
 		
 		
-		SourceTable(const MiningAlgorithm& algorithm) : _minerule(algorithm.optimizedMinerule().getParsedMinerule()), _sourceTableRequirements(algorithm.sourceTableRequirements()), _pdu(_minerule, _sourceTableRequirements), _bodyStatement(NULL), _headStatement(NULL), _fullStatement(NULL) { 
+		SourceTable(const MiningAlgorithm& algorithm) : _minerule(algorithm.optimizedMinerule().getParsedMinerule()), _sourceTableRequirements(algorithm.sourceTableRequirements()), _pdu(_minerule, _sourceTableRequirements), _bodyStatement(NULL), _headStatement(NULL), _fullStatement(NULL), _usesCrossProduct(false) { 
 			init(); 
 		};
 		
-		SourceTable(const ParsedMinerule& minerule, const SourceTableRequirements& requirements) : _minerule(minerule), _sourceTableRequirements(requirements), _pdu(_minerule,_sourceTableRequirements), _bodyStatement(NULL), _headStatement(NULL), _fullStatement(NULL) { 
+		SourceTable(const ParsedMinerule& minerule, const SourceTableRequirements& requirements) : _minerule(minerule), _sourceTableRequirements(requirements), _pdu(_minerule,_sourceTableRequirements), _bodyStatement(NULL), _headStatement(NULL), _fullStatement(NULL), _usesCrossProduct(false) { 
 			init(); 		
 		}
-		
-		
-		
+
 		virtual ~SourceTable();
+		
+		bool usesCrossProduct() const { return _usesCrossProduct; }
 
 		void init();
 		size_t getTotGroups();
@@ -63,6 +63,7 @@ namespace minerule {
 		const ParsedMinerule& _minerule;
 		SourceTableRequirements _sourceTableRequirements;
 		PrepareDataUtils _pdu;
+		bool _usesCrossProduct;
 				
 		SourceRowColumnIds _columnIds;
 		odbc::PreparedStatement* _bodyStatement;

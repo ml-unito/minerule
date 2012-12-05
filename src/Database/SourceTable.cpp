@@ -76,6 +76,7 @@ namespace minerule {
 	}
 
 	void SourceTable::initFullResultSet() {
+		_usesCrossProduct = true;
 		odbc::Connection* connection = MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
 
 		std::string query = _pdu.buildExtendedSourceTableQuery(_columnIds);
@@ -88,9 +89,8 @@ namespace minerule {
 	void SourceTable::init() {
 		if( _sourceTableRequirements.crossProduct() )
 			initFullResultSet();
-		else {
+		else 
 			initBodyHeadResultSets();
-		}
 	}
 
 } // namespace

@@ -1,13 +1,14 @@
 #include <iostream>
 #include <getopt.h>
 
+#include "Matcher.h"
 #include "Result/RulesMatcher.h"
 #include "Result/RuleFormatter.h"
 #include "mrmatch.h"
 #include "Options.h"
 
 using namespace minerule;
-
+ 
 namespace mrmatch {
 
 	void printUsage(int argc, char* const argv[]) {
@@ -71,71 +72,7 @@ namespace mrmatch {
 		else
 			return SourceTableRequirements();		
 	}
-	
-	void matchWithCrossProduct(RuleGidsVector& rules, SourceTable& st) {
-		SourceTable::Iterator it = st.newIterator(SourceTable::FullIterator);
 		
-		while(!it.isAfterLast()) {
-			ItemType gid = it->getGroup();
-			
-			RuleTransaction<RulesMatcher::RuleSetType> transaction;
-			transaction.load(gid, it);
-			
-			for(RuleGidsVector::iterator rulesIt=rules.begin(); rulesIt!=rules.end(); ++rulesIt) {
-				if( RulesMatcher::match(rulesIt->first, transaction) ) {
-					rulesIt->second.push_back( gid );
-				}
-			}
-		}		
-	}
-		
-	void matchWithoutCrossProduct(RuleGidsVector& rules, SourceTable& st) {
-		SourceTable::Iterator bodyIt = st.newIterator(SourceTable::BodyIterator);
-		SourceTable::Iterator headIt = st.newIterator(SourceTable::HeadIterator);
-				
-		while(!bodyIt.isAfterLast()) {
-			ItemType gid = bodyIt->getGroup();
-			
-			ItemTransaction<RulesMatcher::ItemSetType> bodies;
-			ItemTransaction<RulesMatcher::ItemSetType> heads;
-			
-			bodies.loadBody(gid, bodyIt); 			// this advances the body iterator
-						
-			if( !TransactionBase<RulesMatcher::ItemSetType>::findGid(gid, headIt) ) {// positioning the head iterator  
-				break;								// no more heads to load
-			}
-
-			heads.loadHead(gid, headIt);			// loading the heads
-			
-			// populating results
-			for(RuleGidsVector::iterator ruleIt = rules.begin(); ruleIt!=rules.end(); ++ruleIt) {				
-				if( RulesMatcher::match( ruleIt->first, bodies, heads ) ) {
-					ruleIt->second.push_back( gid );
-				}
-			}
-			
-		} // while
-		
-	} // matchWithoutCrossProduct
-	
-	std::string formatGids( const std::vector<ItemType>& gids ) {
-		std::stringstream str;
-		for(std::vector<ItemType>::const_iterator it = gids.begin(); it!=gids.end(); ++it) {
-			str << *it << " ";
-		}
-		
-		return StringUtils::toBold(StringUtils::toGreen(str.str()));
-	}
-	
-	void printMatches( const RuleGidsVector& matches ) {
-		SimpleRuleFormatter sf;
-		sf.setFieldWidths( SimpleRuleFormatter::FieldWidths(1,1,1,1) );
-		for(RuleGidsVector::const_iterator it=matches.begin(); it!=matches.end(); ++it) {
-			MRLog() 	<< StringUtils::toBold("Rule: ") << sf.formatRule(it->first) << " "
-						<< StringUtils::toBold("\tGids: ") << formatGids(it->second) << std::endl;
-		}
-	}
-	
 	void execute(const Options& options) {	
 		MRLogPush("Building source table...");
 		// rebuild source table
@@ -151,27 +88,21 @@ namespace mrmatch {
 		// load past minerule result
 		QueryResult::Iterator it;
 		OptimizerCatalogue::getMRQueryResultIterator(options.queryName(), it, minerule.sup, minerule.conf);
-		RuleGidsVector rules;
+		
+		auto_ptr<Matcher> matcher(Matcher::newMatcher(options.matchKind()));
 
 		while(it.next()) {
-			rules.push_back( std::pair<Rule, std::vector<ItemType> >() );
-			it.getRule(rules.back().first);
+			Rule& rule = matcher->addRule();
+			it.getRule(rule);
 		}
 		MRLogPop();
-		
-		
+				
 		MRLogPush("Matching...");
-		// perform the match
-		if( requirements.crossProduct() ) {
-			matchWithCrossProduct(rules, st);			
-		} else {
-			matchWithoutCrossProduct(rules,st);
-		}
+		matcher->match(st);
 		MRLogPop();
 		
 		MRLogPush("Printing results:");
-		// show results
-		printMatches( rules );
+		matcher->printMatches( );
 		
 		MRLogPop();
 	}

@@ -69,7 +69,7 @@ target_link_libraries(mr-defaults
 
 add_executable(mr-match 
 	Programs/MRMatch/mrmatch.cpp
-	Programs/MRMatch/options.cpp)
+	Programs/MRMatch/Options.cpp)
 	
 target_link_libraries(mr-match 
   mrdatabase

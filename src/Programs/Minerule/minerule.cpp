@@ -5,6 +5,7 @@
 #include<errno.h>
 #include<string.h>
 #include<stdlib.h>
+#include <algorithm>
 
 #include "Utils/MineruleException.h"
 #include "Utils/MineruleErrors.h"
@@ -92,7 +93,7 @@ void checkSubCommands(int argc, char** argv) {
 	std::string subCmd( expandSubCommand(argv[1]) );
 	const std::vector<std::string>& cmds = knownCommands();
 	
-	if( find( cmds.begin(), cmds.end(), subCmd.c_str() ) != cmds.end() ) {
+	if( std::find( cmds.begin(), cmds.end(), subCmd.c_str() ) != cmds.end() ) {
 		execSubCommand(subCmd, argc-2, &argv[2], buildPath(argv[0]));
 	}	
 	

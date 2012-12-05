@@ -22,7 +22,16 @@ add_subdirectory(Utils)
 add_subdirectory(Parsers)
 add_subdirectory(Result)
 
-LIST(APPEND LIBS mralgorithms mrresult mrdatabase mroptimizer mrpredicateutils mrutils mrparsers)
+LIST(APPEND LIBS 
+	mralgorithms
+	mroptimizer
+	mrparsers
+	mrresult
+	mrdatabase 
+	mrpredicateutils 
+	mrutils
+ )
+	
 LIST(APPEND LIBS ${LIBGA_LIBRARIES})
 LIST(APPEND LIBS ${LIBODBC++_LIBRARIES})
 
@@ -38,31 +47,25 @@ add_executable(mr-catalogue
 	Programs/MRCatalogue/Printer.cpp
 	Programs/MRCatalogue/Options.cpp)
 	
-target_link_libraries(mr-catalogue 
-	${LIBS}
-	${LIBODBC++_LIBRARIES})
-
-add_executable(mr-print 
-	Programs/MRPrintRules/PrintRules.cpp)
-	
-target_link_libraries(mr-print 
-	${LIBS}
-	${LIBODBC++_LIBRARIES})
-
-add_executable(mr-defaults 
-	Programs/MRDefaultOptions/MRDefaultOptions.cpp)
-	
-target_link_libraries(mr-defaults 
-	mrutils 
-	${LIBODBC++_LIBRARIES})
-
-
-add_executable(mr-match 
-	Programs/MRMatch/mrmatch.cpp
-	Programs/MRMatch/Options.cpp)
-	
-target_link_libraries(mr-match 
-  ${LIBS}
-  ${LIBODBC++_LIBRARIES})
-
-
+target_link_libraries(mr-catalogue 	${LIBS})
+# 
+# add_executable(mr-print 
+# 	Programs/MRPrintRules/PrintRules.cpp)
+# 	
+# target_link_libraries(mr-print 	${LIBS})
+# 
+# add_executable(mr-defaults 
+# 	Programs/MRDefaultOptions/MRDefaultOptions.cpp)
+# 	
+# target_link_libraries(mr-defaults 
+# 	mrutils 
+# 	${LIBODBC++_LIBRARIES})
+# 
+# 
+# add_executable(mr-match
+# 	Programs/MRMatch/mrmatch.cpp
+# 	Programs/MRMatch/Options.cpp)
+# 	
+# target_link_libraries(mr-match ${LIBS})
+# 
+# 

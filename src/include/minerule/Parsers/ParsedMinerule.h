@@ -135,7 +135,7 @@ class ParsedMinerule
     conf(0.0),
     bodyCardinalities(1,1000),
     headCardinalities(1,1000),
-	sequenceAllowedGaps( MinMaxPair(0,0)) {
+		sequenceAllowedGaps( MinMaxPair(0,0)) {
     init(minerule_text);
   }
   
@@ -173,14 +173,6 @@ class ParsedMinerule
   void init(const std::string& minerule_text);
 
   
-
-  /**
-   * The method returns true if the constraints in the query
-   * are item dependent. Notice that, cross predicates are
-   * implicitly context dependent, even if the attributes depends
-   * on the item.
-   */
-  bool hasIDConstraints() const throw(MineruleException);
 
   bool requiresClusters() const {
     return !ca.empty();

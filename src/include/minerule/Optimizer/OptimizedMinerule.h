@@ -68,6 +68,8 @@ namespace minerule {
       getOptimizationInfo() {
       return optInfo;
     }
+		
+		bool hasIDConstraints() const throw(MineruleException);
 
     static bool isACandidateQuery( const ParsedMinerule& candidate, const ParsedMinerule& target );
 	static bool firstMineruleIncludesSecondMinerule(const ParsedMinerule&, const ParsedMinerule&);

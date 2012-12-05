@@ -11,7 +11,7 @@ namespace minerule {
     // if mr has only ItemDependent constraints
 		MRLog() << "Checking if the current minerule is item dependent..." << std::endl;
     
-		if( mr.getParsedMinerule().hasIDConstraints() ) {
+		if( mr.hasIDConstraints() ) {
 			MRLog() << "The minerule is item dependent!" << std::endl;
 			if( mr.getOptimizationInfo().relationship==OptimizedMinerule::Combination ) 
 				return new ResultCombinator(mr);

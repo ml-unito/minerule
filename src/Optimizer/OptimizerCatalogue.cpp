@@ -501,6 +501,58 @@ namespace minerule {
     
 		return false;
 	}
+	
+ /**
+  * The method returns true if the constraints in the query
+  * are item dependent. Notice that, cross predicates are
+  * implicitly context dependent, even if the attributes depends
+  * on the item.
+  */
+	
+	
+	bool OptimizerCatalogue::hasIDConstraints(const ParsedMinerule& minerule) throw(MineruleException) {
+		OptimizerCatalogue& optcat = MineruleOptions::getSharedOptions().getOptimizations().getCatalogue();
+                                       
+
+		list_OR_node* it_or=minerule.mc;
+		for(;it_or!=NULL; it_or=it_or->next) {
+			list_AND_node* it_and=it_or->l_and;
+			for(;it_and!=NULL; it_and=it_and->next) {
+				bool attr1 = SQLUtils::isAttribute(it_and->sp->val1);
+				bool attr2 = SQLUtils::isAttribute(it_and->sp->val2);
+				const ParsedMinerule::AttrVector* attrList;
+				std::string theAttr;
+
+				if(attr1) {
+					theAttr=it_and->sp->val1;
+				}
+
+				if(attr2) {
+					theAttr=it_and->sp->val2;
+				}
+
+				if(attr1 && attr2)
+					return false;
+
+
+				if(theAttr.substr(0,5)=="BODY.") 
+					attrList=&minerule.ba;
+				else if(theAttr.substr(0,5)=="HEAD.")
+					attrList=&minerule.ha;
+				else throw MineruleException( MR_ERROR_MINERULETEXT_PARSING,
+					"Found a condition defined over an attribute,"
+					" but neither HEAD nor BODY selector has been"
+					" specified.");
+      
+				SQLUtils::removeHeadBodyFromAttrName(theAttr);
+
+				if((attr1 || attr2) && !optcat.isIDAttribute(minerule.tab_source,*attrList,theAttr))
+						return false;
+			}
+		}
+
+		return true;			
+	}
   
 
 } // namespace

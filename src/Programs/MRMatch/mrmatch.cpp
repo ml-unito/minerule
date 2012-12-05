@@ -66,7 +66,7 @@ namespace mrmatch {
 	}
 	
 	SourceTableRequirements sourceTableRequirements(const ParsedMinerule& minerule) {
-		if(minerule.hasCrossConditions() || !minerule.hasIDConstraints()) 
+		if(minerule.hasCrossConditions() || !OptimizerCatalogue::hasIDConstraints(minerule)) 
 			return SourceTableRequirements( SourceTableRequirements::CrossProduct | SourceTableRequirements::SortedGids );
 		else
 			return SourceTableRequirements();		

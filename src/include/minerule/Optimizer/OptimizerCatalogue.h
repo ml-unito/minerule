@@ -171,6 +171,15 @@ namespace minerule {
     bool isIDAttribute(const std::string& tableName,
 		       const std::vector<std::string>& itemCols,
 		       const std::string& attribute) const throw(MineruleException);
+		
+		
+   /**
+    * The method returns true if the constraints in the query
+    * are item dependent. Notice that, cross predicates are
+    * implicitly context dependent, even if the attributes depends
+    * on the item.
+    */		
+		static bool hasIDConstraints(const ParsedMinerule& mineruel) throw(MineruleException);
     
 
     // ==================== STATIC METHODS ====================

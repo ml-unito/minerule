@@ -78,7 +78,7 @@ namespace minerule {
 	      // above are the standard checking 
 	      // if in addition both the queries are item dependent (mr1 is
 	      // item dependent by hypothesis).
-			mr1.hasIDConstraints() &&
+			OptimizerCatalogue::hasIDConstraints(mr1) &&
        	  // and the all the attributes on which mr1.mc predicates are included
      	  // in those on which mr2 predicates
 			predicateAttributesAreIncluded(mr1,mr2);
@@ -174,7 +174,7 @@ namespace minerule {
 
 		bool avoidCombinationDetection = 
 			MineruleOptions::getSharedOptions().getOptimizations().getAvoidCombinationDetection() 
-				|| !minerule.hasIDConstraints();
+				|| !hasIDConstraints();
 
 		OptimizerCatalogue& catalogue = 
 			MineruleOptions::getSharedOptions().getOptimizations().getCatalogue();
@@ -385,6 +385,9 @@ namespace minerule {
 	}
   
 
+	bool OptimizedMinerule::hasIDConstraints() const throw(MineruleException) {
+		return OptimizerCatalogue::hasIDConstraints(minerule);
+	}
   
 
 } // end namespace minerule

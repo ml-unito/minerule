@@ -22,7 +22,7 @@ add_subdirectory(Utils)
 add_subdirectory(Parsers)
 add_subdirectory(Result)
 
-LIST(APPEND LIBS mralgorithms mrdatabase mroptimizer mrpredicateutils mrutils mrparsers mrresult)
+LIST(APPEND LIBS mralgorithms mrresult mrdatabase mroptimizer mrpredicateutils mrutils mrparsers)
 LIST(APPEND LIBS ${LIBGA_LIBRARIES})
 LIST(APPEND LIBS ${LIBODBC++_LIBRARIES})
 
@@ -39,24 +39,14 @@ add_executable(mr-catalogue
 	Programs/MRCatalogue/Options.cpp)
 	
 target_link_libraries(mr-catalogue 
-	mrpredicateutils 
-	mroptimizer
-	mrdatabase 
-	mrutils
-	mrresult
-	mrparsers 
+	${LIBS}
 	${LIBODBC++_LIBRARIES})
 
 add_executable(mr-print 
 	Programs/MRPrintRules/PrintRules.cpp)
 	
 target_link_libraries(mr-print 
-	mroptimizer 
-	mrdatabase 
-	mrpredicateutils 
-	mrutils
-	mrresult 
-	mrparsers 
+	${LIBS}
 	${LIBODBC++_LIBRARIES})
 
 add_executable(mr-defaults 
@@ -72,7 +62,6 @@ add_executable(mr-match
 	Programs/MRMatch/Options.cpp)
 	
 target_link_libraries(mr-match 
-  mrdatabase
   ${LIBS}
   ${LIBODBC++_LIBRARIES})
 

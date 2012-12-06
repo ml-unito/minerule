@@ -10,61 +10,6 @@
 using namespace minerule;
  
 namespace mrmatch {
-
-	void printUsage(int argc, char* const argv[]) {
-		char* progName = argv[0];
-		
-		std::cout << StringUtils::toBold("Usage:") << std::endl
-			<< "  " << StringUtils::toBold(progName) << " [-n <num query>] [-O <optionlist>] [-v] [-h] [<query name>] " << std::endl << std::endl;
-	
-		std::cout
-			<< StringUtils::toBold("   -h") << " - prints this message." << std::endl
-			<< StringUtils::toBold("   -c") << " - suppress colors."
-			<< StringUtils::toBold("   -n") << " - specifies a query number (instead of a query name)." << std::endl
-			<< StringUtils::toBold("   -O") << " - specifies a minerule option on the command line (overrides those read from file)." << std::endl
-			<< StringUtils::toBold("   -f") << " - specify a file name containing the Options to be used." << std::endl
-			<< "         default is 'optins.txt'"<< std::endl;
-			// << StringUtils::toBold("   -v") << " -- version informations" << std::endl
-			// << StringUtils::toBold("   -h") << " -- this message" << std::endl
-  
-		exit(SUCCESS);
-	}
-
-	Options parseOptions(int argc,  char* const argv[]) {
-		char ch;
-		Options options;
-		
-		while( (ch=getopt(argc, argv, "hcn:")) != -1 ) {
-			switch(ch) {
-				case 'h':
-					printUsage(argc, argv);
-					break;
-				case 'c':
-					StringUtils::setColorsEnabled(false);
-					break;
-				case 'n':
-					options.setQueryNumber(Converter(optarg).toLong());
-					break;
-				case '?':				  
-				default:
-					std::cout << StringUtils::toBold("Option not recognized:") << "-" << ch << endl;
-					printUsage(argc, argv);
-					exit(MRMATCH_OPTION_PARSING_ERROR);
-			}
-		}
-	
-		if( optind < argc-1 ) {
-			cout << StringUtils::toBold("Error:") << "some of the options were not recognized" << std::endl;
-			
-			printUsage(argc, argv);
-			exit(MRMATCH_OPTION_PARSING_ERROR);
-		}
-		
-		if( optind == argc-1 )
-			options.setQueryName(argv[argc-1]);
-	
-		return options;
-	}
 	
 	SourceTableRequirements sourceTableRequirements(const ParsedMinerule& minerule) {
 		if(minerule.hasCrossConditions() || !OptimizerCatalogue::hasIDConstraints(minerule)) 
@@ -114,7 +59,7 @@ int main (int argc, char* const argv[]) {
 	try {
 		mrmatch::Options options;
 	
-		options = mrmatch::parseOptions(argc, argv);
+		options.parse(argc, argv);
 		if(!options.initMineruleOptions()) {
 			std::cout << "Minerule Options not specified." << std::endl
 				<< "They can be specified in several ways, you can:" << std::endl

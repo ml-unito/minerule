@@ -18,8 +18,12 @@ namespace mrmatch {
 		std::string queryName() const;
 		
 		MatchKind matchKind() const { return _matchKind; }
+		void setMatchKind(MatchKind kind) { _matchKind = kind; }
 		
 		bool initMineruleOptions() const;
+		
+		void printUsage(int argc, char* const argv[]);
+		void parse(int argc, char* const argv[]);
 	private:
 		std::string _mrOptionsFileName;
 		std::vector<std::string> _mrOptionsInline;		
@@ -28,6 +32,8 @@ namespace mrmatch {
 		size_t _queryNumber;
 		
 		MatchKind _matchKind;
+		
+		static MatchKind stringToMatchKind(const std::string&);
 	};
 
 }

@@ -66,7 +66,8 @@ add_executable(mr-match
 	Programs/MRMatch/mrmatch.cpp	
 	Programs/MRMatch/Options.cpp
 	Programs/MRMatch/Matcher.cpp
-	Programs/MRMatch/RuleGidsMatcher.cpp)
+	Programs/MRMatch/RuleGidsMatcher.cpp
+	Programs/MRMatch/GidRulesMatcher.cpp)
 	
 target_link_libraries(mr-match ${LIBS})
 

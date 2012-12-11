@@ -1,6 +1,7 @@
 #ifndef BIT_VECTOR__H
 #define BIT_VECTOR__H
 #include <vector>
+#include <cstring>
 
 namespace minerule {
 	class BitVector: public std::vector<bool>{

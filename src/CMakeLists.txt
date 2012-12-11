@@ -11,7 +11,7 @@ include_directories(${LIBODBC++_INCLUDE_DIRS})
 find_package(LIBGA REQUIRED)
 include_directories(${LIBGA_INCLUDE_DIRS})
 
-include_directories(${CMAKE_SOURCE_DIR}/include/minerule ${CMAKE_SOURCE_DIR}/../ExtLibs/libgist/include)
+include_directories(${CMAKE_SOURCE_DIR}/../include/minerule ${CMAKE_SOURCE_DIR}/../ExtLibs/libgist/include)
 add_definitions(-DMR_VERSION=\"2.0a\")
 
 add_subdirectory(Algorithms)

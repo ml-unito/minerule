@@ -32,9 +32,15 @@ class Converter {
 
   explicit Converter(long val)  {
     std::stringstream ss;
-    ss << val;// << std::ends;
+    ss << val;
     value=ss.str();
   }
+	
+	explicit Converter(unsigned int val) {
+    std::stringstream ss;
+    ss << val;// << std::ends;
+    value=ss.str();		
+	}
   
   explicit Converter(unsigned long val)  {
     std::stringstream ss;

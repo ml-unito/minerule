@@ -1,9 +1,10 @@
 #include <iostream>
 #include <getopt.h>
 
-#include "Matcher.h"
 #include "Result/RulesMatcher.h"
 #include "Result/RuleFormatter.h"
+
+#include "Matcher.h"
 #include "mrmatch.h"
 #include "Options.h"
 

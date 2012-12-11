@@ -7,6 +7,7 @@
 #include <assert.h>
 #include <string>
 #include <algorithm>
+#include <getopt.h>
 
 #include "MRCUtils.h"
 #include "Printer.h"

@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <getopt.h>
 
 #include "Utils/StringUtils.h"
 #include "Utils/MineruleErrors.h"

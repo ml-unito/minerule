@@ -1,5 +1,6 @@
 #include "mrmatch.h"
 #include "Options.h"
+#include <getopt.h>
 
 #include "Utils/MineruleOptions.h"
 #include "Utils/FileUtils.h"

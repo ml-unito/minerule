@@ -122,13 +122,13 @@ namespace minerule {
   std::ostream& MineruleOptions::saveOptions(std::ostream& os) const {
     os << "# Options related to the ODBC connection" << std::endl;
     os << "odbc::{" << std::endl
-       << "  name="<< getODBC().getName() <<std::endl
-       << "  username="<<getODBC().getUsername() << std::endl
-       << "  password="<<getODBC().getPassword() << std::endl
-       << "  cacheWrites="<<Converter(getODBC().getCacheWrites()).toString() << std::endl
+       << "  +name="<< getODBC().getName() <<std::endl
+       << "  +username="<<getODBC().getUsername() << std::endl
+       << "  +password="<<getODBC().getPassword() << std::endl
+       << "  +cacheWrites="<<Converter(getODBC().getCacheWrites()).toString() << std::endl
 	   << "# dbms allows one to specify the underlying dbms, supported dbms are presently" << std::endl
 	   << "# mysql and postgres" << std::endl
-	   << "  dbms=" <<getODBC().getDBMS() << std::endl
+	   << "  +dbms=" <<getODBC().getDBMS() << std::endl
        << "}" << std::endl << std::endl;
 
     os << "# Options related to data safety issues" << std::endl;
@@ -137,7 +137,7 @@ namespace minerule {
        << "# system will delete old results whenever a new minerule"<<std::endl
        << "# having the same name of an old one is inserted. Otherwise"<<std::endl
        << "# the system will report an error message and exit." << std::endl
-       << "  overwriteHomonymMinerules=" 
+       << "  +overwriteHomonymMinerules=" 
        << Converter( getSafety().getOverwriteHomonymMinerules() ).toString() << std::endl
        << "# if overwriteHomonymMinerules is set to True, then the" << std::endl
        << "# following option decides whether the system should delete"<<std::endl
@@ -145,7 +145,7 @@ namespace minerule {
        << "# deleted one. If the option is set to True, those " << std::endl
        << "# minerule will be deleted as well, otherwise the system " <<std::endl
        << "# with halt reporting an error." << std::endl
-       << "  allowCascadeDeletes=" 
+       << "  +allowCascadeDeletes=" 
        << Converter( getSafety().getAllowCascadeDeletes() ).toString() << std::endl
        << "}" << std::endl << std::endl;
 
@@ -153,16 +153,16 @@ namespace minerule {
     os << "miningalgorithms::{" << std::endl;
     os << "  #options for configuring rule mining algorithms" << std::endl;
     os << "  rulesmining::{" << std::endl;
-    os << "    preferredAlgorithm=" << algorithmTypeToString(getMiningAlgorithms().getRulesMiningAlgorithms().getPreferredAlgorithm()) << std::endl << std::endl;
+    os << "    +preferredAlgorithm=" << algorithmTypeToString(getMiningAlgorithms().getRulesMiningAlgorithms().getPreferredAlgorithm()) << std::endl << std::endl;
     os << "    # Options related to PartitionBase algorithm" << std::endl;
     os << "    partitionbase::{" << std::endl
-       << "      rowsPerPartition=" << 
+       << "      +rowsPerPartition=" << 
                    getMiningAlgorithms().getRulesMiningAlgorithms().getPartitionBase().getRowsPerPartition() << std::endl
        << "    }" << std::endl << std::endl;
 
     os << "    # Options related to PartitionWithClusters algorithm" << std::endl;
     os << "    partitionwithclusters::{" << std::endl
-       << "      rowsPerPartition=" << 
+       << "      +rowsPerPartition=" << 
                    getMiningAlgorithms().getRulesMiningAlgorithms().getPartitionWithClusters().getRowsPerPartition() << std::endl
        << "    }" << std::endl << std::endl;
     
@@ -174,12 +174,12 @@ namespace minerule {
 
     os << "    # Options related to FPGrowth algorithms" << std::endl;
     os << "    fpgrowth::{" << std::endl
-       << "      algoType=" << algoType << std::endl
+       << "      +algoType=" << algoType << std::endl
        << "    }" <<std::endl;
     os << "  }" << std::endl;
     
     os << " itemsetsmining::{" << std::endl;
-    os << "    preferredAlgorithm=" << algorithmTypeToString(getMiningAlgorithms().getItemsetsMiningAlgorithms().getPreferredAlgorithm()) << std::endl << std::endl;
+    os << "    +preferredAlgorithm=" << algorithmTypeToString(getMiningAlgorithms().getItemsetsMiningAlgorithms().getPreferredAlgorithm()) << std::endl << std::endl;
     os << " }" << std::endl;
     os << "}" << std::endl << std::endl;
 
@@ -203,22 +203,22 @@ namespace minerule {
 
     os << "# Options related to Optimizations" << std::endl;
     os << "optimizations::{" << std::endl
-       << "  enableOptimizations=" << optimizations << std::endl
+       << "  +enableOptimizations=" << optimizations << std::endl
        << "# If set to True, this option will disable the detection of dominant" << std::endl
        << "# queries (this imply also that the system will not try to find equivalent" << std::endl
        << "# queries, since they are a particular case of dominance)" << std::endl
-       << "  avoidDominanceDetection=" 
+       << "  +avoidDominanceDetection=" 
        << Converter( getOptimizations().getAvoidDominanceDetection() ).toString() << std::endl
        << "# If set to True this option will make the optimizer to "<<std::endl
        << "# consider equivalent queries as if they were dominant ones"<<std::endl
        << "# (i.e., it will call an incremental algorithm instead of"<< std::endl
        << "# dealing with the equivalence)." << std::endl
-       << "  avoidEquivalenceDetection=" 
+       << "  +avoidEquivalenceDetection=" 
        << Converter( getOptimizations().getAvoidEquivalenceDetection() ).toString() << std::endl
        << "# If set to True the optimizer will not try to find " << std::endl
        << "# a combinations of previous queries equivalent to the current one." << std::endl
        << "# Notice that the search for combination may be a slow process" << std::endl
-       << "  avoidCombinationDetection=" 
+       << "  +avoidCombinationDetection=" 
        << Converter(getOptimizations().getAvoidCombinationDetection() ).toString() << std::endl
        << "# The following option allows the user to specify how a " << std::endl
        << "# particular incremental algorithm  have to be chosen. The" <<std::endl
@@ -227,26 +227,26 @@ namespace minerule {
        << "# Constructive and Destructive force the corresponding "<<std::endl
        << "# algorithm to be chosen. " << std::endl
        << "# Auto leaves the choice to the optimizer." << std::endl
-       << "  incrementalAlgorithm=" << incrAlgorithm << std::endl
+       << "  +incrementalAlgorithm=" << incrAlgorithm << std::endl
        << "# Options related to the query combinator algorithm" << std::endl
-       << "  combinator {" << std::endl
+       << "  combinator::{" << std::endl
        << "# amount of time the search for a combination is allowed to run " << std::endl
-       << "    timeOut=" 
+       << "    +timeOut=" 
        << Converter(getOptimizations().getCombinator().getTimeOutThreshold()).toString() << std::endl
        << "# Max number of disjuncts. It is the number of disjuncts that is considered" << std::endl
        << "# during the search. Notice that increasing this number has a strong impact" << std::endl
        << "# on the dimension of the search space." << std::endl 
-       << "    maxDisjuncts=" 
+       << "    +maxDisjuncts=" 
        << Converter(long(getOptimizations().getCombinator().getMaxDisjuncts())).toString() << std::endl
        << "# Max number of queries. Max number of distinct queries the user allows to" <<std::endl
        << "# be combined in the result. Formulae with a larger number of queries are" << std::endl
        << "# penalized in the evaluation function." << std::endl
-       << "    maxQueries="
+       << "    +maxQueries="
        << Converter(long(getOptimizations().getCombinator().getMaxQueries())).toString() << std::endl
        << "# Max distinct predicates. Max number of distinct predicates that the user"<<std::endl
        << "# allows. This afflict the response time: the time spent in assessing each" <<std::endl
        << "# formula grows exponentially fast with the number of predicates." << std::endl
-       << "    maxDistinctPredicates="
+       << "    +maxDistinctPredicates="
        << Converter(long(getOptimizations().getCombinator().getMaxDistinctPredicates())).toString()<<std::endl
        << "  }" << std::endl
        << "}" <<std::endl << std::endl;
@@ -254,19 +254,19 @@ namespace minerule {
     os << "parsers::{" << std::endl;
     os << "# Parsers log stream, valid names are:" << std::endl;
     os << "#   <stdout>, <stderr> and any writeable file." << std::endl;
-    os << " logfile=/dev/null" << std::endl;
+    os << " +logfile=/dev/null" << std::endl;
     os << "# The following four options allows to set constraint on" << std::endl
        << "# cardinalities of elements which appears in the body/head" <<std::endl
        << "# part of rules. The constraints set here 'win' on the ones"<<std::endl
        << "# in minerules (i.e., if you say '1..n' as BODY in your minerule"<<std::endl
        <<"# but set it to 1..5 here, than 1..5 will be used instead." <<std::endl;
-    os <<" minBodyElems=" << 
+    os <<" +minBodyElems=" << 
       getParsers().getBodyCardinalities().getMin() <<std::endl;
-    os <<" maxBodyElems=" 
+    os <<" +maxBodyElems=" 
        << getParsers().getBodyCardinalities().getMax() << std::endl;
-    os <<" minHeadElems=" 
+    os <<" +minHeadElems=" 
        << getParsers().getHeadCardinalities().getMin() << std::endl;
-    os <<" maxHeadElems="
+    os <<" +maxHeadElems="
        << getParsers().getHeadCardinalities().getMax()<<std::endl;
     os << "}" << std::endl << std::endl;
     
@@ -283,20 +283,20 @@ namespace minerule {
        << "# of the -i parameter if any, to 'mr' otherwise" << std::endl
        << "#" << std::endl
        << "# logstream::{" << std::endl
-       << "#    stream=<stdout> " << std::endl
-       << "#    loglevel=100" << std::endl
+       << "#    +stream=<stdout> " << std::endl
+       << "#    +loglevel=100" << std::endl
        << "# }" << std::endl
        << "# errstream::{" << std::endl
-       << "#    stream=<stderr> " << std::endl
-       << "#    loglevel=100" << std::endl
+       << "#    +stream=<stderr> " << std::endl
+       << "#    +loglevel=100" << std::endl
        << "# }" << std::endl
        << "# warnstream::{" << std::endl
-       << "#    stream=<stdout> " << std::endl
-       << "#    loglevel=100" << std::endl
+       << "#    +stream=<stdout> " << std::endl
+       << "#    +loglevel=100" << std::endl
        << "# }" << std::endl
        << "# debugstream::{" << std::endl
-       << "#    stream=<stderr> " << std::endl
-       << "#    loglevel=100" << std::endl
+       << "#    +stream=<stderr> " << std::endl
+       << "#    +loglevel=100" << std::endl
        << "# }" << std::endl;
     
     return os;

@@ -181,7 +181,7 @@ namespace mrc {
 
 	Results checkCatalogue()  {
 		if(minerule::OptimizerCatalogue::checkInstallation()) {
-			minerule::MRLog() << "The catalogue appear to be installed properly." << std::endl;
+			minerule::MRLog() << "The catalogue appears to be installed properly." << std::endl;
 			return SUCCESS;					
 		} else {
 			minerule::MRLog() << "The catalogue is " << minerule::StringUtils::toRed("NOT") <<" installed" << std::endl;

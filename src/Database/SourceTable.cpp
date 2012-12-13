@@ -14,7 +14,7 @@ namespace minerule {
 		++_rowCounter;
 		assert( _sourceRow != NULL && _resultSet != NULL );
 		
-		if( _rowCounter % 10000 ) {
+		if( _rowCounter % 10000 == 0 ) {
 			MRLog() << "Read " << _rowCounter << " rows so far..." << std::endl;
 		}
 		

@@ -11,7 +11,13 @@ namespace minerule {
 	}	
 
 	bool SourceTable::Iterator::next() { 
+		++_rowCounter;
 		assert( _sourceRow != NULL && _resultSet != NULL );
+		
+		if( _rowCounter % 10000 ) {
+			MRLog() << "Read " << _rowCounter << " rows so far..." << std::endl;
+		}
+		
 		if( _resultSet->next() ) {
 			_sourceRow->init(_resultSet, _columnIds);
 			return true;

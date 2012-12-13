@@ -17,8 +17,9 @@ namespace minerule {
 			odbc::ResultSet* _resultSet;
 			SourceRowColumnIds _columnIds;
 			SourceRow* _sourceRow;
+			size_t _rowCounter;
 
-			Iterator( odbc::ResultSet* resultSet, const SourceRowColumnIds& columnIds) : _resultSet(resultSet), _columnIds(columnIds), _sourceRow(new SourceRow()) {	
+			Iterator( odbc::ResultSet* resultSet, const SourceRowColumnIds& columnIds) : _resultSet(resultSet), _columnIds(columnIds), _sourceRow(new SourceRow()), _rowCounter(0) {	
 				
 				assert(_resultSet!=NULL);
 				if(_resultSet->isBeforeFirst()) {

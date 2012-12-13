@@ -241,7 +241,6 @@ int main (int argc, char *argv[])
 	} catch (odbc::SQLException& e) {
 		MRErr() << "ODBC Exception:" << e.getMessage() << std::endl;
 		exit(MR_ERROR_DATABASE_ERROR);
-		throw;
 	} catch (MineruleException& e) {
 		MRErr() << "Minerule Exception:" << e.what() << std::endl;
 		exit( e.getErrorCode() );

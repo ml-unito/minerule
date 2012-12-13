@@ -30,7 +30,7 @@ void parseMinerule(std::string minerule_text, ParsedMinerule& output) {
        mrparse();
     } catch (MineruleException& m) {
      std::string error;
-      error = std::string(m.what())+ " Original minerule was:"+minerule_text;
+      error = std::string(m.unformattedMessage())+ " Original minerule was:"+minerule_text;
       throw MineruleException(MR_ERROR_MINERULETEXT_PARSING, error);
     }
 

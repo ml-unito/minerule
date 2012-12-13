@@ -117,23 +117,21 @@ HEAD\.{ATTRNAME}              {
 		
 
 (-?[0-9]+"."[0-9]+)|(-?[0-9]+[e|E]-?[0-9]+)    {	tokenpos=tokenpos+mrleng;
-				strncat(linebuf,mrtext,PARSER_BUF_SIZE);				
-				mrlval.TString=strndup(mrtext,PARSER_BUF_SIZE);
-				return(DBL_NUMBER);
+							strncat(linebuf,mrtext,PARSER_BUF_SIZE);				
+							mrlval.TString=strndup(mrtext,PARSER_BUF_SIZE);
+							return(DBL_NUMBER);
 			     }
 
 \n  			{
-				if (lastC)
-					{
-						tokenpos=tokenpos+mrleng;
-						strncat(linebuf,mrtext,PARSER_BUF_SIZE);
-						lastC=0;
-						return 0;
-					}
-					{	
-					 	tokenpos=0;
-					 	linebuf[0]='\0';
-					}
+						if (lastC) {
+								tokenpos=tokenpos+mrleng;
+								strncat(linebuf,mrtext,PARSER_BUF_SIZE);
+								lastC=0;
+								return 0;
+						} else {	
+							 	tokenpos=0;
+							 	linebuf[0]='\0';
+						}
 				}
 
 %%
@@ -142,7 +140,6 @@ void mrerror(char const *s){
 	char buf[4096];
 	std::stringstream ss;
 	ss << s << " at column: " << tokenpos << std::endl << linebuf << std::endl;
-	std::cout << s << " at column: " << tokenpos << std::endl << linebuf << std::endl;
 	for(int i=0; i<tokenpos+1; ++i)
 	   buf[i]=' ';		
 	buf[tokenpos+1]='\0';

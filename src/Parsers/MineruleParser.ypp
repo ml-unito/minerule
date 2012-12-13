@@ -55,6 +55,10 @@ extern minerule::ParsedPredicate* hc_mining;
 %left AND        
 
 %nonassoc NOT
+
+%error-verbose
+%locations
+
 %%
 
 query: MINE RULE ATTR AS SELECT 

@@ -25,6 +25,7 @@ namespace minerule {
 		static void setColorsEnabled(bool newVal) { enableColors = newVal; }
 		static std::string toBold(const std::string& str){ return colorize(str, BOLD); }
 		static std::string toRed(const std::string& str)   { return colorize(str,RED);   }
+		static std::string toBoldRed(const std::string& str) { return colorize(colorize(str, RED), BOLD); }
 		static std::string toGreen(const std::string& str) { return colorize(str,GREEN); }
 		static std::string toWhite(const std::string& str) { return colorize(str,WHITE); }
 		static std::string toBlue(const std::string& str) 	{ return colorize(str,BLUE); }

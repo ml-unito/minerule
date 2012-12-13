@@ -10,16 +10,21 @@ namespace minerule {
 
 class MineruleException : public std::exception {
   std::string message;
+	std::string formattedMessage;
+	
+	std::string file;
+	int line;
   size_t errorCode;
+	
+	void formatMessage();
  public:
-  MineruleException(std::string file, int line,  size_t errCode, std::string msg) throw(); 
+  MineruleException(std::string sourceFile, int sourceLine,  size_t errCode, std::string msg) throw(); 
 
   virtual ~MineruleException() throw() {    
   }
 
-  virtual const char* what() const throw() {
-    return message.c_str();
-  }
+  virtual const char* what() const throw();
+	virtual const char* unformattedMessage() const throw();
 
   virtual size_t getErrorCode() const {
     return errorCode;

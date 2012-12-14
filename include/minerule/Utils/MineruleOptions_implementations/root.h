@@ -214,9 +214,7 @@ public:
 
   std::ostream&
     getLogStream() const {
-    // the following is an example of color log entry....
-    //      return logStream.getStream() << "\e[31;34mLog:\e[0m";
-    return logStream.getStream() << StringUtils::toGreen("Log:");
+		return logStream.getStream() << StringUtils::toGreen("Log:");
   }
 
   std::ostream&

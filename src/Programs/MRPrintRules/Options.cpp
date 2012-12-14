@@ -18,7 +18,7 @@ namespace mrprint {
 			<< "The program allows printing results of minerule queries." << std::endl 
 			<< std::endl
 			<< minerule::StringUtils::toBold("-h") << " - prints this message " << std::endl
-			<< minerule::StringUtils::toBold("-f") << " - Specifies a minerule option file (default: 'options.txt')" << std::endl
+			<< minerule::StringUtils::toBold("-f") << " - Specifies a minerule option file (default: '"<< minerule::MineruleOptions::DEFAULT_FILE_NAME << "')" << std::endl
 			<< minerule::StringUtils::toBold("-c") << " - suppress colors " << std::endl
 			<< minerule::StringUtils::toBold("-0") << " - suppresses logging artifacts " << std::endl
 			<< minerule::StringUtils::toBold("-l") << " - do not filter out rules having low confidence" << std::endl	
@@ -59,7 +59,6 @@ namespace mrprint {
 				_noLowConfidenceFilter=true;
 				break;
 				case 'n':
-				std::cout << "-n:" << optarg << std::endl;
 				_queryNumber = minerule::Converter(optarg).toLong();
 				break;
 				case 's':

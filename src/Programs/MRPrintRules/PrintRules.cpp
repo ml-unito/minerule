@@ -79,27 +79,30 @@ namespace mrprint {
 
 }
 
-int
-main(int argc, char** argv) {    
+int main(int argc, char** argv) {    
 	try {
+		MineruleOptions& mr = MineruleOptions::getSharedOptions();
+		
 		RuleFormatter* rf=NULL;
 		double conf = -1;
-		mrprint::Options options(argc, argv);
-		
+
+		mrprint::Options options(argc, argv);		
 		options.parse();
-				
-		MineruleOptions& mr = MineruleOptions::getSharedOptions();
+
 		mr.readFromFile(options.mroptFileName());
-		
+
 		rf = newFormatter(options);
 		if( options.noLowConfidenceFilter() ) {
 			conf = 0.0;
 		}
 		
+		
 		std::string queryName = getQueryName(options);
-        
+
 		if(!rf->suppressLog()) MRLogPush("Printing result set...");
+		
 		mrprint::printRules( queryName, *rf, conf);
+		
 		if(!rf->suppressLog()) MRLogPop();
 		
 		

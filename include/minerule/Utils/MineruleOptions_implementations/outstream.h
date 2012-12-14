@@ -19,6 +19,7 @@ public:
 
   void setLogger(MRLogger& log) {
 	logger=&log;
+	logLevel = log.getLogLevel();
   }
 
   MRLogger& getLogger() {

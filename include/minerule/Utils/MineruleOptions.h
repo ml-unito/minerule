@@ -1,3 +1,4 @@
+
 #ifndef __MINERULE_OPTIONS_H__
 #define __MINERULE_OPTIONS_H__
 

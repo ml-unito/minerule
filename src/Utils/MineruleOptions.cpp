@@ -90,7 +90,7 @@ namespace minerule {
 
     try {
       if(file==NULL) {
-	throw MineruleException(MR_ERROR_INPUT_FILE_NOT_FOUND,
+		  throw MineruleException(MR_ERROR_INPUT_FILE_NOT_FOUND,
 				"Cannot open file:"+filename);
       }
       initializeOptionsFromFile(*this,file);
@@ -631,33 +631,29 @@ namespace minerule {
       setLogger( *knownStreams[valueCopy] );
     } else if(name=="loglevel") {
       try {
-	size_t level = Converter(valueCopy).toLong();
-	setLogLevel(level);
+				size_t level = Converter(valueCopy).toLong();
+				setLogLevel(level);
       } catch (MineruleException& e){
-	throw MineruleException(MR_ERROR_OPTION_PARSING,
-		  "Error parsing options while converting loglevel value `"
-		  +valueCopy+"' to int.");
+				throw MineruleException(MR_ERROR_OPTION_PARSING,
+					"Error parsing options while converting loglevel value `"
+						+valueCopy+"' to int.");
       }
     } else {
-      std::cerr << "Error while parsing options, expecting a stream option in:" <<std::endl
-	   << "{stream} and: " << std::endl
-	   << "\"" << name << "\" found." << std::endl;
-      throw MineruleException(MR_ERROR_OPTION_PARSING,MINERULE_OPTIONS_PARSING_ERROR);
+			std::cerr << "Error while parsing options, expecting a stream option in:" <<std::endl
+				<< "{stream} and: " << std::endl
+				<< "\"" << name << "\" found." << std::endl;
+			throw MineruleException(MR_ERROR_OPTION_PARSING,MINERULE_OPTIONS_PARSING_ERROR);
     }
   }
 
-
-  void 
-  MineruleOptions::Parsers::setOption(const std::string& name, 
-					const std::string& value) 
-                                 throw(MineruleException) {
+  void MineruleOptions::Parsers::setOption(const std::string& name, const std::string& value) throw(MineruleException) {
     if(name=="logfile") {
       if(value=="<stdout>")
-	setLogOnStdout();
+				setLogOnStdout();
       else if(value=="<stderr>")
-	setLogOnStderr();
-      else 
-	setLogFILE(value);
+				setLogOnStderr();
+			else 
+				setLogFILE(value);
     } else if( name=="minBodyElems" ) {
       int min = stringToLong(value,name);
       setMinBodyElems(min);
@@ -672,9 +668,9 @@ namespace minerule {
       setMaxHeadElems(max);
     } else {
       std::cerr << "Error while parsing options, expecting a parser option in:" <<std::endl
-	   << "{logfile, minBodyElems, maxBodyElems, minHeadElems, maxHeadElems} and: " << std::endl
-	   << "\"" << name << "\" found." << std::endl;
-      throw MineruleException(MR_ERROR_OPTION_PARSING, MINERULE_OPTIONS_PARSING_ERROR);
+			   << "{logfile, minBodyElems, maxBodyElems, minHeadElems, maxHeadElems} and: " << std::endl
+			   << "\"" << name << "\" found." << std::endl;
+			throw MineruleException(MR_ERROR_OPTION_PARSING, MINERULE_OPTIONS_PARSING_ERROR);
     }
   }
   

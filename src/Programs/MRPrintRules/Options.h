@@ -2,6 +2,7 @@
 #define OPTIONS_H_IK79Q6DV
 
 #include <string>
+#include "Utils/MineruleOptions.h"
 
 namespace mrprint {
 	enum MRPRINT_ERRORS { MRPRINT_OPTION_PARSING_ERROR=1 };
@@ -10,7 +11,7 @@ namespace mrprint {
 	
 	class Options	{
 	public:
-		Options(int argc, char** argv) : _argc(argc), _argv(argv), _mroptFileName("options.txt"), _noLogArtifacts(false), _noLowConfidenceFilter(false), _sortOrder("no"), _queryNumber(0), _queryName("") {};
+		Options(int argc, char** argv) : _argc(argc), _argv(argv), _mroptFileName(minerule::MineruleOptions::DEFAULT_FILE_NAME), _noLogArtifacts(false), _noLowConfidenceFilter(false), _sortOrder("no"), _queryNumber(0), _queryName("") {};
 		virtual ~Options () {};
 		
 		void parse();

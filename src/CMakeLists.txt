@@ -50,7 +50,8 @@ add_executable(mr-catalogue
 target_link_libraries(mr-catalogue 	${LIBS})
 
 add_executable(mr-print 
-	Programs/MRPrintRules/PrintRules.cpp)
+	Programs/MRPrintRules/PrintRules.cpp
+	Programs/MRPrintRules/Options.cpp)
 	
 target_link_libraries(mr-print 	${LIBS})
 

@@ -1,6 +1,7 @@
 #include "Options.h"
 
 namespace mrc {
+	
 
 	void Options::setListFormat(const char* format) throw (Exception) {
 		if(format==NULL)

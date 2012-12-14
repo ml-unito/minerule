@@ -126,3 +126,9 @@ add_executable(mr-match
 target_link_libraries(mr-match ${LIBS})
 
 
+INSTALL(TARGETS mr mr-query mr-catalogue mr-print mr-defaults mr-match minerule
+		RUNTIME DESTINATION bin
+		ARCHIVE DESTINATION lib)
+		
+INSTALL(DIRECTORY ../include/minerule DESTINATION include)
+

@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include "Options.h"
-#include "Optimizer/OptimizerCatalogue.h"
+#include "minerule/Optimizer/OptimizerCatalogue.h"
 
 namespace mrc {
 	class Printer {

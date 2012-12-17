@@ -2,7 +2,7 @@
 #define OPTIONS_H_IK79Q6DV
 
 #include <string>
-#include "Utils/MineruleOptions.h"
+#include "minerule/Utils/MineruleOptions.h"
 
 namespace mrprint {
 	enum MRPRINT_ERRORS { MRPRINT_OPTION_PARSING_ERROR=1 };

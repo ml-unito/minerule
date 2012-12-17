@@ -1,11 +1,11 @@
 %{
 
-#include "Parsers/ParsedPredicate.h"
-#include "Parsers/HeaderQuery.h"
-#include "Parsers/SupportMeasure.h"
+#include "minerule/Parsers/ParsedPredicate.h"
+#include "minerule/Parsers/HeaderQuery.h"
+#include "minerule/Parsers/SupportMeasure.h"
 #include "MineruleParser_parser.hpp"
 #include <string.h>
-#include <Utils/Converter.h>
+#include "minerule/Utils/Converter.h"
 #include <sstream>
 #include <map>
 #include <iostream>

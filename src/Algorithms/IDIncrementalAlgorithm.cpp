@@ -1,10 +1,10 @@
 #include <memory>
 #include <iterator>
-#include "Algorithms/IDIncrementalAlgorithm.h"
-#include "Utils/MineruleOptions.h"
-#include "Utils/SQLUtils.h"
-#include "Database/Connection.h"
-#include "PredicateUtils/HeadBodyPredicatesSeparator.h"
+#include "minerule/Algorithms/IDIncrementalAlgorithm.h"
+#include "minerule/Utils/MineruleOptions.h"
+#include "minerule/Utils/SQLUtils.h"
+#include "minerule/Database/Connection.h"
+#include "minerule/PredicateUtils/HeadBodyPredicatesSeparator.h"
 
 
 

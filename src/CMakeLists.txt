@@ -14,7 +14,7 @@ include_directories(${LIBGA_INCLUDE_DIRS})
 find_package(BISON)
 find_package(FLEX)
 
-include_directories(${CMAKE_SOURCE_DIR}/../include/minerule ${CMAKE_SOURCE_DIR}/../ExtLibs/libgist/include)
+include_directories(${CMAKE_SOURCE_DIR}/../include ${CMAKE_SOURCE_DIR}/../ExtLibs/libgist/include)
 add_definitions(-DMR_VERSION=\"2.0a\")
 
 

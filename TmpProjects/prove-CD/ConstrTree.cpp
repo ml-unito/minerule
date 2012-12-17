@@ -1,6 +1,6 @@
 #include "ConstrTree.h"
-#include "PredicateUtils/HeadBodyPredicatesSeparator.h"
-#include "Utils/MineruleOptions.h"
+#include "minerule/PredicateUtils/HeadBodyPredicatesSeparator.h"
+#include "minerule/Utils/MineruleOptions.h"
 #include <iterator>
 
 

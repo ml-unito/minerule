@@ -2,7 +2,7 @@
 #define OPTIONS_H_C27RB72E
 	
 #include "Exception.h"
-#include "Optimizer/CatalogueInstaller.h"
+#include "minerule/Optimizer/CatalogueInstaller.h"
 
 namespace mrc {
 	

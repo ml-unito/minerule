@@ -1,10 +1,10 @@
 #ifndef __CCSMINER_H__
 #define __CCSMINER_H__
 
-#include "Algorithms/CCSMSequence.h"
-#include "Algorithms/MiningAlgorithmBase.h"
-#include "Database/Connection.h"
-#include "Utils/AlgorithmTypes.h"
+#include "minerule/Algorithms/CCSMSequence.h"
+#include "minerule/Algorithms/MiningAlgorithmBase.h"
+#include "minerule/Database/Connection.h"
+#include "minerule/Utils/AlgorithmTypes.h"
 
 namespace minerule {
 

@@ -1,5 +1,5 @@
-#include "Utils/MineruleException.h"
-#include "Utils/StringUtils.h"
+#include "minerule/Utils/MineruleException.h"
+#include "minerule/Utils/StringUtils.h"
 
 namespace minerule {
 	

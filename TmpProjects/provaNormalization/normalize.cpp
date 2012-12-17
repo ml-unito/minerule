@@ -1,4 +1,4 @@
-#include "PredicateUtils/SimplePredAnalyzer.h"
+#include "minerule/PredicateUtils/SimplePredAnalyzer.h"
 
 using namespace std;
 using namespace minerule;

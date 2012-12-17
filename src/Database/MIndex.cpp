@@ -5,8 +5,8 @@
 #include<fstream>
 #include<algorithm>
 #include <unistd.h>
-#include "Database/MRResultSet.h"
-#include "Utils/SQLUtils.h"
+#include "minerule/Database/MRResultSet.h"
+#include "minerule/Utils/SQLUtils.h"
 #include <odbc++/resultsetmetadata.h>
 
 

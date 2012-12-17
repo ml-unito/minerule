@@ -1,9 +1,9 @@
 #ifndef __BFSWITHGIDSANDCROSS_H__
 #define __BFSWITHGIDSANDCROSS_H__
 
-#include "Algorithms/MiningAlgorithmBase.h"
-#include "Database/Connection.h"
-#include "Database/Transaction.h"
+#include "minerule/Algorithms/MiningAlgorithmBase.h"
+#include "minerule/Database/Connection.h"
+#include "minerule/Database/Transaction.h"
 
 namespace minerule {
 

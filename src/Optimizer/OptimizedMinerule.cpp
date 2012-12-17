@@ -15,8 +15,8 @@ typedef wxString String;
   #endif
 */
 
-#include"Optimizer/OptimizedMinerule.h"
-#include"Parsers/ParsedMinerule.h"
+#include"minerule/Optimizer/OptimizedMinerule.h"
+#include"minerule/Parsers/ParsedMinerule.h"
 
 #include<odbc++/drivermanager.h>
 #include<odbc++/connection.h>
@@ -24,9 +24,9 @@ typedef wxString String;
 #include<odbc++/statement.h>
 #include<odbc++/resultsetmetadata.h>
 
-#include "Utils/MineruleOptions.h"
-#include "Optimizer/QueryNormalizer.h"
-#include "PredicateUtils/PredicateUtils.h"
+#include "minerule/Utils/MineruleOptions.h"
+#include "minerule/Optimizer/QueryNormalizer.h"
+#include "minerule/PredicateUtils/PredicateUtils.h"
 
 
 using namespace odbc;

@@ -5,10 +5,10 @@
 #include <set>
 #include <string>
 
-#include "Parsers/ParsedMinerule.h"
-#include "PredicateUtils/VarSet.h"
-#include "PredicateUtils/ExpressionNFCoder.h"
-#include "PredicateUtils/Predicate.h"
+#include "minerule/Parsers/ParsedMinerule.h"
+#include "minerule/PredicateUtils/VarSet.h"
+#include "minerule/PredicateUtils/ExpressionNFCoder.h"
+#include "minerule/PredicateUtils/Predicate.h"
 #include <iterator>
 
 namespace minerule {

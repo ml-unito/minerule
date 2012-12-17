@@ -1,12 +1,12 @@
 #ifndef __MINERULE_ALGORITHMS_H__
 #define __MINERULE_ALGORITHMS_H__
 
-#include "Database/SourceRow.h"
-#include "Database/ItemType.h"
-#include "Algorithms/AlgorithmsOptions.h"
-#include "Algorithms/MiningAlgorithmBase.h"
-#include "Optimizer/OptimizedMinerule.h"
-#include "Utils/AlgorithmTypes.h"
+#include "minerule/Database/SourceRow.h"
+#include "minerule/Database/ItemType.h"
+#include "minerule/Algorithms/AlgorithmsOptions.h"
+#include "minerule/Algorithms/MiningAlgorithmBase.h"
+#include "minerule/Optimizer/OptimizedMinerule.h"
+#include "minerule/Utils/AlgorithmTypes.h"
 #include <exception>
 
 namespace minerule {

@@ -1,8 +1,8 @@
 #ifndef _CONSTRAINTS_H
 #define _CONSTRAINTS_H
-#include "Utils/MineruleOptions.h"
-#include "Database/MRResultSet.h"
-#include "Utils/Bitstring.h"
+#include "minerule/Utils/MineruleOptions.h"
+#include "minerule/Database/MRResultSet.h"
+#include "minerule/Utils/Bitstring.h"
 
 namespace minerule { 
 

@@ -1,9 +1,9 @@
 #ifndef __EXPRESSIONNFCODER_H__
 #define __EXPRESSIONNFCODER_H__
 
-#include "Utils/MineruleException.h"
-#include "PredicateUtils/Predicate.h"
-#include "PredicateUtils/InvalidConfigurationFilter.h"
+#include "minerule/Utils/MineruleException.h"
+#include "minerule/PredicateUtils/Predicate.h"
+#include "minerule/PredicateUtils/InvalidConfigurationFilter.h"
 
 // This class provide facilities to encode/decode the normal form
 // of an Expression contained in an Expression Evaluator

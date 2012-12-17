@@ -3,8 +3,8 @@
 
 #include <string>
 
-#include "PredicateUtils/VarSet.h"
-#include "PredicateUtils/Interval.h"
+#include "minerule/PredicateUtils/VarSet.h"
+#include "minerule/PredicateUtils/Interval.h"
 
 namespace minerule {
   

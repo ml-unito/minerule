@@ -2,8 +2,8 @@
 #include "Options.h"
 #include <getopt.h>
 
-#include "Utils/MineruleOptions.h"
-#include "Utils/FileUtils.h"
+#include "minerule/Utils/MineruleOptions.h"
+#include "minerule/Utils/FileUtils.h"
 
 using namespace minerule;
 

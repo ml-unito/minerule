@@ -1,11 +1,11 @@
 class MiningAlgorithms : public OptionBase {
 public:
   /* ========= RULE MINING ALGORITHMS ======== */
-  	#include "Utils/MineruleOptions_implementations/miningalgorithms/rulemining.h"
+  	#include "minerule/Utils/MineruleOptions_implementations/miningalgorithms/rulemining.h"
   /* ========= ITEMSET MINING ALGORITHMS ======== */
-	#include "Utils/MineruleOptions_implementations/miningalgorithms/itemsetmining.h"
+	#include "minerule/Utils/MineruleOptions_implementations/miningalgorithms/itemsetmining.h"
   /* ========= SEQUENCE MINING ALGORITHMS ======= */
-	#include "Utils/MineruleOptions_implementations/miningalgorithms/sequencemining.h"
+	#include "minerule/Utils/MineruleOptions_implementations/miningalgorithms/sequencemining.h"
 
 private:
   RulesMiningAlgorithms rulesMiningAlgorithms;

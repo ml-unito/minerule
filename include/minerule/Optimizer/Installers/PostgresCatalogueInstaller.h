@@ -1,7 +1,7 @@
 #ifndef POSTGRESCATALOGUEINSTALLER_H_M0QRV1OU
 #define POSTGRESCATALOGUEINSTALLER_H_M0QRV1OU
 
-#include "Optimizer/CatalogueInstaller.h"
+#include "minerule/Optimizer/CatalogueInstaller.h"
 
 namespace minerule {
 	class PostgresCatalogueInstaller : public CatalogueInstaller {

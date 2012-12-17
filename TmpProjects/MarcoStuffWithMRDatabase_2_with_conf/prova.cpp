@@ -17,8 +17,8 @@
 
 
 #include "AlgorithmsOptions.h"
-#include "Utils/MineruleOptions.h"
-#include "Database/MRResultSet.h"
+#include "minerule/Utils/MineruleOptions.h"
+#include "minerule/Database/MRResultSet.h"
 #include "prova.h"
 
 #define MROPTIONFILE "mroptions"

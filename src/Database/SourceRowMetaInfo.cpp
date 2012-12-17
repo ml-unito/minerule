@@ -1,5 +1,5 @@
-#include "Database/SourceRowMetaInfo.h"
-#include "Database/SourceRowColumnIds.h"
+#include "minerule/Database/SourceRowMetaInfo.h"
+#include "minerule/Database/SourceRowColumnIds.h"
 #include <odbc++/resultsetmetadata.h>
 #include <iostream>
 #include <string.h>

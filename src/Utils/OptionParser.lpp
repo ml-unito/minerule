@@ -1,6 +1,6 @@
 %{
 #include <iostream>
-#include "Utils/MineruleException.h"
+#include "minerule/Utils/MineruleException.h"
 
 
 using namespace minerule;

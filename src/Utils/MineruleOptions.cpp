@@ -1,4 +1,4 @@
-#include "Utils/MineruleOptions.h"
+#include "minerule/Utils/MineruleOptions.h"
 #include <iostream>
 #include <fstream>
 
@@ -9,7 +9,7 @@
 
 const std::string MINERULE_OPTIONS_PARSING_ERROR = "Parsing Error while parsing MineruleOptions";
 
-#include "Utils/OptionParserLib.h"
+#include "minerule/Utils/OptionParserLib.h"
 
 namespace minerule {
   const std::string MineruleOptions::DEFAULT_FILE_NAME("options.txt");

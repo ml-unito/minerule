@@ -1,7 +1,7 @@
 #ifndef __HEADERQUERY_H__
 #define __HEADERQUERY_H__
 #include <string>
-#include "Utils/MinMaxPair.h"
+#include "minerule/Utils/MinMaxPair.h"
 #include "ParsedMinerule.h"
 
 namespace minerule {

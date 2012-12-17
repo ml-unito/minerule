@@ -14,7 +14,7 @@
  */
 
 #include <string>
-#include "Utils/MineruleException.h"
+#include "minerule/Utils/MineruleException.h"
 
 namespace minerule {
 

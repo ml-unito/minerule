@@ -1,6 +1,6 @@
-#include "Utils/MineruleLogs.h"
-#include "Utils/MineruleOptions.h"
-#include "Utils/StringUtils.h"
+#include "minerule/Utils/MineruleLogs.h"
+#include "minerule/Utils/MineruleOptions.h"
+#include "minerule/Utils/StringUtils.h"
 
 const size_t MAX_LOG_LENGTH = 70;
 

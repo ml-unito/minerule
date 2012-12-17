@@ -1,8 +1,8 @@
-#include "Algorithms/IncrementalAlgorithm.h"
-#include "Algorithms/IDIncrementalAlgorithm.h"
-#include "Algorithms/ResultCombinator.h"
-#include "Algorithms/ConstrTree.h"
-#include "Algorithms/DestrTree.h"
+#include "minerule/Algorithms/IncrementalAlgorithm.h"
+#include "minerule/Algorithms/IDIncrementalAlgorithm.h"
+#include "minerule/Algorithms/ResultCombinator.h"
+#include "minerule/Algorithms/ConstrTree.h"
+#include "minerule/Algorithms/DestrTree.h"
 
 namespace minerule {
 

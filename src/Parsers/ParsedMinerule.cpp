@@ -13,10 +13,10 @@ typedef wxString String;
  #endif
 */
 
-#include "Utils/MineruleException.h"
-#include "PredicateUtils/PredicateUtils.h"
+#include "minerule/Utils/MineruleException.h"
+#include "minerule/PredicateUtils/PredicateUtils.h"
 #include <sstream>
-#include "Utils/SQLUtils.h"
+#include "minerule/Utils/SQLUtils.h"
 //#include"Ottimizzatore/ottimizzatore.h"
 
 
@@ -27,9 +27,9 @@ typedef wxString String;
 #include<odbc++/resultsetmetadata.h>
 #include<iterator>
 
-#include "Parsers/ParsedMinerule.h"
-#include "Utils/MineruleOptions.h"
-#include "Parsers/ParserLibrary.h"
+#include "minerule/Parsers/ParsedMinerule.h"
+#include "minerule/Utils/MineruleOptions.h"
+#include "minerule/Parsers/ParserLibrary.h"
 
 /*#define yyerrror predicateerror
 

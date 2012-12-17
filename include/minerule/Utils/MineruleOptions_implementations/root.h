@@ -8,26 +8,26 @@ public:
 
 	/* ========== ODBC_DB ========== */
 	
-	#include "Utils/MineruleOptions_implementations/odbc.h"
+	#include "minerule/Utils/MineruleOptions_implementations/odbc.h"
   /* ========== SAFETY ========== */
 
-	#include "Utils/MineruleOptions_implementations/safety.h"
+	#include "minerule/Utils/MineruleOptions_implementations/safety.h"
   /* ========== MININGALGORITHMS ========== */
 
 
-  	#include "Utils/MineruleOptions_implementations/miningalgorithms.h"
+  	#include "minerule/Utils/MineruleOptions_implementations/miningalgorithms.h"
 
   /* ========== OPTIMIZATIONS ========== */
-  	#include "Utils/MineruleOptions_implementations/optimizations.h"
+  	#include "minerule/Utils/MineruleOptions_implementations/optimizations.h"
 
 
   /* ========== PARSERS ========== */
   
-  	#include "Utils/MineruleOptions_implementations/parsers.h"
+  	#include "minerule/Utils/MineruleOptions_implementations/parsers.h"
  
   /* ========== OUTSTREAM ========== */
 
-  	#include "Utils/MineruleOptions_implementations/outstream.h"
+  	#include "minerule/Utils/MineruleOptions_implementations/outstream.h"
 
 
   /* ==============================

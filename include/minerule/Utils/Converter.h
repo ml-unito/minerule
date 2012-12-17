@@ -6,7 +6,7 @@
 #include <cerrno>
 #include <string.h>
 #include <stdlib.h>
-#include "Utils/MineruleException.h"
+#include "minerule/Utils/MineruleException.h"
 
 
 

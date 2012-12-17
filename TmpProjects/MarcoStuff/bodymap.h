@@ -17,11 +17,11 @@
 #include <algorithm>
 
 #include "AlgorithmsOptions.h"
-#include "Utils/MineruleOptions.h"
+#include "minerule/Utils/MineruleOptions.h"
 #include "MRResultSet.h"
-#include "Database/ItemType.h"
-#include "Utils/Converter.h"
-#include "Database/Connection.h"
+#include "minerule/Database/ItemType.h"
+#include "minerule/Utils/Converter.h"
+#include "minerule/Database/Connection.h"
 #include "bitstring.h"
 
 using namespace minerule;

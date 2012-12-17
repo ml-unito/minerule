@@ -1,9 +1,9 @@
-#include "Optimizer/QueryResultIterator.h"
+#include "minerule/Optimizer/QueryResultIterator.h"
 #include "classi.h"
 #include "algo.h"
-#include "Database/ItemType.h"
+#include "minerule/Database/ItemType.h"
 #include <iostream>
-#include "Optimizer/OptimizerCatalogue.h"
+#include "minerule/Optimizer/OptimizerCatalogue.h"
 #include <odbc++/resultset.h>
 #include <odbc++/connection.h>
 #include <odbc++/statement.h>
@@ -11,8 +11,8 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
-#include "Utils/MineruleOptions.h"
-#include "Database/SourceRowElement.h"
+#include "minerule/Utils/MineruleOptions.h"
+#include "minerule/Database/SourceRowElement.h"
 #include "MRDatabase/MIndex.h"
 #include "SubsetIterator.h"
 #include <iterator>

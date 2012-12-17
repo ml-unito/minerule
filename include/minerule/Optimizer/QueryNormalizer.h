@@ -2,9 +2,9 @@
 #define __QUERYNORMALIZER_H__
 
 #include <vector>
-#include <Parsers/ParsedMinerule.h>
-#include <Optimizer/OptimizerCatalogue.h>
-#include "Utils/SQLUtils.h"
+#include "minerule/Parsers/ParsedMinerule.h"
+#include "minerule/Optimizer/OptimizerCatalogue.h"
+#include "minerule/Utils/SQLUtils.h"
 
 namespace minerule { 
 

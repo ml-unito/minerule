@@ -1,12 +1,12 @@
 #include <string.h>
 #include <algorithm>
 #include <memory>
-#include "Optimizer/QueryNormalizer.h"
-#include "Utils/Converter.h"
-#include "Utils/MineruleOptions.h"
+#include "minerule/Optimizer/QueryNormalizer.h"
+#include "minerule/Utils/Converter.h"
+#include "minerule/Utils/MineruleOptions.h"
 #include "odbc++/resultset.h"
 #include "odbc++/resultsetmetadata.h"
-#include "PredicateUtils/SimplePredAnalyzer.h"
+#include "minerule/PredicateUtils/SimplePredAnalyzer.h"
 
 namespace minerule {
     

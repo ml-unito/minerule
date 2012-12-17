@@ -1,5 +1,5 @@
-#include "Database/SourceRow.h"
-#include "Utils/MineruleLogs.h"
+#include "minerule/Database/SourceRow.h"
+#include "minerule/Utils/MineruleLogs.h"
 
 namespace minerule {
 

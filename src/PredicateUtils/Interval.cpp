@@ -1,6 +1,6 @@
-#include "PredicateUtils/Interval.h"
-#include "Utils/MineruleOptions.h"
-#include "PredicateUtils/Predicate.h"
+#include "minerule/PredicateUtils/Interval.h"
+#include "minerule/Utils/MineruleOptions.h"
+#include "minerule/PredicateUtils/Predicate.h"
 
 namespace minerule {
   

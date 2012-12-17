@@ -9,16 +9,16 @@
 #include <map>
 #include <iostream>
 
-#include "Utils/MineruleLogs.h"
+#include "minerule/Utils/MineruleLogs.h"
 
 
-#include "Utils/MineruleException.h"
-#include "Utils/MinMaxPair.h"
-#include "Utils/Converter.h"
-#include "Optimizer/OptimizerCatalogue.h"
-#include "Utils/MRLogger.h"
-#include "Utils/AlgorithmTypes.h"
-#include "Utils/StringUtils.h"
+#include "minerule/Utils/MineruleException.h"
+#include "minerule/Utils/MinMaxPair.h"
+#include "minerule/Utils/Converter.h"
+#include "minerule/Optimizer/OptimizerCatalogue.h"
+#include "minerule/Utils/MRLogger.h"
+#include "minerule/Utils/AlgorithmTypes.h"
+#include "minerule/Utils/StringUtils.h"
 
 namespace minerule {
 
@@ -39,7 +39,7 @@ namespace minerule {
   };
 
 // Options subclasses
-#include "Utils/MineruleOptions_implementations/root.h"
+#include "minerule/Utils/MineruleOptions_implementations/root.h"
 
 }// end namespace minerule
 

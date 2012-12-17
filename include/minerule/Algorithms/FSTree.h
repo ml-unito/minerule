@@ -7,7 +7,7 @@
 #include <vector>
 #include "FSTreeNode.h"
 #include "FSTreeSequence.h"
-#include "Optimizer/OptimizedMinerule.h"
+#include "minerule/Optimizer/OptimizedMinerule.h"
 //#include "sequenceList.h"
 
 namespace minerule {

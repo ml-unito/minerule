@@ -1,4 +1,4 @@
-#include "Algorithms/AlgorithmsOptions.h"
+#include "minerule/Algorithms/AlgorithmsOptions.h"
 
 using namespace minerule;
 

@@ -1,7 +1,7 @@
 #include "RuleGidsMatcher.h"
-#include "Database/Transaction.h"
-#include "Result/RulesMatcher.h"
-#include "Result/RuleFormatter.h"
+#include "minerule/Database/Transaction.h"
+#include "minerule/Result/RulesMatcher.h"
+#include "minerule/Result/RuleFormatter.h"
 
 namespace mrmatch {
 	

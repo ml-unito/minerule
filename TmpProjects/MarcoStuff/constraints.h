@@ -1,8 +1,8 @@
 #ifndef _CONSTRAINTS_H
 #define _CONSTRAINTS_H
 #include "AlgorithmsOptions.h"
-#include "Utils/MineruleOptions.h"
-#include "Database/MRResultSet.h"
+#include "minerule/Utils/MineruleOptions.h"
+#include "minerule/Database/MRResultSet.h"
 #include "bitstring.h"
 
 class BodyMap;

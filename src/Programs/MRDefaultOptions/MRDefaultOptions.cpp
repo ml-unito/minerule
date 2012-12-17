@@ -1,6 +1,6 @@
 #include <iostream>
 #include <unistd.h>
-#include "Utils/MineruleOptions.h"
+#include "minerule/Utils/MineruleOptions.h"
 
 
 using namespace minerule;

@@ -1,9 +1,9 @@
 // care.cpp
 
 
-#include "PredicateUtils/HeadBodyPredicatesSeparator.h"
-#include "Database/PrepareDataUtils.h"
-#include "Algorithms/ConstrItemSetsExtraction.h"
+#include "minerule/PredicateUtils/HeadBodyPredicatesSeparator.h"
+#include "minerule/Database/PrepareDataUtils.h"
+#include "minerule/Algorithms/ConstrItemSetsExtraction.h"
 
 #define MROPTIONFILE "mroptions"
 

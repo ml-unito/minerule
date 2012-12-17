@@ -1,10 +1,10 @@
 #include <string.h>
 #include <odbc++/resultset.h>
-#include "Utils/MineruleOptions.h"
-#include "Utils/SQLUtils.h"
-#include "Optimizer/OptimizerCatalogue.h"
-#include "Parsers/ParsedMinerule.h"
-#include "Database/Connection.h"
+#include "minerule/Utils/MineruleOptions.h"
+#include "minerule/Utils/SQLUtils.h"
+#include "minerule/Optimizer/OptimizerCatalogue.h"
+#include "minerule/Parsers/ParsedMinerule.h"
+#include "minerule/Database/Connection.h"
 #include <memory>
 #include <iterator>
 #include <algorithm>

@@ -1,9 +1,9 @@
-#include "Algorithms/IncrAlgoClasses.h"
-#include "Database/ItemType.h"
+#include "minerule/Algorithms/IncrAlgoClasses.h"
+#include "minerule/Database/ItemType.h"
 #include <iostream>
 #include <algorithm>
-#include "Optimizer/OptimizerCatalogue.h"
-#include "Database/Connection.h"
+#include "minerule/Optimizer/OptimizerCatalogue.h"
+#include "minerule/Database/Connection.h"
 #include <iterator>
 
 

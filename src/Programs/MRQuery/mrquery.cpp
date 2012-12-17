@@ -3,13 +3,13 @@
 #include <fstream>
 #include <getopt.h>
 
-#include "Utils/StringUtils.h"
-#include "Utils/MineruleErrors.h"
-#include "Utils/MineruleLogs.h"
-#include "Utils/MineruleOptions.h"
-#include "Utils/FileUtils.h"
-#include "Optimizer/OptimizedMinerule.h"
-#include "Algorithms/Algorithms.h"
+#include "minerule/Utils/StringUtils.h"
+#include "minerule/Utils/MineruleErrors.h"
+#include "minerule/Utils/MineruleLogs.h"
+#include "minerule/Utils/MineruleOptions.h"
+#include "minerule/Utils/FileUtils.h"
+#include "minerule/Optimizer/OptimizedMinerule.h"
+#include "minerule/Algorithms/Algorithms.h"
 
 using namespace minerule;
 

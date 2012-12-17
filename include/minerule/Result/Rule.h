@@ -1,7 +1,7 @@
 #ifndef RULE_H_SP35S3OZ
 #define RULE_H_SP35S3OZ
 
-#include "Database/ItemType.h"
+#include "minerule/Database/ItemType.h"
 
 namespace minerule {
 	

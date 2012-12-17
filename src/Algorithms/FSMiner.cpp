@@ -1,7 +1,7 @@
-#include "Algorithms/FSMiner.h"
-#include "Algorithms/FSTree.h"
-#include "Utils/MineruleLogs.h"
-#include "Database/PrepareDataUtils.h"
+#include "minerule/Algorithms/FSMiner.h"
+#include "minerule/Algorithms/FSTree.h"
+#include "minerule/Utils/MineruleLogs.h"
+#include "minerule/Database/PrepareDataUtils.h"
 #include <stdexcept>
 
 //#include "sequence.h"

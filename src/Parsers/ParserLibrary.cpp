@@ -1,5 +1,5 @@
-#include "Parsers/ParserLibrary.h"
-#include <Utils/MineruleOptions.h>
+#include "minerule/Parsers/ParserLibrary.h"
+#include "minerule/Utils/MineruleOptions.h"
 #include <iostream>
 
 extern int mrparse();

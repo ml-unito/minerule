@@ -3,7 +3,7 @@
 
 #include "odbc++/connection.h"
 #include "odbc++/statement.h"
-#include "Utils/MineruleException.h"
+#include "minerule/Utils/MineruleException.h"
 
 namespace minerule {
 	class CatalogueInstaller {

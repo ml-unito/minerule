@@ -1,5 +1,5 @@
-#include "Database/SourceTable.h"
-#include "PredicateUtils/HeadBodyPredicatesSeparator.h"
+#include "minerule/Database/SourceTable.h"
+#include "minerule/PredicateUtils/HeadBodyPredicatesSeparator.h"
 #include <odbc++/resultset.h>
 
 namespace minerule {

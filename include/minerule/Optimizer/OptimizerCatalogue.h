@@ -8,11 +8,11 @@
 #include <string.h>
 #include <stdlib.h>
 #include <odbc++/types.h>
-#include "Utils/MineruleException.h"
-#include "Parsers/ParsedMinerule.h"
-#include "Database/ItemType.h"
-#include "Result/QueryResult-header.h"
-#include "Optimizer/CatalogueInstaller.h"
+#include "minerule/Utils/MineruleException.h"
+#include "minerule/Parsers/ParsedMinerule.h"
+#include "minerule/Database/ItemType.h"
+#include "minerule/Result/QueryResult-header.h"
+#include "minerule/Optimizer/CatalogueInstaller.h"
 
 
 

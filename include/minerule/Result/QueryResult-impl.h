@@ -2,9 +2,9 @@
 #define __QUERY_RESULT_IMPL_H__
 
 #include <algorithm>
-#include "Result/QueryResult.h"
-#include "Database/Connection.h"
-#include "Optimizer/OptimizerCatalogue.h"
+#include "minerule/Result/QueryResult.h"
+#include "minerule/Database/Connection.h"
+#include "minerule/Optimizer/OptimizerCatalogue.h"
 
 namespace minerule {
 

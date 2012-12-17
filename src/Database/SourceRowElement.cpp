@@ -1,6 +1,6 @@
-#include "Database/SourceRowElement.h"
-#include "Database/SourceRowAttribute.h"
-#include "Database/SourceRowAttributeCollection.h"
+#include "minerule/Database/SourceRowElement.h"
+#include "minerule/Database/SourceRowAttribute.h"
+#include "minerule/Database/SourceRowAttributeCollection.h"
 
 namespace minerule {
 

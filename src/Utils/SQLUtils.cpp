@@ -1,5 +1,5 @@
-#include "Utils/SQLUtils.h"
-#include "Utils/MineruleLogs.h"
+#include "minerule/Utils/SQLUtils.h"
+#include "minerule/Utils/MineruleLogs.h"
 #include <map>
 #include <memory>
 

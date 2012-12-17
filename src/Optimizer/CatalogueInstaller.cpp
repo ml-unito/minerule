@@ -1,7 +1,7 @@
-#include "Optimizer/CatalogueInstaller.h"
-#include "Optimizer/Installers/MySqlCatalogueInstaller.h"
-#include "Optimizer/Installers/PostgresCatalogueInstaller.h"
-#include "Utils/MineruleOptions.h"
+#include "minerule/Optimizer/CatalogueInstaller.h"
+#include "minerule/Optimizer/Installers/MySqlCatalogueInstaller.h"
+#include "minerule/Optimizer/Installers/PostgresCatalogueInstaller.h"
+#include "minerule/Utils/MineruleOptions.h"
 
 namespace minerule {
 	

@@ -1,9 +1,9 @@
 #ifndef __MROPTIMIZER_H__
 #define __MROPTIMIZER_H__
 
-#include "Parsers/ParsedMinerule.h"
-#include "Database/SourceRow.h"
-#include "Optimizer/GAQueryCombinator.h"
+#include "minerule/Parsers/ParsedMinerule.h"
+#include "minerule/Database/SourceRow.h"
+#include "minerule/Optimizer/GAQueryCombinator.h"
 
 
 namespace minerule {

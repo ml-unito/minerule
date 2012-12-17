@@ -1,8 +1,8 @@
-#include "Algorithms/MiningAlgorithmBase.h"
-#include "Algorithms/BFSWithGidsNoCross.h"
-#include "Algorithms/BFSWithGidsAndCross.h"
-#include "Algorithms/Care.h"
-#include "Algorithms/ConstrItemSetsExtraction.h"
+#include "minerule/Algorithms/MiningAlgorithmBase.h"
+#include "minerule/Algorithms/BFSWithGidsNoCross.h"
+#include "minerule/Algorithms/BFSWithGidsAndCross.h"
+#include "minerule/Algorithms/Care.h"
+#include "minerule/Algorithms/ConstrItemSetsExtraction.h"
 
 
 MiningAlgorithmBase*

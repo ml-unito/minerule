@@ -1,6 +1,6 @@
 #include <typeinfo>
-#include "Database/SourceRowAttributeCollection.h"
-#include "Utils/MineruleOptions.h"
+#include "minerule/Database/SourceRowAttributeCollection.h"
+#include "minerule/Utils/MineruleOptions.h"
 
 /* ******************************* */
 /* SourceRowAttributeCollection methods */

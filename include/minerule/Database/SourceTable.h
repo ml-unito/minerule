@@ -1,9 +1,9 @@
 #ifndef SOURCETABLE_H_GE1S8NL9
 #define SOURCETABLE_H_GE1S8NL9
 
-#include "Database/SourceRow.h"
-#include "Database/PrepareDataUtils.h"
-#include "Algorithms/MiningAlgorithmBase.h"
+#include "minerule/Database/SourceRow.h"
+#include "minerule/Database/PrepareDataUtils.h"
+#include "minerule/Algorithms/MiningAlgorithmBase.h"
 
 namespace minerule {
 	class SourceTable {

@@ -1,10 +1,10 @@
 #ifndef MATCHERS_H_Q12443YU
 #define MATCHERS_H_Q12443YU
 
-#include "Result/Rule.h"
-#include "Database/SourceTable.h"
-#include "Database/Transaction.h"
-#include "Result/RulesMatcher.h"
+#include "minerule/Result/Rule.h"
+#include "minerule/Database/SourceTable.h"
+#include "minerule/Database/Transaction.h"
+#include "minerule/Result/RulesMatcher.h"
 
 #include "mrmatch.h"
 

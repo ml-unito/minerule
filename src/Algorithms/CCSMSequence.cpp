@@ -1,7 +1,7 @@
-#include "Algorithms/CCSMSequence.h"
+#include "minerule/Algorithms/CCSMSequence.h"
 
-#include "Database/SourceRowColumnIds.h"
-#include "Database/SourceRow.h"
+#include "minerule/Database/SourceRowColumnIds.h"
+#include "minerule/Database/SourceRow.h"
 
 #include "time.h"
 

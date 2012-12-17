@@ -2,10 +2,10 @@
 #define __PREPAREDATAUTILS_H__
 
 #include <string>
-#include "Parsers/ParsedMinerule.h"
-#include "Database/SourceRowColumnIds.h"
-#include "Optimizer/OptimizedMinerule.h"
-#include "Algorithms/MiningAlgorithmBase.h"
+#include "minerule/Parsers/ParsedMinerule.h"
+#include "minerule/Database/SourceRowColumnIds.h"
+#include "minerule/Optimizer/OptimizedMinerule.h"
+#include "minerule/Algorithms/MiningAlgorithmBase.h"
 
 namespace minerule {
 

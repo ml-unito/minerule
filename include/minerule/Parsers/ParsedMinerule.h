@@ -7,10 +7,10 @@
 
 #include<string>
 #include<vector>
-#include"Utils/MinMaxPair.h"
-#include"Utils/MineruleLogs.h"
-#include"Utils/MineruleException.h"
-#include"Utils/AlgorithmTypes.h"
+#include"minerule/Utils/MinMaxPair.h"
+#include"minerule/Utils/MineruleLogs.h"
+#include"minerule/Utils/MineruleException.h"
+#include"minerule/Utils/AlgorithmTypes.h"
 
 
 

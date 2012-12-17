@@ -1,6 +1,6 @@
-#include "Optimizer/OptimizerCatalogue.h"
-#include "Utils/MineruleOptions.h"
-#include "Database/Connection.h"
+#include "minerule/Optimizer/OptimizerCatalogue.h"
+#include "minerule/Utils/MineruleOptions.h"
+#include "minerule/Database/Connection.h"
 
 namespace minerule {
 

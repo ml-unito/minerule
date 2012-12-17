@@ -1,8 +1,8 @@
 #include <iostream>
 #include <getopt.h>
 
-#include "Result/RulesMatcher.h"
-#include "Result/RuleFormatter.h"
+#include "minerule/Result/RulesMatcher.h"
+#include "minerule/Result/RuleFormatter.h"
 
 #include "Matcher.h"
 #include "mrmatch.h"

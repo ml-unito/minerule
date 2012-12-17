@@ -1,7 +1,7 @@
 #ifndef MYSQLCATALOGUEINSTALLER_H_3QIF6B9O
 #define MYSQLCATALOGUEINSTALLER_H_3QIF6B9O
 
-#include "Optimizer/Installers/PostgresCatalogueInstaller.h"
+#include "minerule/Optimizer/Installers/PostgresCatalogueInstaller.h"
 
 namespace minerule {
 

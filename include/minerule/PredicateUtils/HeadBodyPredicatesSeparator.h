@@ -2,7 +2,7 @@
 #define __HEADBODYPREDICATESEPARATOR_H__
 
 #include <string>
-#include "Parsers/ParsedMinerule.h"
+#include "minerule/Parsers/ParsedMinerule.h"
 
 namespace minerule { 
 

@@ -1,7 +1,7 @@
 #ifndef __INCREMENTAL_ALGORITHM_H__
 #define __INCREMENTAL_ALGORITHM_H__
 
-#include "Optimizer/OptimizedMinerule.h"
+#include "minerule/Optimizer/OptimizedMinerule.h"
 
 namespace minerule {
 

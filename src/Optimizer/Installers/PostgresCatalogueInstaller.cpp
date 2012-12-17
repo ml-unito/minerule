@@ -1,4 +1,4 @@
-#include "Optimizer/Installers/PostgresCatalogueInstaller.h"
+#include "minerule/Optimizer/Installers/PostgresCatalogueInstaller.h"
 #include "odbc++/statement.h"
 
 namespace minerule {

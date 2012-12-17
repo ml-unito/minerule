@@ -1,4 +1,4 @@
-#include "Utils/AlgorithmTypes.h"
+#include "minerule/Utils/AlgorithmTypes.h"
 
 
 namespace minerule {

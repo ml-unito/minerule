@@ -1,7 +1,7 @@
-#include "PredicateUtils/PredicateUtils.h"
+#include "minerule/PredicateUtils/PredicateUtils.h"
 
 #include <algorithm>
-#include "PredicateUtils/ExpressionNFCoder.h"
+#include "minerule/PredicateUtils/ExpressionNFCoder.h"
 
 namespace minerule {
 

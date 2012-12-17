@@ -2,14 +2,14 @@
 #define __INTERVAL_CHECKER__
 
 #include <string.h>
-#include "Utils/MineruleException.h"
+#include "minerule/Utils/MineruleException.h"
 #include "odbc++/types.h"
 #include <set>
 #include <map>
 #include <string>
-#include "PredicateUtils/VarSet.h"
-#include "Parsers/ParsedMinerule.h"
-#include "Utils/SQLUtils.h"
+#include "minerule/PredicateUtils/VarSet.h"
+#include "minerule/Parsers/ParsedMinerule.h"
+#include "minerule/Utils/SQLUtils.h"
 
 
 namespace minerule {

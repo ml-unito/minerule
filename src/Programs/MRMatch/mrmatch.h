@@ -2,7 +2,7 @@
 #define MRMATCH_H_MP1T5YIM
 
 #include <vector>
-#include "Result/Rule.h"
+#include "minerule/Result/Rule.h"
 
 namespace mrmatch {
 	typedef enum { SUCCESS=0, MRMATCH_OPTION_PARSING_ERROR } ExitCodes;

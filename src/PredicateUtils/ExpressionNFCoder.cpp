@@ -1,4 +1,4 @@
-#include "PredicateUtils/ExpressionNFCoder.h"
+#include "minerule/PredicateUtils/ExpressionNFCoder.h"
 
 namespace minerule {
 

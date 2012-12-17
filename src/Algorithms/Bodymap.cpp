@@ -1,5 +1,5 @@
-#include "Algorithms/Bodymap.h"
-#include "Utils/Constraints.h"
+#include "minerule/Algorithms/Bodymap.h"
+#include "minerule/Utils/Constraints.h"
 #include <algorithm>
 
 namespace minerule {

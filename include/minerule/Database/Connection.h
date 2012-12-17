@@ -12,14 +12,14 @@
 #include<odbc++/databasemetadata.h>
 #include<odbc++/preparedstatement.h>
 
-#include "Utils/MineruleOptions.h"
-#include "Database/SourceRow.h"
-#include "Database/SourceRowMetaInfo.h"
+#include "minerule/Utils/MineruleOptions.h"
+#include "minerule/Database/SourceRow.h"
+#include "minerule/Database/SourceRowMetaInfo.h"
 
 #include <iostream>
 #include <stdio.h>
 
-// #include "Algorithms/Algorithms.h"
+// #include "minerule/Algorithms/Algorithms.h"
 
 namespace minerule {
 

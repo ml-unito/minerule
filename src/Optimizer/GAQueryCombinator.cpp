@@ -1,5 +1,5 @@
-#include "Optimizer/GAQueryCombinator.h"
-#include "PredicateUtils/PredicateUtils.h"
+#include "minerule/Optimizer/GAQueryCombinator.h"
+#include "minerule/PredicateUtils/PredicateUtils.h"
 #include <iterator>
 #include <cmath>
 #include <algorithm>

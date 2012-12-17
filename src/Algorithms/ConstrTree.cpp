@@ -1,7 +1,7 @@
-#include "Algorithms/ConstrTree.h"
-#include "PredicateUtils/HeadBodyPredicatesSeparator.h"
-#include "Utils/MineruleOptions.h"
-#include "Database/PrepareDataUtils.h"
+#include "minerule/Algorithms/ConstrTree.h"
+#include "minerule/PredicateUtils/HeadBodyPredicatesSeparator.h"
+#include "minerule/Utils/MineruleOptions.h"
+#include "minerule/Database/PrepareDataUtils.h"
 #include <iterator>
 
 

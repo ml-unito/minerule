@@ -1,4 +1,4 @@
-#include "Parsers/PredicateBase.h"
+#include "minerule/Parsers/PredicateBase.h"
 
 #include <algorithm>
 #include <string>

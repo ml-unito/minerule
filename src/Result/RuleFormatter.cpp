@@ -1,4 +1,4 @@
-#include "Result/RuleFormatter.h"
+#include "minerule/Result/RuleFormatter.h"
 #include <iomanip>
 #include <sstream>
 

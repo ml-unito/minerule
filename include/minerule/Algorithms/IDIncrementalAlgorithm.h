@@ -5,8 +5,8 @@
 #include<set>
 
 #include "IncrementalAlgorithm.h"
-#include "Database/ItemType.h"
-#include "Result/QueryResult.h"
+#include "minerule/Database/ItemType.h"
+#include "minerule/Result/QueryResult.h"
 
 namespace minerule {
 

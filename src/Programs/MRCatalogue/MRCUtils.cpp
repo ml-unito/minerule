@@ -11,8 +11,8 @@
 
 #include "MRCUtils.h"
 #include "Printer.h"
-#include "Utils/FileUtils.h"
-#include "Utils/StringUtils.h"
+#include "minerule/Utils/FileUtils.h"
+#include "minerule/Utils/StringUtils.h"
 
 
 namespace mrc {

@@ -7,8 +7,8 @@
 #include <odbc++/resultset.h>
 #include <odbc++/resultsetmetadata.h>
 #include <odbc++/databasemetadata.h>
-#include "Utils/MineruleException.h"
-#include "Utils/Converter.h"
+#include "minerule/Utils/MineruleException.h"
+#include "minerule/Utils/Converter.h"
 
 
 namespace minerule {

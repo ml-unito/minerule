@@ -5,9 +5,9 @@
 #include <odbc++/resultset.h>
 #include <odbc++/resultsetmetadata.h>
 
-#include "Database/SourceRowAttribute.h"
-#include "Database/SourceRowColumnIds.h"
-#include "Database/SourceRowAttributeCollection.h"
+#include "minerule/Database/SourceRowAttribute.h"
+#include "minerule/Database/SourceRowColumnIds.h"
+#include "minerule/Database/SourceRowAttributeCollection.h"
 
 using namespace std;
 

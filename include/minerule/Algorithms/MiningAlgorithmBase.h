@@ -2,10 +2,10 @@
 #define __MININGALGORITHM_BASE_H__
 
 #include "AlgorithmsOptions.h"
-#include "Optimizer/OptimizedMinerule.h"
-#include "Utils/AlgorithmTypes.h"
-#include "Database/Connection.h"
-#include "Database/SourceTableRequirements.h"
+#include "minerule/Optimizer/OptimizedMinerule.h"
+#include "minerule/Utils/AlgorithmTypes.h"
+#include "minerule/Database/Connection.h"
+#include "minerule/Database/SourceTableRequirements.h"
 
 namespace minerule {
 

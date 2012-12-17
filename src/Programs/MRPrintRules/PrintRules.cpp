@@ -7,11 +7,11 @@
 #include <iostream>
 #include <assert.h>
 
-#include "Utils/MineruleOptions.h"
-#include "Optimizer/OptimizerCatalogue.h"
-#include "Database/SourceRowElement.h"
-#include "Utils/FileUtils.h"
-#include "Result/RuleFormatter.h"
+#include "minerule/Utils/MineruleOptions.h"
+#include "minerule/Optimizer/OptimizerCatalogue.h"
+#include "minerule/Database/SourceRowElement.h"
+#include "minerule/Utils/FileUtils.h"
+#include "minerule/Result/RuleFormatter.h"
 
 #include "Options.h"
 

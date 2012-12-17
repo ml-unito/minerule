@@ -1,5 +1,5 @@
 #include "GidRulesMatcher.h"
-#include "Result/RuleFormatter.h"
+#include "minerule/Result/RuleFormatter.h"
 
 namespace mrmatch {
 

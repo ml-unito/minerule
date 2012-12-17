@@ -1,9 +1,9 @@
 #ifndef __FSMINER_H__
 #define __FSMINER_H__
 
-#include "Algorithms/MiningAlgorithmBase.h"
-#include "Database/Connection.h"
-#include "Utils/AlgorithmTypes.h"
+#include "minerule/Algorithms/MiningAlgorithmBase.h"
+#include "minerule/Database/Connection.h"
+#include "minerule/Utils/AlgorithmTypes.h"
 
 namespace minerule {
 

@@ -8,7 +8,7 @@
 #include <string>
 #include <iostream>
 
-#include "Database/SourceRowElement.h"
+#include "minerule/Database/SourceRowElement.h"
 
 namespace minerule { 
   /**

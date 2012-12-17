@@ -1,9 +1,9 @@
 #include "classi.h"
-#include "Database/ItemType.h"
+#include "minerule/Database/ItemType.h"
 #include <iostream>
 
-#include "Optimizer/OptimizerCatalogue.h"
-#include "Database/Connection.h"
+#include "minerule/Optimizer/OptimizerCatalogue.h"
+#include "minerule/Database/Connection.h"
 
 
 

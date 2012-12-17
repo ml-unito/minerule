@@ -7,10 +7,10 @@
 #include<stdlib.h>
 #include <algorithm>
 
-#include "Utils/MineruleException.h"
-#include "Utils/MineruleErrors.h"
-#include "Utils/StringUtils.h"
-#include "Utils/MineruleLogs.h"
+#include "minerule/Utils/MineruleException.h"
+#include "minerule/Utils/MineruleErrors.h"
+#include "minerule/Utils/StringUtils.h"
+#include "minerule/Utils/MineruleLogs.h"
 
 using namespace minerule;
 

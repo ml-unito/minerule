@@ -7,7 +7,7 @@
  * TranslationManagerStandardSQL.
  */
 
-#include "Utils/common.h"
+#include "minerule/Utils/common.h"
 #include "translatedtable.h"
 #include <ext/hash_map>
 

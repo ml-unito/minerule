@@ -1,9 +1,9 @@
-#include "Algorithms/FSTreeSequence.h"
+#include "minerule/Algorithms/FSTreeSequence.h"
 
 #include <iostream>
-#include "Database/SourceRowColumnIds.h"
-#include "Database/SourceRow.h"
-#include "Utils/MineruleLogs.h"
+#include "minerule/Database/SourceRowColumnIds.h"
+#include "minerule/Database/SourceRow.h"
+#include "minerule/Utils/MineruleLogs.h"
 
 
 

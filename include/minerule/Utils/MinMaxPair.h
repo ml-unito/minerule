@@ -11,14 +11,14 @@ class MinMaxPair {
   int _min;
   int _max;
 
-  static int MIN(int m1, int m2) {
+  static int _MIN(int m1, int m2) {
     if(m1<m2)
       return m1;
     else 
       return m2;
   }
 
-  static int MAX(int m1, int m2) {
+  static int _MAX(int m1, int m2) {
     if(m1>m2)
       return m1;
     else
@@ -38,14 +38,14 @@ class MinMaxPair {
 
     // the minimal el, cannot be lower than constr.minimal so we set
     // it to the maximum of the two
-    _min = MAX( _min, constr._min );
+    _min = _MAX( _min, constr._min );
     // at the same time it cannot be higher than constr.maximal so we
     // set it to the minimum of the two
-    _min = MIN( _min, constr._max );
+    _min = _MIN( _min, constr._max );
     
     // An analogous reasoning lead to the following two lines of code
-    _max = MIN( _max, constr._max );
-    _max = MAX( _max, constr._min );
+    _max = _MIN( _max, constr._max );
+    _max = _MAX( _max, constr._min );
 
     assert( _min<=_max );
   }

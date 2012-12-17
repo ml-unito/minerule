@@ -1,7 +1,7 @@
 #include <iostream>
-#include "PredicateUtils/PredicateUtils.h"
-#include "Utils/MRLogger.h"
-#include "Utils/Converter.h"
+#include "minerule/PredicateUtils/PredicateUtils.h"
+#include "minerule/Utils/MRLogger.h"
+#include "minerule/Utils/Converter.h"
 
 using namespace std;
 using namespace minerule;

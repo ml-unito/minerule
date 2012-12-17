@@ -1,5 +1,5 @@
-#include "Algorithms/ResultCombinator.h"
-#include "Result/QueryResult.h"
+#include "minerule/Algorithms/ResultCombinator.h"
+#include "minerule/Result/QueryResult.h"
 
 namespace minerule {
 

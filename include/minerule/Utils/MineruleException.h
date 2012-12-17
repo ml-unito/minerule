@@ -4,7 +4,7 @@
 #include <exception>
 #include <sstream>
 #include <string>
-#include "Utils/MineruleErrors.h"
+#include "minerule/Utils/MineruleErrors.h"
 
 namespace minerule {
 

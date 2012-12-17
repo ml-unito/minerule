@@ -5,7 +5,7 @@
 #include<set>
 
 #include "IncrementalAlgorithm.h"
-#include "Database/ItemType.h"
+#include "minerule/Database/ItemType.h"
 #include "IncrAlgoClasses.h"
 
 namespace minerule {

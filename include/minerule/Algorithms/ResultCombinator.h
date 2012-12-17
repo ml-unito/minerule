@@ -1,7 +1,7 @@
 #ifndef __RESULT_COMBINATOR_H__
 #define __RESULT_COMBINATOR_H__
 
-#include "Algorithms/IncrementalAlgorithm.h"
+#include "minerule/Algorithms/IncrementalAlgorithm.h"
 
 namespace minerule {
 

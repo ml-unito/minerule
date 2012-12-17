@@ -1,8 +1,8 @@
-#include "Algorithms/DestrTree.h"
-#include "PredicateUtils/HeadBodyPredicatesSeparator.h"
-#include "Utils/MineruleOptions.h"
+#include "minerule/Algorithms/DestrTree.h"
+#include "minerule/PredicateUtils/HeadBodyPredicatesSeparator.h"
+#include "minerule/Utils/MineruleOptions.h"
 #include <iterator>
-#include "Database/PrepareDataUtils.h"
+#include "minerule/Database/PrepareDataUtils.h"
 #include <cmath>
 
 

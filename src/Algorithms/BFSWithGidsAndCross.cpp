@@ -8,15 +8,15 @@
 #include <algorithm>
 
 
-#include "Algorithms/AlgorithmsOptions.h"
-#include "Utils/MineruleOptions.h"
-#include "Database/MRResultSet.h"
-#include "Database/ItemType.h"
-#include "Utils/Converter.h"
-#include "Database/Connection.h"
-#include "Algorithms/BFSWithGidsAndCross.h"
-#include "PredicateUtils/HeadBodyPredicatesSeparator.h"
-#include "Database/PrepareDataUtils.h"
+#include "minerule/Algorithms/AlgorithmsOptions.h"
+#include "minerule/Utils/MineruleOptions.h"
+#include "minerule/Database/MRResultSet.h"
+#include "minerule/Database/ItemType.h"
+#include "minerule/Utils/Converter.h"
+#include "minerule/Database/Connection.h"
+#include "minerule/Algorithms/BFSWithGidsAndCross.h"
+#include "minerule/PredicateUtils/HeadBodyPredicatesSeparator.h"
+#include "minerule/Database/PrepareDataUtils.h"
 
 namespace minerule {
 

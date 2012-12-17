@@ -1,5 +1,5 @@
-#include "Database/PrepareDataUtils.h"  
-#include "Utils/MineruleOptions.h"
+#include "minerule/Database/PrepareDataUtils.h"  
+#include "minerule/Utils/MineruleOptions.h"
 #include <string>
 #include <memory>
 

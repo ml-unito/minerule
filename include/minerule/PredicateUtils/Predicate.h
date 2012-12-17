@@ -5,8 +5,8 @@
 #include <set>
 #include <string>
 
-#include "Parsers/ParsedMinerule.h"
-#include "PredicateUtils/VarSet.h"
+#include "minerule/Parsers/ParsedMinerule.h"
+#include "minerule/PredicateUtils/VarSet.h"
 
 namespace minerule {
   // forward declaration needed by SimplePredicate

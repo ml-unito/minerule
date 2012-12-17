@@ -1,4 +1,4 @@
-#include "Parsers/ParsedPredicate.h"
+#include "minerule/Parsers/ParsedPredicate.h"
 
 
 namespace minerule {

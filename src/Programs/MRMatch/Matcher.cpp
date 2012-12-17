@@ -1,7 +1,7 @@
 #include "Matcher.h"
 #include "RuleGidsMatcher.h"
 #include "GidRulesMatcher.h"
-#include "Utils/MineruleErrors.h"
+#include "minerule/Utils/MineruleErrors.h"
 
 namespace mrmatch {
 	Matcher* Matcher::newMatcher(MatchKind kind) {

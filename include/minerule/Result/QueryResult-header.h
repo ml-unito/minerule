@@ -1,10 +1,10 @@
 #ifndef __QUERY_RESULT_HEADER_H__
 #define __QUERY_RESULT_HEADER_H__
 
-#include "Database/ItemType.h"
-#include "Parsers/ParsedMinerule.h"
+#include "minerule/Database/ItemType.h"
+#include "minerule/Parsers/ParsedMinerule.h"
 #include "odbc++/preparedstatement.h"
-#include "Result/Rule.h"
+#include "minerule/Result/Rule.h"
 
 namespace minerule {
 

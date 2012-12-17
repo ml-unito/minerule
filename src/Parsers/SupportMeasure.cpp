@@ -1,6 +1,6 @@
-#include <Utils/MineruleOptions.h>
-#include "Parsers/SupportMeasure.h"
-#include "Parsers/EvaluationMeasure.h"
+#include "minerule/Utils/MineruleOptions.h"
+#include "minerule/Parsers/SupportMeasure.h"
+#include "minerule/Parsers/EvaluationMeasure.h"
 
 
 

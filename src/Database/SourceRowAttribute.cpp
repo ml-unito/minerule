@@ -1,6 +1,6 @@
-#include "Database/SourceRowAttribute.h"
+#include "minerule/Database/SourceRowAttribute.h"
 #include <sstream>
-#include "Utils/Converter.h"
+#include "minerule/Utils/Converter.h"
 
 #include <odbc++/resultsetmetadata.h>
 

@@ -3,11 +3,11 @@
 
 #ifndef INCRALGOCLASSI_H
 #define INCRALGOCLASSI_H
-#include "Database/ItemType.h"
+#include "minerule/Database/ItemType.h"
 #include <vector>
 #include <iostream>
 #include <map>
-#include "Database/Connection.h"
+#include "minerule/Database/Connection.h"
 
 namespace minerule {
 

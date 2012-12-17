@@ -5,10 +5,10 @@
 #include <odbc++/preparedstatement.h>
 #include <odbc++/connection.h>
 
-#include "Database/SourceRow.h"
-#include "Parsers/ParsedMinerule.h"
-#include "Database/MRResultSet.h"
-#include "Utils/MineruleOptions.h"
+#include "minerule/Database/SourceRow.h"
+#include "minerule/Parsers/ParsedMinerule.h"
+#include "minerule/Database/MRResultSet.h"
+#include "minerule/Utils/MineruleOptions.h"
 
 namespace minerule {
 

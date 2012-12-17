@@ -5,8 +5,8 @@
 #include <list>
 #include <string>
 #include <iostream>
-#include "Database/ItemType.h"
-#include "Database/SourceRowColumnIds.h"
+#include "minerule/Database/ItemType.h"
+#include "minerule/Database/SourceRowColumnIds.h"
 
 #define PRESENT 1
 #define ABSENT 0

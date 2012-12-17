@@ -1,4 +1,4 @@
-#include "Utils/Bitstring.h"
+#include "minerule/Utils/Bitstring.h"
 
 namespace minerule {
 

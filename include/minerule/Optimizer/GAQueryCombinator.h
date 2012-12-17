@@ -1,7 +1,7 @@
 #include <iostream>
 #include <ga/GA1DBinStrGenome.h>
 #include <ga/GASimpleGA.h>
-#include "PredicateUtils/Predicate.h"
+#include "minerule/PredicateUtils/Predicate.h"
 
  /**
    * This module provides an algorithm that searches for a combination

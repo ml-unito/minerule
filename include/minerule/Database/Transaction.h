@@ -1,7 +1,7 @@
 #ifndef ITEMSETLOADER_H_J9K5VPNF
 #define ITEMSETLOADER_H_J9K5VPNF
 
-#include "Database/SourceTable.h"
+#include "minerule/Database/SourceTable.h"
 
 namespace minerule {
 	// --------------------------------------------------------------------------------

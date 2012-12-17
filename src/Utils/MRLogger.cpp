@@ -1,7 +1,7 @@
 #include <cassert>
 
-#include "Utils/MRLogger.h"
-#include "Utils/StringUtils.h"
+#include "minerule/Utils/MRLogger.h"
+#include "minerule/Utils/StringUtils.h"
 
 namespace minerule {
 

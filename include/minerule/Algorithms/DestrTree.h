@@ -5,9 +5,9 @@
 #include<set>
 
 #include "IncrementalAlgorithm.h"
-#include "Database/ItemType.h"
-#include "Algorithms/IncrAlgoClasses.h"
-#include "Database/MIndex.h"
+#include "minerule/Database/ItemType.h"
+#include "minerule/Algorithms/IncrAlgoClasses.h"
+#include "minerule/Database/MIndex.h"
 
 namespace minerule {
 

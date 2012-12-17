@@ -3,9 +3,9 @@
 
 #include <string.h>
 #include <odbc++/types.h>
-#include "Utils/MineruleException.h"
-#include "Utils/SQLUtils.h"
-#include "Parsers/ParsedMinerule.h"
+#include "minerule/Utils/MineruleException.h"
+#include "minerule/Utils/SQLUtils.h"
+#include "minerule/Parsers/ParsedMinerule.h"
 
 
 namespace minerule {

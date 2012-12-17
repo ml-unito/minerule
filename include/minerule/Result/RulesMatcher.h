@@ -1,8 +1,8 @@
 #ifndef RULESMATCHER_H_2OI7RAD0
 #define RULESMATCHER_H_2OI7RAD0
 
-#include "Database/Transaction.h"
-#include "Result/Rule.h"
+#include "minerule/Database/Transaction.h"
+#include "minerule/Result/Rule.h"
 
 namespace minerule {
 	class RulesMatcher {

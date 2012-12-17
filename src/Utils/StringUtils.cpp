@@ -1,4 +1,4 @@
-#include "Utils/StringUtils.h"
+#include "minerule/Utils/StringUtils.h"
 
 namespace minerule {
 	bool StringUtils::enableColors = true;

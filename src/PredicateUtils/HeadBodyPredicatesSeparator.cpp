@@ -1,5 +1,5 @@
-#include "PredicateUtils/HeadBodyPredicatesSeparator.h"
-#include "Utils/SQLUtils.h"
+#include "minerule/PredicateUtils/HeadBodyPredicatesSeparator.h"
+#include "minerule/Utils/SQLUtils.h"
 
 namespace minerule {
 

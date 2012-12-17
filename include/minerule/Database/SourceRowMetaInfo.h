@@ -6,8 +6,8 @@
 #include <vector>
 #include <odbc++/resultset.h>
 
-#include "Database/SourceRowColumnIds.h"
-#include "Parsers/ParsedMinerule.h"
+#include "minerule/Database/SourceRowColumnIds.h"
+#include "minerule/Parsers/ParsedMinerule.h"
 
 
 namespace minerule {

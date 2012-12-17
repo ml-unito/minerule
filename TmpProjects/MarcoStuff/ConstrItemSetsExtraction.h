@@ -1,10 +1,10 @@
 #ifndef __CONSTRITEMSETSEXTRACTION_H
 #define __CONSTRiTEMSETSEXTRACTION_H
 
-#include "Algorithms/MiningAlgorithmBase.h"
-#include "Database/Connection.h"
+#include "minerule/Algorithms/MiningAlgorithmBase.h"
+#include "minerule/Database/Connection.h"
 //#include "bodymap.h"
-#include "Algorithms/Bodymap.h"
+#include "minerule/Algorithms/Bodymap.h"
 
 namespace minerule {
 

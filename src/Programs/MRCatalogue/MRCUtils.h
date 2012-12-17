@@ -2,7 +2,7 @@
 #define MRCATALOGUE_H_89D0JOQH
 
 #include "Options.h"
-#include "Utils/MineruleOptions.h"
+#include "minerule/Utils/MineruleOptions.h"
 
 namespace mrc { // minerule catalogue
   

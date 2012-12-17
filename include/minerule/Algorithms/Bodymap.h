@@ -10,14 +10,14 @@
 #include <iterator>
 #include <algorithm>
 
-#include "Algorithms/AlgorithmsOptions.h"
-#include "Utils/MineruleOptions.h"
-#include "Database/MRResultSet.h"
-#include "Database/ItemType.h"
-#include "Utils/Converter.h"
-#include "Database/Connection.h"
-#include "Database/Transaction.h"
-#include "Utils/Bitstring.h"
+#include "minerule/Algorithms/AlgorithmsOptions.h"
+#include "minerule/Utils/MineruleOptions.h"
+#include "minerule/Database/MRResultSet.h"
+#include "minerule/Database/ItemType.h"
+#include "minerule/Utils/Converter.h"
+#include "minerule/Database/Connection.h"
+#include "minerule/Database/Transaction.h"
+#include "minerule/Utils/Bitstring.h"
 
 namespace minerule {
 

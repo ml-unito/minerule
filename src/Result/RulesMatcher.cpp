@@ -1,4 +1,4 @@
-#include "Result/RulesMatcher.h"
+#include "minerule/Result/RulesMatcher.h"
 
 namespace minerule {	
 	bool RulesMatcher::match( const Rule& r, const RuleTransaction<RuleSetType>& t ) {

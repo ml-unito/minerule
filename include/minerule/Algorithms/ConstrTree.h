@@ -4,10 +4,10 @@
 #include<vector>
 #include<set>
 
-#include "Algorithms/IncrementalAlgorithm.h"
-#include "Database/ItemType.h"
-#include "Algorithms/IncrAlgoClasses.h"
-#include "Database/MIndex.h"
+#include "minerule/Algorithms/IncrementalAlgorithm.h"
+#include "minerule/Database/ItemType.h"
+#include "minerule/Algorithms/IncrAlgoClasses.h"
+#include "minerule/Database/MIndex.h"
 
 namespace minerule {
 

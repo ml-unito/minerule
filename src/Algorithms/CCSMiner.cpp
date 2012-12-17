@@ -6,9 +6,9 @@
 #include <assert.h>
 #include <set>
 #include <time.h>
-#include "Algorithms/BitVector.h"
-#include "Algorithms/CCSMiner.h"
-#include "Database/PrepareDataUtils.h"
+#include "minerule/Algorithms/BitVector.h"
+#include "minerule/Algorithms/CCSMiner.h"
+#include "minerule/Database/PrepareDataUtils.h"
 
 namespace minerule {
 

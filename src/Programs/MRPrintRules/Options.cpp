@@ -2,9 +2,9 @@
 #include <getopt.h>
 #include <iostream>
 
-#include "Utils/StringUtils.h"
-#include "Utils/Converter.h"
-#include "Utils/FileUtils.h"
+#include "minerule/Utils/StringUtils.h"
+#include "minerule/Utils/Converter.h"
+#include "minerule/Utils/FileUtils.h"
 
 namespace mrprint {
 	

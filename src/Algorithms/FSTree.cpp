@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
-#include "Algorithms/FSTree.h"
+#include "minerule/Algorithms/FSTree.h"
 
 
 

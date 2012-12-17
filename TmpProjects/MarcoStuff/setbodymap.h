@@ -1,8 +1,8 @@
 #ifndef __BFSWITHGIDSNOCROSS_H__
 #define __BFSWITHGIDSNOCROSS_H__
 
-#include "Algorithms/MiningAlgorithmBase.h"
-#include "Database/Connection.h"
+#include "minerule/Algorithms/MiningAlgorithmBase.h"
+#include "minerule/Database/Connection.h"
 
   class Transaction : public std::set<ItemType> {
     SourceRowColumnIds srd;

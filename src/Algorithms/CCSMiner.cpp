@@ -63,10 +63,10 @@ namespace minerule {
 	 std::vector<CCSMSequence*>* k_2=k2;
 	 std::vector<CCSMSequence*>* k_1=NULL;
 
-		list<CCSMSequence*> suff;
-		list<CCSMSequence*> pre;
-		list<CCSMSequence*>::iterator pre_it;
-		list<CCSMSequence*>::iterator suf_it;
+		std::list<CCSMSequence*> suff;
+		std::list<CCSMSequence*> pre;
+		std::list<CCSMSequence*>::iterator pre_it;
+		std::list<CCSMSequence*>::iterator suf_it;
 	 std::vector<CCSMSequence*>* da_cancellare = new std::vector<CCSMSequence*>() ;
 		bool canContinue=true;
 		while (seq_length!=k&&canContinue){			
@@ -222,7 +222,7 @@ namespace minerule {
 
 				}
 			 std::vector<CCSMSequence*>::iterator del, it_kk;
-				list<CCSMSequence*>::iterator del1;
+				std::list<CCSMSequence*>::iterator del1;
 				for (del = k_1->begin();del!=k_1->end();++del)
 					delete (*del);
 	//	std::cout<<"fuori dal ciclo"<<std::endl;

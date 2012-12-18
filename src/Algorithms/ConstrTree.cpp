@@ -31,34 +31,34 @@ namespace minerule {
 
 
 
-  void ConstrTree::adjustSuppMIndex(){
-
-    while( mb2->current() != mb2->end() ) {
-     std::string g=mb2->getCurrentGID();
-      ItemSet* body=new ItemSet();
-      //cout<<"in adjustSupp:"<<std::endl;
-      for(; mb2->current() != mb2->end() && mb2->getCurrentGID()==g;(*mb2)++){
-	ItemType gid(*SourceRowElement::deserializeElementFromString("n "+mb2->getCurrentGID()));
-	ItemType item(*SourceRowElement::deserializeElementFromString("n "+mb2->getCurrentItem()));
-	//cout<<item.asString()<<" "<<gid.asString()<<std::endl;
-	body->push_back(item);
-      }
-    
-
-      if (g!=mh2->getCurrentGID())
-	this->root->findBodiesInTree(body);
-      else{
-	ItemSet* head=new ItemSet();
-	for(;mh2->current() != mh2->end() && mh2->getCurrentGID()==g; (*mh2)++){
-	  ItemType item(*SourceRowElement::deserializeElementFromString("n "+mh2->getCurrentItem()));
-	  head->push_back(item);
-	}
-	this->root->findRulesInTree(body,head);
-	delete head;
-      }
-      delete body;
-    }
-  }
+	//   void ConstrTree::adjustSuppMIndex(){
+	// 
+	//     while( mb2->current() != mb2->end() ) {
+	//      std::string g=mb2->getCurrentGID();
+	//       ItemSet* body=new ItemSet();
+	//       //cout<<"in adjustSupp:"<<std::endl;
+	//       for(; mb2->current() != mb2->end() && mb2->getCurrentGID()==g;(*mb2)++){
+	// ItemType gid(*SourceRowElement::deserializeElementFromString("n "+mb2->getCurrentGID()));
+	// ItemType item(*SourceRowElement::deserializeElementFromString("n "+mb2->getCurrentItem()));
+	// //cout<<item.asString()<<" "<<gid.asString()<<std::endl;
+	// body->push_back(item);
+	//       }
+	//     
+	// 
+	//       if (g!=mh2->getCurrentGID())
+	// this->root->findBodiesInTree(body);
+	//       else{
+	// ItemSet* head=new ItemSet();
+	// for(;mh2->current() != mh2->end() && mh2->getCurrentGID()==g; (*mh2)++){
+	//   ItemType item(*SourceRowElement::deserializeElementFromString("n "+mh2->getCurrentItem()));
+	//   head->push_back(item);
+	// }
+	// this->root->findRulesInTree(body,head);
+	// delete head;
+	//       }
+	//       delete body;
+	//     }
+	//   }
 
   void ConstrTree::adjustSuppRSet(){
     ItemType gid;
@@ -117,16 +117,16 @@ namespace minerule {
        MineruleOptions::getSharedOptions().getODBC().getODBCConnection());
     connection.createResultTables(SourceRowMetaInfo(connection.getODBCConnection(), minerule->getParsedMinerule()));
 
-    if (mb2!=NULL  &&  mh2!=NULL) {
-      adjustSuppMIndex();
-      std::vector<ItemType> body;
-      getRoot()->extractRules(body,
-			      minerule->getParsedMinerule().sup,
-			      minerule->getParsedMinerule().conf,
-			      ngroups,
-			      &connection);
-    }
-    else {
+    // if (mb2!=NULL  &&  mh2!=NULL) {
+    //    adjustSuppMIndex();
+    //    std::vector<ItemType> body;
+    //    getRoot()->extractRules(body,
+    // 			      minerule->getParsedMinerule().sup,
+    // 			      minerule->getParsedMinerule().conf,
+    // 			      ngroups,
+    // 			      &connection);
+    //  }
+    //  else {
       if (rb2!=NULL  &&  rh2!=NULL) {
 	MRLog() << "Evaluating constraints and adjusting the support counts in the data structure..." << std::endl;
 	adjustSuppRSet();
@@ -141,7 +141,7 @@ namespace minerule {
       } else 
 	throw MineruleException (MR_ERROR_INTERNAL,
 				 " cannot create rules ");
-    }
+    // }
   }
 
 

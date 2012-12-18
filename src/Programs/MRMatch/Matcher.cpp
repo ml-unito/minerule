@@ -3,6 +3,8 @@
 #include "GidRulesMatcher.h"
 #include "minerule/Utils/MineruleErrors.h"
 
+using namespace minerule;
+
 namespace mrmatch {
 	Matcher* Matcher::newMatcher(MatchKind kind) {
 		switch(kind) {

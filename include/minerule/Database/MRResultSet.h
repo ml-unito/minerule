@@ -3,12 +3,12 @@
 
 #include <odbc++/preparedstatement.h>
 #include <odbc++/resultset.h>
-#include "MIndex.h"
+// #include "MIndex.h"
 
 class MRResultSetIterator {
 	odbc::PreparedStatement * query;
 	odbc::ResultSet* rs;
-	MIndexIterator*     mi;
+	// MIndexIterator*     mi;
 
 	void setParameters(const std::string& values) {
 		int i = 1;
@@ -25,32 +25,32 @@ class MRResultSetIterator {
 	}
   
 public:
-	MRResultSetIterator(odbc::PreparedStatement * q, MIndexIterator* miningIndex = NULL) : query(q), rs(NULL), mi(miningIndex) {
-		if (mi == NULL) rs = query->executeQuery();
+	MRResultSetIterator(odbc::PreparedStatement * q/*, MIndexIterator* miningIndex = NULL*/) : query(q), rs(NULL)/*, mi(miningIndex)*/ {
+		/*if (mi == NULL)*/ rs = query->executeQuery();
 	}
 
 	bool next() {
 		bool ok = false;
-		if( mi==NULL )
+		// if( mi==NULL )
 			return rs->next();
-		else if (rs == NULL || !(ok = rs->next())) {
-			while (mi->current() != mi->end() && !ok) {
-				if (rs != NULL) delete rs;
-				setParameters(*(mi->current()));
-				rs = query->executeQuery();
-				(*mi)++;
-				if( (ok = rs->next()) ) break;
-			} 
-		}
+		// else if (rs == NULL || !(ok = rs->next())) {
+		// 	while (mi->current() != mi->end() && !ok) {
+		// 		if (rs != NULL) delete rs;
+		// 		setParameters(*(mi->current()));
+		// 		rs = query->executeQuery();
+		// 		(*mi)++;
+		// 		if( (ok = rs->next()) ) break;
+		// 	} 
+		// }
 		return ok;
 	}
 
 	void reset() {
 		if( rs!=NULL ) { delete rs; rs = NULL; }
-		if( mi==NULL ) 
+		// if( mi==NULL ) 
 			rs=query->executeQuery();
-		else
-			mi->reset();
+		// else
+		// 	mi->reset();
 	}
 
 	odbc::ResultSet* getResultSet() {

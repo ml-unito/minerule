@@ -4,6 +4,8 @@ cmake_minimum_required(VERSION 2.8)
 LIST(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/Modules)
 LIST(APPEND CMAKE_PREFIX_PATH ${CMAKE_SOURCE_DIR}/cmake/Modules)
 
+set(CMAKE_INCLUDE_DIRECTORIES_PROJECT_BEFORE ON)
+
 # Dependencies
 find_package(LIBODBC++ REQUIRED)
 include_directories(${LIBODBC++_INCLUDE_DIRS})
@@ -14,7 +16,7 @@ include_directories(${LIBGA_INCLUDE_DIRS})
 find_package(BISON)
 find_package(FLEX)
 
-include_directories(${CMAKE_SOURCE_DIR}/../include ${CMAKE_SOURCE_DIR}/../ExtLibs/libgist/include)
+include_directories(${CMAKE_SOURCE_DIR}/../include)
 add_definitions(-DMR_VERSION=\"2.0a\")
 
 

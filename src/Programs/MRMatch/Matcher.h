@@ -20,19 +20,19 @@ namespace mrmatch {
 		virtual minerule::Rule& addRule() = 0;
 	
 	// Match the given source table with the current set of rules
-		virtual void match(SourceTable& st) {
+		virtual void match(minerule::SourceTable& st) {
 			st.usesCrossProduct() ? matchWithCrossProduct(st) : matchWithoutCrossProduct(st);
 		}
 		
-		virtual void matchWithCrossProduct(SourceTable& st);
-		virtual void matchWithoutCrossProduct(SourceTable& st);		
+		virtual void matchWithCrossProduct(minerule::SourceTable& st);
+		virtual void matchWithoutCrossProduct(minerule::SourceTable& st);		
 		
 	// outputs the results
 		virtual void printMatches() const = 0;
 	
 	protected:
-		virtual void matchItemTransaction(const minerule::ItemType& gid, const ItemTransaction<RulesMatcher::ItemSetType>& bodies,const ItemTransaction<RulesMatcher::ItemSetType>& heads) = 0;
-		virtual void matchRuleTransaction(const minerule::ItemType& gid, const RuleTransaction<RulesMatcher::RuleSetType>& transaction) = 0;
+		virtual void matchItemTransaction(const minerule::ItemType& gid, const minerule::ItemTransaction<minerule::RulesMatcher::ItemSetType>& bodies,const minerule::ItemTransaction<minerule::RulesMatcher::ItemSetType>& heads) = 0;
+		virtual void matchRuleTransaction(const minerule::ItemType& gid, const minerule::RuleTransaction<minerule::RulesMatcher::RuleSetType>& transaction) = 0;
 	};
 
 }

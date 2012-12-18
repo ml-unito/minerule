@@ -3,6 +3,8 @@
 #include "minerule/Result/RulesMatcher.h"
 #include "minerule/Result/RuleFormatter.h"
 
+using namespace minerule;
+
 namespace mrmatch {
 	
 	// create a new empty rule and returns it (so that it can be intialized)

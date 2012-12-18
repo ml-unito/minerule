@@ -7,9 +7,9 @@ namespace mrmatch {
 	
 	class GidRulesMatcher : public Matcher {
 	private:
-		typedef std::vector< Rule > RuleVector;
-		typedef std::vector< Rule* > RulePtrVector;
-		typedef std::pair< ItemType, RulePtrVector > GidRules;
+		typedef std::vector< minerule::Rule > RuleVector;
+		typedef std::vector< minerule::Rule* > RulePtrVector;
+		typedef std::pair< minerule::ItemType, RulePtrVector > GidRules;
 		typedef std::vector< GidRules > GidRulesVector;
 		
 		RuleVector rules;								// stores all known rules
@@ -17,15 +17,15 @@ namespace mrmatch {
 		
 
 	protected:
-		virtual void matchItemTransaction(const minerule::ItemType& gid, const ItemTransaction<RulesMatcher::ItemSetType>& bodies,const ItemTransaction<RulesMatcher::ItemSetType>& heads);
-		virtual void matchRuleTransaction(const minerule::ItemType& gid, const RuleTransaction<RulesMatcher::RuleSetType>& transaction);
+		virtual void matchItemTransaction(const minerule::ItemType& gid, const minerule::ItemTransaction<minerule::RulesMatcher::ItemSetType>& bodies,const minerule::ItemTransaction<minerule::RulesMatcher::ItemSetType>& heads);
+		virtual void matchRuleTransaction(const minerule::ItemType& gid, const minerule::RuleTransaction<minerule::RulesMatcher::RuleSetType>& transaction);
 		
 	public:
 		GidRulesMatcher() {};
 		virtual ~GidRulesMatcher() {};
 		
 		// create a new empty rule and returns it (so that it can be intialized)
-		virtual Rule& addRule();
+		virtual minerule::Rule& addRule();
 		
 		// outputs the results
 		virtual void printMatches() const;		

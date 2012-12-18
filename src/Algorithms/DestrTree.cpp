@@ -27,64 +27,64 @@ namespace minerule {
 	}
 
 
-	void DestrTree::adjustSuppMIndex(){
-     //    MRLog() << "findRulesInTree da adjustSuppMIndex()..."<<std::endl;
-		bool notend=1;
-    //body e head servono per capire quando devo andare avanti nella rispettiva lista oppure no
-		bool newbody=1;
-		bool newhead=1;
-		ItemSet* b1=new ItemSet();
-		ItemSet* b1nb2=new ItemSet();
-		ItemSet* h1=new ItemSet();
-		ItemSet* h1nh2=new ItemSet();
-		while( notend ) {
-			std::string gb,gh;
-			if (newbody){delete b1; delete b1nb2;
-				ItemSet* b1=new ItemSet();
-				ItemSet* b1nb2=new ItemSet();
-				gb=mb1->getCurrentGID();
-				for(; mb1->current() != mb1->end() && mb1->getCurrentGID()==gb;(*mb1)++){
-					ItemType item(*SourceRowElement::deserializeElementFromString("n "+mb1->getCurrentItem()));
-					b1->push_back(item);
-				}
-				for(; mb1nb2->current() != mb1nb2->end() && mb1->getCurrentGID()==gb;(*mb1nb2)++){
-					ItemType item(*SourceRowElement::deserializeElementFromString("n "+mb1->getCurrentItem()));
-					b1nb2->push_back(item);
-				}
-			}
-			if (newhead){delete h1; delete h1nh2;
-				ItemSet* h1=new ItemSet();
-				ItemSet* h1nh2=new ItemSet();
-				gh=mb1->getCurrentGID();
-				for(; mh1->current() != mh1->end() && mh1->getCurrentGID()==gh;(*mh1)++){
-					ItemType item(*SourceRowElement::deserializeElementFromString("n "+mh1->getCurrentItem()));
-					h1->push_back(item);
-				}
-				for(; mh1nh2->current() != mh1nh2->end() && mh1->getCurrentGID()==gh;(*mh1nh2)++){
-					ItemType item(*SourceRowElement::deserializeElementFromString("n "+mh1->getCurrentItem()));
-					h1nh2->push_back(item);
-				}
-			}
-
-			if (gb>gh) {
-
-				root->findRulesInTree(NULL, NULL, h1, h1nh2);
-				newbody=0;newhead=1;
-			}else if (gb<gh) {
-				root->findRulesInTree(b1, b1nb2, NULL, NULL);
-				newbody=1;newhead=0;
-
-			}
-			else if (gb==gh) {
-
-				root->findRulesInTree(b1, b1nb2, h1, h1nh2);
-				newbody=1;newhead=1;
-
-			}
-
-			if (mb1->current()==mb1->end() && mh1->current()==mh1->end()) notend=0;
-		}
-	}
+	// void DestrTree::adjustSuppMIndex(){
+	//      //    MRLog() << "findRulesInTree da adjustSuppMIndex()..."<<std::endl;
+	// 	bool notend=1;
+	//     //body e head servono per capire quando devo andare avanti nella rispettiva lista oppure no
+	// 	bool newbody=1;
+	// 	bool newhead=1;
+	// 	ItemSet* b1=new ItemSet();
+	// 	ItemSet* b1nb2=new ItemSet();
+	// 	ItemSet* h1=new ItemSet();
+	// 	ItemSet* h1nh2=new ItemSet();
+	// 	while( notend ) {
+	// 		std::string gb,gh;
+	// 		if (newbody){delete b1; delete b1nb2;
+	// 			ItemSet* b1=new ItemSet();
+	// 			ItemSet* b1nb2=new ItemSet();
+	// 			gb=mb1->getCurrentGID();
+	// 			for(; mb1->current() != mb1->end() && mb1->getCurrentGID()==gb;(*mb1)++){
+	// 				ItemType item(*SourceRowElement::deserializeElementFromString("n "+mb1->getCurrentItem()));
+	// 				b1->push_back(item);
+	// 			}
+	// 			for(; mb1nb2->current() != mb1nb2->end() && mb1->getCurrentGID()==gb;(*mb1nb2)++){
+	// 				ItemType item(*SourceRowElement::deserializeElementFromString("n "+mb1->getCurrentItem()));
+	// 				b1nb2->push_back(item);
+	// 			}
+	// 		}
+	// 		if (newhead){delete h1; delete h1nh2;
+	// 			ItemSet* h1=new ItemSet();
+	// 			ItemSet* h1nh2=new ItemSet();
+	// 			gh=mb1->getCurrentGID();
+	// 			for(; mh1->current() != mh1->end() && mh1->getCurrentGID()==gh;(*mh1)++){
+	// 				ItemType item(*SourceRowElement::deserializeElementFromString("n "+mh1->getCurrentItem()));
+	// 				h1->push_back(item);
+	// 			}
+	// 			for(; mh1nh2->current() != mh1nh2->end() && mh1->getCurrentGID()==gh;(*mh1nh2)++){
+	// 				ItemType item(*SourceRowElement::deserializeElementFromString("n "+mh1->getCurrentItem()));
+	// 				h1nh2->push_back(item);
+	// 			}
+	// 		}
+	// 
+	// 		if (gb>gh) {
+	// 
+	// 			root->findRulesInTree(NULL, NULL, h1, h1nh2);
+	// 			newbody=0;newhead=1;
+	// 		}else if (gb<gh) {
+	// 			root->findRulesInTree(b1, b1nb2, NULL, NULL);
+	// 			newbody=1;newhead=0;
+	// 
+	// 		}
+	// 		else if (gb==gh) {
+	// 
+	// 			root->findRulesInTree(b1, b1nb2, h1, h1nh2);
+	// 			newbody=1;newhead=1;
+	// 
+	// 		}
+	// 
+	// 		if (mb1->current()==mb1->end() && mh1->current()==mh1->end()) notend=0;
+	// 	}
+	// }
 
 
 
@@ -184,12 +184,7 @@ namespace minerule {
 		connection.useODBCConnection( MineruleOptions::getSharedOptions().getODBC().getODBCConnection());
 		connection.createResultTables(SourceRowMetaInfo(connection.getODBCConnection(), minerule->getParsedMinerule()));
 
-		if (mb1!=NULL  &&  mh1!=NULL) {
-			adjustSuppMIndex();
-			std::vector<ItemType> body;
-			getRoot()->extractRules(body, minerule->getParsedMinerule().sup, minerule->getParsedMinerule().conf, ngroups, &connection);
-		} else {
-			if (rb1!=NULL  &&  rh1!=NULL) {
+		if (rb1!=NULL  &&  rh1!=NULL) {
 				MRLog() << "Adjusting support..." << std::endl;
 				adjustSuppRSet();
 				MRLog() << "Done!" << std::endl;
@@ -198,8 +193,7 @@ namespace minerule {
 				MRLog() << "Extracting rules..." << std::endl;
 				getRoot()->extractRules(body, minerule->getParsedMinerule().sup, minerule->getParsedMinerule().conf, ngroups, &connection);
 				MRLog() << "Done!" << std::endl;
-			} else throw MineruleException (MR_ERROR_INTERNAL, " cannot create rules ");
-		}
+		} else throw MineruleException (MR_ERROR_INTERNAL, " cannot create rules ");
 	}
 
 

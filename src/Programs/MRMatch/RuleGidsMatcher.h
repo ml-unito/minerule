@@ -14,8 +14,8 @@ namespace mrmatch {
 		RuleGidsVector _ruleGidsVector;
 		
 	protected:
-		virtual void matchItemTransaction(const minerule::ItemType& gid, const ItemTransaction<RulesMatcher::ItemSetType>& bodies,const ItemTransaction<RulesMatcher::ItemSetType>& heads);
-		virtual void matchRuleTransaction(const minerule::ItemType& gid, const RuleTransaction<RulesMatcher::RuleSetType>& transaction);
+		virtual void matchItemTransaction(const minerule::ItemType& gid, const minerule::ItemTransaction<minerule::RulesMatcher::ItemSetType>& bodies,const minerule::ItemTransaction<minerule::RulesMatcher::ItemSetType>& heads);
+		virtual void matchRuleTransaction(const minerule::ItemType& gid, const minerule::RuleTransaction<minerule::RulesMatcher::RuleSetType>& transaction);
 
 		std::string formatGids( const Gids& gids ) const;	
 		
@@ -24,7 +24,7 @@ namespace mrmatch {
 		virtual ~RuleGidsMatcher() {}
 
 	// create a new empty rule and returns it (so that it can be intialized)
-		virtual Rule& addRule();
+		virtual minerule::Rule& addRule();
 		
 	// outputs the results
 		virtual void printMatches() const;

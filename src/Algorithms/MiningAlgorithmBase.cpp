@@ -4,6 +4,7 @@
 #include "minerule/Algorithms/Care.h"
 #include "minerule/Algorithms/ConstrItemSetsExtraction.h"
 
+namespace minerule {
 
 MiningAlgorithmBase*
 MiningAlgorithmBase::algorithmForType(AlgorithmTypes t, const OptimizedMinerule& mr) throw(MineruleException) {
@@ -20,4 +21,6 @@ MiningAlgorithmBase::algorithmForType(AlgorithmTypes t, const OptimizedMinerule&
     return new ConstrItemSetsExtraction(mr);
   default: throw MineruleException( MR_ERROR_INTERNAL, "Requested unknown mining algorithm type");
   }
+}
+
 }

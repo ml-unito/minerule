@@ -23,8 +23,8 @@ namespace minerule {
 		class BodyMapElement : public MapElement {
 		public:
     //pair<iterator, bool> insert(const value_type& x) { return std::set<ItemType>::insert(x); }
-			pair<iterator, bool> insert(const value_type& x) { return std::set<int>::insert(x); }
-			map<ItemType, MapElement > heads;
+			std::pair<iterator, bool> insert(const value_type& x) { return std::set<int>::insert(x); }
+			std::map<ItemType, MapElement > heads;
 			void insert(const ItemType& item, MapElement& gidList, bool secondPass = false);
 			bool pruneMap (float threshold);
 			bool updateCount ();
@@ -33,14 +33,14 @@ namespace minerule {
 		class NewRule {
 		public:
 			std::vector<ItemType> body, head;
-			map<ItemType, BodyMapElement>::iterator lastBody;
-			map<ItemType, MapElement>::iterator lastHead;
+			std::map<ItemType, BodyMapElement>::iterator lastBody;
+			std::map<ItemType, MapElement>::iterator lastHead;
 			double conf;
 
 			GidList gids;
 			int bodySupp;
 
-			NewRule (map<ItemType, BodyMapElement>::iterator b, GidList& g) : lastBody(b), gids(g) {
+			NewRule (std::map<ItemType, BodyMapElement>::iterator b, GidList& g) : lastBody(b), gids(g) {
 				body.push_back(b->first);
 				lastHead = b->second.heads.begin();
 			}
@@ -48,7 +48,7 @@ namespace minerule {
 				body.push_back(b->first);
 				lastHead = b->second.heads.begin();
 			}
-			NewRule (map<ItemType, BodyMapElement>::iterator b, std::map<ItemType, MapElement>::iterator h, GidList& g, int bs) : lastBody(b), lastHead(h), gids(g), bodySupp(bs) {
+			NewRule (std::map<ItemType, BodyMapElement>::iterator b, std::map<ItemType, MapElement>::iterator h, GidList& g, int bs) : lastBody(b), lastHead(h), gids(g), bodySupp(bs) {
 				body.push_back(b->first);
 				head.push_back(h->first);
 			}

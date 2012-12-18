@@ -36,7 +36,7 @@ namespace minerule {
 		return result;
 	}
 
-	string
+	std::string
 	PrepareDataUtils::buildAttrListAlias( const ParsedMinerule::AttrVector& attrs,	const std::string& alias, bool addColAlias)  {
 		#define ADDCOLALIAS (addColAlias?(alias+*it):"")
 
@@ -207,7 +207,7 @@ namespace minerule {
 		state->execute("DROP TABLE IF EXISTS "+tname);
 	}
 
-	string
+	std::string
 	PrepareDataUtils::createSourceTable() const {
 		std::string aliasA, aliasB;
 		std::string queryText;

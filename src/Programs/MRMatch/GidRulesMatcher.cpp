@@ -1,6 +1,8 @@
 #include "GidRulesMatcher.h"
 #include "minerule/Result/RuleFormatter.h"
 
+using namespace minerule;
+
 namespace mrmatch {
 
 	Rule& GidRulesMatcher::addRule() {

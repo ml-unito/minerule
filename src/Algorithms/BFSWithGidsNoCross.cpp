@@ -31,14 +31,14 @@ namespace minerule {
 
   bool BFSWithGidsNoCross::BodyMapElement::pruneMap (float threshold) {
     std::map<ItemType, MapElement> newMap;
-    for (map<ItemType, MapElement>::iterator i = heads.begin(); i != heads.end(); i++)
+    for (std::map<ItemType, MapElement>::iterator i = heads.begin(); i != heads.end(); i++)
       if (i->second.count >= threshold) {i->second.count = 0; newMap[i->first] = i->second;}
     heads = newMap;
     return heads.size() > 0;
   }
 
   bool BFSWithGidsNoCross::BodyMapElement::updateCount () {
-    for (map<ItemType, MapElement>::iterator i = heads.begin(); i != heads.end(); i++)
+    for (std::map<ItemType, MapElement>::iterator i = heads.begin(); i != heads.end(); i++)
       i->second.count += i->second.size();
     return heads.size() > 0;
   }

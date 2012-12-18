@@ -63,7 +63,7 @@ namespace minerule {
 		}
 	//pair<iterator, bool> insert(const value_type& x) { return std::set<ItemType>::insert(x); }
 		void insert(const int x) { set(x,true); }
-		map<ItemType, MapElement > heads;
+		std::map<ItemType, MapElement > heads;
 		void insert(const ItemType& item, const int gid, bool secondPass = false);
 		bool pruneMap(double threshold, bool onlyBody = false);
 		bool updateCount ();
@@ -75,13 +75,13 @@ namespace minerule {
 	class NewRule {
 	public:
 		std::vector<ItemType> body, head;
-		map<ItemType, BodyMapElement>::iterator lastBody;
-		map<ItemType, MapElement>::iterator lastHead;
+		std::map<ItemType, BodyMapElement>::iterator lastBody;
+		std::map<ItemType, MapElement>::iterator lastHead;
 		bool satisfy;
 		GidList gids;
 		int bodySupp;
 		NewRule () : satisfy(false) {}
-		NewRule (map<ItemType, BodyMapElement>::iterator b, GidList& g) : lastBody(b), satisfy(false), gids(g) {
+		NewRule (std::map<ItemType, BodyMapElement>::iterator b, GidList& g) : lastBody(b), satisfy(false), gids(g) {
 			body.push_back(b->first);
 			lastHead = b->second.heads.begin();
 		}
@@ -89,7 +89,7 @@ namespace minerule {
 			body.push_back(b->first);
 			lastHead = b->second.heads.begin();
 		}
-		NewRule (map<ItemType, BodyMapElement>::iterator b, std::map<ItemType, MapElement>::iterator h, GidList& g, int bs) : lastBody(b), lastHead(h), satisfy(false), gids(g), bodySupp(bs) {
+		NewRule (std::map<ItemType, BodyMapElement>::iterator b, std::map<ItemType, MapElement>::iterator h, GidList& g, int bs) : lastBody(b), lastHead(h), satisfy(false), gids(g), bodySupp(bs) {
 			body.push_back(b->first);
 			head.push_back(h->first);
 		}
@@ -125,8 +125,8 @@ namespace minerule {
 		std::string outfile;
 		Connection * connection;
 		double totGroups;
-		ofstream outR;
-		ofstream outHB;
+		std::ofstream outR;
+		std::ofstream outHB;
 // std::vector<GidList> bodySupports;
 		std::vector<int> itemsets;
 //	int curBodySupp;

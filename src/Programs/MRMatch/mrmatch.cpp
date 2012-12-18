@@ -35,7 +35,7 @@ namespace mrmatch {
 		QueryResult::Iterator it;
 		OptimizerCatalogue::getMRQueryResultIterator(options.queryName(), it, minerule.sup, minerule.conf);
 		
-		auto_ptr<Matcher> matcher(Matcher::newMatcher(options.matchKind()));
+		std::auto_ptr<Matcher> matcher(Matcher::newMatcher(options.matchKind()));
 
 		while(it.next()) {
 			Rule& rule = matcher->addRule();
@@ -74,7 +74,7 @@ int main (int argc, char* const argv[]) {
 		execute(options);
 	
 	} catch( std::exception& e ) {
-		cerr << e.what() << std::endl;
+		std::cerr << e.what() << std::endl;
 	}
 	
 	return 0;

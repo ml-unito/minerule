@@ -71,10 +71,10 @@ namespace minerule {
     bodyMap.pruneMap(support*totalGroups,true);
     bodyMap.setTotalGroups(totalGroups);
     std::vector<BodyMap::iterator> v;
-    multimap<int, BodyMap::iterator> temp;
+    std::multimap<int, BodyMap::iterator> temp;
     for (BodyMap::iterator i = bodyMap.begin(); i!=bodyMap.end(); i++)
-       	if (!i->second.done) temp.insert(pair<int, BodyMap::iterator>(i->second.count(),i));
-    for (multimap<int, BodyMap::iterator>::iterator i = temp.begin(); i!=temp.end(); i++)
+       	if (!i->second.done) temp.insert(std::pair<int, BodyMap::iterator>(i->second.count(),i));
+    for (std::multimap<int, BodyMap::iterator>::iterator i = temp.begin(); i!=temp.end(); i++)
         v.insert(v.end(),i->second);
     MRLog() << "Total bodies after pruning: " << v.size() << std::endl;
 

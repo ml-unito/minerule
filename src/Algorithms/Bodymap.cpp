@@ -7,7 +7,7 @@ namespace minerule {
 int BodyMap::nextid = 0;
 
 void BodyMapElement::insert(const ItemType& item, const int gid, bool secondPass) {
-	map<ItemType, MapElement>::iterator found = heads.find(item);
+	std::map<ItemType, MapElement>::iterator found = heads.find(item);
 	if (found == heads.end()) {
 		if (!secondPass) heads[item].insert(gid);
 	} else found->second.insert(gid);
@@ -16,8 +16,8 @@ void BodyMapElement::insert(const ItemType& item, const int gid, bool secondPass
 bool BodyMapElement::pruneMap (double threshold, bool onlyBody) {
 	if (!moreThan(threshold)) return false;
 	else if (onlyBody) return true;
-	map<ItemType, MapElement> newMap;
-	for (map<ItemType, MapElement>::iterator i = heads.begin(); i != heads.end(); i++)
+	std::map<ItemType, MapElement> newMap;
+	for (std::map<ItemType, MapElement>::iterator i = heads.begin(); i != heads.end(); i++)
 		if (i->second.counter >= threshold) {i->second.counter = 0; newMap[i->first] = i->second;}
 	heads = newMap;
 	return heads.size() > 0;

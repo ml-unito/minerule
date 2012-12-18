@@ -7,7 +7,6 @@
 #include "minerule/Algorithms/IncrementalAlgorithm.h"
 #include "minerule/Database/ItemType.h"
 #include "minerule/Algorithms/IncrAlgoClasses.h"
-#include "minerule/Database/MIndex.h"
 
 namespace minerule {
 
@@ -19,8 +18,6 @@ class ConstrTree : public IncrementalAlgorithm {
  protected:
   Body* root;
   size_t ngroups;
-  MIndexIterator* mb2;
-  MIndexIterator* mh2;
   odbc::ResultSet* rb2;
   odbc::ResultSet* rh2;
   SourceRowColumnIds bodyDes;
@@ -45,7 +42,7 @@ class ConstrTree : public IncrementalAlgorithm {
 
   Body* getRoot(){return root;}
  public:
-  ConstrTree(const OptimizedMinerule& mr) : IncrementalAlgorithm(mr), root(new Body()), ngroups(0), mb2(NULL), mh2(NULL), rb2(NULL), rh2(NULL) { }
+  ConstrTree(const OptimizedMinerule& mr) : IncrementalAlgorithm(mr), root(new Body()), ngroups(0) /*,mb2(NULL), mh2(NULL)*/, rb2(NULL), rh2(NULL) { }
 
   virtual ~ConstrTree() {
     // Trashing the trashable

@@ -101,10 +101,10 @@ namespace minerule {
 //  MRLogPush("Starting rule extraction ...");
 		std::vector<BodyMap::iterator> v;
 		std::vector<BodyMap::iterator> v1;
-		multimap<int, BodyMap::iterator> temp;
+		std::multimap<int, BodyMap::iterator> temp;
 		for (BodyMap::iterator i = bodyMap.begin(); i!=bodyMap.end(); i++)
-			if (!i->second.done) temp.insert(pair<int, BodyMap::iterator>(i->second.count(),i));
-		for (multimap<int, BodyMap::iterator>::iterator i = temp.begin(); i!=temp.end(); i++)
+			if (!i->second.done) temp.insert(std::pair<int, BodyMap::iterator>(i->second.count(),i));
+		for (std::multimap<int, BodyMap::iterator>::iterator i = temp.begin(); i!=temp.end(); i++)
 			v.insert(v.end(),i->second);
 		for (BodyMap::iterator i = headMap.begin(); i!=headMap.end(); i++)
 			v1.insert(v1.end(),i);

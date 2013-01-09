@@ -12,7 +12,7 @@ namespace mrmatch {
 		char* progName = argv[0];
 		
 		std::cout << StringUtils::toBold("Usage:") << std::endl
-			<< "  " << StringUtils::toBold(progName) << " [-n <num query>] [-O <optionlist>] [-v] [-h] [-s <sort order>] [<query name>] " << std::endl << std::endl;
+			<< "  " << StringUtils::toBold(progName) << " [-h] [-c] [-n <num query>] [-O <optionlist>] [-f]  [-t <table name>] [-s <sort order>] [<query name>] " << std::endl << std::endl;
 	
 		std::cout
 			<< StringUtils::toBold("   -h") << " - prints this message." << std::endl
@@ -21,12 +21,11 @@ namespace mrmatch {
 			<< StringUtils::toBold("   -O") << " - specifies a minerule option on the command line (overrides those read from file)." << std::endl
 			<< StringUtils::toBold("   -f") << " - specify a file name containing the Options to be used." << std::endl
 			<< "         default is 'optins.txt'"<< std::endl
+			<< StringUtils::toBold("   -t") << " - specify a table name for the match (the table *must* have the same schema as the mining table use for the query)" << std::endl
 			<< StringUtils::toBold("   -s") << " - sets the output sorting order. The parameter can be set to:" << std::endl
 			<< StringUtils::toBold("         RuleGids") << ", to produce an output with the format: 'rule -> list of matching gids'" << std::endl
 			<< StringUtils::toBold("         GidRules") << ", to produce an output with the format: 'gid -> list of matching rules'."  << std::endl
-			<< "         default is 'RuleGids'. You can shorten the parameters as you like (e.g., 'G' for GidRules)." << std::endl
-			<< StringUtils::toBold("   -v") << " -- version informations" << std::endl
-			<< StringUtils::toBold("   -h") << " -- this message" << std::endl;
+			<< "         default is 'RuleGids'. You can shorten the parameters as you like (e.g., 'G' for GidRules)." << std::endl;
   
 		exit(SUCCESS);
 	}
@@ -81,11 +80,19 @@ namespace mrmatch {
 		exit(MRMATCH_OPTION_PARSING_ERROR);
 	}
 	
+	const std::string& Options::tableName() const {
+		return _tableName;
+	}
+	
+	void Options::setTableName(const std::string& tableName) {
+		_tableName = tableName;
+	}
+	
 	
 	void Options::parse(int argc,  char* const argv[]) {
 		char ch;
 		
-		while( (ch=getopt(argc, argv, "hcn:s:")) != -1 ) {
+		while( (ch=getopt(argc, argv, "hcn:s:t:")) != -1 ) {
 			switch(ch) {
 				case 'h':
 					printUsage(argc, argv);
@@ -98,6 +105,9 @@ namespace mrmatch {
 					break;
 				case 's':
 					setMatchKind(stringToMatchKind(optarg));
+					break;
+				case 't':
+					setTableName(optarg);
 					break;
 				case '?':
 				default:

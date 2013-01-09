@@ -25,6 +25,9 @@ namespace mrmatch {
 		CatalogueInfo info;
 		OptimizerCatalogue::getMRQueryInfo(options.queryName(), info, false);
 		ParsedMinerule minerule(info.qryText);
+		if( options.tableName() != "" ) {
+			minerule.tab_source = options.tableName();
+		}
 		
 		SourceTableRequirements requirements = sourceTableRequirements(minerule);		
 		SourceTable st( minerule, requirements);

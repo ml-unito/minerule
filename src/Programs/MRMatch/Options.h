@@ -14,7 +14,8 @@ namespace mrmatch {
 		
 		void setQueryName(std::string name) { _queryName   = name; 		}
 		void setQueryNumber(size_t number)  { _queryNumber = number;  }
-		
+		void setTableName(const std::string&);
+		const std::string& tableName() const;		
 		std::string queryName() const;
 		
 		MatchKind matchKind() const { return _matchKind; }
@@ -29,6 +30,7 @@ namespace mrmatch {
 		std::vector<std::string> _mrOptionsInline;		
 		
 		std::string _queryName;
+		std::string _tableName;
 		size_t _queryNumber;
 		
 		MatchKind _matchKind;

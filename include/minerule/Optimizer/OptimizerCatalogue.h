@@ -193,6 +193,7 @@ namespace minerule {
 	
 
     static void addMineruleResult( const MineruleResultInfo& mri ) throw(odbc::SQLException, MineruleException);
+	static void addDerivedResult(const std::string& original, const std::string derived) throw(odbc::SQLException, MineruleException);
     static std::string addMineruleAttributeList(const ParsedMinerule::AttrVector& l) throw(odbc::SQLException, MineruleException);
     static std::string getNewAutoincrementValue(const std::string& tableName) throw(odbc::SQLException, MineruleException);
 

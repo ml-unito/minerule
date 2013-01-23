@@ -316,6 +316,39 @@ namespace minerule {
 		ralid+","+
 		calid+")");
 	}
+	
+	
+	void OptimizerCatalogue::addDerivedResult(const std::string& original, const std::string derived) throw(odbc::SQLException, MineruleException) {
+		minerule::CatalogueInfo originalInfo;
+		bool derivedQueryAlreadyPresent = false;
+		
+		try {
+			minerule::OptimizerCatalogue::getMRQueryInfo(original, originalInfo, false);
+		} catch( minerule::MineruleException& e ) {
+			throw MineruleException(MR_ERROR_CATALOGUE_ERROR, 
+				std::string("Cannot retrieve the original minerule from the catalogue") +
+				"The reason is:" + e.what());
+		}
+		
+		try {
+			// checking the derived results do not already exist.
+			minerule::CatalogueInfo derivedInfo;
+			minerule::OptimizerCatalogue::getMRQueryInfo(derived, derivedInfo, false);
+			derivedQueryAlreadyPresent = true;
+		} catch( minerule::MineruleException& e ) {
+			// do nothing, we are "rooting" for this
+		}
+		
+		if(derivedQueryAlreadyPresent) {
+			throw MineruleException(MR_ERROR_CATALOGUE_ERROR,
+				std::string("The derived query name already exists in the catalogue. Bailing out")
+							+ " so to avoid possible overwriting of useful results.");			
+		}
+		
+		minerule::ParsedMinerule mr(originalInfo.qryText);				
+		mr.tab_result = derived;
+		minerule::OptimizerCatalogue::addMineruleResult( minerule::OptimizerCatalogue::MineruleResultInfo(mr) );
+	}
   
 	std::string OptimizerCatalogue::getResultsetName(const std::string& queryname) 
 	throw(odbc::SQLException, MineruleException){

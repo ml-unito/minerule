@@ -127,7 +127,8 @@ namespace mrc {
 			<< StringUtils::toBold("Installation") << std::endl
 			<< StringUtils::toBold("-C") << " - Checks if the optimizer catalogue is installed correctly and exits." <<std::endl
 			<< StringUtils::toBold("-I") << " - Installs the optimizer catalogue and exits." <<std::endl
-			<< StringUtils::toBold("-U") << " - Uninstall the catalogue (be careful, this cannot be undone!). dbms must be either 'mysql' or 'postgres'." << std::endl
+			<< StringUtils::toBold("-U") << " - Uninstall the catalogue (be careful, this cannot be undone!)." << std::endl
+			<< "     dbms must be either 'mysql' or 'postgres'." << std::endl
 			<< std::endl 
 			<< StringUtils::toBold("Dealing with Catalogue Entries") << std::endl
 			<< StringUtils::toBold("-n") << " - Look in the catalogue for the specified query." << std::endl
@@ -138,10 +139,11 @@ namespace mrc {
 			<< StringUtils::toBold("-d") << " - Delete the given minerule from the system (notice that" << std::endl
 			<< "     the safety options in the option file must be setted" << std::endl
 			<< "     in such a way to allow the deletion. " << std::endl
-			<< std::endl 
 			<< StringUtils::toBold("-a") << " - Adds a derived result set. You must provide the name <ori> of the original" << std::endl
-			<< "     minerule and the name <der> of the derived result. The database must then contain a table named <der> " << std::endl
-			<< "     and two additional tables <der>_body_elems and <der>_head_elems" << std::endl
+			<< "     minerule and the name <der> of the derived result. The database must then" << std::endl
+			<< "     contain a table named <der> and two additional tables <der>_body_elems and " << std::endl 
+			<< "     <der>_head_elems" << std::endl
+			<< std::endl 
 			<< StringUtils::toBold("Output Handling") << std::endl				
 			<< StringUtils::toBold("-c") << " - Disables color output." << std::endl
 			<< StringUtils::toBold("-F") << " - Format specifiers for printing the list of queries (-l)" <<std::endl
@@ -245,34 +247,7 @@ namespace mrc {
 	
 	
 	Results addDerivedQuery(const Options& options) {
-		minerule::CatalogueInfo originalInfo;
-		
-		try {
-			minerule::OptimizerCatalogue::getMRQueryInfo(options.getOriginalQuery(), originalInfo, false);
-		} catch( minerule::MineruleException& e ) {
-			minerule::MRLog() << "Cannot retrieve the original minerule from the catalogue" << std::endl
-				<< "The reason is:" << e.what() << std::endl;
-			return QUERY_NAME_NOT_FOUND;
-		}
-		
-		try {
-			// checking the derived results do not already exist.
-			minerule::CatalogueInfo derivedInfo;
-			minerule::OptimizerCatalogue::getMRQueryInfo(options.getDerivedQuery(), derivedInfo, false);
-			
-			minerule::MRLog() << "The derived query name already exists in the catalogue. Bailing out" << std::endl
-				<< "so to avoid possible overwriting of useful results." << std::endl;
-			return QUERY_NAME_FOUND;
-		} catch( minerule::MineruleException& e ) {
-			// do nothing, we are "rooting" for this
-		}
-		
-		minerule::ParsedMinerule mr(originalInfo.qryText);
-		simple_pred* sp = (simple_pred*) malloc(sizeof(simple_pred));
-		assert(sp!=NULL);
-				
-		mr.tab_result = options.getDerivedQuery();
-		minerule::OptimizerCatalogue::addMineruleResult( minerule::OptimizerCatalogue::MineruleResultInfo(mr) );
+		minerule::OptimizerCatalogue::addDerivedResult(options.getOriginalQuery(), options.getDerivedQuery());
 		return SUCCESS;
 	}
 

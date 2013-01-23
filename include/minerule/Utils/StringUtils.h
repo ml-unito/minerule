@@ -12,6 +12,7 @@ namespace minerule {
 		
 	public:
 		static std::vector<std::string>* splitToLength(const std::string& str, size_t len);
+		static std::vector<std::string> split(const std::string& str, const std::string& sep);
 		static std::string join(const std::vector<std::string>&, const std::string& sep );
 		
 		static const std::string RED;

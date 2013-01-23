@@ -27,17 +27,21 @@ namespace minerule {
 
 
 	std::string
-	SimpleRuleFormatter::formatRule(const Rule& rule) {		
+	SimpleRuleFormatter::formatRule(const Rule& rule, bool includeSuppConf) {		
 		std::stringstream out;
 
 		out	<< std::setw(_fieldWidths.body) << quoteElems(rule.getBody()) 
 			<< _bhSep 
-			<< std::left << std::setw(_fieldWidths.head) << quoteElems(rule.getHead()) << std::right
-			<< " "
-			<< std::setw(_fieldWidths.supp) << rule.getSupport()
-			<< " "
-			<< std::setw(_fieldWidths.conf) << rule.getConfidence();
-	
+			<< std::left << std::setw(_fieldWidths.head) << quoteElems(rule.getHead());
+		
+		if(includeSuppConf) {
+			out << std::right
+				<< " "
+				<< std::setw(_fieldWidths.supp) << rule.getSupport()
+				<< " "
+				<< std::setw(_fieldWidths.conf) << rule.getConfidence();
+		}
+		
 		return out.str();
 	}
 	

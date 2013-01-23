@@ -8,7 +8,7 @@ namespace mrc {
 	
 	class Options {
 	public:
-		typedef enum {NoCommand,ShowList,SearchQry,DeleteQry, CheckCatalogue, InstallCatalogue, UninstallCatalogue} Command;
+		typedef enum {NoCommand,ShowList,SearchQry,DeleteQry, CheckCatalogue, InstallCatalogue, UninstallCatalogue, AddDerivedQuery} Command;
 
 		class ListFormat {
 		public:
@@ -25,6 +25,9 @@ namespace mrc {
 		Command command;
 
 		std::string searchParam[LastParam];
+		std::string originalQuery;
+		std::string derivedQuery;
+		
 		ListFormat listFormat;
 	public:
 
@@ -86,6 +89,20 @@ namespace mrc {
 
 		const std::string& getSearchParam(QryParams qryParam) const {
 			return searchParam[qryParam];
+		}
+		
+		void setAddDerivedQuery(const std::string& original, const std::string& derived) {
+			command = AddDerivedQuery;
+			originalQuery = original;
+			derivedQuery = derived;
+		}
+		
+		const std::string& getOriginalQuery() const { 
+			return originalQuery;
+		}
+		
+		const std::string& getDerivedQuery() const {
+			return derivedQuery;
 		}
 
 		Command getCommand() const {

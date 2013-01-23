@@ -307,11 +307,11 @@ namespace minerule {
 			std::string result;
 			result = 
 				"MINE SEQUENCE " + tab_result + " AS " +
-					"SELECT DISTINCT " + 
-						getCardsText(bodyCardinalities) + " " + getAttrText(ba) +
-							", SUPPORT FROM "+tab_source+" GROUP BY "+getAttrText(ga)+
-								" ORDER BY "+getAttrText(oa)+ " EXTRACTING SEQUENCES WITH SUPPORT:" +
-									Converter(sup).toString();
+				"SELECT DISTINCT " + 
+				getCardsText(bodyCardinalities) + " " + getAttrText(ba) +
+				", SUPPORT FROM "+tab_source+" GROUP BY "+getAttrText(ga)+
+				" ORDER BY "+getAttrText(oa)+ " EXTRACTING SEQUENCES WITH SUPPORT:" +
+				Converter(sup).toString();
 
 			return result;
 		}
@@ -333,10 +333,10 @@ namespace minerule {
 			std::string result;
 			result = 
 				"MINE RULE " + tab_result + " AS " +
-					"SELECT DISTINCT " + 
-						getCardsText(bodyCardinalities) + " " + getAttrText(ba) + " AS BODY," + 
-							getCardsText(headCardinalities) + " " + getAttrText(ha) + " AS HEAD"
-								", SUPPORT, CONFIDENCE ";
+				"SELECT DISTINCT " + 
+				getCardsText(bodyCardinalities) + " " + getAttrText(ba) + " AS BODY," + 
+				getCardsText(headCardinalities) + " " + getAttrText(ha) + " AS HEAD"
+				", SUPPORT, CONFIDENCE ";
 
 			if( mc!=NULL ) 
 				result += "WHERE "+getCondText(mc) + " ";
@@ -412,5 +412,6 @@ namespace minerule {
 			MRLog() << "Cross predicate not found!" << std::endl;
 			return false;
 		}
+		
  
 	} // namespace minerule

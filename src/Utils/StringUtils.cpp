@@ -33,6 +33,25 @@ namespace minerule {
 	
 		return result;
 	}
+	
+	std::vector<std::string> StringUtils::split(const std::string& str, const std::string& sep) {
+		std::vector<std::string> result;
+		size_t pos = 0;
+		size_t size = str.size();
+		while( pos < size ) {
+			size_t found_pos = str.find(sep,pos);
+			std::string cur_piece = str.substr(pos,found_pos);
+			pos+=cur_piece.size();
+			
+			result.push_back(cur_piece);
+			
+			if( pos < size ) { // if something where found, we move beyond the sep string.
+				pos+=sep.size();
+			}
+		}
+		
+		return result;
+	}
 
 	std::string StringUtils::join(const std::vector<std::string>& vec, const std::string& sep) {
 		std::string result;

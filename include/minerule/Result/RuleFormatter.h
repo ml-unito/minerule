@@ -38,7 +38,7 @@ namespace minerule {
 
 		virtual ~RuleFormatter() {}
 
-		virtual std::string formatRule(const Rule&) = 0;
+		virtual std::string formatRule(const Rule&, bool includeSuppConf=true) = 0;
 		virtual void printRule(const Rule&) = 0;
   
 		void setSuppressLog(bool newVal) {  _suppressLog = newVal; }
@@ -59,7 +59,7 @@ namespace minerule {
 
 		virtual ~SimpleRuleFormatter() {};
 
-		virtual std::string formatRule(const Rule&);
+		virtual std::string formatRule(const Rule&, bool=true);
 		virtual void printRule(const Rule&);
 
 		virtual void

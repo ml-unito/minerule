@@ -142,6 +142,8 @@ class ParsedMinerule
   ~ParsedMinerule() {
 #ifdef MRUSERWARNING
 #warning CAPIRE PERCHE'' DA SEGMENTATION FAULT NEL CASO LE SEGUENTI FREE SIANO DECOMMENTATE!
+	  // possible explanation: not all char* pointers in simple predicates have
+	  // been dynamically allocated...
 #endif
     //free_l_OR(mc);
     //free_l_OR(gc);
@@ -171,8 +173,6 @@ class ParsedMinerule
   }
   
   void init(const std::string& minerule_text);
-
-  
 
   bool requiresClusters() const {
     return !ca.empty();

@@ -38,7 +38,7 @@ namespace mrc {
 	}
 
 	void parseOptions(int argc, char** argv, minerule::MineruleOptions& mopt, Options& popt) { 
-		const char* optstr = "cCIUhf:lF:n:d:v";
+		const char* optstr = "cCIUhf:lF:n:d:va:";
 		
 		int opt;
 		bool didLoadOptions=false;
@@ -77,6 +77,14 @@ namespace mrc {
 				popt.setDeleteQry();
 				popt.setSearchParam(Options::QryName, optarg);
 				break;
+			case 'a': {
+					std::vector<std::string> queries = minerule::StringUtils::split(optarg, ",");
+					if( queries.size() != 2 ) {
+						throw Exception( mrc::ERROR_OPTION_PARSING, "Wrong format for -a options, you should pass the original query name and the derived query name separated by a ',' (no spaces)");
+					}
+					popt.setAddDerivedQuery(queries[0], queries[1]);
+				}
+				break;
 			case 'v':
 				printVersion();
 				exit(0);
@@ -104,7 +112,7 @@ namespace mrc {
 	void printHelp(int argc, char** argv) {
 		using namespace minerule;
 		std::cout << StringUtils::toBold("Usage:") << std::endl
-			<< "   " << StringUtils::toBold(argv[0]) << " [-v] [-h] [-f  <optionfile>] [-C] [-I] [-U] [-n <queryname>] [-l] [-d] [-c] [-F <formatSpecs>]" << std::endl
+			<< "   " << StringUtils::toBold(argv[0]) << " [-v] [-h] [-f  <optionfile>] [-C] [-I] [-U] [-n <queryname>] [-l] [-d] [-a <ori>,<der>][-c] [-F <formatSpecs>]" << std::endl
 			<< std::endl << std::endl 
 			<< "Handles the minerule catalogue." << std::endl
 			<< std::endl
@@ -131,6 +139,9 @@ namespace mrc {
 			<< "     the safety options in the option file must be setted" << std::endl
 			<< "     in such a way to allow the deletion. " << std::endl
 			<< std::endl 
+			<< StringUtils::toBold("-a") << " - Adds a derived result set. You must provide the name <ori> of the original" << std::endl
+			<< "     minerule and the name <der> of the derived result. The database must then contain a table named <der> " << std::endl
+			<< "     and two additional tables <der>_body_elems and <der>_head_elems" << std::endl
 			<< StringUtils::toBold("Output Handling") << std::endl				
 			<< StringUtils::toBold("-c") << " - Disables color output." << std::endl
 			<< StringUtils::toBold("-F") << " - Format specifiers for printing the list of queries (-l)" <<std::endl
@@ -231,6 +242,39 @@ namespace mrc {
 		
 		return SUCCESS;
 	}
+	
+	
+	Results addDerivedQuery(const Options& options) {
+		minerule::CatalogueInfo originalInfo;
+		
+		try {
+			minerule::OptimizerCatalogue::getMRQueryInfo(options.getOriginalQuery(), originalInfo, false);
+		} catch( minerule::MineruleException& e ) {
+			minerule::MRLog() << "Cannot retrieve the original minerule from the catalogue" << std::endl
+				<< "The reason is:" << e.what() << std::endl;
+			return QUERY_NAME_NOT_FOUND;
+		}
+		
+		try {
+			// checking the derived results do not already exist.
+			minerule::CatalogueInfo derivedInfo;
+			minerule::OptimizerCatalogue::getMRQueryInfo(options.getDerivedQuery(), derivedInfo, false);
+			
+			minerule::MRLog() << "The derived query name already exists in the catalogue. Bailing out" << std::endl
+				<< "so to avoid possible overwriting of useful results." << std::endl;
+			return QUERY_NAME_FOUND;
+		} catch( minerule::MineruleException& e ) {
+			// do nothing, we are "rooting" for this
+		}
+		
+		minerule::ParsedMinerule mr(originalInfo.qryText);
+		simple_pred* sp = (simple_pred*) malloc(sizeof(simple_pred));
+		assert(sp!=NULL);
+				
+		mr.tab_result = options.getDerivedQuery();
+		minerule::OptimizerCatalogue::addMineruleResult( minerule::OptimizerCatalogue::MineruleResultInfo(mr) );
+		return SUCCESS;
+	}
 
 	// --------------------------------------------------------------------------------
 	// MAIN ACTION HANDLER 
@@ -261,6 +305,10 @@ namespace mrc {
 
 		if( options.getCommand()==Options::UninstallCatalogue ) {
 			return uninstallCatalogue();
+		}
+		
+		if( options.getCommand()==Options::AddDerivedQuery ) {
+			return addDerivedQuery(options);
 		}
 
 

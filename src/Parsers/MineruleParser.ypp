@@ -557,13 +557,16 @@ and_cond:
 namespace minerule{
 void init_mrparser() {
 	/* initialization of keywords_to_token table */
+	if(keywords_to_token.size() > 0)
+		return;
+	
 	keywords_to_token["MINE"]=MINE;
 	keywords_to_token["RULE"]=RULE;
 	keywords_to_token["AS"]=AS;
 	keywords_to_token["FROM"]=FROM;
 	keywords_to_token["WHERE"]=WHERE;
 	keywords_to_token["GROUP"]=GROUP;
-        keywords_to_token["BY"]=BY;
+    keywords_to_token["BY"]=BY;
 	keywords_to_token["HAVING"]=HAVING;
 	keywords_to_token["EXTRACTING"]=EXTRACTING;
 	keywords_to_token["RULES"]=RULES;

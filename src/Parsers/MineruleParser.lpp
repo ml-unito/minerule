@@ -15,7 +15,7 @@ using namespace minerule;
 
 int mrlex();  
 
-#define PARSER_BUF_SIZE 4096
+#define PARSER_BUF_SIZE (1<<14)
 
 char linebuf[PARSER_BUF_SIZE];
 int tokenpos=0;
@@ -23,6 +23,7 @@ int lastC=0;
 char* stringUpperCase(char*);
 std::map<std::string,int> keywords_to_token;
  
+void append_to_linebuf(char* str);
 %}
 
 %option noinput
@@ -36,18 +37,17 @@ QUOTED_STRING  (['][^']*['])
 %%
 
 [ ]+		      {	tokenpos=tokenpos+mrleng;
-			strncat(linebuf,mrtext,PARSER_BUF_SIZE);
-			
+					append_to_linebuf(mrtext);			
 		      }
 
 [,"():]               { tokenpos=tokenpos+mrleng;
-			strncat(linebuf,mrtext,PARSER_BUF_SIZE);
+			append_to_linebuf(mrtext);
 			return mrtext[0];
 		      }
 
 (<)|(>)|(<=)|(>=)|(<>)|(=)			 {
 							tokenpos=tokenpos+mrleng;
-							strncat(linebuf,mrtext,PARSER_BUF_SIZE);
+							append_to_linebuf(mrtext);
 							mrlval.TString=strndup(mrtext,PARSER_BUF_SIZE);
 							return(COMPARISON);
 						 }
@@ -56,41 +56,41 @@ QUOTED_STRING  (['][^']*['])
 {KEYWORDS}		{
 				char* stringUpperCase(char*);
 				tokenpos=tokenpos+mrleng;
-                                strncat(linebuf,mrtext,PARSER_BUF_SIZE);
+                                append_to_linebuf(mrtext);
 				return keywords_to_token[stringUpperCase(mrtext)];
 			}
 
 (-?[1-9][0-9]*|0)		{
 			 		tokenpos=tokenpos+mrleng; 
-			 		strncat(linebuf,mrtext,PARSER_BUF_SIZE); 
+			 		append_to_linebuf(mrtext); 
 					mrlval.TString=strndup(mrtext,PARSER_BUF_SIZE);
 			 		return(INT_NUMBER);
  			}
 
 \.\.                    {
 				tokenpos=tokenpos+mrleng; 
-				strncat(linebuf,mrtext,PARSER_BUF_SIZE); 
+				append_to_linebuf(mrtext); 
 				return(DOTS);
 			 }
 
 
 BODY\.{ATTRNAME}              {
 				tokenpos=tokenpos+mrleng;
-                                strncat(linebuf,mrtext,PARSER_BUF_SIZE);
+                                append_to_linebuf(mrtext);
 				mrlval.TString=strndup(mrtext,PARSER_BUF_SIZE);
 				return(PARTBODY);
 			}
 
 HEAD\.{ATTRNAME}              {
 				tokenpos=tokenpos+mrleng;
-                                strncat(linebuf,mrtext,PARSER_BUF_SIZE);
+                                append_to_linebuf(mrtext);
 				mrlval.TString=strndup(mrtext,PARSER_BUF_SIZE);
 				return(PARTHEAD);
 			}
 
 {AGGR}			 {
                           tokenpos=tokenpos+mrleng;
-                          strncat(linebuf,stringUpperCase(mrtext),PARSER_BUF_SIZE);
+                          append_to_linebuf(stringUpperCase(mrtext));
                           mrlval.TString=strndup(stringUpperCase(mrtext),PARSER_BUF_SIZE);
                           return(AGGREGATE);
 			}
@@ -99,7 +99,7 @@ HEAD\.{ATTRNAME}              {
 {ATTRNAME}		{	
 			  tokenpos=tokenpos+mrleng;
 			  
-			  strncat(linebuf,mrtext,PARSER_BUF_SIZE);
+			  append_to_linebuf(mrtext);
 			  mrlval.TString=strndup(mrtext,PARSER_BUF_SIZE);
 			  return(ATTR);
 		        }
@@ -110,14 +110,14 @@ HEAD\.{ATTRNAME}              {
 				linebuf[0]='\0';
 			 }
 			 tokenpos=tokenpos+mrleng;
-			 strncat(linebuf,mrtext,PARSER_BUF_SIZE);
+			 append_to_linebuf(mrtext);
 			 mrlval.TString=strndup(mrtext,PARSER_BUF_SIZE);
  			 return(QUOTED_VALUE);
 			}
 		
 
 (-?[0-9]+"."[0-9]+)|(-?[0-9]+[e|E]-?[0-9]+)    {	tokenpos=tokenpos+mrleng;
-							strncat(linebuf,mrtext,PARSER_BUF_SIZE);				
+							append_to_linebuf(mrtext);				
 							mrlval.TString=strndup(mrtext,PARSER_BUF_SIZE);
 							return(DBL_NUMBER);
 			     }
@@ -125,7 +125,7 @@ HEAD\.{ATTRNAME}              {
 \n  			{
 						if (lastC) {
 								tokenpos=tokenpos+mrleng;
-								strncat(linebuf,mrtext,PARSER_BUF_SIZE);
+								append_to_linebuf(mrtext);
 								lastC=0;
 								return 0;
 						} else {	
@@ -135,6 +135,21 @@ HEAD\.{ATTRNAME}              {
 				}
 
 %%
+
+void append_to_linebuf(char* str) {
+	int curlen = strlen(linebuf);
+	int charsLeft = PARSER_BUF_SIZE - curlen - 1; 
+	if( charsLeft < 0) {
+		std::cout << "Buffer overflow!" << std::endl;
+	}
+	
+	if( charsLeft == 0 ) {
+		std::cout << "append_to_linebuf: No more space on the buffer..., skipping buffer append!";
+	} else {
+/*		std::cout << "appending " << strlen(str) << " chars to buffer (chars left:" << charsLeft << " )" << std::endl;*/
+		strncat(linebuf, str, charsLeft);
+	}
+}
 
 void mrerror(char const *s){
 	char buf[4096];

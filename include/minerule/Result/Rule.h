@@ -7,6 +7,8 @@ namespace minerule {
 	
 	class Rule {
 	private:
+		unsigned int bodyId;
+		unsigned int headId;
 		ItemSet* body;
 		ItemSet* head;		
 		double support;
@@ -25,7 +27,7 @@ namespace minerule {
 	public:			
 		Rule() : body(NULL), head(NULL), support(0), confidence(0) {} 
 
-		Rule(const Rule& rule) : support(rule.support), confidence(rule.confidence) {
+		Rule(const Rule& rule) : support(rule.support), confidence(rule.confidence), bodyId(rule.bodyId), headId(rule.headId) {
 			if(rule.body!=NULL) {
 				body= new ItemSet(*rule.body);
 			}
@@ -125,6 +127,12 @@ namespace minerule {
 		double getConfidence() const {
 			return confidence;
 		}
+		
+		// Rules id getters and setters		
+		void setBodyId(unsigned int bid) { bodyId = bid; }
+		void setHeadId(unsigned int hid) { headId = hid; }
+		unsigned int getBodyId() const { return bodyId; }
+		unsigned int getHeadId() const { return headId; }
 			
 	};
 

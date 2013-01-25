@@ -6,14 +6,12 @@
 namespace mrmatch {
 
 	class RuleGidsMatcher : public Matcher {
-	private:
+	protected:
 		typedef std::vector<minerule::ItemType> Gids;
 		typedef std::pair< minerule::Rule, Gids > RuleGids;
 		typedef std::vector< RuleGids > RuleGidsVector;
-	
 		RuleGidsVector _ruleGidsVector;
 		
-	protected:
 		virtual void matchItemTransaction(const minerule::ItemType& gid, const minerule::ItemTransaction<minerule::RulesMatcher::ItemSetType>& bodies,const minerule::ItemTransaction<minerule::RulesMatcher::ItemSetType>& heads);
 		virtual void matchRuleTransaction(const minerule::ItemType& gid, const minerule::RuleTransaction<minerule::RulesMatcher::RuleSetType>& transaction);
 

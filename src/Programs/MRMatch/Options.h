@@ -9,7 +9,7 @@
 namespace mrmatch {
 	class Options {
 	public:
-		Options() : _queryNumber(0), _matchKind(RuleGids) {};
+		Options() : _queryNumber(0), _matchKind(RuleGids), _matchOutput(OutOnConsole) {};
 		virtual ~Options () {};
 		
 		void setQueryName(std::string name) { _queryName   = name; 		}
@@ -18,8 +18,12 @@ namespace mrmatch {
 		const std::string& tableName() const;		
 		std::string queryName() const;
 		
-		MatchKind matchKind() const { return _matchKind; }
+		MatcherSpecs matcherSpecs() const { return _matchKind | _matchOutput; }
+
 		void setMatchKind(MatchKind kind) { _matchKind = kind; }
+		void setMatchOutput(MatchOutput out) { _matchOutput = out; }
+		void setMatchOutputTableName(const std::string& name) { _matchOutputTableName = name; }
+		const std::string& getMatchOutputTableName() const { return _matchOutputTableName; }
 		
 		bool initMineruleOptions() const;
 		
@@ -34,6 +38,8 @@ namespace mrmatch {
 		size_t _queryNumber;
 		
 		MatchKind _matchKind;
+		MatchOutput _matchOutput;
+		std::string _matchOutputTableName;
 		
 		static MatchKind stringToMatchKind(const std::string&);
 	};

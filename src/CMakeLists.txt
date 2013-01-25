@@ -123,7 +123,8 @@ add_executable(mr-match
 	Programs/MRMatch/Options.cpp
 	Programs/MRMatch/Matcher.cpp
 	Programs/MRMatch/RuleGidsMatcher.cpp
-	Programs/MRMatch/GidRulesMatcher.cpp)
+	Programs/MRMatch/GidRulesMatcher.cpp
+	Programs/MRMatch/RuleGidsDBMatcher.cpp)
 	
 target_link_libraries(mr-match ${LIBS})
 

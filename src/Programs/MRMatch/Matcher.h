@@ -6,6 +6,7 @@
 #include "minerule/Database/Transaction.h"
 #include "minerule/Result/RulesMatcher.h"
 
+#include "options.h"
 #include "mrmatch.h"
 
 namespace mrmatch {
@@ -14,7 +15,7 @@ namespace mrmatch {
 	class Matcher {
 	public:
 	// creates a new matcher and returns it
-		static Matcher* newMatcher(MatchKind kind);
+		static Matcher* newMatcher(const Options& opts, const minerule::ParsedMinerule& p);
 
 	// create a new empty rule and returns it (so that it can be intialized)
 		virtual minerule::Rule& addRule() = 0;

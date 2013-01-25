@@ -41,10 +41,11 @@ SourceRowAttrCollectionDescriptor::dataDefinitionForElem(odbc::ResultSet* rs, in
   
   char buf[255];
   if( precision == 0 ) {
-		if(displaySize == 0)
-	    strcpy(buf,"");
-		else
-			sprintf(buf,"(%d)", displaySize);
+		// if(displaySize == 0)
+		// 	    	strcpy(buf,"");
+		// else
+		// 	sprintf(buf,"(%d)", displaySize);
+	  strcpy(buf,"");
   } else {
     if(scale==0)
       sprintf(buf,"(%d)",precision);

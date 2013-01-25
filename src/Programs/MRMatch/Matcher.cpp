@@ -1,13 +1,19 @@
 #include "Matcher.h"
 #include "RuleGidsMatcher.h"
+#include "RuleGidsDBMatcher.h"
 #include "GidRulesMatcher.h"
 #include "minerule/Utils/MineruleErrors.h"
 
 using namespace minerule;
 
 namespace mrmatch {
-	Matcher* Matcher::newMatcher(MatchKind kind) {
-		switch(kind) {
+	Matcher* Matcher::newMatcher(const Options& opts, const ParsedMinerule& minerule) {
+		MatcherSpecs specs = opts.matcherSpecs();
+		if((specs & MatchOutputMask) == OutOnDB) {
+			return new RuleGidsDBMatcher(opts.getMatchOutputTableName(), minerule);
+		}
+		
+		switch(specs & MatchKindMask) {
 			case RuleGids: return new RuleGidsMatcher();
 			case GidRules: return new GidRulesMatcher();
 			default: throw MineruleException( MR_ERROR_INTERNAL, "Unknown or unsupported matcher kind");

@@ -112,6 +112,11 @@ namespace minerule {
 		virtual ~BFSWithGidsNoCross() {
 			if(sourceTable!=NULL) delete sourceTable;			
 		}
+		
+		virtual SourceTableRequirements sourceTableRequirements() const {
+			return SourceTableRequirements(SourceTableRequirements::SortedGids);
+		};
+		
 
 		virtual void mineRules();
 			

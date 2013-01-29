@@ -31,15 +31,20 @@ namespace minerule {
 
   bool BFSWithGidsNoCross::BodyMapElement::pruneMap (float threshold) {
     std::map<ItemType, MapElement> newMap;
-    for (std::map<ItemType, MapElement>::iterator i = heads.begin(); i != heads.end(); i++)
-      if (i->second.count >= threshold) {i->second.count = 0; newMap[i->first] = i->second;}
+    for (std::map<ItemType, MapElement>::iterator i = heads.begin(); i != heads.end(); i++) {
+      if (i->second.count >= threshold) {
+		  i->second.count = 0; 
+		  newMap[i->first] = i->second;
+	  }
+	}
     heads = newMap;
     return heads.size() > 0;
   }
 
   bool BFSWithGidsNoCross::BodyMapElement::updateCount () {
-    for (std::map<ItemType, MapElement>::iterator i = heads.begin(); i != heads.end(); i++)
+    for (std::map<ItemType, MapElement>::iterator i = heads.begin(); i != heads.end(); i++) { 
       i->second.count += i->second.size();
+  	}
     return heads.size() > 0;
   }
 
@@ -68,7 +73,7 @@ namespace minerule {
 
   void BFSWithGidsNoCross::BodyMap::pruneMap (float threshold) {
 	  BodyMap newMap(*connection);
-	  for (iterator i = begin(); i != end(); i++) {
+	  for (iterator i = begin(); i != end(); i++) {		  
 		  if (i->second.pruneMap(threshold)) 
 			  newMap[i->first] = i->second;
 	  }
@@ -172,18 +177,20 @@ namespace minerule {
 	  return howManyRules;
   }
 
-  void BFSWithGidsNoCross::BodyMap::addHead (NewRuleSet& rs, float threshold, int maxHead, int suppBody, NewRule& rc) {
+  void BFSWithGidsNoCross::BodyMap::addHead (NewRuleSet& rs, float threshold, int maxHead, int suppBody, NewRule& rc) {	  
     if (rc.head.size() < (size_t)maxHead) {
       std::map<ItemType, MapElement>::iterator lh = rc.lastHead;
       std::map<ItemType, MapElement>::iterator eh = rc.lastBody->second.heads.end();
       for (map<ItemType, MapElement>::iterator j = lh; j != eh; j++) {
 		GidList newGidList;
 
-		if (!BFSWithGidsNoCross::getMineruleHasSameBodyHead() || std::find(rc.body.begin(), rc.body.end(), j->first) == rc.body.end()/* &&
-											   rc.head.find(j->first) == rc.head.end()*/) {
+		if (!BFSWithGidsNoCross::getMineruleHasSameBodyHead() || 
+			 std::find(rc.body.begin(), rc.body.end(), j->first) == rc.body.end()
+			 /* && rc.head.find(j->first) == rc.head.end()*/) {
 		  set_intersection(rc.gids.begin(),rc.gids.end(),
 				   j->second.begin(), j->second.end(),
 				   inserter(newGidList,newGidList.begin()));
+		  
 		  if (newGidList.size() >= threshold) {
 		    NewRule r(rc,j,newGidList);
 		    r.lastHead++;
@@ -259,6 +266,7 @@ namespace minerule {
     MRLogPush("Starting rule extraction...");
 
     bodyMap.updateCount();
+	
     MRLog() << "Total bodies before pruning: " << bodyMap.size() << std::endl;
     bodyMap.pruneMap(support*totalGroups);
     MRLog() << "Total bodies after pruning: " << bodyMap.size() << std::endl;

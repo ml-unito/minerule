@@ -6,6 +6,9 @@ LIST(APPEND CMAKE_PREFIX_PATH ${CMAKE_SOURCE_DIR}/cmake/Modules)
 
 set(CMAKE_INCLUDE_DIRECTORIES_PROJECT_BEFORE ON)
 
+execute_process(COMMAND mkdir ${CMAKE_CURRENT_BINARY_DIR}/Utils)
+execute_process(COMMAND mkdir ${CMAKE_CURRENT_BINARY_DIR}/Parsers)
+
 # Dependencies
 find_package(LIBODBC++ REQUIRED)
 include_directories(${LIBODBC++_INCLUDE_DIRS})

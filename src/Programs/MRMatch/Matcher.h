@@ -6,7 +6,7 @@
 #include "minerule/Database/Transaction.h"
 #include "minerule/Result/RulesMatcher.h"
 
-#include "options.h"
+#include "Options.h"
 #include "mrmatch.h"
 
 namespace mrmatch {

@@ -95,6 +95,7 @@ namespace minerule {
     void createBodies (NewRuleSet& rs, float threshold, size_t maxBody);
     void createHeads (NewRuleSet& rs, NewRuleSet& rs1, float threshold, size_t maxHead);
 
+    bool checkHeads (NewRule& r, std::map<ItemType, BodyMapElement>::iterator b, GidList& g, float threshold);
     int generateRules (float support, int totGroups, int maxBody, int maxHead);
     void addHead (NewRuleSet& rs, float threshold, int maxHead, int suppBody, NewRule& rc);
 

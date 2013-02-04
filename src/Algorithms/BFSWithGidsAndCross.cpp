@@ -165,6 +165,23 @@ namespace minerule {
     }
   }
 
+   bool BFSWithGidsAndCross::BodyMap::checkHeads (NewRule& r, std::map<ItemType, BodyMapElement>::iterator b, GidList& g, float threshold) {
+    bool ok = true;
+    for (std::vector<ItemType>::iterator i = r.head.begin(); i != r.head.end() && ok; i++) {
+	std::map<ItemType, MapElement >::iterator found = b->second.heads.find(*i);
+	if (found == b->second.heads.end()) return false;
+	else {
+          GidList newGidList;
+	  set_intersection((*found).second.begin(),(*found).second.end(),
+			   g.begin(), g.end(),
+			   inserter(newGidList,newGidList.begin()));
+          g = newGidList;
+	  ok = newGidList.size() >= threshold;
+	}
+    }
+    return ok;
+  }
+
   int BFSWithGidsAndCross::BodyMap::generateRules (float support, int totGroups, int maxBody, int maxHead) {
     NewRuleSet rs1;
     int howManyRules = 0;
@@ -188,8 +205,10 @@ namespace minerule {
 			   j->second.begin(), j->second.end(),
 			   inserter(newGidList,newGidList.begin()));
 	  if (newGidList.size() >= threshold) {
+		if (checkHeads(rc2,j,newGidList,threshold)) {
 	    NewRule r(rc2,j,newGidList);
 	    rs1.insert(rs1.end(),r);
+		}
 	  }
 	}
       }

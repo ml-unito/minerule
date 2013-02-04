@@ -33,6 +33,7 @@ namespace minerule {
   class NewRule {
   public:
 	  std::vector<ItemType> body, head;
+	  std::map<ItemType, MapElement> headTable;
 	  std::map<ItemType, BodyMapElement>::iterator lastBody;
 	  std::map<ItemType, MapElement>::iterator lastHead;
 	  double conf;
@@ -42,12 +43,15 @@ namespace minerule {
 
 	  NewRule (std::map<ItemType, BodyMapElement>::iterator b, GidList& g) : lastBody(b), gids(g) {
 		  body.push_back(b->first);
-		  lastHead = b->second.heads.begin();
+		  headTable = b->second.heads;
+		  lastHead = headTable.begin();
+		  assert(lastHead != headTable.end());
 	  }
 	  
 	  NewRule (NewRule& r, std::map<ItemType, BodyMapElement>::iterator b, GidList& g) : body(r.body), lastBody(b), gids(g) {
 		  body.push_back(b->first);
-		  lastHead = b->second.heads.begin();
+		  hash_intersection( headTable, b->second.heads );
+		  lastHead = headTable.begin();
 	  }
 	  
 	  NewRule (std::map<ItemType, BodyMapElement>::iterator b, std::map<ItemType, MapElement>::iterator h, GidList& g, int bs) : lastBody(b), lastHead(h), gids(g), bodySupp(bs) {
@@ -77,6 +81,9 @@ namespace minerule {
 		  out << std::endl;
 		  return out;
 	  }
+	  
+  private:
+	  static void hash_intersection( std::map<ItemType, MapElement>& lhs, const std::map<ItemType, MapElement>& rhs );
   };
 
   class NewRuleSet : public std::vector<NewRule> {  };

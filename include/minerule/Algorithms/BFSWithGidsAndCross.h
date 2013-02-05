@@ -32,39 +32,41 @@ namespace minerule {
 
   class NewRule {
   public:
+	  std::map<ItemType, BodyMapElement>::iterator lastBody;
 	  std::vector<ItemType> body, head;
 	  std::map<ItemType, MapElement> headTable;
-	  std::map<ItemType, BodyMapElement>::iterator lastBody;
 	  std::map<ItemType, MapElement>::iterator lastHead;
 	  double conf;
 
 	  GidList gids;
 	  int bodySupp;
+	 
+	  NewRule( const NewRule& r ) : lastBody(r.lastBody), body(r.body), head(r.head), headTable(r.headTable), conf(r.conf), gids(r.gids), bodySupp(r.bodySupp) {
+		  if( r.lastHead == r.headTable.end() )
+			  lastHead = headTable.end();
+		  else 
+			  lastHead = headTable.find( r.lastHead->first );		  
+	  }
 
 	  NewRule (std::map<ItemType, BodyMapElement>::iterator b, GidList& g) : lastBody(b), gids(g) {
 		  body.push_back(b->first);
 		  headTable = b->second.heads;
-		  lastHead = headTable.begin();
-		  assert(lastHead != headTable.end());
+		  lastHead = headTable.begin();		  
 	  }
 	  
 	  NewRule (NewRule& r, std::map<ItemType, BodyMapElement>::iterator b, GidList& g) : body(r.body), lastBody(b), gids(g) {
 		  body.push_back(b->first);
-		  hash_intersection( headTable, b->second.heads );
+		  headTable = hash_intersection( r.headTable, b->second.heads );		  
 		  lastHead = headTable.begin();
 	  }
 	  
-	  NewRule (std::map<ItemType, BodyMapElement>::iterator b, std::map<ItemType, MapElement>::iterator h, GidList& g, int bs) : lastBody(b), lastHead(h), gids(g), bodySupp(bs) {
-		  body.push_back(b->first);
-		  head.push_back(h->first);
-	  }
-	  
-	  NewRule (NewRule& r, std::map<ItemType, BodyMapElement>::iterator b, GidList& g, int bs) : body(r.body), head(r.head), lastBody(b), lastHead(r.lastHead), gids(g), bodySupp(bs) {
+	  NewRule (NewRule& r, std::map<ItemType, BodyMapElement>::iterator b, GidList& g, int bs) : body(r.body), head(r.head), headTable(r.headTable), lastBody(b), lastHead(r.lastHead), gids(g), bodySupp(bs) {
 		  body.push_back(b->first);
 	  }
 	  
-	  NewRule (NewRule& r, std::map<ItemType, MapElement>::iterator h, GidList& g) : body(r.body), head(r.head), lastBody(r.lastBody), lastHead(h), gids(g), bodySupp(r.bodySupp) {
-		  head.push_back(h->first);
+	  NewRule (NewRule& r, std::map<ItemType, MapElement>::iterator h, GidList& g) : body(r.body), head(r.head), headTable(r.headTable), lastBody(r.lastBody), gids(g), bodySupp(r.bodySupp) {
+		  head.push_back(h->first);		  
+		  lastHead = headTable.find( h->first );
 	  }
 	  
 	  friend std::ostream& operator<<(std::ostream& out, NewRule r) {
@@ -83,7 +85,7 @@ namespace minerule {
 	  }
 	  
   private:
-	  static void hash_intersection( std::map<ItemType, MapElement>& lhs, const std::map<ItemType, MapElement>& rhs );
+	  static std::map<ItemType, MapElement> hash_intersection( std::map<ItemType, MapElement>& lhs, const std::map<ItemType, MapElement>& rhs );
   };
 
   class NewRuleSet : public std::vector<NewRule> {  };
@@ -99,8 +101,8 @@ namespace minerule {
 
     void pruneMap(float threshold);
     void updateCount ();
-    void createBodies (NewRuleSet& rs, float threshold, size_t maxBody);
-    void createHeads (NewRuleSet& rs, NewRuleSet& rs1, float threshold, size_t maxHead);
+    // void createBodies (NewRuleSet& rs, float threshold, size_t maxBody);
+    // void createHeads (NewRuleSet& rs, NewRuleSet& rs1, float threshold, size_t maxHead);
 
     bool checkHeads (NewRule& r, std::map<ItemType, BodyMapElement>::iterator b, GidList& g, float threshold);
     int generateRules (float support, int totGroups, int maxBody, int maxHead);

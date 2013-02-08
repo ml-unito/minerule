@@ -16,14 +16,15 @@ namespace mrmatch {
 	
 		std::cout
 			<< StringUtils::toBold("   -h") << " - prints this message." << std::endl
-			<< StringUtils::toBold("   -c") << " - suppress colors."
+			<< StringUtils::toBold("   -c") << " - suppress colors." << std::endl
 			<< StringUtils::toBold("   -n") << " - specifies a query number (instead of a query name)." << std::endl
 			<< StringUtils::toBold("   -O") << " - specifies a minerule option on the command line (overrides those read from file)." << std::endl
 			<< StringUtils::toBold("   -f") << " - specify a file name containing the Options to be used." << std::endl
 			<< "         default is 'optins.txt'"<< std::endl
 			<< StringUtils::toBold("   -d") << " - redirect the output onto the database. The output table must" <<std::endl
 			<< "         be specified as the argument to this option" << std::endl
-			<< StringUtils::toBold("   -t") << " - specify a table name for the match (the table *must* have the same schema as the mining table use for the query)" << std::endl
+			<< StringUtils::toBold("   -t") << " - specify a table name for the match (the table *must* have the" << std::endl
+			<< "         same schema as the mining table used for the query)" << std::endl
 			<< StringUtils::toBold("   -s") << " - sets the output sorting order. The parameter can be set to:" << std::endl
 			<< StringUtils::toBold("         RuleGids") << ", to produce an output with the format: 'rule -> list of matching gids'" << std::endl
 			<< StringUtils::toBold("         GidRules") << ", to produce an output with the format: 'gid -> list of matching rules'."  << std::endl

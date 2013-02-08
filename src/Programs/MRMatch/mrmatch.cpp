@@ -16,7 +16,7 @@ namespace mrmatch {
 		if(minerule.hasCrossConditions() || !OptimizerCatalogue::hasIDConstraints(minerule)) 
 			return SourceTableRequirements( SourceTableRequirements::CrossProduct | SourceTableRequirements::SortedGids );
 		else
-			return SourceTableRequirements();		
+			return SourceTableRequirements(SourceTableRequirements::SortedGids);		
 	}
 		
 	void execute(const Options& options) {	

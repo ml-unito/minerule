@@ -80,7 +80,7 @@ namespace minerule {
 		std::map<FSTreeSequence,int,FSTreeSequence::less_sequence>* ris = h->getResult();
 	//std::string s=""
 		std::cout<<"ris->size "<<ris->size()<<std::endl;
-		MRLogPush("contiguos frequent sequence find: "+ris->size());
+		MRLogPush(std::string("contiguos frequent sequence find: ")+Converter(ris->size()).toString());
 		for (res_it=ris->begin();res_it!=ris->end();res_it++){
 			FSTreeSequence temp=(*res_it).first;
 			MRLogPush(temp.toStdString());

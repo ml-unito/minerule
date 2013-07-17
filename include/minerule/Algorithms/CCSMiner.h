@@ -19,7 +19,10 @@ namespace minerule {
     
   public:
     CCSMiner(const OptimizedMinerule& mr, const AlgorithmsOptions& opts) : 
-      MiningAlgorithm(mr), options(opts), statement(NULL) {}
+      MiningAlgorithm(mr),  statement(NULL) {
+	options = opts;
+        connection.useODBCConnection(opts.getODBCConnection());
+}
 
     virtual ~CCSMiner() {}
 

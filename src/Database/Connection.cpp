@@ -78,9 +78,10 @@ namespace minerule {
 
 		statement->execute(create);
 		statement->execute(create_index);
-
+if(srd.getHead().getColumnsCount() > 0) {
 		// Creating the head elements table
 		create=std::string("CREATE TABLE ")+ getTableName(HeadsTable) +  " (id int, " + srd.getHead().getSQLDataDefinition() +")";
+
 		create_index = " CREATE INDEX "+getTableName(HeadsTable)+"_index ON " + getTableName(HeadsTable) + " (id);";
 
 		statement->execute(create);
@@ -88,7 +89,7 @@ namespace minerule {
 
 		std::string headInserterQuery = "INSERT INTO " + getTableName(HeadsTable) + " VALUES (?,"+ srd.getHead().questionMarks() +")";
 		dbInserter->setHeadInserter(connection->prepareStatement(headInserterQuery));
-
+}
 		std::string bodyInserterQuery = "INSERT INTO " + getTableName(BodiesTable) + " VALUES (?," + srd.getBody().questionMarks() + ")";
 		dbInserter->setBodyInserter(connection->prepareStatement(bodyInserterQuery));
 

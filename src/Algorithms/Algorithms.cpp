@@ -10,6 +10,7 @@
 #include "minerule/Algorithms/ConstrItemSetsExtraction.h"
 #include "minerule/Algorithms/FSMiner.h"
 #include "minerule/Algorithms/CCSMiner.h"
+#include "minerule/Algorithms/STSMinerWithBitVector.h"
 
 namespace minerule {
 
@@ -92,7 +93,8 @@ namespace minerule {
 		opts.setSupport( mr.getParsedMinerule().sup );
 		opts.setBodyCardinalities( mr.getParsedMinerule().bodyCardinalities );
 
-		CCSMiner* miner = new CCSMiner(mr,opts);
+		//CCSMiner* miner = new CCSMiner(mr,opts);
+		STSMinerWithBitVector* miner= new STSMinerWithBitVector(mr,opts);
 		if(miner->canHandleMinerule())
 			return miner;
 		else {

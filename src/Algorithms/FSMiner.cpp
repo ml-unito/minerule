@@ -1,3 +1,18 @@
+//   Minerule - a sql-like language for datamining
+//   Copyright (C) 2013 Dino Ienco (dino.ienco@teledetection.fr)
+//
+//   This program is free software: you can redistribute it and/or modify
+//   it under the terms of the GNU General Public License as published by
+//   the Free Software Foundation, either version 3 of the License, or
+//   (at your option) any later version.
+//
+//   This program is distributed in the hope that it will be useful,
+//   but WITHOUT ANY WARRANTY; without even the implied warranty of
+//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//   GNU General Public License for more details.
+//
+//   You should have received a copy of the GNU General Public License
+//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "minerule/Algorithms/FSMiner.h"
 #include "minerule/Algorithms/FSTree.h"
 #include "minerule/Utils/MineruleLogs.h"
@@ -80,7 +95,7 @@ namespace minerule {
 		std::map<FSTreeSequence,int,FSTreeSequence::less_sequence>* ris = h->getResult();
 	//std::string s=""
 		std::cout<<"ris->size "<<ris->size()<<std::endl;
-		MRLogPush("contiguos frequent sequence find: "+ris->size());
+		MRLogPush(std::string("contiguos frequent sequence find: ")+Converter(ris->size()).toString());
 		for (res_it=ris->begin();res_it!=ris->end();res_it++){
 			FSTreeSequence temp=(*res_it).first;
 			MRLogPush(temp.toStdString());

@@ -1,35 +1,182 @@
-How to compile:
-  From the top most directory type the following commands:
-	./configure
-	make
-  the main executable (kernel.exe) will be found in ./Kernel
+#Minerule installation instruction (Linux - mint 14 - cinnamon - postgresql)
 
-Here follows the description of the minerule directory structure.
+## Install Postgresql (for internal use -- this should be removed and a reference to a tutorial put in the prerequisites)
 
-There are the 5 branches at top level:
-  Algorithms: contains the sources of the implemented mining algorithms
-  MRDatabase: contains the classes used to connect to and/or to abstract the
-	    Database
-  DeveloperUtils: contains some utilities that may be used in the developing 
-		  or debugging phase
-  Optimizer: contains the classes used by the system in order to optimize 
-	     the execution of Minerule queries
-  TmpProject: directory to be used to store temporary new directories that 
-	      may or may not become important for the project (i.e., it should 
-	      be used in order to avoid to pollute the directory structure 
-	      with unuseful branches)
-  Parsers: contains lex, yacc and utility files used to parse the minerule 
-	   queries
-  PreProcessor: contains classes needed to pre-process user data before 
-		calling the mine rule operator
-  PredicateUtils: classes abstracting the concept of boolean predicate and
-		  algorithms operating on them.
-  ExtLibs: Libraries developed by third parties and needed by the system 
-	   (e.g., libgist for the mining index)
-  Kernel: contains the classes that coordinates the whole system
-  Docs: pieces of documentation (notably: the README about the Optimizer 
-	catalog can be used to create the cataloger itself if it is
-	given to the mysql client).
-  
-  bin: place where each binary will be put
-  lib: place where each library will be put
+1. Install postgresql
+		
+		sudo apt-get install postgresql
+		
+2. Update the password for the postgres user
+
+		sudo -u postgres psql template1
+		ALTER USER postgres WITH ENCRYPTED PASSWORD 'password';
+		\q
+		
+3. Restart the server
+
+		/etc/init.d/postgresql restart
+		
+4. Install pgadmin3
+
+		sudo apt-get install pgadmin3
+
+
+##Prerequisites
+
+We will assume that you already have a postgres database installed and configured on your system. If this is not the case see: <!-- FIXME URL to a tutorial about how to setup postgresql on linux mint-->
+
+Even if the following are not really used by the minerule, they are needed to install the system:
+
+1. Install g++ and curl:
+		
+		sudo apt-get install curl g++ git cmake bison flex
+
+
+##Install odbc and related libraries
+
+1. Install obdc-postgresql drivers:
+
+		sudo apt-get install odbc-postgresql
+
+2. Install unixodbc configuration manager:
+
+		sudo apt-get install unixodbc-bin
+	
+3. Install unixodbc headers:
+
+		sudo apt-get install unixodbc-dev
+
+##Install libodbc++ library (from sources):
+
+1. download the latest sources (v.0.2.5) from sourceforge.net
+
+		curl -L -o libodbcxx.tar.gz http://downloads.sourceforge.net/project/libodbcxx/libodbc++/0.2.5/libodbc++-0.2.5.tar.gz
+
+2. decompress the archive and cd into it:
+
+		tar xzvf libodbcxx.tar.gz <br>
+		cd libodbc++-0.2.5
+
+3. Unfortunately the library contains a small error that prevents it to be compiled under linux. To solve the problem you need to use your favorite text editor (e.g., gedit, vim, emacs, ...) and add the following line at the very top of file src/datastream.h:
+	
+		#include <cstdio>
+
+4. run configure and make:
+
+		./configure
+		./make
+	
+5. run the installation script: 
+
+		sudo make install
+	
+6. step out of the source directory
+
+		cd ..
+	
+7. (optional) remove the sources from your system:
+	
+		rm -rf libodbc++*
+		
+##Install galib (from sources)
+
+1. download the latest sources (v. 2.4.7):
+
+		curl -o galib247.tgz http://lancet.mit.edu/ga/dist/galib247.tgz
+	
+2. decompress the archive and cd into it:
+
+		tar xzvf galib247.tgz
+		cd galib247
+	
+3. compile and install the library
+
+		make lib<br>
+		sudo make install
+
+## Install the minerule (from sources)
+
+<!-- FIXME il minerule non potrà  essere scaricato da kdd in questo modo!! -->
+
+1. Grab the latest sources and cd into the minerule directory 
+
+		git clone ssh://mluser@kdd.di.unito.it/usr/local/GIT/minerule<br>
+		cd minerule
+		
+2. Decompress the gist library in the ExtLibs subdirectory
+
+		tar -C ExtLibs -xzvf libgist.tar.gz
+	
+3. create and configure the build directory
+
+		mkdir build
+		cd build
+		cmake ../src
+	
+3. build the system
+
+		make
+
+
+<!-- FIXME ?make install? -->
+
+## Configure your odbc datasources
+The minerule system will access to your database through odbc. Then, before you can use it, it is necessary to configure the datasources needed to let the system access your data. In the following we will assume that you need to configure a odbc datasource to access a schema named 'testdb' with a user named 'user1' using password 'pwd'.
+
+1. Launch the odbc utilty for creating datasources:
+
+		ODBCCreateDataSourceQ4
+		
+2. A window dialog will appear asking you the type of the datasources. Choose 'User' and click 'Next'.
+
+3. Select the first row of the table shown in the new dialog and click 'Next'.
+
+4. The new dialog will show you a table with some field to be compiled, leave everything untouched except for:
+
+	a. Name: set it to 'test' (this is the name of the datasource)
+	
+	b. Database: set it to 'testdb'
+	
+	c. Username: set it to 'user1'
+	
+	d. Password: set it to 'pwd'
+
+5. Click 'Finish' to save the configuration.
+
+## Configure options for the minerule system
+
+From the build directory (or wherever you have access to the minerule binaries if you moved them), launch the 'defaults' sub-command to create a new option file:
+
+		mr defaults > options.txt
+
+Using your favorite editor, edit the option file with the information needed to access to the newly created odbc datasource. In particular, in the obdc option group set:
+
+1.	name to 'test'
+
+2.  username to 'user1'
+
+3.  password to 'pwd'
+
+4. dbms to 'postgres'
+
+At the end of the process the head of the file should look like:
+
+		odbc::{
+			+name=test
+			+username=user1			
+			+password=pwd
+			...
+			+dbms=postgres
+		}
+		
+		...
+
+## Install the minerule catalogue
+
+If everything is ok, you should now be able to install the minerule catalogue by using the following command:
+
+	./mr catalogue -I
+	
+You should see some log message. In the first part of the message you should see a number of red 'MISSING' messages (they are normal, inform you that the catalogue was not already installed). Then a number of green 'OK' messages.
+
+If this is the case, congratulation, the minerule system is ready for your first query.

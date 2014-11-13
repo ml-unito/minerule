@@ -14,7 +14,7 @@
 //   You should have received a copy of the GNU General Public License
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef __CONSTRITEMSETSEXTRACTION_H
-#define __CONSTRiTEMSETSEXTRACTION_H
+#define __CONSTRITEMSETSEXTRACTION_H
 
 #include "minerule/Algorithms/MiningAlgorithmBase.h"
 #include "minerule/Database/Connection.h"
@@ -53,4 +53,3 @@ namespace minerule {
 
 
 #endif
-

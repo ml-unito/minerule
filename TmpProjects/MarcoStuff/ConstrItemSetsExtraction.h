@@ -1,5 +1,5 @@
 #ifndef __CONSTRITEMSETSEXTRACTION_H
-#define __CONSTRiTEMSETSEXTRACTION_H
+#define __CONSTRITEMSETSEXTRACTION_H
 
 #include "minerule/Algorithms/MiningAlgorithmBase.h"
 #include "minerule/Database/Connection.h"
@@ -50,4 +50,3 @@ namespace minerule {
 
 
 #endif
-

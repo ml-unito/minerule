@@ -20,6 +20,7 @@
 #include <vector>
 #include <string>
 #include <iterator>
+#include <iostream>
 
 namespace minerule {
 
@@ -30,22 +31,22 @@ class SourceRowColumnIds {
   std::vector<int> bodyElems;
   std::vector<int> clusterHeadElems;
   std::vector<int> headElems;
-  
-  SourceRowColumnIds(const SourceRowColumnIds& rhs) 
+
+  SourceRowColumnIds(const SourceRowColumnIds& rhs)
 	  : groupElems(rhs.groupElems), clusterBodyElems(rhs.clusterBodyElems),
 		bodyElems(rhs.bodyElems), clusterHeadElems(rhs.clusterHeadElems),
 		headElems(rhs.headElems) {}
-    
+
   SourceRowColumnIds() {
   }
-  
+
   ~SourceRowColumnIds() {
   }
-  
-  
-  // The following function is a generalization of the set???Elem function defined below (see the 
+
+
+  // The following function is a generalization of the set???Elem function defined below (see the
   // corresponding comment for explanation about start, numCols and return values). Its intended usage
-  // is: 
+  // is:
   //   SourceRowColumnIds des;
   //   des.setElems(des.bodyElems, 1, 5)
   // which is equivalent to
@@ -60,7 +61,7 @@ class SourceRowColumnIds {
   //   and returns start+numCols-1. As a side effect, the columns start, start+1,...,start+numCols-1 are added
   // to the target elem
   // their intended usage is something like:
-  //    /* the following lines sets the description as follows:  
+  //    /* the following lines sets the description as follows:
   //       group : from column 1 to 3
   //       clusterBody: from column 4 to 5
   //       body : from column 6 to 10
@@ -84,9 +85,12 @@ class SourceRowColumnIds {
 };
 
 inline std::ostream& operator<<(std::ostream& o, const SourceRowColumnIds& rowDes) {
-	o << "head:"; copy( rowDes.headElems.begin(), rowDes.headElems.end(), std::ostream_iterator<int>(o, " ") ); 
-	o << " - ";
-	o << "body:"; copy( rowDes.bodyElems.begin(), rowDes.bodyElems.end(), std::ostream_iterator<int>(o, " ") ); 
+  // o << "test";
+	// o << "head:";
+  copy( rowDes.headElems.begin(), rowDes.headElems.end(), std::ostream_iterator<int>(o, " ") );
+	// o << " - ";
+	// o << "body:";
+  copy( rowDes.bodyElems.begin(), rowDes.bodyElems.end(), std::ostream_iterator<int>(o, " ") );
 	return o;
 }
 

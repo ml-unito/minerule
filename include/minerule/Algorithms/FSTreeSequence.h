@@ -14,7 +14,7 @@
 //   You should have received a copy of the GNU General Public License
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef Sequence_H
-#define Sequence_H 
+#define Sequence_H
 #include <list>
 #include <string>
 #include <iostream>
@@ -37,11 +37,16 @@ namespace minerule {
   public:
     /**
      * this struct define the order between two FSTreeSequence
-     */	
+     */
     struct less_sequence{
-      bool operator()(const FSTreeSequence& first, const FSTreeSequence& second){			
-	return (first < second);
+      bool operator()(const FSTreeSequence& first, const FSTreeSequence& second) const {
+	      return (first < second);
       }
+
+      bool comp(const FSTreeSequence& first, const FSTreeSequence& second) const {
+        return (first < second);
+      }
+
     };
 
     /**
@@ -59,7 +64,7 @@ namespace minerule {
       seq=new ItemVector();
       *seq = *in.seq;
     };
-		
+
     /**
      *	This constructor allows to create a new FSTreeSequence object that contains only n_item
      *	from FSTreeSequence in starting from the item in position start
@@ -73,7 +78,7 @@ namespace minerule {
      * The distructor of a FSTreeSequence
      */
     ~FSTreeSequence();
-		
+
     /**
      * this method return a pointer to the vector that contains the items as string
      * @return a pointer of a vector ofstd::string that contains items
@@ -86,12 +91,12 @@ namespace minerule {
      */
     void add(const ItemType& s);
 
-		
+
     /**
      * a simple method for print to standard output the items
      */
     void stampa();
-		
+
     /**
      * the number of items in this FSTreeSequence
      * @return the number of items in this FSTreeSequence
@@ -103,7 +108,7 @@ namespace minerule {
      * @return the first element in the FSTreeSequence
      */
     ItemType removeHead();
-		
+
     /**
      * insert an item in the front of the FSTreeSequence
      * @param s the item that i want insert
@@ -114,12 +119,12 @@ namespace minerule {
      * @return astd::string that contains the items in this FSTreeSequence
      */
     std::string toStdString();
-		
+
     /**
      * delete all the items in this FSTreeSequence, after this operation the FSTreeSequence is empty
      */
     void svuota();
-		
+
     /**
      * the operator ==
      * @return true if the two FSTreeSequence are equal (same element and same size), false otherwise
@@ -145,5 +150,3 @@ namespace minerule {
 } //namespace
 
 #endif
-
-

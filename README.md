@@ -1,33 +1,15 @@
-#Minerule installation instruction (Linux - mint 14 - cinnamon - postgresql)
+# Minerule installation instruction
 
-## Install Postgresql (for internal use -- this should be removed and a reference to a tutorial put in the prerequisites)
-
-1. Install postgresql
-		
-		sudo apt-get install postgresql
-		
-2. Update the password for the postgres user
-
-		sudo -u postgres psql template1
-		ALTER USER postgres WITH ENCRYPTED PASSWORD 'password';
-		\q
-		
-3. Restart the server
-
-		/etc/init.d/postgresql restart
-		
-4. Install pgadmin3
-
-		sudo apt-get install pgadmin3
+The present guide to installing the minerule has been tested using linux (mint) and postgresql.
+The installation procedure is very similar on os x, with the advantage that most dependencies can be
+installed using [homebrew](http://brew.sh) (you need to tap into homebrew/science, then install galib and libodbc++ formulas).
 
 
 ##Prerequisites
 
-We will assume that you already have a postgres database installed and configured on your system. If this is not the case see: <!-- FIXME URL to a tutorial about how to setup postgresql on linux mint-->
+We will assume that you already have a postgres database installed and configured on your system. If this is not the case, please follow one of the many postgress installation guides present on the internet (e.g., https://wiki.postgresql.org/wiki/Detailed_installation_guides).
 
-Even if the following are not really used by the minerule, they are needed to install the system:
-
-1. Install g++ and curl:
+Install g++ and curl:
 		
 		sudo apt-get install curl g++ git cmake bison flex
 
@@ -116,9 +98,11 @@ Even if the following are not really used by the minerule, they are needed to in
 3. build the system
 
 		make
+		
+4. install it
 
+5. 		make install
 
-<!-- FIXME ?make install? -->
 
 ## Configure your odbc datasources
 The minerule system will access to your database through odbc. Then, before you can use it, it is necessary to configure the datasources needed to let the system access your data. In the following we will assume that you need to configure a odbc datasource to access a schema named 'testdb' with a user named 'user1' using password 'pwd'.

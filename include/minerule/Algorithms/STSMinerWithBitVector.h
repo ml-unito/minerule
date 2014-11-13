@@ -228,6 +228,8 @@ public:
             return (el.compare(val))>=0;
         if(op.compare("!=")==0)
             return (el.compare(val))!=0;
+
+        throw MineruleException(MR_ERROR_INTERNAL, "Operator ("+op+") not supported");
     }
 
     bool check(std::string op){

@@ -1,16 +1,49 @@
 # Minerule installation instruction
 
 The present guide to installing the minerule has been tested using linux (mint) and postgresql.
-The installation procedure is very similar on os x, with the advantage that most dependencies can be
+
+The installation procedure on Mac OS X is very similar, with the advantage that most dependencies can be
 installed using [homebrew](http://brew.sh) (you need to tap into homebrew/science, then install galib and libodbc++ formulas).
 
+On OS X, in addition to the above mentione formulas, you will need to install the unixodbc manager (``brew install unixodbc``) and the postgres odbc driver (``brew install psqlodbc``). Also, the state of guis odbc managers is pretty bad on this platform. You may want to manually configure the relevant files by editing ``/usr/local/Cellar/unixodbc/2.3.2_1/etc/odbcinst.ini`` so to look similar to (we are assuming you did install unixodbc through homebrew):
+
+```ini
+[postgres]
+Description     = PostgreSQL driver
+Driver          = /usr/local/lib/psqlodbcw.so
+Setup           =
+FileUsage       = 1
+```
+
+and  ~/.odbc.ini to look similar to:
+
+```ini
+[DataSourceName]
+Description         = DataSource description
+Driver              = postgres
+Trace               = Yes
+TraceFile           = sql.log
+Database            = DataBaseName
+Servername          = localhost
+UserName            = UserName
+Password            = Password
+Port                = 5432
+Protocol            = 6.4
+ReadOnly            = No
+RowVersioning       = No
+ShowSystemTables    = No
+ShowOidColumn       = No
+FakeOidIndex        = No
+ConnSettings        =
+```
+where ``DataSourceName``, ``DataBaseName``, ``UserName``, and ``Password`` needs to be changed to match your needs.
 
 ##Prerequisites
 
 We will assume that you already have a postgres database installed and configured on your system. If this is not the case, please follow one of the many postgress installation guides present on the internet (e.g., https://wiki.postgresql.org/wiki/Detailed_installation_guides).
 
 Install g++ and curl:
-		
+
 		sudo apt-get install curl g++ git cmake bison flex
 
 
@@ -23,7 +56,7 @@ Install g++ and curl:
 2. Install unixodbc configuration manager:
 
 		sudo apt-get install unixodbc-bin
-	
+
 3. Install unixodbc headers:
 
 		sudo apt-get install unixodbc-dev
@@ -40,37 +73,37 @@ Install g++ and curl:
 		cd libodbc++-0.2.5
 
 3. Unfortunately the library contains a small error that prevents it to be compiled under linux. To solve the problem you need to use your favorite text editor (e.g., gedit, vim, emacs, ...) and add the following line at the very top of file src/datastream.h:
-	
+
 		#include <cstdio>
 
 4. run configure and make:
 
 		./configure
 		./make
-	
-5. run the installation script: 
+
+5. run the installation script:
 
 		sudo make install
-	
+
 6. step out of the source directory
 
 		cd ..
-	
+
 7. (optional) remove the sources from your system:
-	
+
 		rm -rf libodbc++*
-		
+
 ##Install galib (from sources)
 
 1. download the latest sources (v. 2.4.7):
 
 		curl -o galib247.tgz http://lancet.mit.edu/ga/dist/galib247.tgz
-	
+
 2. decompress the archive and cd into it:
 
 		tar xzvf galib247.tgz
 		cd galib247
-	
+
 3. compile and install the library
 
 		make lib<br>
@@ -80,25 +113,25 @@ Install g++ and curl:
 
 <!-- FIXME il minerule non potrà  essere scaricato da kdd in questo modo!! -->
 
-1. Grab the latest sources and cd into the minerule directory 
+1. Grab the latest sources and cd into the minerule directory
 
 		git clone ssh://mluser@kdd.di.unito.it/usr/local/GIT/minerule<br>
 		cd minerule
-		
+
 2. Decompress the gist library in the ExtLibs subdirectory
 
 		tar -C ExtLibs -xzvf libgist.tar.gz
-	
+
 3. create and configure the build directory
 
 		mkdir build
 		cd build
 		cmake ../src
-	
+
 3. build the system
 
 		make
-		
+
 4. install it
 
 5. 		make install
@@ -110,20 +143,20 @@ The minerule system will access to your database through odbc. Then, before you 
 1. Launch the odbc utilty for creating datasources:
 
 		ODBCCreateDataSourceQ4
-		
+
 2. A window dialog will appear asking you the type of the datasources. Choose 'User' and click 'Next'.
 
 3. Select the first row of the table shown in the new dialog and click 'Next'.
 
 4. The new dialog will show you a table with some field to be compiled, leave everything untouched except for:
 
-	a. Name: set it to 'test' (this is the name of the datasource)
-	
-	b. Database: set it to 'testdb'
-	
-	c. Username: set it to 'user1'
-	
-	d. Password: set it to 'pwd'
+	a. Name: set it to the name you want to give to this datasource (in the following we will assume it to be DataSourceName)
+
+	b. Database: set it to the name of the database as seen by postgres (in the following we will assume it to be 'DataBaseName')
+
+	c. Username: set it to a user name recognized by postgres and with enough privileges to work on DataBaseName (in the following we will assume it to be "UserName")
+
+	d. Password: set it to the password of UserName
 
 5. Click 'Finish' to save the configuration.
 
@@ -135,32 +168,34 @@ From the build directory (or wherever you have access to the minerule binaries i
 
 Using your favorite editor, edit the option file with the information needed to access to the newly created odbc datasource. In particular, in the obdc option group set:
 
-1.	name to 'test'
+1.	name to 'DataSourceName'
 
-2.  username to 'user1'
+2.  username to 'UserName'
 
-3.  password to 'pwd'
+3.  password to the password of UserName
 
 4. dbms to 'postgres'
 
 At the end of the process the head of the file should look like:
 
+```
 		odbc::{
-			+name=test
-			+username=user1			
-			+password=pwd
+			+name=DataSourceName
+			+username=UserName
+			+password=...
 			...
 			+dbms=postgres
 		}
-		
+
 		...
+```
 
 ## Install the minerule catalogue
 
 If everything is ok, you should now be able to install the minerule catalogue by using the following command:
 
 	./mr catalogue -I
-	
-You should see some log message. In the first part of the message you should see a number of red 'MISSING' messages (they are normal, inform you that the catalogue was not already installed). Then a number of green 'OK' messages.
+
+You should see some log message. In the first part of the message you should see a number of red 'MISSING' messages (they are normal, they inform you that the catalogue was not already installed). Then a number of green 'OK' messages.
 
 If this is the case, congratulation, the minerule system is ready for your first query.

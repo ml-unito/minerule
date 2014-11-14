@@ -82,14 +82,10 @@ Install g++ and curl:
 
 1. Grab the latest sources and cd into the minerule directory 
 
-		git clone ssh://mluser@kdd.di.unito.it/usr/local/GIT/minerule<br>
+		git clone git@github.com:boborbt/minerule.git
 		cd minerule
 		
-2. Decompress the gist library in the ExtLibs subdirectory
-
-		tar -C ExtLibs -xzvf libgist.tar.gz
-	
-3. create and configure the build directory
+2. create and configure the build directory
 
 		mkdir build
 		cd build

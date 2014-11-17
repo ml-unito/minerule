@@ -3,8 +3,10 @@ MINERULE INSTALLATION INSTRUCTIONS
 
 1. Get the sources:
    git clone ssh://mluser@kdd.di.unito.it/usr/local/GIT/minerule
+
 2. cd into the directory created by git
    cd minerule
+   
 3. install dependencies
    install cmake
    cd into ExtLibs where you will find as snapshot of the libraries needed by minerule.

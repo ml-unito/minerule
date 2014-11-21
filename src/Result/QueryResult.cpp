@@ -13,21 +13,17 @@
 //
 //   You should have received a copy of the GNU General Public License
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "minerule/Optimizer/OptimizerCatalogue.h"
-#include "minerule/Utils/MineruleOptions.h"
-#include "minerule/Database/Connection.h"
+#include "minerule/Optimizer/OptimizerCatalogue.hpp"
+#include "minerule/Utils/MineruleOptions.hpp"
+#include "minerule/Database/Connection.hpp"
 
 namespace minerule {
 
   void
-  QueryResult::Iterator::readElems(int id, ItemSet& elems, odbc::PreparedStatement* ps_elems)
-  throw (MineruleException, odbc::SQLException, std::exception) {
-
-    // FIXME: THE MEMORY ERROR SHOULD BE DUE TO ONE OF THESE TWO LINES (COMMENTING OUT
-    //    THEM FIXES THE PROBLEM, COMMENTING OUT ONLY THE REST OF THE FUNCTION DOES NOT).
-    //    --> BUG IN LIBODBC++?
+  QueryResult::Iterator::readElems(int id, ItemSet& elems, mrdb::PreparedStatement* ps_elems)
+  throw (MineruleException, mrdb::SQLException, std::exception) {
     ps_elems->setInt(1,id);
-    odbc::ResultSet* rs = ps_elems->executeQuery();
+    mrdb::ResultSet* rs = ps_elems->executeQuery();
 
     try {
       while( rs->next() ) {
@@ -48,8 +44,8 @@ namespace minerule {
   void
   QueryResult::Iterator::init( const std::string& rulesTable,
   double support,
-  double confidence ) throw( MineruleException, odbc::SQLException ) {
-    odbc::Connection* odbc_conn = MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
+  double confidence ) throw( MineruleException, mrdb::SQLException ) {
+    mrdb::Connection* odbc_conn = MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
     Connection connection;
     connection.setOutTableName(rulesTable);
 
@@ -78,7 +74,7 @@ namespace minerule {
     return rs_rules->next();
   }
 
-  void QueryResult::Iterator::getRule( Rule& r ) throw(MineruleException, odbc::SQLException, std::exception) {
+  void QueryResult::Iterator::getRule( Rule& r ) throw(MineruleException, mrdb::SQLException, std::exception) {
     ItemSet* body = new ItemSet();
     ItemSet* head = new ItemSet();
     size_t bid, hid;
@@ -91,8 +87,8 @@ namespace minerule {
 
     r.setBody(body);
     r.setHead(head);
-    r.setSupport(rs_rules->getFloat(3));
-    r.setConfidence(rs_rules->getFloat(4));
+    r.setSupport(rs_rules->getDouble(3));
+    r.setConfidence(rs_rules->getDouble(4));
     r.setBodyId(bid);
     r.setHeadId(hid);
   }

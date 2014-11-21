@@ -13,10 +13,10 @@
 //
 //   You should have received a copy of the GNU General Public License
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "minerule/PredicateUtils/Predicate.h"
+#include "minerule/PredicateUtils/Predicate.hpp"
 
 #include <algorithm>
-#include "minerule/PredicateUtils/ExpressionNFCoder.h"
+#include "minerule/PredicateUtils/ExpressionNFCoder.hpp"
 
 
 namespace minerule {

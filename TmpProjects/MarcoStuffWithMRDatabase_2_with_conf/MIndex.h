@@ -2,10 +2,10 @@
 
 #ifndef MINDEX_H
 #define MINDEX_H
-#include "minerule/Utils/MineruleOptions.h"
-#include "minerule/Database/SourceRowAttribute.h"
-#include "minerule/Database/SourceRowColumnIds.h"
-#include "minerule/Database/SourceRowAttributeCollection.h"
+#include "minerule/Utils/MineruleOptions.hpp"
+#include "minerule/Database/SourceRowAttribute.hpp"
+#include "minerule/Database/SourceRowColumnIds.hpp"
+#include "minerule/Database/SourceRowAttributeCollection.hpp"
 using namespace minerule;
 #include <ansidecl.h>
 #include <odbc++/connection.h>

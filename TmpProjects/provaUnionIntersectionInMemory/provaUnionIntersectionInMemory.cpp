@@ -1,6 +1,6 @@
-#include "minerule/Algorithms/ResultCombinator.h"
-#include "minerule/Optimizer/OptimizedMinerule.h"
-#include "minerule/Utils/MineruleOptions.h"
+#include "minerule/Algorithms/ResultCombinator.hpp"
+#include "minerule/Optimizer/OptimizedMinerule.hpp"
+#include "minerule/Utils/MineruleOptions.hpp"
 
 
 using namespace std;

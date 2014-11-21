@@ -13,11 +13,11 @@
 //
 //   You should have received a copy of the GNU General Public License
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "minerule/Algorithms/IncrementalAlgorithm.h"
-#include "minerule/Algorithms/IDIncrementalAlgorithm.h"
-#include "minerule/Algorithms/ResultCombinator.h"
-#include "minerule/Algorithms/ConstrTree.h"
-#include "minerule/Algorithms/DestrTree.h"
+#include "minerule/Algorithms/IncrementalAlgorithm.hpp"
+#include "minerule/Algorithms/IDIncrementalAlgorithm.hpp"
+#include "minerule/Algorithms/ResultCombinator.hpp"
+#include "minerule/Algorithms/ConstrTree.hpp"
+#include "minerule/Algorithms/DestrTree.hpp"
 
 namespace minerule {
 

@@ -13,9 +13,9 @@
 //
 //   You should have received a copy of the GNU General Public License
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "minerule/PredicateUtils/Interval.h"
-#include "minerule/Utils/MineruleOptions.h"
-#include "minerule/PredicateUtils/Predicate.h"
+#include "minerule/PredicateUtils/Interval.hpp"
+#include "minerule/Utils/MineruleOptions.hpp"
+#include "minerule/PredicateUtils/Predicate.hpp"
 
 namespace minerule {
   
@@ -200,7 +200,7 @@ namespace minerule {
    * ======================================================================
    */
   
-  SQLUtils::Type IntervalChecker::typeForAttribute(const char* attr) throw(MineruleException, odbc::SQLException) {
+  SQLUtils::Type IntervalChecker::typeForAttribute(const char* attr) throw(MineruleException, mrdb::SQLException) {
     std::map<const char*, SQLUtils::Type>::const_iterator it = 
       typesMap.find(attr);
     

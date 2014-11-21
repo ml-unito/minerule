@@ -13,8 +13,8 @@
 //
 //   You should have received a copy of the GNU General Public License
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "minerule/Utils/MineruleException.h"
-#include "minerule/Utils/StringUtils.h"
+#include "minerule/Utils/MineruleException.hpp"
+#include "minerule/Utils/StringUtils.hpp"
 
 namespace minerule {
 	

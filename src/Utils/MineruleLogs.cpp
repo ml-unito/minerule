@@ -13,9 +13,9 @@
 //
 //   You should have received a copy of the GNU General Public License
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "minerule/Utils/MineruleLogs.h"
-#include "minerule/Utils/MineruleOptions.h"
-#include "minerule/Utils/StringUtils.h"
+#include "minerule/Utils/MineruleLogs.hpp"
+#include "minerule/Utils/MineruleOptions.hpp"
+#include "minerule/Utils/StringUtils.hpp"
 
 const size_t MAX_LOG_LENGTH = 70;
 

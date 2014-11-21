@@ -13,18 +13,16 @@
 //
 //   You should have received a copy of the GNU General Public License
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "minerule/Utils/MineruleOptions.h"
+#include "minerule/Utils/MineruleOptions.hpp"
 #include <iostream>
 #include <fstream>
 
 
 //#include <malloc.h>
 
-#include<odbc++/drivermanager.h>
-
 const std::string MINERULE_OPTIONS_PARSING_ERROR = "Parsing Error while parsing MineruleOptions";
 
-#include "minerule/Utils/OptionParserLib.h"
+#include "minerule/Utils/OptionParserLib.hpp"
 
 namespace minerule {
   const std::string MineruleOptions::DEFAULT_FILE_NAME("options.txt");
@@ -35,7 +33,7 @@ namespace minerule {
     std::map<std::string, MRLogger*>::iterator it;
     for(it=knownStreams.begin(); it!=knownStreams.end(); it++) {
       std::ostream* ostr=NULL;
-      
+
       if( it->first!="<stdout>" &&
 	  it->first!="<stderr>" ) {
 	ostr=it->second->getStream();
@@ -68,15 +66,15 @@ namespace minerule {
 	return getParsers();
       else return OptionBase::subclassForName(oclass);
     }
-  
 
-  
+
+
   void
   MineruleOptions::init() {
     miningAlgorithms.getRulesMiningAlgorithms().getPartitionBase().setRowsPerPartition(300000); /*300.000*/
     miningAlgorithms.getRulesMiningAlgorithms().getPartitionWithClusters().setRowsPerPartition(300000); /*300.000*/
     miningAlgorithms.getRulesMiningAlgorithms().getFPGrowth().setAlgoType(MineruleOptions::MiningAlgorithms::RulesMiningAlgorithms::FPGrowth::Original);
-    
+
 
     optimizations.setTryOptimizations(false);
 
@@ -113,14 +111,14 @@ namespace minerule {
     } catch(MineruleException& e) {
       if(file!=NULL)
 	fclose(file);
-      
+
       std::cerr << e.what() << std::endl;
       throw;
-    } catch(odbc::SQLException& e) {
+    } catch(mrdb::SQLException& e) {
       if( file!=NULL )
 	fclose(file);
 
-      std::cerr << e.getMessage() << std::endl;
+      std::cerr << e.what() << std::endl;
       throw;
     }
 
@@ -128,7 +126,7 @@ namespace minerule {
   }
 
   void
-  MineruleOptions::readFromString(const std::string& str) throw(MineruleException, odbc::SQLException){
+  MineruleOptions::readFromString(const std::string& str) throw(MineruleException, mrdb::SQLException){
     initializeOptionsFromString(*this,str);
 
     odbc_db.resetConnection();
@@ -136,7 +134,7 @@ namespace minerule {
 
   std::ostream& MineruleOptions::saveOptions(std::ostream& os) const {
     os << "# Options related to the ODBC connection" << std::endl;
-    os << "odbc::{" << std::endl
+    os << "mrdb::{" << std::endl
        << "  +name="<< getODBC().getName() <<std::endl
        << "  +username="<<getODBC().getUsername() << std::endl
        << "  +password="<<getODBC().getPassword() << std::endl
@@ -152,7 +150,7 @@ namespace minerule {
        << "# system will delete old results whenever a new minerule"<<std::endl
        << "# having the same name of an old one is inserted. Otherwise"<<std::endl
        << "# the system will report an error message and exit." << std::endl
-       << "  +overwriteHomonymMinerules=" 
+       << "  +overwriteHomonymMinerules="
        << Converter( getSafety().getOverwriteHomonymMinerules() ).toString() << std::endl
        << "# if overwriteHomonymMinerules is set to True, then the" << std::endl
        << "# following option decides whether the system should delete"<<std::endl
@@ -160,7 +158,7 @@ namespace minerule {
        << "# deleted one. If the option is set to True, those " << std::endl
        << "# minerule will be deleted as well, otherwise the system " <<std::endl
        << "# with halt reporting an error." << std::endl
-       << "  +allowCascadeDeletes=" 
+       << "  +allowCascadeDeletes="
        << Converter( getSafety().getAllowCascadeDeletes() ).toString() << std::endl
        << "}" << std::endl << std::endl;
 
@@ -171,16 +169,16 @@ namespace minerule {
     os << "    +preferredAlgorithm=" << algorithmTypeToString(getMiningAlgorithms().getRulesMiningAlgorithms().getPreferredAlgorithm()) << std::endl << std::endl;
     os << "    # Options related to PartitionBase algorithm" << std::endl;
     os << "    partitionbase::{" << std::endl
-       << "      +rowsPerPartition=" << 
+       << "      +rowsPerPartition=" <<
                    getMiningAlgorithms().getRulesMiningAlgorithms().getPartitionBase().getRowsPerPartition() << std::endl
        << "    }" << std::endl << std::endl;
 
     os << "    # Options related to PartitionWithClusters algorithm" << std::endl;
     os << "    partitionwithclusters::{" << std::endl
-       << "      +rowsPerPartition=" << 
+       << "      +rowsPerPartition=" <<
                    getMiningAlgorithms().getRulesMiningAlgorithms().getPartitionWithClusters().getRowsPerPartition() << std::endl
        << "    }" << std::endl << std::endl;
-    
+
    std::string algoType;
     if(getMiningAlgorithms().getRulesMiningAlgorithms().getFPGrowth().getAlgoType()==MiningAlgorithms::RulesMiningAlgorithms::FPGrowth::Original)
       algoType="Original";
@@ -192,7 +190,7 @@ namespace minerule {
        << "      +algoType=" << algoType << std::endl
        << "    }" <<std::endl;
     os << "  }" << std::endl;
-    
+
     os << " itemsetsmining::{" << std::endl;
     os << "    +preferredAlgorithm=" << algorithmTypeToString(getMiningAlgorithms().getItemsetsMiningAlgorithms().getPreferredAlgorithm()) << std::endl << std::endl;
     os << " }" << std::endl;
@@ -205,7 +203,7 @@ namespace minerule {
       optimizations="False";
    std::string incrAlgorithm;
     switch(getOptimizations().getIncrementalAlgorithm()) {
-    case Optimizations::ConstructiveAlgo: 
+    case Optimizations::ConstructiveAlgo:
       incrAlgorithm = "constructive";
       break;
     case Optimizations::DestructiveAlgo:
@@ -222,18 +220,18 @@ namespace minerule {
        << "# If set to True, this option will disable the detection of dominant" << std::endl
        << "# queries (this imply also that the system will not try to find equivalent" << std::endl
        << "# queries, since they are a particular case of dominance)" << std::endl
-       << "  +avoidDominanceDetection=" 
+       << "  +avoidDominanceDetection="
        << Converter( getOptimizations().getAvoidDominanceDetection() ).toString() << std::endl
        << "# If set to True this option will make the optimizer to "<<std::endl
        << "# consider equivalent queries as if they were dominant ones"<<std::endl
        << "# (i.e., it will call an incremental algorithm instead of"<< std::endl
        << "# dealing with the equivalence)." << std::endl
-       << "  +avoidEquivalenceDetection=" 
+       << "  +avoidEquivalenceDetection="
        << Converter( getOptimizations().getAvoidEquivalenceDetection() ).toString() << std::endl
        << "# If set to True the optimizer will not try to find " << std::endl
        << "# a combinations of previous queries equivalent to the current one." << std::endl
        << "# Notice that the search for combination may be a slow process" << std::endl
-       << "  +avoidCombinationDetection=" 
+       << "  +avoidCombinationDetection="
        << Converter(getOptimizations().getAvoidCombinationDetection() ).toString() << std::endl
        << "# The following option allows the user to specify how a " << std::endl
        << "# particular incremental algorithm  have to be chosen. The" <<std::endl
@@ -246,12 +244,12 @@ namespace minerule {
        << "# Options related to the query combinator algorithm" << std::endl
        << "  combinator::{" << std::endl
        << "# amount of time the search for a combination is allowed to run " << std::endl
-       << "    +timeOut=" 
+       << "    +timeOut="
        << Converter(getOptimizations().getCombinator().getTimeOutThreshold()).toString() << std::endl
        << "# Max number of disjuncts. It is the number of disjuncts that is considered" << std::endl
        << "# during the search. Notice that increasing this number has a strong impact" << std::endl
-       << "# on the dimension of the search space." << std::endl 
-       << "    +maxDisjuncts=" 
+       << "# on the dimension of the search space." << std::endl
+       << "    +maxDisjuncts="
        << Converter(long(getOptimizations().getCombinator().getMaxDisjuncts())).toString() << std::endl
        << "# Max number of queries. Max number of distinct queries the user allows to" <<std::endl
        << "# be combined in the result. Formulae with a larger number of queries are" << std::endl
@@ -275,16 +273,16 @@ namespace minerule {
        << "# part of rules. The constraints set here 'win' on the ones"<<std::endl
        << "# in minerules (i.e., if you say '1..n' as BODY in your minerule"<<std::endl
        <<"# but set it to 1..5 here, than 1..5 will be used instead." <<std::endl;
-    os <<" +minBodyElems=" << 
+    os <<" +minBodyElems=" <<
       getParsers().getBodyCardinalities().getMin() <<std::endl;
-    os <<" +maxBodyElems=" 
+    os <<" +maxBodyElems="
        << getParsers().getBodyCardinalities().getMax() << std::endl;
-    os <<" +minHeadElems=" 
+    os <<" +minHeadElems="
        << getParsers().getHeadCardinalities().getMin() << std::endl;
     os <<" +maxHeadElems="
        << getParsers().getHeadCardinalities().getMax()<<std::endl;
     os << "}" << std::endl << std::endl;
-    
+
     os << "# Options related to streams, note that they are commented." << std::endl
        << "# the reason is that the following conresponds to default " << std::endl
        << "# settings instead of the actual ones." << std::endl
@@ -313,18 +311,18 @@ namespace minerule {
        << "#    +stream=<stderr> " << std::endl
        << "#    +loglevel=100" << std::endl
        << "# }" << std::endl;
-    
+
     return os;
   }
 
 
 
-  
+
   void
   MineruleOptions::Parsers::setLogFILE(const std::string& fname) throw(MineruleException) {
     clearStream();
     logfile = fopen(fname.c_str(), "w");
-    if(logfile==NULL) 
+    if(logfile==NULL)
       throw MineruleException(MR_ERROR_OUTPUT_FILE_PROBLEM,
 			      std::string("Error while parsing options,I've tried to open file:")
 			      +fname+
@@ -342,12 +340,12 @@ namespace minerule {
     logfile=stderr;
   }
 
- 
 
 
-  void 
-  MineruleOptions::Odbc_db::setOption(const std::string& name, 
-				      const std::string& value) 
+
+  void
+  MineruleOptions::Odbc_db::setOption(const std::string& name,
+				      const std::string& value)
                       throw(MineruleException) {
     if(name=="name")
       setName(value);
@@ -367,7 +365,7 @@ namespace minerule {
     }
   }
 
-  void 
+  void
   MineruleOptions::Safety::setOption(const std::string& name,
 				     const std::string& value)
     throw(MineruleException) {
@@ -377,21 +375,21 @@ namespace minerule {
       } else if( name == "allowCascadeDeletes" ) {
 	setAllowCascadeDeletes( Converter(value).toBool() );
       } else {
-	throw MineruleException( MR_ERROR_OPTION_PARSING, 
+	throw MineruleException( MR_ERROR_OPTION_PARSING,
 				 "Expected a value in {overwriteHomonymMinerules,allowCascadeDeletes}, but "+value+" found.");
       }
     } catch (MineruleException& e) {
       std::cerr << "Parsing error while parsing a safety option(given option name:"
 	   << name << " given option value:" << value << "). The reason for"
 	   << " the error is:" << e.what() << std::endl;
-      throw MineruleException( MR_ERROR_OPTION_PARSING, 
+      throw MineruleException( MR_ERROR_OPTION_PARSING,
 			       MINERULE_OPTIONS_PARSING_ERROR);
     }
   }
 
-  
+
   void
-  MineruleOptions::MiningAlgorithms::RulesMiningAlgorithms::PartitionBase::setOption(const std::string& name, 
+  MineruleOptions::MiningAlgorithms::RulesMiningAlgorithms::PartitionBase::setOption(const std::string& name,
 					    const std::string& value) throw(MineruleException) {
     if(name=="rowsPerPartition") {
       unsigned int rpp = stringToLong(value,name);
@@ -408,7 +406,7 @@ namespace minerule {
 
 
   void
-  MineruleOptions::MiningAlgorithms::RulesMiningAlgorithms::PartitionWithClusters::setOption(const std::string& name, 
+  MineruleOptions::MiningAlgorithms::RulesMiningAlgorithms::PartitionWithClusters::setOption(const std::string& name,
 					    const std::string& value) throw(MineruleException) {
     if(name=="rowsPerPartition") {
       unsigned int rpp = stringToLong(value,name);
@@ -422,9 +420,9 @@ namespace minerule {
       throw MineruleException(MR_ERROR_OPTION_PARSING, MINERULE_OPTIONS_PARSING_ERROR);
     }
   }
-  
-  void 
-  MineruleOptions::MiningAlgorithms::RulesMiningAlgorithms::FPGrowth::setOption(const std::string& name, 
+
+  void
+  MineruleOptions::MiningAlgorithms::RulesMiningAlgorithms::FPGrowth::setOption(const std::string& name,
 							 const std::string& value) throw(MineruleException) {
     if(name=="algoType") {
       if(value=="Original") {
@@ -440,7 +438,7 @@ namespace minerule {
       }
     }
     else {
-      std::cerr << "Error while parsing options, expecting a fpgrowth option in:" 
+      std::cerr << "Error while parsing options, expecting a fpgrowth option in:"
 	   <<std::endl
 	   << "{algoType} and: " << std::endl
 	   << "\"" << name << "\" found." << std::endl;
@@ -449,7 +447,7 @@ namespace minerule {
   }
 
   void
-  MineruleOptions::MiningAlgorithms::RulesMiningAlgorithms::setOption(const std::string& name, 
+  MineruleOptions::MiningAlgorithms::RulesMiningAlgorithms::setOption(const std::string& name,
 					       const std::string& value) throw(MineruleException) {
     if(name=="preferredAlgorithm") {
       try {
@@ -460,7 +458,7 @@ namespace minerule {
 	throw MineruleException( MR_ERROR_OPTION_PARSING, MINERULE_OPTIONS_PARSING_ERROR);
       }
     } else {
-      std::cerr << "Error while parsing options, expecting a miningalgorithms option in:" 
+      std::cerr << "Error while parsing options, expecting a miningalgorithms option in:"
 	   << std::endl
 	   << "{preferredAlgorithm} and: " << std::endl
 	   << "\"" << name << "\" found." << std::endl;
@@ -469,7 +467,7 @@ namespace minerule {
   }
 
   void
-  MineruleOptions::MiningAlgorithms::ItemsetsMiningAlgorithms::setOption(const std::string& name, 
+  MineruleOptions::MiningAlgorithms::ItemsetsMiningAlgorithms::setOption(const std::string& name,
 									 const std::string& value) throw(MineruleException) {
     if(name=="preferredAlgorithm") {
       try {
@@ -480,7 +478,7 @@ namespace minerule {
 	throw MineruleException( MR_ERROR_OPTION_PARSING, MINERULE_OPTIONS_PARSING_ERROR);
       }
     } else {
-      std::cerr << "Error while parsing options, expecting a miningalgorithms option in:" 
+      std::cerr << "Error while parsing options, expecting a miningalgorithms option in:"
 	   << std::endl
 	   << "{preferredAlgorithm} and: " << std::endl
 	   << "\"" << name << "\" found." << std::endl;
@@ -511,10 +509,10 @@ namespace minerule {
 
 
 
-  
-  void 
-  MineruleOptions::Optimizations::setOption(const std::string& name, 
-					    const std::string& value) 
+
+  void
+  MineruleOptions::Optimizations::setOption(const std::string& name,
+					    const std::string& value)
                                             throw(MineruleException) {
     if(name=="enableOptimizations") {
       if(value=="True") {
@@ -568,7 +566,7 @@ namespace minerule {
 				 MINERULE_OPTIONS_PARSING_ERROR);
       }
     } else {
-      std::cerr << "Error while parsing options, expecting an optimization option in:" 
+      std::cerr << "Error while parsing options, expecting an optimization option in:"
 	   <<std::endl
 	   << "{enableOptimizations, incrementalAlgorithm, avoidEquivalenceDetection"
 	   << ", tryOptimizationThruCombination} and: " << std::endl
@@ -577,13 +575,13 @@ namespace minerule {
     }
   }
 
-  void MineruleOptions::Optimizations::Combinator::setOption(const std::string& name, 
+  void MineruleOptions::Optimizations::Combinator::setOption(const std::string& name,
 							    const std::string& value)
     throw(MineruleException) {
 
     if( name=="timeOut" )
       setTimeOutThreshold(Converter(value).toDouble());
-    else if(name=="maxDisjuncts") 
+    else if(name=="maxDisjuncts")
       setMaxDisjuncts( Converter(value).toLong() );
     else if(name=="maxQueries")
       setMaxQueries( Converter(value).toLong() );
@@ -598,15 +596,15 @@ namespace minerule {
       throw MineruleException(MR_ERROR_OPTION_PARSING,
 			      MINERULE_OPTIONS_PARSING_ERROR);
     }
-    
+
   }
 
 
-  void 
+  void
   MineruleOptions::OutStream::setOption(const std::string& name, const std::string& value) throw(MineruleException) {
     // we need to modify value, hence we made a copy of it
     // and use it in the rest of the procedure
-   std::string valueCopy=value; 
+   std::string valueCopy=value;
    std::map<std::string, MRLogger* >& knownStreams = getSharedOptions().knownStreams;
 
     if(name=="stream") {
@@ -626,10 +624,10 @@ namespace minerule {
 		  std::ostream* ostrptr(new std::ofstream(valueCopy.c_str()));
 
 	if(!*ostrptr) {
-	  std::cerr << "Error while parsing options, failure while trying to" 
+	  std::cerr << "Error while parsing options, failure while trying to"
 	       << std::endl
 	       << "open in output the following file " << valueCopy << std::endl
-	       << "Possible values for the stream options are:" 
+	       << "Possible values for the stream options are:"
 	       << "{<stdin>,<stdout>,anyStringRepresentingAFileName}" << std::endl
 	       << "Note you can also use file names having the modifier %i or %m inside." << std::endl
 	       << "In that case %i is expandended into the current value of the -i parameter" << std::endl
@@ -667,7 +665,7 @@ namespace minerule {
 				setLogOnStdout();
       else if(value=="<stderr>")
 				setLogOnStderr();
-			else 
+			else
 				setLogFILE(value);
     } else if( name=="minBodyElems" ) {
       int min = stringToLong(value,name);
@@ -688,6 +686,6 @@ namespace minerule {
 			throw MineruleException(MR_ERROR_OPTION_PARSING, MINERULE_OPTIONS_PARSING_ERROR);
     }
   }
-  
-  
+
+
 } // namespace

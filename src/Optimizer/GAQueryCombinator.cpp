@@ -13,8 +13,8 @@
 //
 //   You should have received a copy of the GNU General Public License
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "minerule/Optimizer/GAQueryCombinator.h"
-#include "minerule/PredicateUtils/PredicateUtils.h"
+#include "minerule/Optimizer/GAQueryCombinator.hpp"
+#include "minerule/PredicateUtils/PredicateUtils.hpp"
 #include <iterator>
 #include <cmath>
 #include <algorithm>

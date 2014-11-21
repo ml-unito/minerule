@@ -14,8 +14,8 @@
 //   You should have received a copy of the GNU General Public License
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <typeinfo>
-#include "minerule/Database/SourceRowAttributeCollection.h"
-#include "minerule/Utils/MineruleOptions.h"
+#include "minerule/Database/SourceRowAttributeCollection.hpp"
+#include "minerule/Utils/MineruleOptions.hpp"
 
 /* ******************************* */
 /* SourceRowAttributeCollection methods */
@@ -26,8 +26,8 @@ namespace minerule {
   // public members
 
   SourceRowAttributeCollection::SourceRowAttributeCollection(
-				     odbc::ResultSetMetaData* rsmd,
-				     odbc::ResultSet* rs,
+				     mrdb::ResultSetMetaData* rsmd,
+				     mrdb::ResultSet* rs,
 				     std::vector<int> elems) {
     assert(!elems.empty());
     
@@ -113,7 +113,7 @@ namespace minerule {
   
 
 
-  void SourceRowAttributeCollection::setPreparedStatementParameters(odbc::PreparedStatement* state, size_t start_index) const {
+  void SourceRowAttributeCollection::setPreparedStatementParameters(mrdb::PreparedStatement* state, size_t start_index) const {
 	  size_t count = start_index;
 	  for( CollectionType::const_iterator it = attributes.begin(); it!=attributes.end(); ++it ) {
 		  (*it)->setPreparedStatementParameters(state, count++);

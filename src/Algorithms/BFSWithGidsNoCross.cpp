@@ -23,16 +23,16 @@
 #include <algorithm>
 
 
-#include "minerule/Algorithms/AlgorithmsOptions.h"
-#include "minerule/Utils/MineruleOptions.h"
-#include "minerule/Database/MRResultSet.h"
-#include "minerule/Database/ItemType.h"
-#include "minerule/Utils/Converter.h"
-#include "minerule/Database/Connection.h"
-#include "minerule/Algorithms/BFSWithGidsNoCross.h"
-#include "minerule/PredicateUtils/HeadBodyPredicatesSeparator.h"
-#include "minerule/Database/PrepareDataUtils.h"
-#include "minerule/Database/Transaction.h"
+#include "minerule/Algorithms/AlgorithmsOptions.hpp"
+#include "minerule/Utils/MineruleOptions.hpp"
+#include "minerule/Database/MRResultSet.hpp"
+#include "minerule/Database/ItemType.hpp"
+#include "minerule/Utils/Converter.hpp"
+#include "minerule/Database/Connection.hpp"
+#include "minerule/Algorithms/BFSWithGidsNoCross.hpp"
+#include "minerule/PredicateUtils/HeadBodyPredicatesSeparator.hpp"
+#include "minerule/Database/PrepareDataUtils.hpp"
+#include "minerule/Database/Transaction.hpp"
 
 namespace minerule {
   bool BFSWithGidsNoCross::mineruleHasSameBodyHead = false;	

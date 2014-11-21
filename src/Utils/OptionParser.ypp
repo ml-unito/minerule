@@ -62,7 +62,7 @@
 #define YYSTYPE std::string
 
 #include <iostream>
-#include "minerule/Utils/OptionParserLib.h"
+#include "minerule/Utils/OptionParserLib.hpp"
 
 
 using namespace minerule;

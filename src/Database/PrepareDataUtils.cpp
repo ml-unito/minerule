@@ -13,8 +13,9 @@
 //
 //   You should have received a copy of the GNU General Public License
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "minerule/Database/PrepareDataUtils.h"  
-#include "minerule/Utils/MineruleOptions.h"
+#include "minerule/Database/PrepareDataUtils.hpp"
+#include "minerule/Utils/MineruleOptions.hpp"
+
 #include <string>
 #include <memory>
 
@@ -38,7 +39,7 @@ namespace minerule {
 			result=*it;
 
 		it++;
-  
+
 		for( ;it!=attrs.end(); it++ ) {
 			if(alias.length()!=0)
 				result += ","+alias+"."+*it + ADDCOLALIAS;
@@ -67,7 +68,7 @@ namespace minerule {
 			result=*it;
 
 		it++;
-  
+
 		for( ;it!=attrs.end(); it++ ) {
 			if(alias.length()!=0)
 				result += ","+ADDCOLALIAS;
@@ -81,7 +82,7 @@ namespace minerule {
 	}
 
 	std::string PrepareDataUtils::buildAttrListEquiJoin( const std::string& alias1, const std::string& alias2) const {
-  
+
 		ParsedMinerule::AttrVector::const_iterator it;
 		std::string result;
 		it=mr.ga.begin();
@@ -91,7 +92,7 @@ namespace minerule {
 		assert(it!=mr.ga.end());
 		result=alias1+"."+*it+"="+alias2+"."+*it;
 		it++;
-  
+
 		for( ;it!=mr.ga.end(); it++ ) {
 			result+=" AND "+ alias1+"."+*it+"="+alias2+"."+*it;
 		}
@@ -111,35 +112,35 @@ namespace minerule {
 			assert(it!=mr.ca.end());
 			result+=alias1+"."+*it+"="+alias2+"."+*it;
 			it++;
-  
+
 			for( ;it!=mr.ca.end(); it++ ) {
 				result+=" AND "+ alias1+"."+*it+"="+alias2+"."+*it;
 			}
-     
+
 			result+=" AND ";
 		}
-  
+
 		it=mr.ba.begin();
 		assert(it!=mr.ba.end());
 		result+=alias1+"."+*it+"="+alias2+"."+*it;
 		it++;
-  
+
 		for( ;it!=mr.ba.end(); it++ ) {
 			result+=" AND "+ alias1+"."+*it+"="+alias2+"."+*it;
 		}
-  
+
 		result +=")";
 
-		return result; 
+		return result;
 	}
 
 
-	
+
 
 	std::string
 	PrepareDataUtils::buildBodyTableQuery(SourceRowColumnIds& rowDes, const std::string& body_mining_condition) const {
-		std::string queryText;		
-		
+		std::string queryText;
+
 		queryText = "SELECT ";
 		queryText += buildAttrListDescription(mr.ga);
 		queryText += "," + buildAttrListDescription(mr.ba);
@@ -149,33 +150,33 @@ namespace minerule {
 
 		if( sourceTableRequirements.sortedGids() )
 			queryText += " ORDER BY "+buildAttrListDescription(mr.ga);
-					      
+
 		unsigned int lastElem;
 		lastElem= rowDes.setgroupElems(1,mr.ga.size());
 		rowDes.setBodyElems(lastElem+1,mr.ba.size());
-		
+
 		return queryText;
 	}
-	
+
 	std::string
 	PrepareDataUtils::buildHeadTableQuery(SourceRowColumnIds& rowDes, const std::string& head_mining_condition) const {
-		std::string queryText;		
-		
+		std::string queryText;
+
 		queryText = "SELECT ";
 		queryText += buildAttrListDescription(mr.ga);
 		queryText += "," + buildAttrListDescription(mr.ha);
 		queryText += " FROM "+mr.tab_source;
-		
+
 		if(!head_mining_condition.empty())
 			queryText += " WHERE "+head_mining_condition;
 
 		if( sourceTableRequirements.sortedGids() )
 			queryText += " ORDER BY "+buildAttrListDescription(mr.ga);
-					      
+
 		unsigned int lastElem;
 		lastElem= rowDes.setgroupElems(1,mr.ga.size());
 		rowDes.setHeadElems(lastElem+1,mr.ha.size());
-		
+
 		return queryText;
 	}
 
@@ -202,7 +203,7 @@ namespace minerule {
 	PrepareDataUtils::buildConditionFilter(const list_OR_node* current) const {
 		std::string result;
 
-		if( current==NULL ) 
+		if( current==NULL )
 			return "";
 
 		result = "("+ buildAndList(current->l_and)+")";
@@ -217,8 +218,8 @@ namespace minerule {
 	}
 
 	void
-	PrepareDataUtils::dropTableIfExists(odbc::Connection* conn, const std::string& tname)  {
-		std::auto_ptr<odbc::Statement> state(conn->createStatement());
+	PrepareDataUtils::dropTableIfExists(mrdb::Connection* conn, const std::string& tname)  {
+		std::auto_ptr<mrdb::Statement> state(conn->createStatement());
 		state->execute("DROP TABLE IF EXISTS "+tname);
 	}
 
@@ -226,7 +227,7 @@ namespace minerule {
 	PrepareDataUtils::createSourceTable() const {
 		std::string aliasA, aliasB;
 		std::string queryText;
-	  
+
 		assert( !(mr.ga.empty() || mr.ba.empty() || mr.ha.empty()) );
 
 		aliasA = "BODY";
@@ -247,7 +248,7 @@ namespace minerule {
 		queryText += ","+mr.tab_source+" AS "+aliasB;
 
 		queryText += " WHERE " + buildAttrListEquiJoin( aliasA, aliasB);
-  
+
 		std::string miningCond = buildConditionFilter(mr.mc);
 		if(miningCond!="") {
 			queryText += " AND (" + miningCond +")";
@@ -260,23 +261,23 @@ namespace minerule {
 
 		if( sourceTableRequirements.sortedGids() )
 			queryText += " ORDER BY "+buildAttrListDescription(mr.ga, aliasA,false);
-    
+
 		std::string clusteredTable 	 = mr.tab_result+"_tmpSource";
 		std::string createQuery 	 = "CREATE TABLE  "+clusteredTable+ " AS "+queryText + "; ";
 		std::string createIndexQuery = "CREATE INDEX "+clusteredTable+"_index " + " ON " + clusteredTable + " ("+buildAttrListAlias(mr.ga,aliasA,true)+");";
 
-		odbc::Connection* conn = MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
+		mrdb::Connection* conn = MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
 
 		dropTableIfExists(conn, clusteredTable);
 
-		odbc::Statement* state = conn->createStatement();
+		mrdb::Statement* state = conn->createStatement();
 
 		MRLog() << "Creating clustered table... " << std::endl;
 		MRDebug("Creating mining table, the query is:" + createQuery);
 
 		state->execute(createQuery);
 		state->execute(createIndexQuery);
-	
+
 		MRLog() << "DONE..." << std::endl;
 
 		delete state;
@@ -289,14 +290,14 @@ namespace minerule {
 		std::string tableName = createSourceTable();
 
 		std::string queryText = "SELECT * FROM "+tableName;
-					      
+
 		unsigned int lastElem;
 		lastElem= rowDes.setgroupElems(1,mr.ga.size());
 		lastElem= rowDes.setClusterBodyElems(lastElem+1,mr.ca.size());
 		lastElem= rowDes.setBodyElems(lastElem+1,mr.ba.size());
 		lastElem= rowDes.setClusterHeadElems(lastElem+1,mr.ca.size());
 		rowDes.setHeadElems(lastElem+1, mr.ha.size());
-		
+
 		return queryText;
 	}
 
@@ -311,23 +312,23 @@ namespace minerule {
 	}
 
 
-	size_t PrepareDataUtils::evaluateTotGroups(const ParsedMinerule& pmr) throw(MineruleException, odbc::SQLException) {
+	size_t PrepareDataUtils::evaluateTotGroups(const ParsedMinerule& pmr) throw(MineruleException, mrdb::SQLException) {
 		MRLogPush("Evaluating Number of groups...");
 		std::string qry=
 			"SELECT count(distinct " + buildAttrListDescription(pmr.ga) +") "
 				"FROM " + pmr.tab_source;
-    
-		odbc::Connection* conn = 
+
+		mrdb::Connection* conn =
 			MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
 
-		std::auto_ptr<odbc::Statement> state(conn->createStatement());
-		std::auto_ptr<odbc::ResultSet> rs(state->executeQuery(qry));
+		std::auto_ptr<mrdb::Statement> state(conn->createStatement());
+		std::auto_ptr<mrdb::ResultSet> rs(state->executeQuery(qry));
 
 		MRLogPop();
 
 		if(!rs->next())
 			throw MineruleException(MR_ERROR_DATABASE_ERROR, "Cannot count the number of groups in the source table");
-    
+
 		return rs->getInt(1);
 	}
 

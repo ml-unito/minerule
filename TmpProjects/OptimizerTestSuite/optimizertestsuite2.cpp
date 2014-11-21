@@ -6,10 +6,10 @@
 /************************************************************************/
 
 #include <iostream>
-#include "minerule/PredicateUtils/PredicateUtils.h"
-#include "minerule/Utils/Converter.h"
-#include "minerule/Utils/MineruleOptions.h"
-#include "minerule/Optimizer/OptimizedMinerule.h"
+#include "minerule/PredicateUtils/PredicateUtils.hpp"
+#include "minerule/Utils/Converter.hpp"
+#include "minerule/Utils/MineruleOptions.hpp"
+#include "minerule/Optimizer/OptimizedMinerule.hpp"
 
 using namespace minerule;
 

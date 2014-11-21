@@ -13,19 +13,20 @@
 //
 //   You should have received a copy of the GNU General Public License
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "minerule/Algorithms/Algorithms.h"
-#include "minerule/Algorithms/MiningAlgorithmBase.h"
-#include "minerule/Parsers/ParsedMinerule.h"
-#include "minerule/Utils/MineruleOptions.h"
-#include "minerule/Algorithms/IDIncrementalAlgorithm.h"
-#include "minerule/Algorithms/ConstrTree.h"
-#include "minerule/Algorithms/DestrTree.h"
-#include "minerule/Algorithms/BFSWithGidsNoCross.h"
-#include "minerule/Algorithms/BFSWithGidsAndCross.h"
-#include "minerule/Algorithms/ConstrItemSetsExtraction.h"
-#include "minerule/Algorithms/FSMiner.h"
-#include "minerule/Algorithms/CCSMiner.h"
-#include "minerule/Algorithms/STSMinerWithBitVector.h"
+#include "minerule/Algorithms/Algorithms.hpp"
+#include "minerule/Algorithms/MiningAlgorithmBase.hpp"
+#include "minerule/Parsers/ParsedMinerule.hpp"
+#include "minerule/Utils/MineruleOptions.hpp"
+#include "minerule/Algorithms/IDIncrementalAlgorithm.hpp"
+#include "minerule/Algorithms/ConstrTree.hpp"
+#include "minerule/Algorithms/DestrTree.hpp"
+#include "minerule/Algorithms/BFSWithGidsNoCross.hpp"
+#include "minerule/Algorithms/BFSWithGidsAndCross.hpp"
+#include "minerule/Algorithms/ConstrItemSetsExtraction.hpp"
+#include "minerule/Algorithms/FSMiner.hpp"
+#include "minerule/Algorithms/CCSMiner.hpp"
+#include "minerule/Algorithms/STSMinerWithBitVector.hpp"
+#include "minerule/mrdb/SQLException.hpp"
 
 namespace minerule {
 
@@ -62,18 +63,18 @@ namespace minerule {
 
 		MRDebug() << "BFSWithGidsAndCross cannot handle it." << std::endl;
 
-  
+
 		MRDebug() << "Panic! No known algorithm can handle it." << std::endl;
 		throw MineruleException( MR_ERROR_INTERNAL, "No known algorithm can handle the given minerule!" );
 	}
-	
-	
+
+
 
 	MiningAlgorithmBase*
 	Algorithms::getBestItemsetsMiningAlgorithm(const OptimizedMinerule& mr) {
 		MRDebugPusher pusher("Choosing the best algorithm for the given MR");
 
-		AlgorithmTypes userChoiceOfAT = 
+		AlgorithmTypes userChoiceOfAT =
 			MineruleOptions::getSharedOptions().getMiningAlgorithms().getRulesMiningAlgorithms().getPreferredAlgorithm();
 
 		MiningAlgorithmBase* userChoice= MiningAlgorithm::algorithmForType(userChoiceOfAT, mr);
@@ -94,7 +95,7 @@ namespace minerule {
 			MRDebug() << "Selected ConstrItemSetsExtraction" << std::endl;
 			return new ConstrItemSetsExtraction(mr);
 		}
-  
+
 		MRDebug() << "Panic! No known algorithm can handle it." << std::endl;
 		throw MineruleException( MR_ERROR_INTERNAL, "No known algorithm can handle the given minerule!" );
 	}
@@ -118,7 +119,7 @@ namespace minerule {
 		}
 	}
 
-// 
+//
 // 	This procedure crate a new algorithm and returns its reference.
 // 	As more algorithms become available it will choose among them
 // 	using some (hopefully) good heuristic... In modifying it please
@@ -126,8 +127,8 @@ namespace minerule {
 // 	algorithm is able to deal with SourceRowColumnIds that
 // 	will be passed to it.
 // 	Remember that the informations stored in SourceRowColumnIds
-// 	depends upon mr.mineruleRequiresClusters(). 
-//  
+// 	depends upon mr.mineruleRequiresClusters().
+//
 	MiningAlgorithmBase* Algorithms::newAlgorithm(const OptimizedMinerule& mr) {
 		switch( mr.getParsedMinerule().miningTask ) {
 			case MTMineRules: 		return getBestRulesMiningAlgorithm(mr);
@@ -137,10 +138,10 @@ namespace minerule {
 		}
 	}
 
-	bool Algorithms::executeIncrementalAlgorithm(OptimizedMinerule& mr) throw(MineruleException,odbc::SQLException, std::exception){
- 
+	bool Algorithms::executeIncrementalAlgorithm(OptimizedMinerule& mr) throw(MineruleException,mrdb::SQLException, std::exception){
+
 		IncrementalAlgorithm* incrAlgo = IncrementalAlgorithm::newIncrementalAlgorithm(mr);
-  
+
 		if( incrAlgo!=NULL ) {
 			incrAlgo->execute();
 
@@ -155,22 +156,22 @@ namespace minerule {
 
 
 
-	void Algorithms::executeExtractionAlgorithm(OptimizedMinerule& mr) throw(MineruleException,odbc::SQLException, std::exception) {
+	void Algorithms::executeExtractionAlgorithm(OptimizedMinerule& mr) throw(MineruleException,mrdb::SQLException, std::exception) {
 		MiningAlgorithmBase* algo =  Algorithms::newAlgorithm(mr);
 		algo->execute();
 		delete algo;
 	}
 
-	void Algorithms::checkAndHandleHomonymMinerules(OptimizedMinerule& mr) throw(MineruleException, odbc::SQLException, std::exception) {
+	void Algorithms::checkAndHandleHomonymMinerules(OptimizedMinerule& mr) throw(MineruleException, mrdb::SQLException, std::exception) {
 		if( OptimizerCatalogue::existsMinerule(mr.getParsedMinerule().tab_result) ) {
 			if( MineruleOptions::getSharedOptions().getSafety().getOverwriteHomonymMinerules() ) {
 				MRLog() << "The optimizer Catalogue reports that a minerule " << std::endl;
 				MRLog() << "having the same name as the one you gave already" << std::endl;
 				MRLog() << "exists. I'm now going to delete the previous result as" << std::endl;
 				MRLog() << "it has been specified in the option settings." << std::endl;
-	
+
 				OptimizerCatalogue::deleteMinerule(mr.getParsedMinerule().tab_result);
-	
+
 			} else {
 				throw MineruleException(MR_ERROR_MINERULE_ALREADY_EXISTS,
 					"The Optimizer Catalogue reports that a minerule "
@@ -180,9 +181,9 @@ namespace minerule {
 					"safety::overwriteHomonymMinerules "
 					"to true in your configuration file");
 			}
-		}		
+		}
 	}
-	
+
 	void Algorithms::showDebugInfo(const std::string& msg, OptimizedMinerule& mr) {
 		MRDebugPush("Unoptimized Minerule info");
 		MRDebug("Optimized Minerule:[" + mr.getParsedMinerule().getText() + "]");
@@ -192,7 +193,7 @@ namespace minerule {
 		MRDebugPop();
 	}
 
-	void Algorithms::executeMinerule(OptimizedMinerule& mr) throw(MineruleException,odbc::SQLException, std::exception) {
+	void Algorithms::executeMinerule(OptimizedMinerule& mr) throw(MineruleException,mrdb::SQLException, std::exception) {
 		checkAndHandleHomonymMinerules(mr);
 
 		showDebugInfo("Unoptimized Minerule info", mr);
@@ -209,11 +210,11 @@ namespace minerule {
 			case OptimizedMinerule::Equivalence:
 				{
 					MRLog("Using equivalence relationship.");
-					
+
 					CatalogueInfo catInfo;
 					OptimizerCatalogue::getMRQueryInfo( mr.getOptimizationInfo().minerule.tab_result, catInfo );
 					result.resultset = catInfo.resName;
-    
+
 					MRDebug() << "Inclusion found with respect minerule:" << mr.getOptimizationInfo().minerule.getText() << std::endl;
 					MRDebug() << "Current Minerule:" << result.getText() << std::endl;
 					OptimizerCatalogue::addMineruleResult(result);
@@ -224,30 +225,30 @@ namespace minerule {
 			case OptimizedMinerule::Dominance:
 				unsupportedRelation = "Dominance";
 				MRLog("Using dominance relationship.");
-			
+
 			// COMBINATION
 			case OptimizedMinerule::Combination:
 				if(unsupportedRelation=="") {
 					MRLog("Using combination relationship.");
-					
+
 					unsupportedRelation="Combination";
       			}
-				
-				if(executeIncrementalAlgorithm(mr)) {	 
+
+				if(executeIncrementalAlgorithm(mr)) {
 					OptimizerCatalogue::addMineruleResult(result);
 					break;
 				} else {
 					MRLog() << "The support for the found dominance relationship is not yet implemented"
 						<< " switching back to the non-incremental mining algorithm;" << std::endl;
 				}
-			
+
 			// INCLUSION
 			case OptimizedMinerule::Inclusion:
 				if( unsupportedRelation=="" ) {
 					unsupportedRelation = "Inclusion";
-					MRLog("Using inclusion relationship.");					
+					MRLog("Using inclusion relationship.");
 				}
-				
+
 			// NO RELATION FOUND
 			case OptimizedMinerule::None:
 				if( unsupportedRelation!="" ) {
@@ -256,13 +257,13 @@ namespace minerule {
 						<< "current one. Unfortunately such kind of relationship is still" << std::endl
 						<< "not supported and hence I will switch to the default algorithm" << std::endl;
 				}
-				
+
 				executeExtractionAlgorithm(mr);
-				
+
 				if( mr.getParsedMinerule().miningTask==MTMineRules || mr.getParsedMinerule().miningTask==MTMineItemsets )
 						OptimizerCatalogue::addMineruleResult(result);
 				break;
-				
+
 			// ERROR
 			default:
 				throw MineruleException(MR_ERROR_INTERNAL, "Unexpected Relationship! This is a BUG! Please report it!");

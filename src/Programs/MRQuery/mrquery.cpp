@@ -18,13 +18,13 @@
 #include <fstream>
 #include <getopt.h>
 
-#include "minerule/Utils/StringUtils.h"
-#include "minerule/Utils/MineruleErrors.h"
-#include "minerule/Utils/MineruleLogs.h"
-#include "minerule/Utils/MineruleOptions.h"
-#include "minerule/Utils/FileUtils.h"
-#include "minerule/Optimizer/OptimizedMinerule.h"
-#include "minerule/Algorithms/Algorithms.h"
+#include "minerule/Utils/StringUtils.hpp"
+#include "minerule/Utils/MineruleErrors.hpp"
+#include "minerule/Utils/MineruleLogs.hpp"
+#include "minerule/Utils/MineruleOptions.hpp"
+#include "minerule/Utils/FileUtils.hpp"
+#include "minerule/Optimizer/OptimizedMinerule.hpp"
+#include "minerule/Algorithms/Algorithms.hpp"
 
 using namespace minerule;
 
@@ -253,8 +253,8 @@ int main (int argc, char *argv[])
 {	
 	try {		
 		execQuery(argc, argv);
-	} catch (odbc::SQLException& e) {
-		MRErr() << "ODBC Exception:" << e.getMessage() << std::endl;
+	} catch (mrdb::SQLException& e) {
+		MRErr() << "ODBC Exception:" << e.what() << std::endl;
 		exit(MR_ERROR_DATABASE_ERROR);
 	} catch (MineruleException& e) {
 		MRErr() << "Minerule Exception:" << e.what() << std::endl;

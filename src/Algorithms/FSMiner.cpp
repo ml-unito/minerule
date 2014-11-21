@@ -13,13 +13,13 @@
 //
 //   You should have received a copy of the GNU General Public License
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "minerule/Algorithms/FSMiner.h"
-#include "minerule/Algorithms/FSTree.h"
-#include "minerule/Utils/MineruleLogs.h"
-#include "minerule/Database/PrepareDataUtils.h"
+#include "minerule/Algorithms/FSMiner.hpp"
+#include "minerule/Algorithms/FSTree.hpp"
+#include "minerule/Utils/MineruleLogs.hpp"
+#include "minerule/Database/PrepareDataUtils.hpp"
 #include <stdexcept>
 
-//#include "sequence.h"
+//#include "sequence.hpp"
 
 namespace minerule {
 
@@ -64,7 +64,7 @@ namespace minerule {
 		prepareData();
 		FSTree* h=new FSTree(minerule);
 
-		odbc::ResultSet* rs = statement->executeQuery();
+		mrdb::ResultSet* rs = statement->executeQuery();
 		MRLogPush("Building frequent bigram link table...");	
 		h->createLinkSTable(rs, rowDes);
 		MRLogPop();

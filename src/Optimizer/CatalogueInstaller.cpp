@@ -13,10 +13,10 @@
 //
 //   You should have received a copy of the GNU General Public License
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "minerule/Optimizer/CatalogueInstaller.h"
-#include "minerule/Optimizer/Installers/MySqlCatalogueInstaller.h"
-#include "minerule/Optimizer/Installers/PostgresCatalogueInstaller.h"
-#include "minerule/Utils/MineruleOptions.h"
+#include "minerule/Optimizer/CatalogueInstaller.hpp"
+#include "minerule/Optimizer/Installers/MySqlCatalogueInstaller.hpp"
+#include "minerule/Optimizer/Installers/PostgresCatalogueInstaller.hpp"
+#include "minerule/Utils/MineruleOptions.hpp"
 
 namespace minerule {
 	
@@ -37,7 +37,7 @@ namespace minerule {
 		if(dbmsStr == "mysql") return newInstaller(MySql);
 		if(dbmsStr == "postgres") return newInstaller(Postgres);
 		
-		throw MineruleException(MR_ERROR_OPTION_CONFIGURATION,std::string("Option odbc::dbms is set to an unsupported value.") +
+		throw MineruleException(MR_ERROR_OPTION_CONFIGURATION,std::string("Option mrdb::dbms is set to an unsupported value.") +
 			" Current value is:"+dbmsStr+ ". Supported values are 'postgres' and 'mysql'.");
 	}
 

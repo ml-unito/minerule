@@ -10,10 +10,10 @@
 #include <unistd.h>
 #include <classi.h>
 
-#include "minerule/Utils/MineruleOptions.h"
-#include "minerule/Optimizer/OptimizerCatalogue.h"
+#include "minerule/Utils/MineruleOptions.hpp"
+#include "minerule/Optimizer/OptimizerCatalogue.hpp"
 #include "TmpProjects/PrintRules/RuleFormatter.h"
-#include "minerule/Database/SourceRowElement.h"
+#include "minerule/Database/SourceRowElement.hpp"
 
 
 

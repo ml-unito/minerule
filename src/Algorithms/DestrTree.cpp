@@ -13,11 +13,11 @@
 //
 //   You should have received a copy of the GNU General Public License
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "minerule/Algorithms/DestrTree.h"
-#include "minerule/PredicateUtils/HeadBodyPredicatesSeparator.h"
-#include "minerule/Utils/MineruleOptions.h"
+#include "minerule/Algorithms/DestrTree.hpp"
+#include "minerule/PredicateUtils/HeadBodyPredicatesSeparator.hpp"
+#include "minerule/Utils/MineruleOptions.hpp"
 #include <iterator>
-#include "minerule/Database/PrepareDataUtils.h"
+#include "minerule/Database/PrepareDataUtils.hpp"
 #include <cmath>
 
 
@@ -282,7 +282,7 @@ namespace minerule {
 		std::string headQry1NotQry2 = buildQry1NotQry2( groupAttr, headAttr, q1HeadConstraints, q2HeadConstraints);
 
 		MRLog() << "Executing queries" << std::endl;
-		odbc::Connection* con = MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
+		mrdb::Connection* con = MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
 
 
 		stateb1 = con->createStatement();
@@ -309,7 +309,7 @@ namespace minerule {
 
 
 	void DestrTree::execute()
-	throw(MineruleException,odbc::SQLException) {
+	throw(MineruleException,mrdb::SQLException) {
 		assert( minerule->getOptimizationInfo().relationship == OptimizedMinerule::Dominance );
 		assert( minerule->getParsedMinerule().mc!=NULL && minerule->getParsedMinerule().mc->next==NULL);
 

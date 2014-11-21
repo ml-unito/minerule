@@ -18,7 +18,7 @@
 #include "itemSetList.h"
 
 #include "newItemSetHashMap.h"
-#include "minerule/Database/Connection.h"
+#include "minerule/Database/Connection.hpp"
 
 #include "AlgorithmsOptions.h"
 

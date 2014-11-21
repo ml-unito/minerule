@@ -13,10 +13,10 @@
 //
 //   You should have received a copy of the GNU General Public License
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include <odbc++/resultset.h>
-#include <odbc++/connection.h>
-#include <odbc++/statement.h>
-#include <odbc++/preparedstatement.h>
+#include "minerule/mrdb/ResultSet.hpp"
+#include "minerule/mrdb/Connection.hpp"
+#include "minerule/mrdb/Statement.hpp"
+#include "minerule/mrdb/PreparedStatement.hpp"
 
 #include <iostream>
 #include <assert.h>
@@ -24,10 +24,10 @@
 #include <algorithm>
 #include <getopt.h>
 
-#include "MRCUtils.h"
-#include "Printer.h"
-#include "minerule/Utils/FileUtils.h"
-#include "minerule/Utils/StringUtils.h"
+#include "MRCUtils.hpp"
+#include "Printer.hpp"
+#include "minerule/Utils/FileUtils.hpp"
+#include "minerule/Utils/StringUtils.hpp"
 
 
 namespace mrc {

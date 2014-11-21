@@ -5,7 +5,7 @@
 #include <iostream>
 #include <odbc++/resultsetmetadata.h>
 #include <odbc++/resultset.h>
-#include "minerule/Utils/MineruleException.h"
+#include "minerule/Utils/MineruleException.hpp"
 
 namespace minerule {
 

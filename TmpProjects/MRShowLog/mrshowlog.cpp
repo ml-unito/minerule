@@ -6,7 +6,7 @@
 #include <string>
 
 
-#include "minerule/Utils/MineruleOptions.h"
+#include "minerule/Utils/MineruleOptions.hpp"
 
 using namespace std;
 using namespace minerule;

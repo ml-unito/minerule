@@ -1,5 +1,5 @@
-#include "minerule/Optimizer/OptimizerCatalogue.h"
-#include "minerule/Utils/MineruleOptions.h"
+#include "minerule/Optimizer/OptimizerCatalogue.hpp"
+#include "minerule/Utils/MineruleOptions.hpp"
 #include <iterator>
 
 using namespace minerule;

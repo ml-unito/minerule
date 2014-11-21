@@ -16,9 +16,9 @@
 // care.cpp
 
 
-#include "minerule/PredicateUtils/HeadBodyPredicatesSeparator.h"
-#include "minerule/Database/PrepareDataUtils.h"
-#include "minerule/Algorithms/ConstrItemSetsExtraction.h"
+#include "minerule/PredicateUtils/HeadBodyPredicatesSeparator.hpp"
+#include "minerule/Database/PrepareDataUtils.hpp"
+#include "minerule/Algorithms/ConstrItemSetsExtraction.hpp"
 
 #define MROPTIONFILE "mroptions"
 
@@ -55,7 +55,7 @@ namespace minerule {
     MRLog() << "Preparing data sources..." << std::endl;
     prepareData();
 
-    odbc::ResultSet* result;
+    mrdb::ResultSet* result;
 
     float support = options.getSupport();
     int maxBody = options.getBodyCardinalities().getMax();

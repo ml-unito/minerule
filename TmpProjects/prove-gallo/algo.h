@@ -1,7 +1,7 @@
 
 #ifndef ALGO_H
 #define ALGO_H
-#include "minerule/Database/ItemType.h"
+#include "minerule/Database/ItemType.hpp"
 #include <vector>
 #include <iostream>
 #include <map>

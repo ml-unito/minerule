@@ -13,10 +13,10 @@
 //
 //   You should have received a copy of the GNU General Public License
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "RuleGidsMatcher.h"
-#include "minerule/Database/Transaction.h"
-#include "minerule/Result/RulesMatcher.h"
-#include "minerule/Result/RuleFormatter.h"
+#include "RuleGidsMatcher.hpp"
+#include "minerule/Database/Transaction.hpp"
+#include "minerule/Result/RulesMatcher.hpp"
+#include "minerule/Result/RuleFormatter.hpp"
 
 using namespace minerule;
 

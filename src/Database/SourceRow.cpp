@@ -13,8 +13,8 @@
 //
 //   You should have received a copy of the GNU General Public License
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "minerule/Database/SourceRow.h"
-#include "minerule/Utils/MineruleLogs.h"
+#include "minerule/Database/SourceRow.hpp"
+#include "minerule/Utils/MineruleLogs.hpp"
 
 namespace minerule {
 
@@ -24,9 +24,9 @@ namespace minerule {
 /* SourceRow methods */
 /* ************ */
 
-  SourceRow::SourceRow(odbc::ResultSet* resultSet,
+  SourceRow::SourceRow(mrdb::ResultSet* resultSet,
 				       const SourceRowColumnIds& srd) {
-    odbc::ResultSetMetaData* rsmd = resultSet->getMetaData();
+    mrdb::ResultSetMetaData* rsmd = resultSet->getMetaData();
 
     group =    SourceRowElement::createElement(rsmd,resultSet,srd.groupElems);
     clusterBody =  SourceRowElement::createElement(rsmd,resultSet,srd.clusterBodyElems);
@@ -62,7 +62,7 @@ SourceRow::~SourceRow() {
 }
 
 void 
-SourceRow::init(odbc::ResultSet* resultSet,
+SourceRow::init(mrdb::ResultSet* resultSet,
 			const SourceRowColumnIds& srd) {
 
 #define DESTROY(a) if((a)!=NULL) delete a;
@@ -73,7 +73,7 @@ SourceRow::init(odbc::ResultSet* resultSet,
   DESTROY(clusterHead);
   DESTROY(head);
 
-  odbc::ResultSetMetaData* rsmd = resultSet->getMetaData();
+  mrdb::ResultSetMetaData* rsmd = resultSet->getMetaData();
 
   group =    SourceRowElement::createElement(rsmd,resultSet,srd.groupElems);
   clusterBody =  SourceRowElement::createElement(rsmd,resultSet,srd.clusterBodyElems);

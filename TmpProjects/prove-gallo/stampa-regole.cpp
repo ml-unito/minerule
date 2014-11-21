@@ -9,10 +9,10 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-#include "minerule/Utils/MineruleOptions.h"
-#include "minerule/Optimizer/OptimizerCatalogue.h"
+#include "minerule/Utils/MineruleOptions.hpp"
+#include "minerule/Optimizer/OptimizerCatalogue.hpp"
 #include "TmpProjects/PrintRules/RuleFormatter.h"
-#include "minerule/Database/SourceRowElement.h"
+#include "minerule/Database/SourceRowElement.hpp"
 
 /* stampa a video le regole con relativo supporto e confidenza*/
 /* basta dare in input la tabella risultato IMP:qui non ci sono controlli sull'esistenza della tabella*/

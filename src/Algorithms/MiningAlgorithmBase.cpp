@@ -13,11 +13,11 @@
 //
 //   You should have received a copy of the GNU General Public License
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "minerule/Algorithms/MiningAlgorithmBase.h"
-#include "minerule/Algorithms/BFSWithGidsNoCross.h"
-#include "minerule/Algorithms/BFSWithGidsAndCross.h"
-#include "minerule/Algorithms/Care.h"
-#include "minerule/Algorithms/ConstrItemSetsExtraction.h"
+#include "minerule/Algorithms/MiningAlgorithmBase.hpp"
+#include "minerule/Algorithms/BFSWithGidsNoCross.hpp"
+#include "minerule/Algorithms/BFSWithGidsAndCross.hpp"
+#include "minerule/Algorithms/Care.hpp"
+#include "minerule/Algorithms/ConstrItemSetsExtraction.hpp"
 
 namespace minerule {
 

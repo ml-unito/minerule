@@ -2,7 +2,7 @@
 #include <string>
 #include <sstream>
 
-#include "minerule/Utils/MineruleOptions.h"
+#include "minerule/Utils/MineruleOptions.hpp"
 #define MROPTIONFILE "mroptions.txt"
 #define BUFSIZE 1<<18
 

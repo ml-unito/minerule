@@ -13,7 +13,7 @@
 //
 //   You should have received a copy of the GNU General Public License
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "minerule/Utils/OptionParserLib.h"
+#include "minerule/Utils/OptionParserLib.hpp"
 #include "Utils/OptionParser_lexer.cpp"
 
 //extern void OPparse();

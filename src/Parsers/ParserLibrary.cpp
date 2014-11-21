@@ -14,8 +14,8 @@
 //   You should have received a copy of the GNU General Public License
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "minerule/Parsers/ParserLibrary.h"
-#include "minerule/Utils/MineruleOptions.h"
+#include "minerule/Parsers/ParserLibrary.hpp"
+#include "minerule/Utils/MineruleOptions.hpp"
 #include <iostream>
 
 extern int mrparse();

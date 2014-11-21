@@ -13,17 +13,17 @@
 //
 //   You should have received a copy of the GNU General Public License
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "RuleGidsDBMatcher.h"
-#include "minerule/Utils/MineruleOptions.h"
-#include <odbc++/connection.h>
-#include <odbc++/statement.h>
-#include <odbc++/preparedstatement.h>
+#include "RuleGidsDBMatcher.hpp"
+#include "minerule/Utils/MineruleOptions.hpp"
+#include "minerule/mrdb/Connection.hpp"
+#include "minerule/mrdb/Statement.hpp"
+#include "minerule/mrdb/PreparedStatement.hpp"
 
 
 namespace mrmatch {
 	void RuleGidsDBMatcher::createOutputTable(const minerule::ItemType& item) const {
-		odbc::Connection*  con = minerule::MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
-		std::auto_ptr<odbc::Statement> state(con->createStatement());
+		mrdb::Connection*  con = minerule::MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
+		std::auto_ptr<mrdb::Statement> state(con->createStatement());
 		minerule::SourceRowMetaInfo metaInfo(con, _minerule);
 		
 		minerule::MRLog() << "Creating dest table: " << _outTableName << std::endl;
@@ -42,8 +42,8 @@ namespace mrmatch {
 	}
 	
 	void RuleGidsDBMatcher::createOutputTableIndex(const std::string& indexName, const std::string& indexCols) const {
-		odbc::Connection*  con = minerule::MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
-		std::auto_ptr<odbc::Statement> state(con->createStatement());
+		mrdb::Connection*  con = minerule::MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
+		std::auto_ptr<mrdb::Statement> state(con->createStatement());
 
 		minerule::MRLog() << "Building index on body/head..." << std::endl;
 		state->execute("\
@@ -56,10 +56,10 @@ namespace mrmatch {
 		bool outTableCreated = false;
 		
 		minerule::MRLogPusher _("Saving matches onto the database...");
-		odbc::Connection*  con = minerule::MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
+		mrdb::Connection*  con = minerule::MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
 		
 		minerule::MRLog() << "Inserting rules..." << std::endl;
-		std::auto_ptr<odbc::PreparedStatement> ps(con->prepareStatement("\
+		std::auto_ptr<mrdb::PreparedStatement> ps(con->prepareStatement("\
 			INSERT INTO " + _outTableName + " VALUES (?,?,?);"));
 			
 		for(RuleGidsVector::const_iterator it=_ruleGidsVector.begin(); it!=_ruleGidsVector.end(); ++it) {						

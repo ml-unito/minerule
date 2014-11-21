@@ -15,11 +15,11 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <memory>
 #include <iterator>
-#include "minerule/Algorithms/IDIncrementalAlgorithm.h"
-#include "minerule/Utils/MineruleOptions.h"
-#include "minerule/Utils/SQLUtils.h"
-#include "minerule/Database/Connection.h"
-#include "minerule/PredicateUtils/HeadBodyPredicatesSeparator.h"
+#include "minerule/Algorithms/IDIncrementalAlgorithm.hpp"
+#include "minerule/Utils/MineruleOptions.hpp"
+#include "minerule/Utils/SQLUtils.hpp"
+#include "minerule/Database/Connection.hpp"
+#include "minerule/PredicateUtils/HeadBodyPredicatesSeparator.hpp"
 
 
 
@@ -41,7 +41,7 @@ namespace minerule {
 
 
 	std::set<ItemType>*
-	IDIncrementalAlgorithm::fillValidItems(const std::string& constraints) const throw(odbc::SQLException) {
+	IDIncrementalAlgorithm::fillValidItems(const std::string& constraints) const throw(mrdb::SQLException) {
 		if(constraints=="")
 			return NULL;
 
@@ -63,11 +63,11 @@ namespace minerule {
 			"FROM "+minerule->getParsedMinerule().tab_source+" "+
 			(constraints.size()>0 ?	"WHERE "+constraints : "");
   
-		odbc::Connection* con = 
+		mrdb::Connection* con = 
 			MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
 
-		std::auto_ptr<odbc::Statement> state(con->createStatement());
-		std::auto_ptr<odbc::ResultSet> rs(state->executeQuery(query.c_str()));
+		std::auto_ptr<mrdb::Statement> state(con->createStatement());
+		std::auto_ptr<mrdb::ResultSet> rs(state->executeQuery(query.c_str()));
 
 		while(rs->next()) {
 			SourceRow sr(rs.get(), hbsr);
@@ -120,7 +120,7 @@ bool IDIncrementalAlgorithm::checkInclusion(const std::set<ItemType>& validOnes,
 	}
 	
 	
-	void IDIncrementalAlgorithm::filterQueries(const ValidRules& validRules) throw(MineruleException,odbc::SQLException) {
+	void IDIncrementalAlgorithm::filterQueries(const ValidRules& validRules) throw(MineruleException,mrdb::SQLException) {
 		OptimizerCatalogue& cat = MineruleOptions::getSharedOptions().getOptimizations().getCatalogue();
 		
 		std::string resName = cat.getResultsetName(minerule->getOptimizationInfo().minerule.tab_result );
@@ -154,7 +154,7 @@ bool IDIncrementalAlgorithm::checkInclusion(const std::set<ItemType>& validOnes,
 
 
 	void 
-	IDIncrementalAlgorithm::execute() throw(MineruleException,odbc::SQLException) {
+	IDIncrementalAlgorithm::execute() throw(MineruleException,mrdb::SQLException) {
 		assert(minerule->getParsedMinerule().mc!=NULL);
 
 		MRLogPush("This is IDIncrementalAlgorithm. Starting...");

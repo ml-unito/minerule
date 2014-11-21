@@ -15,7 +15,7 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <iostream>
 #include <unistd.h>
-#include "minerule/Utils/MineruleOptions.h"
+#include "minerule/Utils/MineruleOptions.hpp"
 
 
 using namespace minerule;
@@ -65,7 +65,7 @@ parseOptions(int argc, char** argv, MineruleOptions& mrOpts) {
     case 'O':
       try {
 	mrOpts.readFromString(std::string(optarg));
-      } catch( odbc::SQLException& e) {
+      } catch( mrdb::SQLException& e) {
 	// do nothing
       }
       break;

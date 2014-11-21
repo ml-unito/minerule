@@ -13,12 +13,12 @@
 //
 //   You should have received a copy of the GNU General Public License
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "minerule/Algorithms/IncrAlgoClasses.h"
-#include "minerule/Database/ItemType.h"
+#include "minerule/Algorithms/IncrAlgoClasses.hpp"
+#include "minerule/Database/ItemType.hpp"
 #include <iostream>
 #include <algorithm>
-#include "minerule/Optimizer/OptimizerCatalogue.h"
-#include "minerule/Database/Connection.h"
+#include "minerule/Optimizer/OptimizerCatalogue.hpp"
+#include "minerule/Database/Connection.hpp"
 #include <iterator>
 
 

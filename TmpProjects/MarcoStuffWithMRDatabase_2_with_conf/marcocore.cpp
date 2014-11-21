@@ -16,7 +16,7 @@
 
 
 #include "AlgorithmsOptions.h"
-#include "minerule/Utils/MineruleOptions.h"
+#include "minerule/Utils/MineruleOptions.hpp"
 #include "MRResultSet.h"
 
 void go();

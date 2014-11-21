@@ -13,7 +13,7 @@
 //
 //   You should have received a copy of the GNU General Public License
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "minerule/Algorithms/AlgorithmsOptions.h"
+#include "minerule/Algorithms/AlgorithmsOptions.hpp"
 
 using namespace minerule;
 
@@ -30,11 +30,11 @@ AlgorithmsOptions::setRowsPerPartition(unsigned int rowPerPart)  {
   rowsPerPartition = rowPerPart;
   }*/
 
-void AlgorithmsOptions::setConnection(odbc::Connection* conn) {
+void AlgorithmsOptions::setConnection(mrdb::Connection* conn) {
   connection=conn;
 }
 
-void AlgorithmsOptions::setStatement(odbc::PreparedStatement* stat) {
+void AlgorithmsOptions::setStatement(mrdb::PreparedStatement* stat) {
   statement=stat;
 }
 
@@ -56,11 +56,11 @@ AlgorithmsOptions::getRowsPerPartition() const {
   return rowsPerPartition;
   }*/
 
-odbc::Connection* AlgorithmsOptions::getODBCConnection() const {
+mrdb::Connection* AlgorithmsOptions::getODBCConnection() const {
   return connection;
 }
 
-odbc::PreparedStatement* AlgorithmsOptions::getStatement() const {
+mrdb::PreparedStatement* AlgorithmsOptions::getStatement() const {
   return statement;
 }
 

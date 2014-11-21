@@ -2,8 +2,8 @@
 #include <vector>
 #include <set>
 #include <algorithm>
-#include "minerule/Utils/MineruleException.h"
-#include "minerule/Utils/Converter.h"
+#include "minerule/Utils/MineruleException.hpp"
+#include "minerule/Utils/Converter.hpp"
 #include <odbc++/drivermanager.h>
 #include <odbc++/statement.h>
 #include <odbc++/connection.h>

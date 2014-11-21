@@ -13,13 +13,13 @@
 //
 //   You should have received a copy of the GNU General Public License
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "minerule/Algorithms/ResultCombinator.h"
-#include "minerule/Result/QueryResult.h"
+#include "minerule/Algorithms/ResultCombinator.hpp"
+#include "minerule/Result/QueryResult.hpp"
 
 namespace minerule {
 
 	void 
-	ResultCombinator::execute() throw(MineruleException,odbc::SQLException) {
+	ResultCombinator::execute() throw(MineruleException,mrdb::SQLException) {
 		MRLogPusher log1("ResultCombinator incremental algorithm starting...");
 
 		if( minerule==NULL )

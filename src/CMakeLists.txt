@@ -25,8 +25,6 @@ execute_process(COMMAND mkdir ${CMAKE_CURRENT_BINARY_DIR}/Utils)
 execute_process(COMMAND mkdir ${CMAKE_CURRENT_BINARY_DIR}/Parsers)
 
 # Dependencies
-find_package(LIBODBC++ REQUIRED)
-include_directories(${LIBODBC++_INCLUDE_DIRS})
 
 find_package(LIBGA REQUIRED)
 include_directories(${LIBGA_INCLUDE_DIRS})
@@ -38,33 +36,33 @@ include_directories(${CMAKE_SOURCE_DIR}/../include)
 add_definitions(-DMR_VERSION=\"2.0a\")
 
 
-flex_target(OPTLEXER 
-	${CMAKE_CURRENT_SOURCE_DIR}/Utils/OptionParser.lpp 
-	${CMAKE_CURRENT_BINARY_DIR}/Utils/OptionParser_lexer.cpp 
+flex_target(OPTLEXER
+	${CMAKE_CURRENT_SOURCE_DIR}/Utils/OptionParser.lpp
+	${CMAKE_CURRENT_BINARY_DIR}/Utils/OptionParser_lexer.cpp
 	COMPILE_FLAGS "-POP")
-	
-bison_target(OPTPARSER 
-	${CMAKE_CURRENT_SOURCE_DIR}/Utils/OptionParser.ypp 
+
+bison_target(OPTPARSER
+	${CMAKE_CURRENT_SOURCE_DIR}/Utils/OptionParser.ypp
 	${CMAKE_CURRENT_BINARY_DIR}/Utils/OptionParser_parser.cpp
 	COMPILE_FLAGS "-pOP")
 
 add_flex_bison_dependency(OPTLEXER OPTPARSER)
 
-flex_target(MRLEXER 
-	${CMAKE_CURRENT_SOURCE_DIR}/Parsers/MineruleParser.lpp 
-	${CMAKE_CURRENT_BINARY_DIR}/Parsers/MineruleParser_lexer.cpp 
+flex_target(MRLEXER
+	${CMAKE_CURRENT_SOURCE_DIR}/Parsers/MineruleParser.lpp
+	${CMAKE_CURRENT_BINARY_DIR}/Parsers/MineruleParser_lexer.cpp
 	COMPILE_FLAGS "-P mr -i")
-	
-bison_target(MRPARSER 
-	${CMAKE_CURRENT_SOURCE_DIR}/Parsers/MineruleParser.ypp 
+
+bison_target(MRPARSER
+	${CMAKE_CURRENT_SOURCE_DIR}/Parsers/MineruleParser.ypp
 	${CMAKE_CURRENT_BINARY_DIR}/Parsers/MineruleParser_parser.cpp
 	COMPILE_FLAGS "-p mr")
 
 # include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
-set(utils_src 
-	Utils/AlgorithmTypes.cpp 
-	Utils/Bitstring.cpp 
+set(utils_src
+	Utils/AlgorithmTypes.cpp
+	Utils/Bitstring.cpp
 	Utils/Constraints.cpp
 	Utils/MineruleErrors.cpp
 	Utils/MineruleOptions.cpp
@@ -96,8 +94,8 @@ file(GLOB installers_src Optimizer/Installers/*.cpp)
 file(GLOB predicateutils_src PredicateUtils/*.cpp)
 file(GLOB result_src Result/*.cpp)
 
-add_library(minerule 
-	${algorithms_src} 
+add_library(minerule
+	${algorithms_src}
 	${mrdatabase_src}
 	${optimizer_src}
 	${installers_src}
@@ -107,9 +105,8 @@ add_library(minerule
 	${result_src} )
 
 
-LIST(APPEND LIBS minerule)	
+LIST(APPEND LIBS minerule)
 LIST(APPEND LIBS ${LIBGA_LIBRARIES})
-LIST(APPEND LIBS ${LIBODBC++_LIBRARIES})
 
 add_executable(mr Programs/Minerule/minerule.cpp)
 target_link_libraries(mr ${LIBS})
@@ -117,39 +114,38 @@ target_link_libraries(mr ${LIBS})
 add_executable(mr-query Programs/MRQuery/mrquery.cpp)
 target_link_libraries(mr-query  ${LIBS})
 
-add_executable(mr-catalogue 
-	Programs/MRCatalogue/mrcatalogue.cpp 
+add_executable(mr-catalogue
+	Programs/MRCatalogue/mrcatalogue.cpp
 	Programs/MRCatalogue/MRCUtils.cpp
 	Programs/MRCatalogue/Printer.cpp
 	Programs/MRCatalogue/Options.cpp)
-	
+
 target_link_libraries(mr-catalogue 	${LIBS})
 
-add_executable(mr-print 
+add_executable(mr-print
 	Programs/MRPrintRules/PrintRules.cpp
 	Programs/MRPrintRules/Options.cpp)
-	
+
 target_link_libraries(mr-print 	${LIBS})
 
-add_executable(mr-defaults 
+add_executable(mr-defaults
 	Programs/MRDefaultOptions/MRDefaultOptions.cpp)
-	
+
 target_link_libraries(mr-defaults ${LIBS})
 
 add_executable(mr-match
-	Programs/MRMatch/mrmatch.cpp	
+	Programs/MRMatch/mrmatch.cpp
 	Programs/MRMatch/Options.cpp
 	Programs/MRMatch/Matcher.cpp
 	Programs/MRMatch/RuleGidsMatcher.cpp
 	Programs/MRMatch/GidRulesMatcher.cpp
 	Programs/MRMatch/RuleGidsDBMatcher.cpp)
-	
+
 target_link_libraries(mr-match ${LIBS})
 
 
 INSTALL(TARGETS mr mr-query mr-catalogue mr-print mr-defaults mr-match minerule
 		RUNTIME DESTINATION bin
 		ARCHIVE DESTINATION lib)
-		
-INSTALL(DIRECTORY ../include/minerule DESTINATION include)
 
+INSTALL(DIRECTORY ../include/minerule DESTINATION include)

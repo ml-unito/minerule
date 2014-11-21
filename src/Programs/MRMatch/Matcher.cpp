@@ -13,11 +13,11 @@
 //
 //   You should have received a copy of the GNU General Public License
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "Matcher.h"
-#include "RuleGidsMatcher.h"
-#include "RuleGidsDBMatcher.h"
-#include "GidRulesMatcher.h"
-#include "minerule/Utils/MineruleErrors.h"
+#include "Matcher.hpp"
+#include "RuleGidsMatcher.hpp"
+#include "RuleGidsDBMatcher.hpp"
+#include "GidRulesMatcher.hpp"
+#include "minerule/Utils/MineruleErrors.hpp"
 
 using namespace minerule;
 

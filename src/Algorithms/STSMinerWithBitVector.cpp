@@ -24,7 +24,7 @@ EXTRACTING SEQUENCES WITH SUPPORT: x
 /*da correggere: la tipologia fissa degli elementi in Source non va molto bene... lines 25-27
 leggi il tipo e scegli il corrispettivo sql*/
 
-#include "minerule/Algorithms/STSMinerWithBitVector.h"
+#include "minerule/Algorithms/STSMinerWithBitVector.hpp"
 
 namespace minerule {
 
@@ -92,7 +92,7 @@ void STSMinerWithBitVector::createBitVectors(){
     begin_end_vect.push_back(new_vect);
 
     q="SELECT * FROM Seq1";
-    odbc::ResultSet* rs= execQr(q);
+    mrdb::ResultSet* rs= execQr(q);
 
     while(rs->next()){
         //leggiamo riga per riga i valori dei singoletti e ne cerchiamo il count
@@ -100,7 +100,7 @@ void STSMinerWithBitVector::createBitVectors(){
         std::string subarea_id=rs->getString(2);
         int id=rs->getInt(3);
         q = "SELECT "+groupAttrList+" FROM Source WHERE "+ordAttrList+"="+Converter(d_time).toString()+" AND "+AttrList.at(2)+"='"+Converter(subarea_id).toString()+"';";
-        odbc::ResultSet* ris = options.getODBCConnection()->prepareStatement(ODBCXX_STRING_CONST(q.c_str()))->executeQuery();
+        mrdb::ResultSet* ris = options.getODBCConnection()->prepareStatement(q.c_str())->executeQuery();
         while(ris->next()){
             int track_id= ris->getInt(1);
             BitString* v=bvptr.at(0).at(id-1);
@@ -211,7 +211,7 @@ bool STSMinerWithBitVector::pruningSeqK(int k){
     std::vector<BitString*> new_begin_end_vect;
     std::string query= "SELECT * FROM Seq"+strK;
 
-    odbc::ResultSet* rs= execQr(query);
+    mrdb::ResultSet* rs= execQr(query);
     while(rs->next()){
         int id1=rs->getInt(1);
         int id2=rs->getInt(2);
@@ -333,4 +333,3 @@ void STSMinerWithBitVector::mineRules (){
 }
 
 }//end namespace
-

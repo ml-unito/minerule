@@ -21,9 +21,9 @@
 #include <assert.h>
 #include <set>
 #include <time.h>
-#include "minerule/Algorithms/BitVector.h"
-#include "minerule/Algorithms/CCSMiner.h"
-#include "minerule/Database/PrepareDataUtils.h"
+#include "minerule/Algorithms/BitVector.hpp"
+#include "minerule/Algorithms/CCSMiner.hpp"
+#include "minerule/Database/PrepareDataUtils.hpp"
 
 namespace minerule {
 
@@ -298,7 +298,7 @@ namespace minerule {
 
 
 				prepareData();
-				odbc::ResultSet* rs = statement->executeQuery();
+				mrdb::ResultSet* rs = statement->executeQuery();
 				
 				rs->next();
 				while (!rs->isAfterLast()){

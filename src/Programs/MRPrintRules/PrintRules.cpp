@@ -14,21 +14,21 @@
 //   You should have received a copy of the GNU General Public License
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <string.h>
-#include <odbc++/resultset.h>
-#include <odbc++/connection.h>
-#include <odbc++/statement.h>
-#include <odbc++/preparedstatement.h>
+#include "minerule/mrdb/ResultSet.hpp"
+#include "minerule/mrdb/Connection.hpp"
+#include "minerule/mrdb/Statement.hpp"
+#include "minerule/mrdb/PreparedStatement.hpp"
 
 #include <iostream>
 #include <assert.h>
 
-#include "minerule/Utils/MineruleOptions.h"
-#include "minerule/Optimizer/OptimizerCatalogue.h"
-#include "minerule/Database/SourceRowElement.h"
-#include "minerule/Utils/FileUtils.h"
-#include "minerule/Result/RuleFormatter.h"
+#include "minerule/Utils/MineruleOptions.hpp"
+#include "minerule/Optimizer/OptimizerCatalogue.hpp"
+#include "minerule/Database/SourceRowElement.hpp"
+#include "minerule/Utils/FileUtils.hpp"
+#include "minerule/Result/RuleFormatter.hpp"
 
-#include "Options.h"
+#include "Options.hpp"
 
 
 using namespace minerule;
@@ -36,7 +36,7 @@ using namespace minerule;
 namespace mrprint {
 
 	void
-	printRules(std::string queryname,	RuleFormatter& formatter, double conf) throw (MineruleException, odbc::SQLException, std::exception) {
+	printRules(std::string queryname,	RuleFormatter& formatter, double conf) throw (MineruleException, mrdb::SQLException, std::exception) {
 		QueryResult::Iterator qit;
 		OptimizerCatalogue::getMRQueryResultIterator( queryname, qit, -1, conf );
     
@@ -125,7 +125,7 @@ int main(int argc, char** argv) {
 	} catch ( minerule::MineruleException& e ) {
 		MRErr() << "MineruleError:" << e.what() << std::endl;
 		throw;
-	}  catch( odbc::SQLException& e) {
+	}  catch( mrdb::SQLException& e) {
 		MRErr() << "SQLError:" << e.what() << std::endl;
 		throw;
 	}  catch (std::exception& e) {

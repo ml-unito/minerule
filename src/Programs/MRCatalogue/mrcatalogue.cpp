@@ -13,11 +13,11 @@
 //
 //   You should have received a copy of the GNU General Public License
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "minerule/Utils/MineruleOptions.h"
+#include "minerule/Utils/MineruleOptions.hpp"
 
-#include "ErrorCodes.h"
-#include "MRCUtils.h"
-#include "Options.h"
+#include "ErrorCodes.hpp"
+#include "MRCUtils.hpp"
+#include "Options.hpp"
 
 using namespace minerule;
 

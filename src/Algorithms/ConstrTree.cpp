@@ -13,10 +13,10 @@
 //
 //   You should have received a copy of the GNU General Public License
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "minerule/Algorithms/ConstrTree.h"
-#include "minerule/PredicateUtils/HeadBodyPredicatesSeparator.h"
-#include "minerule/Utils/MineruleOptions.h"
-#include "minerule/Database/PrepareDataUtils.h"
+#include "minerule/Algorithms/ConstrTree.hpp"
+#include "minerule/PredicateUtils/HeadBodyPredicatesSeparator.hpp"
+#include "minerule/Utils/MineruleOptions.hpp"
+#include "minerule/Database/PrepareDataUtils.hpp"
 #include <iterator>
 
 
@@ -222,7 +222,7 @@ namespace minerule {
 	  MRLog() << "Body query" << bodyQry << std::endl;
 	  MRLog() << "Head query" << headQry << std::endl;
 	  MRLog() << "Executing queries" << std::endl;
-	  odbc::Connection* con = MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
+	  mrdb::Connection* con = MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
 
 	  stateb2 = con->createStatement();
 	  rb2 = stateb2->executeQuery(bodyQry);
@@ -234,7 +234,7 @@ namespace minerule {
   }
 
   void ConstrTree::execute() 
-    throw(MineruleException,odbc::SQLException) {
+    throw(MineruleException,mrdb::SQLException) {
     assert( minerule->getOptimizationInfo().relationship == OptimizedMinerule::Dominance );
     assert( minerule->getParsedMinerule().mc!=NULL &&
 	    minerule->getParsedMinerule().mc->next==NULL);

@@ -17,7 +17,7 @@
 
 %{
 #include <iostream>
-#include "minerule/Utils/MineruleException.h"
+#include "minerule/Utils/MineruleException.hpp"
 
 
 using namespace minerule;

@@ -15,7 +15,7 @@
 
 
 
-#include "minerule/Utils/MineruleOptions.h"
+#include "minerule/Utils/MineruleOptions.hpp"
 #include "MRDatabase/MIndex.h"
 
 

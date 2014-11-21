@@ -15,8 +15,8 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // CORE.CPP
 
-#include "minerule/Algorithms/Bodymap.h"
-#include "minerule/Utils/Constraints.h"
+#include "minerule/Algorithms/Bodymap.hpp"
+#include "minerule/Utils/Constraints.hpp"
 #include <algorithm>
 
 namespace minerule {

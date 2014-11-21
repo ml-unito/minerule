@@ -23,15 +23,15 @@
 #include <algorithm>
 
 
-#include "minerule/Algorithms/AlgorithmsOptions.h"
-#include "minerule/Utils/MineruleOptions.h"
-#include "minerule/Database/MRResultSet.h"
-#include "minerule/Database/ItemType.h"
-#include "minerule/Utils/Converter.h"
-#include "minerule/Database/Connection.h"
-#include "minerule/Algorithms/BFSWithGidsAndCross.h"
-#include "minerule/PredicateUtils/HeadBodyPredicatesSeparator.h"
-#include "minerule/Database/PrepareDataUtils.h"
+#include "minerule/Algorithms/AlgorithmsOptions.hpp"
+#include "minerule/Utils/MineruleOptions.hpp"
+#include "minerule/Database/MRResultSet.hpp"
+#include "minerule/Database/ItemType.hpp"
+#include "minerule/Utils/Converter.hpp"
+#include "minerule/Database/Connection.hpp"
+#include "minerule/Algorithms/BFSWithGidsAndCross.hpp"
+#include "minerule/PredicateUtils/HeadBodyPredicatesSeparator.hpp"
+#include "minerule/Database/PrepareDataUtils.hpp"
 
 namespace minerule {
 
@@ -79,7 +79,7 @@ namespace minerule {
 			return howMany;
 		}
 
-		int BFSWithGidsAndCross::BodyMap::add(int gid, odbc::ResultSet* rs, SourceRow& hbsr, bool secondPass) {
+		int BFSWithGidsAndCross::BodyMap::add(int gid, mrdb::ResultSet* rs, SourceRow& hbsr, bool secondPass) {
 			int howMany = 0;
 			MapElement me;
 			me.insert(gid);

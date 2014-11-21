@@ -30,21 +30,18 @@ typedef wxString String;
   #endif
 */
 
-#include"minerule/Optimizer/OptimizedMinerule.h"
-#include"minerule/Parsers/ParsedMinerule.h"
+#include"minerule/Optimizer/OptimizedMinerule.hpp"
+#include"minerule/Parsers/ParsedMinerule.hpp"
 
-#include<odbc++/drivermanager.h>
-#include<odbc++/connection.h>
-#include<odbc++/resultset.h>
-#include<odbc++/statement.h>
-#include<odbc++/resultsetmetadata.h>
+#include "minerule/mrdb/Connection.hpp"
+#include "minerule/mrdb/ResultSet.hpp"
+#include "minerule/mrdb/Statement.hpp"
+#include "minerule/mrdb/ResultSetMetaData.hpp"
 
-#include "minerule/Utils/MineruleOptions.h"
-#include "minerule/Optimizer/QueryNormalizer.h"
-#include "minerule/PredicateUtils/PredicateUtils.h"
+#include "minerule/Utils/MineruleOptions.hpp"
+#include "minerule/Optimizer/QueryNormalizer.hpp"
+#include "minerule/PredicateUtils/PredicateUtils.hpp"
 
-
-using namespace odbc;
 
 namespace minerule {
 
@@ -54,13 +51,13 @@ namespace minerule {
 			while( l_and!=NULL ) {
 				if( !Converter(l_and->sp->val1).isNumber() )
 					result.insert(l_and->sp->val1);
-    
+
 				if( !Converter(l_and->sp->val2).isNumber() )
 					result.insert(l_and->sp->val2);
-    			
+
 				l_and=l_and->next;
 			}
-       
+
 			l=l->next;
 		}
 	}
@@ -77,9 +74,9 @@ namespace minerule {
 
 	}
 
-	// mr1: candidate query 
+	// mr1: candidate query
 	// mr2: target query
-	bool OptimizedMinerule::isACandidateQuery( const ParsedMinerule& mr1, const ParsedMinerule& mr2  ) { 
+	bool OptimizedMinerule::isACandidateQuery( const ParsedMinerule& mr1, const ParsedMinerule& mr2  ) {
 		return mr1.ga==mr2.ga &&
 			mr1.ca==mr2.ca &&
 			mr1.ra==mr2.ra &&
@@ -88,9 +85,9 @@ namespace minerule {
 			mr1.c_aggr_list == mr2.c_aggr_list &&
 			mr1.sup<=mr2.sup &&
 			mr1.bodyCardinalities.contains(mr2.bodyCardinalities) &&
-			mr1.headCardinalities.contains(mr2.headCardinalities) && 
+			mr1.headCardinalities.contains(mr2.headCardinalities) &&
 			mr1.tab_source==mr2.tab_source &&
-	      // above are the standard checking 
+	      // above are the standard checking
 	      // if in addition both the queries are item dependent (mr1 is
 	      // item dependent by hypothesis).
 			OptimizerCatalogue::hasIDConstraints(mr1) &&
@@ -103,7 +100,7 @@ namespace minerule {
 	void OptimizedMinerule::checkForCombinedQueries(  ) {
 		MRLogPush("Searching for equivalences due to query combinations...");
 		std::vector<Predicate> candidates;
-    
+
 		std::vector<ParsedMinerule>::const_iterator it;
 
     // disabling the logging of the Parser since it would confuse
@@ -111,7 +108,7 @@ namespace minerule {
 		MineruleOptions::getSharedOptions().getLogStreamObj().disable();
 
 		std::ostream& log = MRLog() << "Candidates are: ";
-    
+
 		for(it=optInfo.minerulesToCombine.begin(); it!=optInfo.minerulesToCombine.end(); it++) {
 			if(it!=optInfo.minerulesToCombine.begin()) log<<", ";
 
@@ -120,16 +117,16 @@ namespace minerule {
 		}
 		log << std::endl;
 
-    // re-enabling the log 
+    // re-enabling the log
 		MineruleOptions::getSharedOptions().getLogStreamObj().enable();
 
 		Predicate target(minerule.mc);
-    
+
 	// FIXME: The third parameters ("Sales") seems to be obsoleted and not used any more
 		GAQueryCombinator qCombinator(target, candidates);
 		MineruleOptions::Optimizations::Combinator& combopt =
 			MineruleOptions::getSharedOptions().getOptimizations().getCombinator();
-	
+
 		qCombinator.setMaxDisjuncts(combopt.getMaxDisjuncts());
 		qCombinator.setMaxQueries(combopt.getMaxQueries());
 		qCombinator.setMaxDistinctPredicates(combopt.getMaxDistinctPredicates());
@@ -140,19 +137,19 @@ namespace minerule {
 		} catch( TimeOutException& e ) {
 			MRLog() << "The algorithm timed out." << std::endl;
 		}
-    
+
 
 	// FIXME: all of the following is about output. It should be moved into an appropriate method
 		if( qCombinator.getResult().empty() ) {
 			MRLog() << "No valid combination found!" << std::endl;
-		} else { 
+		} else {
 			std::string qryString;
 
 			GAQueryCombinator::QueryOrList::const_iterator itOr;
 			for(itOr=qCombinator.getResult().begin(); itOr!=qCombinator.getResult().end();  itOr++) {
 				if(itOr!=qCombinator.getResult().begin())
 					qryString += " OR ";
-      
+
 				GAQueryCombinator::QueryAndList::const_iterator itAnd;
 				for(itAnd=itOr->begin(); itAnd!=itOr->end(); itAnd++) {
 					if( itAnd!=itOr->begin() )
@@ -161,7 +158,7 @@ namespace minerule {
 					qryString += optInfo.minerulesToCombine[*itAnd].tab_result;
 				}
 			}
-    
+
 
 			MRLog() 	<< "A combination of queries equivalent to the given one"
 				<< " has been found. The found query follows:" << std::endl;
@@ -170,7 +167,7 @@ namespace minerule {
 			optInfo.combinationFormula = qCombinator.getResult();
 			optInfo.relationship = Combination;
 		}
- 
+
 		MRLogPop();
 	}
 
@@ -187,11 +184,11 @@ namespace minerule {
 		if(!MineruleOptions::getSharedOptions().getOptimizations().getTryOptimizations())
 			return;
 
-		bool avoidCombinationDetection = 
-			MineruleOptions::getSharedOptions().getOptimizations().getAvoidCombinationDetection() 
+		bool avoidCombinationDetection =
+			MineruleOptions::getSharedOptions().getOptimizations().getAvoidCombinationDetection()
 				|| !hasIDConstraints();
 
-		OptimizerCatalogue& catalogue = 
+		OptimizerCatalogue& catalogue =
 			MineruleOptions::getSharedOptions().getOptimizations().getCatalogue();
 
 		QueryNormalizer normalizer( catalogue, minerule );
@@ -206,8 +203,8 @@ namespace minerule {
     //lettura delle minerules precedenti
 		try	{
 			MRLogPusher _("Determining if a relationship exists with previous minerules...");
-			
-			MRLog() << "Reading past minerules" << std::endl;	
+
+			MRLog() << "Reading past minerules" << std::endl;
 			for(std::vector<CatalogueInfo>::const_iterator it=catInfos.begin(); it!=catInfos.end(); ++it) {
 				ParsedMinerule mr;
 				mr.init(it->qryText);
@@ -238,7 +235,7 @@ namespace minerule {
 			// since relationship==None, there is not yet any information
 			// about other Dominances. We simply store the found minerule
 								optInfo.minerule = mr;
-								MRLog() << "Minerule " << "``" << mr.tab_result <<"'' is now the best promising" 
+								MRLog() << "Minerule " << "``" << mr.tab_result <<"'' is now the best promising"
 									<< " dominant minerule." << std::endl;
 							} else {
 								// we must keep the current minerule only if its result set
@@ -247,13 +244,13 @@ namespace minerule {
 								OptimizerCatalogue::getMRQueryInfo( optInfo.minerule.tab_result, oldQryInfo );
 								if( it->resSize<oldQryInfo.resSize) {
 									optInfo.minerule = mr;
-									MRLog() << "Minerule " << "``" << mr.tab_result <<"'' is now the best promising" 
+									MRLog() << "Minerule " << "``" << mr.tab_result <<"'' is now the best promising"
 											<< " dominant minerule." << std::endl;
 								} else {
 									MRLog() << "Keeping the previously found dominant minerule" << std::endl;
 								}
 							}
-	      
+
 							optInfo.relationship = Dominance;
 						}
 						break;
@@ -266,17 +263,17 @@ namespace minerule {
 			  // and exit immediately from the loop, otherwise we check if we can
 			  // find some minerule which is a better candidate for the incremental
 			  // algorithms.
-				if(optInfo.relationship==Equivalence) 
+				if(optInfo.relationship==Equivalence)
 					break;
 			}
 
-			if(optInfo.relationship==None) 
+			if(optInfo.relationship==None)
 				MRLog() << "No interesting past minerules found." << std::endl;
 
-			if(optInfo.relationship==Dominance) 
-				MRLog() << "The best promising dominant minerule found is ``" 
-					<< optInfo.minerule.tab_result << "''" << std::endl;	
-		} catch (odbc::SQLException& e) {
+			if(optInfo.relationship==Dominance)
+				MRLog() << "The best promising dominant minerule found is ``"
+					<< optInfo.minerule.tab_result << "''" << std::endl;
+		} catch (mrdb::SQLException& e) {
 			MRErr() << e.what() << std::endl;
 			throw;
 		}
@@ -299,7 +296,7 @@ namespace minerule {
 		Predicate mr1pcc(mr1.cc);
 		Predicate mr2pcc(mr2.cc);
 
-		return 
+		return
 			mr1.ga==mr2.ga &&
 			mr1.ca==mr2.ca &&
 			mr1.ra==mr2.ra &&
@@ -308,17 +305,17 @@ namespace minerule {
 			mr1.c_aggr_list == mr2.c_aggr_list &&
 			mr1.sup<=mr2.sup &&
 			mr1.bodyCardinalities.contains(mr2.bodyCardinalities) &&
-			mr1.headCardinalities.contains(mr2.headCardinalities) && 
+			mr1.headCardinalities.contains(mr2.headCardinalities) &&
 			mr1.tab_source==mr2.tab_source &&
 			PredicateUtils::predicatesAreEquivalent( mr1pmc, mr2pmc, mr1.tab_source ) &&
 			PredicateUtils::predicatesAreEquivalent( mr1pgc, mr2pgc, mr1.tab_source ) &&
 			PredicateUtils::predicatesAreEquivalent( mr1pcc, mr2pcc, mr1.tab_source );
 	}
-  
+
 
 	bool OptimizedMinerule::firstMineruleDominatesSecondMinerule(const ParsedMinerule& mr1,const ParsedMinerule& mr2) {
 
-    
+
 		Predicate mr1pmc(mr1.mc);
 		Predicate mr2pmc(mr2.mc);
 		Predicate mr1pgc(mr1.gc);
@@ -326,15 +323,15 @@ namespace minerule {
 		Predicate mr1pcc(mr1.cc);
 		Predicate mr2pcc(mr2.cc);
 
-		PredicateUtils::PredicateRelationship mcrel = 
+		PredicateUtils::PredicateRelationship mcrel =
 			PredicateUtils::getPredicateRelationship( mr1pmc, mr2pmc, mr1.tab_source );
-		PredicateUtils::PredicateRelationship gcrel = 
+		PredicateUtils::PredicateRelationship gcrel =
 			PredicateUtils::getPredicateRelationship( mr1pgc, mr2pgc, mr1.tab_source );
-		PredicateUtils::PredicateRelationship ccrel = 
+		PredicateUtils::PredicateRelationship ccrel =
 			PredicateUtils::getPredicateRelationship( mr1pcc, mr2pcc, mr1.tab_source );
 
 
-		return 
+		return
 			mr1.ga==mr2.ga &&
 			mr1.ca==mr2.ca &&
 			mr1.ra==mr2.ra &&
@@ -343,7 +340,7 @@ namespace minerule {
 			mr1.c_aggr_list == mr2.c_aggr_list &&
 			mr1.sup<=mr2.sup &&
 			mr1.bodyCardinalities.contains(mr2.bodyCardinalities) &&
-			mr1.headCardinalities.contains(mr2.headCardinalities) && 
+			mr1.headCardinalities.contains(mr2.headCardinalities) &&
 			mr1.tab_source==mr2.tab_source &&
 			(mcrel==EncodedNF::FirstMoreGeneral || mcrel==EncodedNF::Equivalent)&&
 			(gcrel==EncodedNF::FirstMoreGeneral || gcrel==EncodedNF::Equivalent)&&
@@ -363,7 +360,7 @@ namespace minerule {
 			mr1.c_aggr_list == mr2.c_aggr_list &&
 			mr1.sup<=mr2.sup &&
 			mr1.bodyCardinalities.contains(mr2.bodyCardinalities) &&
-			mr1.headCardinalities.contains(mr2.headCardinalities) && 
+			mr1.headCardinalities.contains(mr2.headCardinalities) &&
 			mr1.tab_source==mr2.tab_source))
 				return None;
 
@@ -381,7 +378,7 @@ namespace minerule {
 		relations[2] = PredicateUtils::getPredicateRelationship( mr1pcc, mr2pcc, mr1.tab_source );
 
 		MineruleRelationship current = Equivalence;
-    
+
 		for(size_t i=0; i<3; i++) {
 			switch( relations[i] ) {
 				case EncodedNF::FirstMoreGeneral:
@@ -398,11 +395,11 @@ namespace minerule {
 
 		return current;
 	}
-  
+
 
 	bool OptimizedMinerule::hasIDConstraints() const throw(MineruleException) {
 		return OptimizerCatalogue::hasIDConstraints(minerule);
 	}
-  
+
 
 } // end namespace minerule

@@ -13,8 +13,8 @@
 //
 //   You should have received a copy of the GNU General Public License
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "Printer.h"
-#include "minerule/Utils/StringUtils.h"
+#include "Printer.hpp"
+#include "minerule/Utils/StringUtils.hpp"
 #include <sstream>
 
 namespace mrc {

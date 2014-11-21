@@ -13,16 +13,16 @@
 //
 //   You should have received a copy of the GNU General Public License
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "minerule/Database/SourceRowElement.h"
-#include "minerule/Database/SourceRowAttribute.h"
-#include "minerule/Database/SourceRowAttributeCollection.h"
+#include "minerule/Database/SourceRowElement.hpp"
+#include "minerule/Database/SourceRowAttribute.hpp"
+#include "minerule/Database/SourceRowAttributeCollection.hpp"
 
 namespace minerule {
 
 	SourceRowElement* 
 		SourceRowElement::createElement(
-			odbc::ResultSetMetaData* rsmd,
-				odbc::ResultSet* rs,
+			mrdb::ResultSetMetaData* rsmd,
+				mrdb::ResultSet* rs,
 	const std::vector<int>& srd) {
 		if(srd.empty())
 			return NULL;
@@ -64,8 +64,8 @@ namespace minerule {
 	}
 
 	SourceRowElement*
-	SourceRowElement::deserializeElementFromResultSet(odbc::ResultSet* rs, size_t start_index) throw(MineruleException){
-		odbc::ResultSetMetaData* rsmd = rs->getMetaData();
+	SourceRowElement::deserializeElementFromResultSet(mrdb::ResultSet* rs, size_t start_index) throw(MineruleException){
+		mrdb::ResultSetMetaData* rsmd = rs->getMetaData();
 		size_t numColumns = rsmd->getColumnCount();
 		std::vector<int> descr;
 		

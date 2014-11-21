@@ -13,17 +13,17 @@
 //
 //   You should have received a copy of the GNU General Public License
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "minerule/Algorithms/CCSMSequence.h"
+#include "minerule/Algorithms/CCSMSequence.hpp"
 
-#include "minerule/Database/SourceRowColumnIds.h"
-#include "minerule/Database/SourceRow.h"
+#include "minerule/Database/SourceRowColumnIds.hpp"
+#include "minerule/Database/SourceRow.hpp"
 
 #include "time.h"
 
 
 namespace minerule{
 	
-	void CCSMSequence::read(odbc::ResultSet* rs, const SourceRowColumnIds& rowDes){
+	void CCSMSequence::read(mrdb::ResultSet* rs, const SourceRowColumnIds& rowDes){
 	SourceRow hbsr(rs,rowDes);
 	ItemType gid;
 	if(!rs->isAfterLast()) 

@@ -17,12 +17,12 @@
 
 %{
 
-#include "minerule/Parsers/ParsedPredicate.h"
-#include "minerule/Parsers/HeaderQuery.h"
-#include "minerule/Parsers/SupportMeasure.h"
+#include "minerule/Parsers/ParsedPredicate.hpp"
+#include "minerule/Parsers/HeaderQuery.hpp"
+#include "minerule/Parsers/SupportMeasure.hpp"
 #include "MineruleParser_parser.hpp"
 #include <string.h>
-#include "minerule/Utils/Converter.h"
+#include "minerule/Utils/Converter.hpp"
 #include <sstream>
 #include <map>
 #include <iostream>

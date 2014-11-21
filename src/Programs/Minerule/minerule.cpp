@@ -22,10 +22,10 @@
 #include<stdlib.h>
 #include <algorithm>
 
-#include "minerule/Utils/MineruleException.h"
-#include "minerule/Utils/MineruleErrors.h"
-#include "minerule/Utils/StringUtils.h"
-#include "minerule/Utils/MineruleLogs.h"
+#include "minerule/Utils/MineruleException.hpp"
+#include "minerule/Utils/MineruleErrors.hpp"
+#include "minerule/Utils/StringUtils.hpp"
+#include "minerule/Utils/MineruleLogs.hpp"
 
 using namespace minerule;
 

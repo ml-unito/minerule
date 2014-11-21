@@ -2,8 +2,8 @@
 
 #include "Care.h"
 
-#include "minerule/PredicateUtils/HeadBodyPredicatesSeparator.h"
-#include "minerule/Algorithms/PrepareDataUtils.h"
+#include "minerule/PredicateUtils/HeadBodyPredicatesSeparator.hpp"
+#include "minerule/Algorithms/PrepareDataUtils.hpp"
 
 #define MROPTIONFILE "mroptions"
 

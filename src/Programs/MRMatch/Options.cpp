@@ -13,12 +13,12 @@
 //
 //   You should have received a copy of the GNU General Public License
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "mrmatch.h"
-#include "Options.h"
+#include "mrmatch.hpp"
+#include "Options.hpp"
 #include <getopt.h>
 
-#include "minerule/Utils/MineruleOptions.h"
-#include "minerule/Utils/FileUtils.h"
+#include "minerule/Utils/MineruleOptions.hpp"
+#include "minerule/Utils/FileUtils.hpp"
 
 using namespace minerule;
 

@@ -15,8 +15,8 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <cassert>
 
-#include "minerule/Utils/MRLogger.h"
-#include "minerule/Utils/StringUtils.h"
+#include "minerule/Utils/MRLogger.hpp"
+#include "minerule/Utils/StringUtils.hpp"
 
 namespace minerule {
 

@@ -16,12 +16,12 @@
 #include <iostream>
 #include <getopt.h>
 
-#include "minerule/Result/RulesMatcher.h"
-#include "minerule/Result/RuleFormatter.h"
+#include "minerule/Result/RulesMatcher.hpp"
+#include "minerule/Result/RuleFormatter.hpp"
 
-#include "Matcher.h"
-#include "mrmatch.h"
-#include "Options.h"
+#include "Matcher.hpp"
+#include "mrmatch.hpp"
+#include "Options.hpp"
 
 using namespace minerule;
  

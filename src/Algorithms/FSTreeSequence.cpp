@@ -13,12 +13,12 @@
 //
 //   You should have received a copy of the GNU General Public License
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "minerule/Algorithms/FSTreeSequence.h"
+#include "minerule/Algorithms/FSTreeSequence.hpp"
 
 #include <iostream>
-#include "minerule/Database/SourceRowColumnIds.h"
-#include "minerule/Database/SourceRow.h"
-#include "minerule/Utils/MineruleLogs.h"
+#include "minerule/Database/SourceRowColumnIds.hpp"
+#include "minerule/Database/SourceRow.hpp"
+#include "minerule/Utils/MineruleLogs.hpp"
 
 
 
@@ -110,7 +110,7 @@ namespace minerule {
 
   }
 
-  void FSTreeSequence::read(odbc::ResultSet* rs, const SourceRowColumnIds& rowDes){
+  void FSTreeSequence::read(mrdb::ResultSet* rs, const SourceRowColumnIds& rowDes){
 	SourceRow hbsr(rs,rowDes);
 	ItemType gid;
 	if(!rs->isAfterLast()) 

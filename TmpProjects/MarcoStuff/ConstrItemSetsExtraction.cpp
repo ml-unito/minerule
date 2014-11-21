@@ -2,8 +2,8 @@
 
 #include "ConstrItemSetsExtraction.h"
 
-#include "minerule/PredicateUtils/HeadBodyPredicatesSeparator.h"
-#include "minerule/Algorithms/PrepareDataUtils.h"
+#include "minerule/PredicateUtils/HeadBodyPredicatesSeparator.hpp"
+#include "minerule/Algorithms/PrepareDataUtils.hpp"
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>

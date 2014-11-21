@@ -3,11 +3,11 @@
 
 #ifndef CLASSI_H
 #define CLASSI_H
-#include "minerule/Database/ItemType.h"
+#include "minerule/Database/ItemType.hpp"
 #include <vector>
 #include <iostream>
 #include <map>
-#include "minerule/Database/Connection.h"
+#include "minerule/Database/Connection.hpp"
 
 namespace minerule {
 

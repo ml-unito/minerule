@@ -6,7 +6,7 @@
 //#include "mindex.h"
 #include <odbc++/resultsetmetadata.h>
 #include "MRResultSet.h"
-#include "minerule/Utils/SQLUtils.h"
+#include "minerule/Utils/SQLUtils.hpp"
 
 using namespace std;
 using namespace minerule;

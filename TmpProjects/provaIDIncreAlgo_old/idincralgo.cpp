@@ -1,5 +1,5 @@
-#include "minerule/Algorithms/IDIncrementalAlgorithm.h"
-#include "minerule/Utils/MineruleOptions.h"
+#include "minerule/Algorithms/IDIncrementalAlgorithm.hpp"
+#include "minerule/Utils/MineruleOptions.hpp"
 
 using namespace minerule;
 using namespace std;

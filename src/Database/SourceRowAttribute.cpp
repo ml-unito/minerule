@@ -13,11 +13,11 @@
 //
 //   You should have received a copy of the GNU General Public License
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "minerule/Database/SourceRowAttribute.h"
+#include "minerule/Database/SourceRowAttribute.hpp"
 #include <sstream>
-#include "minerule/Utils/Converter.h"
+#include "minerule/Utils/Converter.hpp"
 
-#include <odbc++/resultsetmetadata.h>
+#include "minerule/mrdb/ResultSetMetaData.hpp"
 
 //#define DEBUG
 
@@ -30,17 +30,17 @@ namespace minerule {
   /**
 	* Factory method - returns an attribute capable of handling types of the given type
    */
-		SourceRowAttribute* 
-			SourceRowAttribute::createAttribute(odbc::ResultSetMetaData* rsmd,
-				odbc::ResultSet* rs,
+		SourceRowAttribute*
+			SourceRowAttribute::createAttribute(mrdb::ResultSetMetaData* rsmd,
+				mrdb::ResultSet* rs,
 
 	int elem) {
-		odbc::Types::SQLType colType = (odbc::Types::SQLType) rsmd->getColumnType(elem);
+		mrdb::Types::SQLType colType = (mrdb::Types::SQLType) rsmd->getColumnType(elem);
 #ifdef DEBUG
 #warning MemDebugGeneric...
 		return new MemDebugGenericSourceRowAttribute(rs,elem,colType);
-#else 
-		if(colType==odbc::Types::INTEGER || colType==odbc::Types::BIGINT) 
+#else
+		if(colType==mrdb::Types::INTEGER || colType==mrdb::Types::BIGINT)
 			return new NumericSourceRowAttribute(rs,elem);
 		else
 			return new GenericSourceRowAttribute(rs,elem,colType);
@@ -54,18 +54,18 @@ namespace minerule {
    */
 
 			void
-	GenericSourceRowAttribute::setValue( odbc::ResultSet* rs, int col) {
+	GenericSourceRowAttribute::setValue( mrdb::ResultSet* rs, int col) {
 		assert(rs!=NULL);
 		assert(col<=rs->getMetaData()->getColumnCount());
 
-		type = (odbc::Types::SQLType) rs->getMetaData()->getColumnType(col);
+		type = (mrdb::Types::SQLType) rs->getMetaData()->getColumnType(col);
 		value = rs->getString(col);
 	}
 
 	void
 	GenericSourceRowAttribute::setValue( const std::string& inStr ) {
 
-		type = (odbc::Types::SQLType) 4;
+		type = (mrdb::Types::SQLType) 4;
 		value = inStr;
 	}
 
@@ -75,7 +75,7 @@ namespace minerule {
 		return value.compare(dynamic_cast<const GenericSourceRowAttribute&>(rhs).value);
 	}
 
-	odbc::Types::SQLType
+	mrdb::Types::SQLType
 	GenericSourceRowAttribute::getType() const {
 		return type;
 	}
@@ -84,16 +84,16 @@ namespace minerule {
 	GenericSourceRowAttribute::asString(const std::string& sep) const {
 		if(value == "")
 			return "(not set)";
-		else 
+		else
 			return value;
 	}
 
-	void 
+	void
 	GenericSourceRowAttribute::serialize(std::ostream& os) const throw(MineruleException) {
 		os << " @[ " << value << "@] ";
 	}
-  
-	void 
+
+	void
 	GenericSourceRowAttribute::deserialize(std::istream& is) throw(MineruleException) {
     // In order to avoid missing spaces etc. we resort to use istream::get method
     // instead of >> operator. This means that we need to read one char at a time
@@ -112,31 +112,31 @@ namespace minerule {
 
 			std::string buf;
 			char ch;
-	
+
 			assert(is);
 			is >> buf;
 			assert(is);
-	
-			if(buf!="@[") 
+
+			if(buf!="@[")
 				throw MineruleException(MR_ERROR_INTERNAL, "Expected `@[', but: `"+buf+"' found!");
 
 			is.get(); // throwing away spurious space.
 
 			bool finished = false;
-			value = ""; 
+			value = "";
 
 			AutomaState state = AS_NORMAL;
 			while(is.good() && !finished) {
 				ch=is.get();
-      
+
 				if( ch==']' && state==AS_EXITING )
 					finished=true;
 				else {
 					switch( ch ) {
-						case '@': 
+						case '@':
 							state = AS_EXITING;
 							break;
-						
+
 						default:
 							if(state==AS_EXITING)
 								value += '@';
@@ -146,12 +146,12 @@ namespace minerule {
 					}
 				}
 			}
-  
+
 			if(!is)
-				throw MineruleException(MR_ERROR_INTERNAL, 
+				throw MineruleException(MR_ERROR_INTERNAL,
 					"Unfinished Generic value, value read 'till now:"+value);
 		}
-  
+
 		std::string
 		GenericSourceRowAttribute::getSQLData() const {
 			return std::string("'")+value+"'";
@@ -159,51 +159,51 @@ namespace minerule {
 
   /* NUMERIC SOURCE ROW ATTRIBUTE */
 
-  
-		void 
-		NumericSourceRowAttribute::setValue( odbc::ResultSet* rs, int col) {
+
+		void
+		NumericSourceRowAttribute::setValue( mrdb::ResultSet* rs, int col) {
 			assert(rs!=NULL);
 			assert(col<=rs->getMetaData()->getColumnCount());
-			assert( getType() == (odbc::Types::SQLType) rs->getMetaData()->getColumnType(col) );
+			assert( getType() == (mrdb::Types::SQLType) rs->getMetaData()->getColumnType(col) );
 
 			value = rs->getLong(col);
 		}
 
-		void 
+		void
 		NumericSourceRowAttribute::setValue( const std::string& inStr ) {
 			value = (long int) strtod(inStr.c_str(), NULL);
 		}
 
-		int 
+		int
 		NumericSourceRowAttribute::compareTo(const SourceRowAttribute& rhs) const {
 			long int res= value - dynamic_cast<const NumericSourceRowAttribute&>(rhs).value;
 			return res;
 		}
-  
-		std::string 
+
+		std::string
 		NumericSourceRowAttribute::asString(const std::string& sep) const {
 			std::stringstream ss;
 			ss << value;
 			return ss.str();
 		}
-  
+
 		std::string
 		NumericSourceRowAttribute::getSQLData() const {
 			std::stringstream ss;
 			ss << "'" << value << "'";
 			return ss.str();
 		}
-  
+
 
   /**
 		* Serialization methods
    */
-  
-			void 
+
+			void
 		NumericSourceRowAttribute::serialize(std::ostream& os) const throw(MineruleException)  {
 			os << " " << value << " ";
 		}
-  
+
 		void NumericSourceRowAttribute::deserialize(std::istream& is) throw(MineruleException) {
 			std::string val;
 			is >> val;

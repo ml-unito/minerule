@@ -13,13 +13,13 @@
 //
 //   You should have received a copy of the GNU General Public License
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "Options.h"
+#include "Options.hpp"
 #include <getopt.h>
 #include <iostream>
 
-#include "minerule/Utils/StringUtils.h"
-#include "minerule/Utils/Converter.h"
-#include "minerule/Utils/FileUtils.h"
+#include "minerule/Utils/StringUtils.hpp"
+#include "minerule/Utils/Converter.hpp"
+#include "minerule/Utils/FileUtils.hpp"
 
 namespace mrprint {
 	

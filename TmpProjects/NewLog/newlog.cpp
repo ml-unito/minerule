@@ -1,4 +1,4 @@
-#include "minerule/Utils/MRLogger.h"
+#include "minerule/Utils/MRLogger.hpp"
 
 
 namespace minerule {

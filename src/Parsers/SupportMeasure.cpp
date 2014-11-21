@@ -13,9 +13,9 @@
 //
 //   You should have received a copy of the GNU General Public License
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#include "minerule/Utils/MineruleOptions.h"
-#include "minerule/Parsers/SupportMeasure.h"
-#include "minerule/Parsers/EvaluationMeasure.h"
+#include "minerule/Utils/MineruleOptions.hpp"
+#include "minerule/Parsers/SupportMeasure.hpp"
+#include "minerule/Parsers/EvaluationMeasure.hpp"
 
 
 

@@ -29,23 +29,22 @@ typedef wxString String;
  #endif
 */
 
-#include "minerule/Utils/MineruleException.h"
-#include "minerule/PredicateUtils/PredicateUtils.h"
+#include "minerule/Utils/MineruleException.hpp"
+#include "minerule/PredicateUtils/PredicateUtils.hpp"
 #include <sstream>
-#include "minerule/Utils/SQLUtils.h"
+#include "minerule/Utils/SQLUtils.hpp"
 //#include"Ottimizzatore/ottimizzatore.h"
 
 
-#include<odbc++/drivermanager.h>
-#include<odbc++/connection.h>
-#include<odbc++/resultset.h>
-#include<odbc++/statement.h>
-#include<odbc++/resultsetmetadata.h>
+#include"minerule/mrdb/Connection.hpp"
+#include"minerule/mrdb/ResultSet.hpp"
+#include"minerule/mrdb/Statement.hpp"
+#include"minerule/mrdb/ResultSetMetaData.hpp"
 #include<iterator>
 
-#include "minerule/Parsers/ParsedMinerule.h"
-#include "minerule/Utils/MineruleOptions.h"
-#include "minerule/Parsers/ParserLibrary.h"
+#include "minerule/Parsers/ParsedMinerule.hpp"
+#include "minerule/Utils/MineruleOptions.hpp"
+#include "minerule/Parsers/ParserLibrary.hpp"
 
 /*#define yyerrror predicateerror
 
@@ -81,7 +80,7 @@ print_AND_list(std::ostream& os, list_AND_node* andnode) {
 
 void
 print_OR_list(std::ostream& os, list_OR_node* ornode) {
-	if( ornode==NULL ) 
+	if( ornode==NULL )
 		return;
 
 	if( ornode->l_and!=NULL ) {
@@ -89,7 +88,7 @@ print_OR_list(std::ostream& os, list_OR_node* ornode) {
 		print_AND_list(os, ornode->l_and);
 		os  << ")";
 	}
-  
+
 	if( ornode->next!=NULL ) {
 		os << " OR ";
 		print_OR_list(os, ornode->next);
@@ -106,12 +105,12 @@ list_AND_node* clone_l_AND(list_AND_node* l)
 	if (l==NULL) return NULL;
 	result=(list_AND_node*)malloc(sizeof(list_AND_node));
 
-	if (result==NULL) 
+	if (result==NULL)
 		mrerror("Cannot allocate memory for a new list_AND_node");
 
 	p=(simple_pred*)malloc(sizeof(simple_pred));
 
-	if (p==NULL) 
+	if (p==NULL)
 		mrerror("simple_pred");
 
 	p->val1=strdup(l->sp->val1);
@@ -130,15 +129,15 @@ list_OR_node* clone_l_OR(list_OR_node* l)
 	list_OR_node* result;
 
 	if (l==NULL) return NULL;
-  
+
 	result=(list_OR_node*)malloc(sizeof(list_OR_node));
-	if (result==NULL) 
+	if (result==NULL)
 		mrerror("Cannot allocate memory for a new list_OR_node");
-  
+
 	result->l_and=clone_l_AND(l->l_and);
 	result->next=clone_l_OR(l->next);
 	return result;
-}                                                        
+}
 
 namespace minerule {
 
@@ -154,26 +153,26 @@ namespace minerule {
 
 		os << " - ga:";
 		copy( mr.ga.begin(), mr.ga.end(), std::ostream_iterator<std::string>(os, " "));
-		os << std::endl 
+		os << std::endl
 			<< " - ca:";
 		copy( mr.ca.begin(), mr.ca.end(), std::ostream_iterator<std::string>(os, " "));
-		os << std::endl 
+		os << std::endl
 			<< " - ra:";
 		copy( mr.ra.begin(), mr.ra.end(), std::ostream_iterator<std::string>(os, " "));
 		os << std::endl
 			<< " = mc:";
 		print_OR_list(os,mr.mc);
-		os << std::endl 
+		os << std::endl
 			<< " = gc:";
 		print_OR_list(os,mr.gc);
 		os << std::endl
 			<< " = cc:";
 		print_OR_list(os,mr.cc);
 		os << std::endl;
-  
+
 		os << " ! clust. agg. list:";
-		copy( mr.c_aggr_list.begin(), 
-			mr.c_aggr_list.end(), 
+		copy( mr.c_aggr_list.begin(),
+			mr.c_aggr_list.end(),
 				std::ostream_iterator<std::string>(os, " "));
 		os << std::endl;
 
@@ -203,7 +202,7 @@ namespace minerule {
 		for(int i=0; i<6 ; i++ ) {
 			par_sqlcode[i]="";
 		}
-  
+
 		for(int i=0; i<10; i++) {
 			deall_att_list(par_attlist[i]);
 			par_attlist[i]=NULL;
@@ -211,7 +210,7 @@ namespace minerule {
 	}
   */
 
-	float 
+	float
 	floatFromText(char* text) {
 		char* endptr;
 		float tmp = strtof(text, &endptr);
@@ -307,7 +306,7 @@ namespace minerule {
 				result += " OR (" + getAndListText(cond->l_and) + ")";
 				cond=cond->next;
 			}
-    
+
 			return result;
 		}
 		std::string ParsedMinerule::getCardsText(const MinMaxPair& mm) const {
@@ -321,9 +320,9 @@ namespace minerule {
 		}
 		std::string ParsedMinerule::getMinesequenceText() const {
 			std::string result;
-			result = 
+			result =
 				"MINE SEQUENCE " + tab_result + " AS " +
-				"SELECT DISTINCT " + 
+				"SELECT DISTINCT " +
 				getCardsText(bodyCardinalities) + " " + getAttrText(ba) +
 				", SUPPORT FROM "+tab_source+" GROUP BY "+getAttrText(ga)+
 				" ORDER BY "+getAttrText(oa)+ " EXTRACTING SEQUENCES WITH SUPPORT:" +
@@ -340,23 +339,23 @@ namespace minerule {
 				case MTMineItemsets:
 				return getMineitemsetsText();
 				default:
-				throw MineruleException( MR_ERROR_MINERULETEXT_PARSING, 
+				throw MineruleException( MR_ERROR_MINERULETEXT_PARSING,
 					"Current query is not currently supported by the system "
 						"(i.e., it is not a MINE RULE nor a MINE SEQUENCE query" );
 			}
 		}
 		std::string ParsedMinerule::getMineruleText() const {
 			std::string result;
-			result = 
+			result =
 				"MINE RULE " + tab_result + " AS " +
-				"SELECT DISTINCT " + 
-				getCardsText(bodyCardinalities) + " " + getAttrText(ba) + " AS BODY," + 
+				"SELECT DISTINCT " +
+				getCardsText(bodyCardinalities) + " " + getAttrText(ba) + " AS BODY," +
 				getCardsText(headCardinalities) + " " + getAttrText(ha) + " AS HEAD"
 				", SUPPORT, CONFIDENCE ";
 
-			if( mc!=NULL ) 
+			if( mc!=NULL )
 				result += "WHERE "+getCondText(mc) + " ";
-       
+
 			result +=
 				"FROM "+tab_source + " "
 					"GROUP BY " + getAttrText(ga) + " ";
@@ -367,27 +366,27 @@ namespace minerule {
 			if( !ca.empty() ) {
 				result += "CLUSTER BY " + getAttrText(ca) + " ";
 
-				if( cc!=NULL ) 
+				if( cc!=NULL )
 					result+= "HAVING " +getCondText(cc) + " ";
 			}
 
-			result += 
+			result +=
 				"EXTRACTING RULES WITH SUPPORT:" + Converter(sup).toString() + ","+
 					"CONFIDENCE:"+Converter(conf).toString();
-    
+
 			return result;
 		}
 		std::string ParsedMinerule::getMineitemsetsText() const {
 			std::string result;
-			result = 
+			result =
 				"MINE ITEMSET " + tab_result + " AS " +
-					"SELECT DISTINCT " + 
-						getCardsText(bodyCardinalities) + " " + getAttrText(ba) + " AS BODY" + 
+					"SELECT DISTINCT " +
+						getCardsText(bodyCardinalities) + " " + getAttrText(ba) + " AS BODY" +
 							", SUPPORT ";
 
-			if( mc!=NULL ) 
+			if( mc!=NULL )
 				result += "WHERE "+getCondText(mc) + " ";
-       
+
 			result +=
 				"FROM "+tab_source + " "
 					"GROUP BY " + getAttrText(ga) + " ";
@@ -395,27 +394,27 @@ namespace minerule {
 			if( gc!=NULL )
 				result += getCondText(gc) + " ";
 
-			result += 
+			result +=
 				"EXTRACTING ITEMSETS WITH SUPPORT:" + Converter(sup).toString();
-    
+
 			return result;
 		}
-  
+
 
 
 		bool ParsedMinerule::hasCrossConditions(const list_OR_node* cond) const {
 			MRLog()<<"Checking whether the minerule contains cross predicates" << std::endl;
-  
+
 			const list_OR_node* curr_OR;
 			for(curr_OR=cond; curr_OR!=NULL; curr_OR=curr_OR->next) {
 				list_AND_node* curr_AND;
 				for(curr_AND=curr_OR->l_and; curr_AND!=NULL; curr_AND=curr_AND->next) {
 					assert(curr_AND->sp!=NULL);
 					MRLog() << curr_AND->sp->val1 << " " << curr_AND->sp->val2 << std::endl;
-					bool hasHead = 
+					bool hasHead =
 						strstr(curr_AND->sp->val1, "HEAD.")==curr_AND->sp->val1 ||
 							strstr(curr_AND->sp->val2, "HEAD.")==curr_AND->sp->val2;
-					bool hasBody = 
+					bool hasBody =
 						strstr(curr_AND->sp->val1, "BODY.")==curr_AND->sp->val1 ||
 							strstr(curr_AND->sp->val2, "BODY.")==curr_AND->sp->val2;
 					if( hasHead && hasBody ) {
@@ -428,6 +427,6 @@ namespace minerule {
 			MRLog() << "Cross predicate not found!" << std::endl;
 			return false;
 		}
-		
- 
+
+
 	} // namespace minerule

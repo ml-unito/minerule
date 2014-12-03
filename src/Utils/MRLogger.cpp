@@ -34,7 +34,7 @@ namespace minerule {
       << getCpuSecs(li,logStack.back())
       <<" time:"
       << getTimeSecs(li,logStack.front())
-      <<" d-time:" 
+      <<" d-time:"
       << getTimeSecs(li,logStack.back())
       <<"]";
     return ss.str();
@@ -60,11 +60,11 @@ namespace minerule {
     return getTimeSecs(curInfo,logStack.back());
   }
 
-  MRLogger::MRLogger(void) : indentInset("  "), os(NULL), logLevel(100), curLogLevel(0) {
+  MRLogger::MRLogger(void) : indentInset("  "), os(NULL), logLevel(100), curLogLevel(1) {
     updateIndentString();
   }
 
-  MRLogger::MRLogger(std::ostream& ostr) : indentInset("  "), os(NULL), logLevel(100), curLogLevel(0) {
+  MRLogger::MRLogger(std::ostream& ostr) : indentInset("  "), os(NULL), logLevel(100), curLogLevel(1) {
     setStream(ostr);
     updateIndentString();
   }
@@ -90,7 +90,7 @@ namespace minerule {
   void MRLogger::push(const std::string& descr) {
     curLogLevel++;
     if(curLogLevel>logLevel)
-      return; 
+      return;
 
     assert(os!=NULL);
     indent();
@@ -110,11 +110,11 @@ namespace minerule {
     updateIndentString();
   }
 
- 
+
 
   void MRLogger::pop() {
     if(logStack.empty()) return;
-	
+
     if(curLogLevel>logLevel) {
       curLogLevel--;
       return;
@@ -137,18 +137,18 @@ namespace minerule {
     indent();
     *os<<std::endl;
   }
-  
-  void MRLogger::logMeasurement(const std::string& description, const MeasurementInfo& data) {	  
+
+  void MRLogger::logMeasurement(const std::string& description, const MeasurementInfo& data) {
 	  log() << StringUtils::toGreen("tag: ") << description << StringUtils::toGreen(" cpu time:") << data.totCpu << StringUtils::toGreen(" time:") << data.totTime << std::endl;
   }
-  
+
   void MRLogger::logMeasurements() {
 	  push("Showing measured execution times:");
-	  
+
 		for( Measurements::const_iterator it=measurements.begin(); it!=measurements.end(); ++it ) {
 		  logMeasurement(it->first, it->second);
 	  }
-		
+
 	  pop();
   }
 

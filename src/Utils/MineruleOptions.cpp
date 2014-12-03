@@ -294,6 +294,11 @@ namespace minerule {
        << "# In case 3) %m is expandend to the current minerule name as" << std::endl
        << "# it appear in the minerule text, %i is expanded to the value" << std::endl
        << "# of the -i parameter if any, to 'mr' otherwise" << std::endl
+       << "# The loglevel option allows you to select how deep the log nesting" << std::endl
+       << "# can grow. The default (loglevel==100) means: \"grow as much as needed\"" << std::endl
+       << "# (no function in minerule will ever nest logs more than a few levels)." << std::endl
+       << "# If set to 0, then the log is actually suppressed (the first level is 1)." << std::endl
+       << "# Otherwise, if set to n, only the first n levels will be displayed." << std::endl
        << "#" << std::endl
        << "# logstream::{" << std::endl
        << "#    +stream=<stdout> " << std::endl

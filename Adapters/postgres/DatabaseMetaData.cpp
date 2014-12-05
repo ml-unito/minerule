@@ -6,7 +6,7 @@
 #include <catalog/pg_type.h>
 #include <catalog/pg_type.h>
 
-#include "minerule/Utils/Converter.hpp"
+#include <string>
 
 
 namespace mrdb {
@@ -44,7 +44,7 @@ Types::SQLType DatabaseMetaData::sqlType(int oid) {
     case TEXTOID:
     case VARCHAROID:      return mrdb::Types::VARCHAR;
     default:
-    throw mrdb::SQLException("Posgres OID type:" + minerule::Converter(oid).toString() + " does not map to any know SQL type.");
+    throw mrdb::SQLException("Posgres OID type:" + std::to_string(oid) + " does not map to any know SQL type.");
   }
 }
 
@@ -65,7 +65,7 @@ std::string DatabaseMetaData::typeName(int oid) {
     case TEXTOID:
     case VARCHAROID:      return "varchar";
     default:
-    throw mrdb::SQLException("Posgres OID type:" + minerule::Converter(oid).toString() + " does not map to any know SQL type.");
+    throw mrdb::SQLException("Posgres OID type:" + std::to_string(oid) + " does not map to any know SQL type.");
   }
 }
 
@@ -87,7 +87,7 @@ Types::SQLType DatabaseMetaData::getColumnType(const std::string &tableName, con
     throw mrdb::SQLException("More than one row found describing types for " + tableName + "::" + columnName);
   }
 
-  int oid = minerule::Converter(PQgetvalue(result, 0, 0)).toLong();
+  int oid = std::stoi(PQgetvalue(result, 0, 0));
   PQclear(result);
 
   return sqlType(oid);

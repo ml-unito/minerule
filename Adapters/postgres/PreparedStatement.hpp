@@ -4,7 +4,6 @@
 #include <libpq-fe.h>
 #include <minerule/mrdb/PreparedStatement.hpp>
 #include <minerule/mrdb/ResultSet.hpp>
-#include <minerule/Utils/MineruleException.hpp>
 
 #include <vector>
 #include <string>

@@ -18,7 +18,7 @@
 #include "minerule/mrdb/Connection.hpp"
 #include "minerule/mrdb/Statement.hpp"
 #include "minerule/mrdb/PreparedStatement.hpp"
-
+#include <memory>
 
 namespace mrmatch {
 	void RuleGidsDBMatcher::createOutputTable(const minerule::ItemType& item) const {

@@ -21,7 +21,7 @@
 #include "minerule/Database/Connection.hpp"
 #include "minerule/PredicateUtils/HeadBodyPredicatesSeparator.hpp"
 
-
+#include <memory>
 
 namespace minerule {
 

@@ -135,7 +135,7 @@ void testCanExecuteQuery() {
 
 
   std::unique_ptr<mrdb::ResultSet> rs(statement->executeQuery("SELECT id,str,flt FROM mrdb_qry_test"));
-  assert(rs);
+  assert(rs!=NULL);
   assert(rs->next());
   assert( 1 == rs->getInt(1) );
   assert( "abc" == rs->getString(2) );

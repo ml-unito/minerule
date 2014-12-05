@@ -25,6 +25,8 @@
 #include <algorithm>
 #include <iomanip>
 
+#include <memory>
+
 namespace minerule {
 
 bool OptimizerCatalogue::existsMinerule(const std::string &mrname) {

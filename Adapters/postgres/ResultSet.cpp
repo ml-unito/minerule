@@ -1,5 +1,4 @@
 #include "ResultSet.hpp"
-#include "minerule/Utils/Converter.hpp"
 #include "ResultSetMetaData.hpp"
 
 namespace mrdb {
@@ -18,12 +17,12 @@ namespace mrdb {
     }
 
     double ResultSet::getDouble(int columnIndex) {
-      return minerule::Converter(PQgetvalue(result_, currentRow_, columnIndex-1)).toDouble();
+      return std::stod(PQgetvalue(result_, currentRow_, columnIndex-1));
     }
 
 
     int ResultSet::getInt(int columnIndex) {
-      return minerule::Converter(PQgetvalue(result_, currentRow_, columnIndex-1)).toLong();
+      return std::stol(PQgetvalue(result_, currentRow_, columnIndex-1));
     }
 
 
@@ -36,7 +35,7 @@ namespace mrdb {
     }
 
     long ResultSet::getLong(int columnIndex) {
-      return minerule::Converter(PQgetvalue(result_, currentRow_, columnIndex-1)).toLong();
+      return std::stol(PQgetvalue(result_, currentRow_, columnIndex-1));
     }
 
     bool ResultSet::isAfterLast() const {

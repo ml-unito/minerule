@@ -1,4 +1,3 @@
-#include <minerule/Utils/MineruleException.hpp>
 #include <minerule/Utils/Converter.hpp>
 
 #include "Connection.hpp"

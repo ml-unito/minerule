@@ -22,6 +22,8 @@
 #include "Matcher.hpp"
 #include "mrmatch.hpp"
 #include "Options.hpp"
+#include <memory>
+
 
 using namespace minerule;
  

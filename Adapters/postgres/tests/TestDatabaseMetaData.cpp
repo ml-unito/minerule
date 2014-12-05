@@ -13,6 +13,8 @@
 #include "../Statement.hpp"
 #include "../PreparedStatement.hpp"
 
+#include <memory>
+
 // GLOBAL CONNECTION FUNCTION
 namespace mrdb_test {
   MRDBConnectFun connect;

@@ -4,9 +4,9 @@
 #include <libpq-fe.h>
 #include <string>
 
-#include "minerule/mrdb/ResultSet.hpp"
-#include "minerule/mrdb/Types.hpp"
-#include "minerule/mrdb/DatabaseMetadata.hpp"
+#include <minerule/mrdb/ResultSet.hpp>
+#include <minerule/mrdb/Types.hpp>
+#include <minerule/mrdb/DatabaseMetaData.hpp>
 
 namespace mrdb {
 namespace postgres {

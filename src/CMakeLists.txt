@@ -94,7 +94,7 @@ file(GLOB installers_src Optimizer/Installers/*.cpp)
 file(GLOB predicateutils_src PredicateUtils/*.cpp)
 file(GLOB result_src Result/*.cpp)
 
-add_library(minerule
+add_library(minerule 
 	${algorithms_src}
 	${mrdatabase_src}
 	${optimizer_src}
@@ -107,6 +107,7 @@ add_library(minerule
 
 LIST(APPEND LIBS minerule)
 LIST(APPEND LIBS ${LIBGA_LIBRARIES})
+LIST(APPEND LIBS ${CMAKE_DL_LIBS})
 
 add_executable(mr Programs/Minerule/minerule.cpp)
 target_link_libraries(mr ${LIBS})

@@ -1,8 +1,8 @@
 #include <assert.h>
-#include <minerule/Utils/Converter.hpp>
 
 #include "PreparedStatement.hpp"
 #include "ResultSet.hpp"
+#include <string.h>
 
 namespace mrdb {
 namespace postgres {
@@ -13,7 +13,7 @@ PreparedStatement::PreparedStatement(PGconn *conn, std::string sql) throw(mrdb::
 
   std::pair<int, std::string> formattedSql = formatParams(sql);
   numParams_ = formattedSql.first;
-  statementName_ = "MRDB_PREPARED_STATEMENT_" + minerule::Converter(stmtCount++).toString();
+  statementName_ = "MRDB_PREPARED_STATEMENT_" + std::to_string(stmtCount++);
 
   initParams();
 
@@ -58,7 +58,7 @@ PreparedStatement::executeQuery() throw(mrdb::SQLException &) {
 
 
 #define SETTER_DEFINITION \
-  setParam(idx-1, minerule::Converter(val).toString().c_str() )
+  setParam(idx-1, std::to_string(val).c_str() )
 
 void PreparedStatement::setDouble(int idx, double val) {
   SETTER_DEFINITION;
@@ -69,7 +69,7 @@ void PreparedStatement::setInt(int idx, int val) {
 }
 
 void PreparedStatement::setString(int idx, const std::string &val) {
-  SETTER_DEFINITION;
+  setParam(idx-1, val.c_str());
 }
 
 void PreparedStatement::setLong(int idx, long val) {
@@ -105,8 +105,8 @@ void PreparedStatement::freeParams() {
 void PreparedStatement::setParam(int idx, const std::string& val) {
   if(idx < 0 || idx >= numParams_) {
     std::string errorMessage = std::string("Column index ") +
-        minerule::Converter(idx).toString() + " not valid!"
-        " Valid range is [0," + minerule::Converter(numParams_-1).toString() + "]";
+        std::to_string(idx) + " not valid!"
+        " Valid range is [0," + std::to_string(numParams_-1) + "]";
 
     throw mrdb::SQLException(errorMessage);
   }
@@ -116,7 +116,7 @@ void PreparedStatement::setParam(int idx, const std::string& val) {
     params_[idx] = NULL;
   }
 
-  params_[idx] = strndup(minerule::Converter(val).toString().c_str(), 255);
+  params_[idx] = strndup(val.c_str(), 255);
   assert( params_[idx] != NULL);
 }
 
@@ -127,7 +127,7 @@ PreparedStatement::formatParams(std::string sql) const {
 
   while ((questionMarkPos = sql.find("?")) != std::string::npos) {
     std::string placeHolder =
-    std::string("$") + minerule::Converter(++paramNumber).toString();
+    std::string("$") + std::to_string(++paramNumber);
     sql.replace(questionMarkPos, 1, placeHolder);
   }
 

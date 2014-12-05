@@ -3,7 +3,6 @@
 
 #include <libpq-fe.h>
 #include <minerule/mrdb/Connection.hpp>
-#include <minerule/Utils/MineruleException.hpp>
 #include <minerule/mrdb/SQLException.hpp>
 
 namespace mrdb {

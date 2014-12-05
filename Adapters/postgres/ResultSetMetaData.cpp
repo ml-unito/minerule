@@ -1,7 +1,6 @@
 #include "ResultSetMetaData.hpp"
 #include "DatabaseMetaData.hpp"
 #include "minerule/mrdb/SQLException.hpp"
-#include "minerule/Utils/Converter.hpp"
 
 namespace mrdb {
 namespace postgres {

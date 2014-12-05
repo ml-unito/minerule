@@ -36,7 +36,8 @@ namespace minerule {
 class SourceRowAttribute : public SourceRowElement {
 public:
   /**
-   * Factory method - returns an attribute capable of handling types of the
+   * Factory method.
+   * @return an attribute capable of handling types of the
    * given type
    */
 
@@ -47,70 +48,84 @@ public:
 
   // ---- Methods to be implemented in sub-classes
   /**
-   * returns a fresh allocated copy of the current object
+   * @return a fresh allocated copy of the current object
    */
   virtual SourceRowElement *copy() const = 0;
 
   /**
-   * return the type of the attribute
+   * @return the type of the attribute
    */
   virtual mrdb::Types::SQLType getType() const = 0;
 
   /**
-   * return the id of the column from which the attribute where extracted
-   * deprecated... it is of no practical interest and it forces subclasses
-   * to store an additional integer
-   */
-  // virtual int getColumnId() const = 0;
-
-  /**
-   * set the value of the attribute accordingly to the value of the specified
+   * Sets the value of the attribute accordingly to the value of the specified
    * column of the current row of the given result set
+   *
+   * @param rs the result set source of the value
+   * @param col the index (starting from 1) of the column in the result set
    */
-  virtual void setValue(mrdb::ResultSet *, int) = 0;
-  virtual void setValue(const std::string &) = 0;
+  virtual void setValue(mrdb::ResultSet *rs, int col) = 0;
 
   /**
-   * Return -1 if the present attribute is less than the argument, 0 if they are
-   * equal
-   * +1 otherwise
+   * Sets the value of the attribute according to the given string (converting
+   * the value to the proper type when necessary).
+   *
+   * @param value a string representation of the value to be set
+   */
+  virtual void setValue(const std::string & value) = 0;
+
+  /**
+   * Compares the present attribute value with the one of the given attribute.
+   *
+   * @return -1 if the present attribute is less than the argument, 0 if they are
+   * equal +1 otherwise
    */
   virtual int compareTo(const SourceRowAttribute &) const = 0;
 
   /**
-   * return thestd::string representation for the attribute
+   * Convert this attribute to a string.
+   *
+   * @param sep a separator string. Composite attributes should use this value
+   *    to separate fields.
+   * @return the std::string representation of the value of this attribute.
    */
   virtual std::string asString(const std::string &sep = ",") const = 0;
 
   // INHERITED FROM SOURCE ROW ELEMENT
 
-  // Returns true if s1<s2
+  /// @return true iff s1<s2
   virtual bool operator()(const SourceRowElement &s1,
                           const SourceRowElement &s2) const {
-    const SourceRowAttribute &attr1 =
-        dynamic_cast<const SourceRowAttribute &>(s1);
-    const SourceRowAttribute &attr2 =
-        dynamic_cast<const SourceRowAttribute &>(s2);
+    const SourceRowAttribute &attr1 = dynamic_cast<const SourceRowAttribute &>(s1);
+    const SourceRowAttribute &attr2 = dynamic_cast<const SourceRowAttribute &>(s2);
 
     return attr1.compareTo(attr2) < 0;
   }
 
+  /// @return true iff *this == s1
   virtual bool operator==(const SourceRowElement &s1) const {
-    const SourceRowAttribute &attr1 =
-        dynamic_cast<const SourceRowAttribute &>(s1);
+    const SourceRowAttribute &attr1 = dynamic_cast<const SourceRowAttribute &>(s1);
 
     return this->compareTo(attr1) == 0;
   }
 
+  /// return true if this attribute is empty
   virtual bool empty() const { return false; }
 
   /**
-   * return thestd::string representation for the attribute in a format
+   * @return the std::string representation for the attribute in a format
    * suitable to be used in SQL queries (tipically it is implemented
    * as return "'"+this->asString()+"'"
    */
   virtual std::string getSQLData() const = 0;
 
+  /**
+   * Inserts the value of this attribute in the provided ostream and
+   * returns the ostream.
+   *
+   * @param os an output stream
+   * @return the output stream given in input
+   */
   virtual std::ostream &operator<<(std::ostream &os) const {
     os << asString();
     return os;
@@ -119,20 +134,17 @@ public:
 
 /**
  * This is a generic attribute class, i.e. it can contain any
- * attribute type. It should be used when more specific class
+ * attribute type. It should be used when more specific classes
  * are not available.
  */
 
 class GenericSourceRowAttribute : public SourceRowAttribute {
-  friend std::ostream &operator<<(std::ostream &os,
-                                  const SourceRowAttribute &ia);
+  friend std::ostream &operator<<(std::ostream &os,const SourceRowAttribute &ia);
 
 private:
   std::string value;
-
   mrdb::Types::SQLType type;
-  // Deprecated
-  // int colId;
+
 public:
   GenericSourceRowAttribute(mrdb::ResultSet *_rs, int _elem,
                             mrdb::Types::SQLType _type)
@@ -164,8 +176,6 @@ public:
 
   virtual mrdb::Types::SQLType getType() const;
 
-  // Deprecated
-  // virtual int getColumnId() const;
 
   virtual void setValue(mrdb::ResultSet *, int);
   virtual void setValue(const std::string &);
@@ -193,7 +203,7 @@ public:
 
 /**
  * This class keep track of how many instances has been created. It is useful
- * in order to check if a program deallocate sourcerowattribute instances.
+ * in order to check if a program correctly deallocates sourcerowattribute instances.
  */
 
 class MemDebugGenericSourceRowAttribute : public GenericSourceRowAttribute {
@@ -202,14 +212,10 @@ class MemDebugGenericSourceRowAttribute : public GenericSourceRowAttribute {
 private:
   void incCounter() {
     instanceCount++;
-    //      std::cout << "Created new SourceRowAttribute. Count after creation:"
-    //	<< instanceCount << std::endl;
   }
 
   void decCounter() {
     instanceCount--;
-    // std::cout << "Deleted a SourceRowAttribute. Count after deletion:"
-    //	<< instanceCount << std::endl;
   }
 
 public:
@@ -239,7 +245,11 @@ public:
   static size_t getInstanceCounter() { return instanceCount; }
 };
 
-/* NUMERIC SOURCE ROW ATTRIBUTE */
+/**
+ * This class represents int valued source row attributes. Probably "numeric"
+ * is a misnomer since it hints that the attribute can handle also real numbers.
+ * It can't, only integers are supported.
+ */
 class NumericSourceRowAttribute : public SourceRowAttribute {
   friend std::ostream &operator<<(std::ostream &os,
                                   const SourceRowAttribute &ia);

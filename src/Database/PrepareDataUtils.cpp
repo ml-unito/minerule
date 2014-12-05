@@ -152,7 +152,7 @@ namespace minerule {
 			queryText += " ORDER BY "+buildAttrListDescription(mr.ga);
 
 		unsigned int lastElem;
-		lastElem= rowDes.setgroupElems(1,mr.ga.size());
+		lastElem= rowDes.setGroupElems(1,mr.ga.size());
 		rowDes.setBodyElems(lastElem+1,mr.ba.size());
 
 		return queryText;
@@ -174,7 +174,7 @@ namespace minerule {
 			queryText += " ORDER BY "+buildAttrListDescription(mr.ga);
 
 		unsigned int lastElem;
-		lastElem= rowDes.setgroupElems(1,mr.ga.size());
+		lastElem= rowDes.setGroupElems(1,mr.ga.size());
 		rowDes.setHeadElems(lastElem+1,mr.ha.size());
 
 		return queryText;
@@ -292,7 +292,7 @@ namespace minerule {
 		std::string queryText = "SELECT * FROM "+tableName;
 
 		unsigned int lastElem;
-		lastElem= rowDes.setgroupElems(1,mr.ga.size());
+		lastElem= rowDes.setGroupElems(1,mr.ga.size());
 		lastElem= rowDes.setClusterBodyElems(lastElem+1,mr.ca.size());
 		lastElem= rowDes.setBodyElems(lastElem+1,mr.ba.size());
 		lastElem= rowDes.setClusterHeadElems(lastElem+1,mr.ca.size());

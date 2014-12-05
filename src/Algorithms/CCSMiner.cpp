@@ -45,7 +45,7 @@ namespace minerule {
 
 		size_t last_elem;
 
-		last_elem = rowDes.setgroupElems(1,pm.ga.size());
+		last_elem = rowDes.setGroupElems(1,pm.ga.size());
 
 		rowDes.setBodyElems(last_elem+1, pm.ba.size());
 		

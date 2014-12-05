@@ -26,8 +26,8 @@
 
 
 namespace minerule {
-/* This class is an helper of class SourceRow. It helps in
- * maintaining parts of items.
+/**
+ * Implements attribute collections.
  */
 
   class SourceRowAttributeCollection : public SourceRowElement {

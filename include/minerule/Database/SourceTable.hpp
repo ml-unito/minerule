@@ -21,80 +21,98 @@
 #include "minerule/Algorithms/MiningAlgorithmBase.hpp"
 
 namespace minerule {
-	class SourceTable {
-	public:
-		typedef enum { BodyIterator, HeadIterator, FullIterator } IteratorKind;
-		
-		class Iterator {
-		friend class SourceTable;			
+class SourceTable {
+public:
+  typedef enum { BodyIterator, HeadIterator, FullIterator } IteratorKind;
 
-		private:
-			mrdb::ResultSet* _resultSet;
-			SourceRowColumnIds _columnIds;
-			SourceRow* _sourceRow;
-			size_t _rowCounter;
-			bool _silent;
+  class Iterator {
+    friend class SourceTable;
 
-			Iterator( mrdb::ResultSet* resultSet, const SourceRowColumnIds& columnIds, bool silent ) : _resultSet(resultSet), _columnIds(columnIds), _sourceRow(new SourceRow()), _rowCounter(0), _silent(silent) {	
-				
-				assert(_resultSet!=NULL);
-				if(_resultSet->isBeforeFirst()) {
-					next();
-				}
-			}
-		public:
-			Iterator() : _resultSet(NULL), _columnIds(), _sourceRow(NULL) {}
-			Iterator( const Iterator& it ) : _resultSet(it._resultSet), _sourceRow(it._sourceRow), _columnIds(it._columnIds) {
-			}
-			
-			virtual ~Iterator() {  }
-			
-			bool next();
-			bool isAfterLast() const;
-			
-			SourceRow* get() { assert(_sourceRow!=NULL); return _sourceRow; }
-			SourceRow* operator->() { return get(); }
-			
-			Iterator& operator++() { next(); return *this; }			
-		};
-		
-		
-		SourceTable(const MiningAlgorithm& algorithm) : _minerule(algorithm.optimizedMinerule().getParsedMinerule()), _sourceTableRequirements(algorithm.sourceTableRequirements()), _pdu(_minerule, _sourceTableRequirements), _bodyStatement(NULL), _headStatement(NULL), _fullStatement(NULL), _usesCrossProduct(false) { 
-			init(); 
-		};
-		
-		SourceTable(const ParsedMinerule& minerule, const SourceTableRequirements& requirements) : _minerule(minerule), _sourceTableRequirements(requirements), _pdu(_minerule,_sourceTableRequirements), _bodyStatement(NULL), _headStatement(NULL), _fullStatement(NULL), _usesCrossProduct(false) { 
-			init(); 		
-		}
+  private:
+    mrdb::ResultSet *_resultSet;
+    SourceRowColumnIds _columnIds;
+    SourceRow *_sourceRow;
+    size_t _rowCounter;
+    bool _silent;
 
-		virtual ~SourceTable();
-		
-		bool usesCrossProduct() const { return _usesCrossProduct; }
+    Iterator(mrdb::ResultSet *resultSet, const SourceRowColumnIds &columnIds,
+             bool silent)
+        : _resultSet(resultSet), _columnIds(columnIds),
+          _sourceRow(new SourceRow()), _rowCounter(0), _silent(silent) {
 
-		void init();
-		size_t getTotGroups();
-	
-		Iterator newIterator(IteratorKind);
-	private:
-	/* data */
-		const ParsedMinerule& _minerule;
-		SourceTableRequirements _sourceTableRequirements;
-		PrepareDataUtils _pdu;
-		bool _usesCrossProduct;
-				
-		SourceRowColumnIds _columnIds;
-		mrdb::PreparedStatement* _bodyStatement;
-		mrdb::PreparedStatement* _headStatement;
-		mrdb::PreparedStatement* _fullStatement;
-		
-		std::vector<mrdb::ResultSet*> _managedResults;
-		
-	/* methods */
-		void initBodyHeadResultSets();	
-		void initFullResultSet();	
+      assert(_resultSet != NULL);
+      if (_resultSet->isBeforeFirst()) {
+        next();
+      }
+    }
 
-	};
-	
-} // namespace	
+  public:
+    Iterator() : _resultSet(NULL), _columnIds(), _sourceRow(NULL) {}
+    Iterator(const Iterator &it)
+        : _resultSet(it._resultSet), _columnIds(it._columnIds),
+          _sourceRow(it._sourceRow) {}
+
+    virtual ~Iterator() {}
+
+    bool next();
+    bool isAfterLast() const;
+
+    SourceRow *get() {
+      assert(_sourceRow != NULL);
+      return _sourceRow;
+    }
+    SourceRow *operator->() { return get(); }
+
+    Iterator &operator++() {
+      next();
+      return *this;
+    }
+  };
+
+  SourceTable(const MiningAlgorithm &algorithm)
+      : _minerule(algorithm.optimizedMinerule().getParsedMinerule()),
+        _sourceTableRequirements(algorithm.sourceTableRequirements()),
+        _pdu(_minerule, _sourceTableRequirements), _usesCrossProduct(false),
+        _bodyStatement(NULL), _headStatement(NULL), _fullStatement(NULL) {
+    init();
+  };
+
+  SourceTable(const ParsedMinerule &minerule,
+              const SourceTableRequirements &requirements)
+      : _minerule(minerule), _sourceTableRequirements(requirements),
+        _pdu(_minerule, _sourceTableRequirements), _usesCrossProduct(false),
+				_bodyStatement(NULL), _headStatement(NULL), _fullStatement(NULL)  {
+    init();
+  }
+
+  virtual ~SourceTable();
+
+  bool usesCrossProduct() const { return _usesCrossProduct; }
+
+  void init();
+  size_t getTotGroups();
+
+  Iterator newIterator(IteratorKind);
+
+private:
+  /* data */
+  const ParsedMinerule &_minerule;
+  SourceTableRequirements _sourceTableRequirements;
+  PrepareDataUtils _pdu;
+  bool _usesCrossProduct;
+
+  SourceRowColumnIds _columnIds;
+  mrdb::PreparedStatement *_bodyStatement;
+  mrdb::PreparedStatement *_headStatement;
+  mrdb::PreparedStatement *_fullStatement;
+
+  std::vector<mrdb::ResultSet *> _managedResults;
+
+  /* methods */
+  void initBodyHeadResultSets();
+  void initFullResultSet();
+};
+
+} // namespace
 
 #endif /* end of include guard: SOURCETABLE_H_GE1S8NL9 */

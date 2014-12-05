@@ -24,6 +24,13 @@
 
 namespace minerule {
 
+/**
+ * A SourceRowColumnIds object maintains the information about which columns
+ * of the source table corresponds to which elements of the mining rule, e.g.,
+ * which columns are to be used as head elements and which needs to be used as
+ * group ones.
+ */
+
 class SourceRowColumnIds {
   public:
   std::vector<int> groupElems;
@@ -44,43 +51,66 @@ class SourceRowColumnIds {
   }
 
 
-  // The following function is a generalization of the set???Elem function defined below (see the
-  // corresponding comment for explanation about start, numCols and return values). Its intended usage
-  // is:
-  //   SourceRowColumnIds des;
-  //   des.setElems(des.bodyElems, 1, 5)
-  // which is equivalent to
-  //   des.setBodyElems(1,5).
-  // It is provided as a convenience method...
+  /// @param start the column at which the group elements start
+  /// @param numCols the number of contiguous columns to be set
+  /// @return start+numCols+1
+  ///
+  /// Adds the columns start, start+1,...,start+numCols-1
+  /// to the group elements.
+
+  unsigned int setGroupElems(unsigned int start,unsigned int numCols);
+
+
+  /// @param start the column at which the cluster body elements start
+  /// @param numCols the number of contiguous columns to be set
+  /// @return start+numCols+1
+  ///
+  /// Adds the columns start, start+1,...,start+numCols-1
+  /// to the cluster body elements.
+
+  unsigned int setClusterBodyElems(unsigned int start, unsigned int numCols);
+
+  /// @param start the column at which the body elements start
+  /// @param numCols the number of contiguous columns to be set
+  /// @return start+numCols+1
+  ///
+  /// Adds the columns start, start+1,...,start+numCols-1
+  /// to the body elements.
+
+  unsigned int setBodyElems(unsigned int start,unsigned int numCols);
+
+  /// @param start the column at which the clustr head elements start
+  /// @param numCols the number of contiguous columns to be set
+  /// @return start+numCols+1
+  ///
+  /// Adds the columns start, start+1,...,start+numCols-1
+  /// to the clustr head elements.
+
+  unsigned int setClusterHeadElems(unsigned int start, unsigned int numCols);
+
+  /// @param start the column at which the head elements start
+  /// @param numCols the number of contiguous columns to be set
+  /// @return start+numCols+1
+  ///
+  /// Adds the columns start, start+1,...,start+numCols-1
+  /// to the head elements.
+
+  unsigned int setHeadElems(unsigned int start, unsigned int numCols);
+
+
+private:
+  /// A generalization of the set???Elem methods defined in this class (see the
+  /// corresponding comment for explanation about start, numCols and return values).
+  /// It is used internally to implement the mentione setter methods.
+  /// Its intended usage
+  /// is:
+  ///   SourceRowColumnIds des;
+  ///   des.setElems(des.bodyElems, 1, 5)
+  /// which is equivalent to
+  ///   des.setBodyElems(1,5).
+  /// It is provided as a convenience method...
 
   unsigned int setElems(std::vector<int>& elems, unsigned int start, unsigned int numCols) const;
-
-  // The following functions are meant to help in setting
-  // the elems vectors.
-  // All functions: takes the start column "start" and the number "numCols" of columns that the elem represent
-  //   and returns start+numCols-1. As a side effect, the columns start, start+1,...,start+numCols-1 are added
-  // to the target elem
-  // their intended usage is something like:
-  //    /* the following lines sets the description as follows:
-  //       group : from column 1 to 3
-  //       clusterBody: from column 4 to 5
-  //       body : from column 6 to 10
-  //       clusterHead: from column 11 to 12
-  //       head : from column 13 to 18 */
-  //    SourceRowColumnIds des;
-  //    int lastCol;
-  //    lastCol = des.setgroupElems(1,3);
-  //    lastCol = des.setClusterBodyElems(lastCol+1,2);
-  //    lastCol = des.setBodyElems(lastCol+1,5);
-  //    lastCol = des.setClusterHead(lastCol+1,2);
-  //    lastCol = des.setHead(lastCol+1,6);
-
-
-  unsigned int setgroupElems(unsigned int start,unsigned int numCols);
-  unsigned int setClusterBodyElems(unsigned int start, unsigned int numCols);
-  unsigned int setBodyElems(unsigned int start,unsigned int numCols);
-  unsigned int setClusterHeadElems(unsigned int start, unsigned int numCols);
-  unsigned int setHeadElems(unsigned int start, unsigned int numCols);
 
 };
 

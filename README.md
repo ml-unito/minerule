@@ -28,7 +28,7 @@ Install g++ and curl:
 
 3. compile install the library
 
-		make lib<br>
+		make lib
 
 4. unfortunately the current version of the library has a small compilation problem.
    to fix it you will have to edit the files:
@@ -50,6 +50,10 @@ Install g++ and curl:
 		this->mutator(…);
 		this->comparator(…);
 		this->crossover(…);
+
+5. install galib
+ 	
+		make install
 
 ## Install the minerule (from sources)
 

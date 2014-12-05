@@ -35,7 +35,7 @@
 
 namespace minerule {
 
-	bool BFSWithGidsAndCross::mineruleHasSameBodyHead = false;	
+	bool BFSWithGidsAndCross::mineruleHasSameBodyHead = false;
 
 	void BFSWithGidsAndCross::BodyMapElement::insert(const ItemType& item, MapElement& gidList, bool secondPass) {
 		std::map<ItemType, MapElement>::iterator found = heads.find(item);
@@ -160,7 +160,7 @@ namespace minerule {
 	// 				map<ItemType, MapElement>::iterator lh = rc.lastHead;
 	// 				map<ItemType, MapElement>::iterator eh = rc.headTable.end();
 	// 				double supportBody = rc.gids.size();
-	// 
+	//
 	// 				for (map<ItemType, MapElement>::iterator j = lh; j != eh; j++) {
 	// 					GidList newGidList;
 	// 					if (std::find(rc.body.begin(), rc.body.end(), j->first) == rc.body.end()/* &&
@@ -236,11 +236,11 @@ namespace minerule {
 			for (map<ItemType, MapElement>::iterator j = lh; j != eh; j++) {
 				GidList newGidList;
 				if (!BFSWithGidsAndCross::getMineruleHasSameBodyHead() || std::find(rc.body.begin(), rc.body.end(), j->first) == rc.body.end()) {
-					
+
 					set_intersection(	rc.gids.begin(),rc.gids.end(),
 										j->second.begin(), j->second.end(),
 										inserter(newGidList,newGidList.begin()));
-					
+
 					if (newGidList.size() >= threshold) {
 						NewRule r(rc,j,newGidList);
 						r.lastHead++;
@@ -252,24 +252,24 @@ namespace minerule {
 			}
 		}
 	}
-	
-	
+
+
 	 std::map<ItemType, BFSWithGidsAndCross::MapElement> BFSWithGidsAndCross::NewRule::hash_intersection( std::map<ItemType, MapElement>& lhs, const std::map<ItemType, MapElement>& rhs ) {
 		std::map<ItemType, MapElement> result;
-		
-		std::map<ItemType, MapElement>::iterator it;		
+
+		std::map<ItemType, MapElement>::iterator it;
 		for( it=lhs.begin(); it!=lhs.end(); ++it ) {
 			std::map<ItemType, MapElement>::const_iterator found = rhs.find(it->first);
-			if( found != rhs.end() ) {				
+			if( found != rhs.end() ) {
 				// GIDS INTERSECTION
 				GidList newGidList;
 				set_intersection(it->second.begin(),it->second.end(),
 					found->second.begin(), found->second.end(),
-						inserter(newGidList,newGidList.begin()));				
+						inserter(newGidList,newGidList.begin()));
 				result[it->first] = newGidList;
 			}
 		}
-		
+
 		return result;
 	}
 
@@ -286,13 +286,13 @@ namespace minerule {
 		sourceTable = new SourceTable(*this);
 		ruleIterator = sourceTable->newIterator(SourceTable::FullIterator);
 
-		options.setTotGroups(sourceTable->getTotGroups());
+		// options.setTotGroups(sourceTable->getTotGroups());
 	}
 
 
 	void BFSWithGidsAndCross::mineRules() {
 		MRLogPush("Starting BFSWithGidsAndCross mining algorithm...");
-    
+
 		MRLog() << "Preparing data sources..." << std::endl;
 		prepareData();
 
@@ -304,7 +304,7 @@ namespace minerule {
 		ItemType gid1;
 		BodyMap bodyMap(connection);
 
-		int totalGroups = options.getTotGroups();
+		int totalGroups = sourceTable->getTotGroups();
 		int howManyRows = 0;
 		int howManyGroups = 0;
 
@@ -314,9 +314,9 @@ namespace minerule {
 		while (!ruleIterator.isAfterLast()) {
 			gid1 = ruleIterator->getGroup();
 			howManyGroups++;
-		
+
 			Transaction t1;
-		
+
 			t1.load(gid1,ruleIterator);
 			howManyRows += bodyMap.add(howManyGroups,t1);
 		}

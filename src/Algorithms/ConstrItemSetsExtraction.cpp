@@ -28,14 +28,17 @@ namespace minerule {
 
     options.setSupport( minerule.getParsedMinerule().sup );
     options.setConfidence( minerule.getParsedMinerule().conf );
-    options.setBodyCardinalities( minerule.getParsedMinerule().bodyCardinalities);
-    options.getBodyCardinalities().applyConstraints(mrOptions.getParsers().getBodyCardinalities());
-    //connection.setHeadCardinalities(minerule.getParsedMinerule().headCardinalities);
-    options.getHeadCardinalities().applyConstraints(mrOptions.getParsers().getHeadCardinalities());
+
+    MinMaxPair bodyCards(minerule.getParsedMinerule().bodyCardinalities);
+    bodyCards.applyConstraints(mrOptions.getParsers().getBodyCardinalities());
+    options.setBodyCardinalities(bodyCards);
+
+    MinMaxPair headCards(minerule.getParsedMinerule().headCardinalities);
+    headCards.applyConstraints(mrOptions.getParsers().getHeadCardinalities());
+    options.setHeadCardinalities(headCards);
 
     sourceTable = new SourceTable(*this);
-    options.setTotGroups(sourceTable->getTotGroups());
-	bodyIterator = sourceTable->newIterator(SourceTable::BodyIterator);
+	  bodyIterator = sourceTable->newIterator(SourceTable::BodyIterator);
 
     MRLog() << "Building db queries" << std::endl;
     MRLog() << "Executing queries" << std::endl;
@@ -55,8 +58,6 @@ namespace minerule {
     MRLog() << "Preparing data sources..." << std::endl;
     prepareData();
 
-    mrdb::ResultSet* result;
-
     float support = options.getSupport();
     int maxBody = options.getBodyCardinalities().getMax();
 
@@ -64,13 +65,13 @@ namespace minerule {
     BodyMap bodyMap(connection,1);
 
     int howManyGroups = 0;
-    int totalGroups = options.getTotGroups();
+    int totalGroups = sourceTable->getTotGroups();
     int howManyRows = 0;
 
     while (!bodyIterator.isAfterLast()) {
 		ItemType gid = bodyIterator->getGroup();
 		Transaction t1, t2;
-		
+
 		t1.loadBody(gid,bodyIterator);
 		howManyRows += bodyMap.add(t1,howManyGroups);
 		howManyGroups++;

@@ -58,7 +58,7 @@ namespace minerule {
 
 	void CARE::prepareData() {
 		sourceTable = new SourceTable(*this);
-		options.setTotGroups(sourceTable->getTotGroups());
+//		options.setTotGroups(sourceTable->getTotGroups());
 
 		bodyIterator = sourceTable->newIterator(SourceTable::BodyIterator);
 		headIterator = sourceTable->newIterator(SourceTable::HeadIterator);
@@ -70,8 +70,6 @@ namespace minerule {
 		MRLog() << "Preparing data sources..." << std::endl;
 		prepareData();
 
-		mrdb::ResultSet* result, *result1;
-
 		double support = options.getSupport();
 		int maxBody = options.getBodyCardinalities().getMax();
 		int maxHead = options.getHeadCardinalities().getMax();
@@ -82,13 +80,13 @@ namespace minerule {
 		BodyMap headMap(connection,1);
 
 		int howManyGroups = 0;
-		int totalGroups = options.getTotGroups();
+		int totalGroups = sourceTable->getTotGroups();
 		int howManyRows = 0;
 
-		while (!bodyIterator.isAfterLast()) {		
+		while (!bodyIterator.isAfterLast()) {
 			ItemType gid = bodyIterator->getGroup();
 			Transaction t1, t2;
-	
+
 			t1.loadBody(gid,bodyIterator);
 			bool found2 = t2.findGid(gid,headIterator);
 			if (found2) {
@@ -98,7 +96,7 @@ namespace minerule {
 			howManyRows += headMap.add(t2,howManyGroups);
 			howManyGroups++;
 		}
-		
+
 		MRLog() << "Total rows: " << howManyRows << std::endl;
 		MRLog() << "Total groups: " << totalGroups << std::endl;
 		MRLogPop();

@@ -33,7 +33,6 @@
 #include <iostream>
 #include <stdio.h>
 
-// #include "minerule/Algorithms/Algorithms.hpp"
 
 namespace minerule {
 

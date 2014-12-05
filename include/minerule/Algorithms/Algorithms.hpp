@@ -28,25 +28,32 @@ namespace minerule {
 
 class Algorithms {
  public:
-  // returns a new MiningAlgorithm choosing among the available ones
-  // using some criteria. One constraint it respects is that it returns
-  // an algorithm which is able to handle clustering whenever the minerule
-  // requires it
+  /// @return a new MiningAlgorithm choosen among the available ones
+  /// using some criteria. One constraint it respects is that it returns
+  /// an algorithm which is able to handle clustering whenever the minerule
+  /// requires it
   static MiningAlgorithmBase* newAlgorithm(const OptimizedMinerule& mr);
 
-  // It execute the provided minerule and stores the results in the database
+  /// It executes the provided minerule and stores the results in the database. It exploits the optimization
+  /// info to select the best option.
   static void executeMinerule(OptimizedMinerule& mr) throw(MineruleException,mrdb::SQLException,std::exception);
 
+  /// It executes a rule extraction algorithm.
   static void executeExtractionAlgorithm(OptimizedMinerule& mr) throw(MineruleException,mrdb::SQLException,std::exception);
-  
+
+  /// It execute an incremental algorithm. It returns false if an algorithm with the required properties has not yet
+  /// been implemented.
   static bool executeIncrementalAlgorithm(OptimizedMinerule& mr) throw(MineruleException,mrdb::SQLException,std::exception);
 
+  /// @return an instance of the best rule mining algorithm available for the given mine rule.
   static MiningAlgorithmBase* getBestRulesMiningAlgorithm(const OptimizedMinerule& mr);
 
+  /// @return an instance of the best itemset mining algorithm available for the given mine rule.
   static MiningAlgorithmBase* getBestItemsetsMiningAlgorithm(const OptimizedMinerule& mr);
 
+  /// @return an instance of the best sequence mining algorithm available for the given mine rule.
   static MiningAlgorithmBase* getBestSequencesMiningAlgorithm( const OptimizedMinerule& mr );
-  
+
 private:
 	static void checkAndHandleHomonymMinerules(OptimizedMinerule& mr) throw(MineruleException, mrdb::SQLException, std::exception);
 	static void showDebugInfo(const std::string& msg, OptimizedMinerule& mr);

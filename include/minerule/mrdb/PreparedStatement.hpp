@@ -11,38 +11,38 @@ namespace mrdb {
   public:
     virtual ~PreparedStatement() {}
 
-    // Execute this statement (assumes that it does not returns
-    // any tuple)
-    // @return true if a result set was available, false otherwise
-    // @throws a MineruleException (with error code MR_ERROR_DATABASE_ERROR) if
-    //   anything goes wrong.
+    /// Execute this statement (assumes that it does not returns
+    /// any tuple)
+    /// @return true if a result set was available, false otherwise
+    /// @throws a MineruleException (with error code MR_ERROR_DATABASE_ERROR) if
+    ///   anything goes wrong.
     virtual bool execute() throw(mrdb::SQLException&) = 0;
 
-    // Execute this statement
-    // @return a ResultSet
-    // @throws a MineruleException (with error code MR_ERROR_DATABASE_ERROR) if
-    //   anything goes wrong.
-    // @memory the caller should dealloc the result set once it is no longer needed
+    /// Execute this statement
+    /// @return a ResultSet
+    /// @throws a MineruleException (with error code MR_ERROR_DATABASE_ERROR) if
+    ///   anything goes wrong.
+    /// @memory the caller should dealloc the result set once it is no longer needed
     virtual ResultSet* executeQuery() throw(mrdb::SQLException&) = 0;
 
-    // Sets a parameter value to a Double
-    // @param idx the index of the parameter to be set
-    // @param val the value to set
+    /// Sets a parameter value to a Double
+    /// @param idx the index of the parameter to be set
+    /// @param val the value to set
     virtual void setDouble (int idx, double val) = 0;
 
-    // Sets a parameter value to an int
-    // @param idx the index of the parameter to be set
-    // @param val the value to set
+    /// Sets a parameter value to an int
+    /// @param idx the index of the parameter to be set
+    /// @param val the value to set
     virtual void setInt (int idx, int val) = 0;
 
-    // Sets a parameter value to a string
-    // @param idx the index of the parameter to be set
-    // @param val the value to set
+    /// Sets a parameter value to a string
+    /// @param idx the index of the parameter to be set
+    /// @param val the value to set
     virtual void setString (int idx, const std::string &val) = 0;
 
-    // Sets a parameter value to a Long
-    // @param idx the index of the parameter to be set
-    // @param val the value to set
+    /// Sets a parameter value to a Long
+    /// @param idx the index of the parameter to be set
+    /// @param val the value to set
     virtual void setLong (int idx, long val) = 0;
   };
 

@@ -10,7 +10,7 @@ installed using [homebrew](http://brew.sh) (to install galib, you will need to t
 
 We will assume that you already have a postgres database installed and configured on your system. If this is not the case, please follow one of the many postgress installation guides present on the internet (e.g., https://wiki.postgresql.org/wiki/Detailed_installation_guides).
 
-Install g++ and curl:
+Install developer tools and curl:
 
 		sudo apt-get install curl g++ git cmake bison flex
 
@@ -95,7 +95,7 @@ Using your favorite editor, edit the option file with the information needed to 
 At the end of the process the head of the file should look like:
 
 ```
-		odbc::{
+		mrdb::{
 			+name=DataSourceName
 			+username=UserName
 			+password=...

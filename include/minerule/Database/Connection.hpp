@@ -92,7 +92,7 @@ namespace minerule {
 	public:
 		// Costruttore
 		Connection() : bodyCard(1,1000), headCard(1,1000)  /*algoOptions(NULL)*/ {
-			if (MineruleOptions::getSharedOptions().getODBC().getCacheWrites())
+			if (MineruleOptions::getSharedOptions().getMRDB().getCacheWrites())
 				dbInserter = new CachedDBInserter(*this);
 			else dbInserter = new DirectDBInserter(*this);
 		}
@@ -101,9 +101,9 @@ namespace minerule {
 
 		void setBodyCardinalities( const MinMaxPair& rhs ) { bodyCard=rhs; }
 		void setHeadCardinalities( const MinMaxPair& rhs ) { headCard=rhs; }
-		void useODBCConnection(mrdb::Connection* newConnection);
+		void useMRDBConnection(mrdb::Connection* newConnection);
 
-		mrdb::Connection* getODBCConnection() { return connection; }
+		mrdb::Connection* getMRDBConnection() { return connection; }
 
 		// bool tableExists(const char * tableName);
 		void deleteTable(const char * tableName);

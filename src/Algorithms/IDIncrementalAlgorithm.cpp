@@ -64,7 +64,7 @@ namespace minerule {
 			(constraints.size()>0 ?	"WHERE "+constraints : "");
   
 		mrdb::Connection* con = 
-			MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
+			MineruleOptions::getSharedOptions().getMRDB().getMRDBConnection();
 
 		std::auto_ptr<mrdb::Statement> state(con->createStatement());
 		std::auto_ptr<mrdb::ResultSet> rs(state->executeQuery(query.c_str()));
@@ -137,8 +137,8 @@ bool IDIncrementalAlgorithm::checkInclusion(const std::set<ItemType>& validOnes,
 		connection.setOutTableName(minerule->getParsedMinerule().tab_result);
 		connection.setBodyCardinalities(minerule->getParsedMinerule().bodyCardinalities);
 		connection.setHeadCardinalities(minerule->getParsedMinerule().headCardinalities);
-		connection.useODBCConnection( MineruleOptions::getSharedOptions().getODBC().getODBCConnection());
-		connection.createResultTables(SourceRowMetaInfo(connection.getODBCConnection(), minerule->getParsedMinerule()));
+		connection.useMRDBConnection( MineruleOptions::getSharedOptions().getMRDB().getMRDBConnection());
+		connection.createResultTables(SourceRowMetaInfo(connection.getMRDBConnection(), minerule->getParsedMinerule()));
 
 		size_t rcount = 0;
 		while(qri.next()) {

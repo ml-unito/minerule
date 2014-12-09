@@ -51,7 +51,7 @@ namespace minerule {
 		
 		MRDebug() << "FSMiner query:" << sqlQuery.c_str() << std::endl;
 
-		statement = connection.getODBCConnection()->prepareStatement(sqlQuery.c_str());
+		statement = connection.getMRDBConnection()->prepareStatement(sqlQuery.c_str());
 	}
 
 	bool CCSMiner::find(std::vector<CCSMSequence*>* vec, CCSMSequence* elem){

@@ -31,7 +31,7 @@ namespace minerule {
 
 bool OptimizerCatalogue::existsMinerule(const std::string &mrname) {
   mrdb::Connection *conn =
-      MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
+      MineruleOptions::getSharedOptions().getMRDB().getMRDBConnection();
 
   std::string query = (std::string) "SELECT * FROM mr_query WHERE query_name=" +
                       SQLUtils::quote(mrname);
@@ -49,8 +49,8 @@ void OptimizerCatalogue::deleteMinerule(const std::string &mrname) throw(
   MRLogPusher _("Deleting past minerules...");
 
   Connection conn;
-  conn.useODBCConnection(
-      MineruleOptions::getSharedOptions().getODBC().getODBCConnection());
+  conn.useMRDBConnection(
+      MineruleOptions::getSharedOptions().getMRDB().getMRDBConnection());
   conn.setOutTableName(mrname);
 
   std::string query = (std::string) "SELECT query_id "
@@ -60,7 +60,7 @@ void OptimizerCatalogue::deleteMinerule(const std::string &mrname) throw(
                       SQLUtils::quote(mrname);
 
   std::auto_ptr<mrdb::Statement> stat(
-      conn.getODBCConnection()->createStatement());
+      conn.getMRDBConnection()->createStatement());
   mrdb::ResultSet *rs = stat->executeQuery(query);
 
   while (rs->next()) {
@@ -106,7 +106,7 @@ void OptimizerCatalogue::Catalogue::insertMapping(
     const std::string &table, const KeyCols &cols, int refKey,
     OrderType orderType) throw(MineruleException) {
   mrdb::Connection *connection =
-      MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
+      MineruleOptions::getSharedOptions().getMRDB().getMRDBConnection();
 
   try {
     std::auto_ptr<mrdb::Statement> stat1(connection->createStatement());
@@ -153,7 +153,7 @@ OptimizerCatalogue::Catalogue::stringToOrder(const std::string &str) {
 
 void OptimizerCatalogue::Catalogue::initialize() throw(MineruleException) {
   mrdb::Connection *connection =
-      MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
+      MineruleOptions::getSharedOptions().getMRDB().getMRDBConnection();
 
   try {
     std::auto_ptr<mrdb::Statement> stat1(connection->createStatement());
@@ -217,7 +217,7 @@ void OptimizerCatalogue::Catalogue::initialize() throw(MineruleException) {
 std::string OptimizerCatalogue::getNewAutoincrementValue(
     const std::string &tableName) throw(mrdb::SQLException, MineruleException) {
   mrdb::Connection *connection =
-      MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
+      MineruleOptions::getSharedOptions().getMRDB().getMRDBConnection();
 
   std::string idstr;
 
@@ -251,7 +251,7 @@ std::string OptimizerCatalogue::addMineruleAttributeList(
 
   std::string id = getNewAutoincrementValue("mr_att_lists");
   mrdb::Connection *connection =
-      MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
+      MineruleOptions::getSharedOptions().getMRDB().getMRDBConnection();
 
   std::string query =
       "INSERT INTO mr_att_lists (att_list_id, col_name) VALUES ";
@@ -272,7 +272,7 @@ std::string OptimizerCatalogue::addMineruleAttributeList(
 
 bool OptimizerCatalogue::checkInstallation() {
   mrdb::Connection *connection =
-      MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
+      MineruleOptions::getSharedOptions().getMRDB().getMRDBConnection();
   mrdb::DatabaseMetaData *meta = connection->getMetaData();
   mrdb::ResultSet *rs = meta->getTables("mr_%");
 
@@ -335,7 +335,7 @@ void OptimizerCatalogue::addMineruleResult(
         mri) throw(mrdb::SQLException, MineruleException) {
 
   mrdb::Connection *connection =
-      MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
+      MineruleOptions::getSharedOptions().getMRDB().getMRDBConnection();
 
   std::string galid = addMineruleAttributeList(mri.ga);
   std::string ralid = addMineruleAttributeList(mri.ra);
@@ -395,7 +395,7 @@ void OptimizerCatalogue::addDerivedResult(
 std::string OptimizerCatalogue::getResultsetName(
     const std::string &queryname) throw(mrdb::SQLException, MineruleException) {
   mrdb::Connection *connection =
-      MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
+      MineruleOptions::getSharedOptions().getMRDB().getMRDBConnection();
 
   std::auto_ptr<mrdb::Statement> statement(connection->createStatement());
   std::auto_ptr<mrdb::ResultSet> rs(
@@ -424,7 +424,7 @@ OptimizerCatalogue::getMRQueryName(size_t i) throw(mrdb::SQLException,
   //
   // std::string queryNumber = Converter(i-1).toString();
   // mrdb::Connection* connection =
-  // MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
+  // MineruleOptions::getSharedOptions().getMRDB().getMRDBConnection();
   //
   // std::auto_ptr<mrdb::Statement> statement(connection->createStatement());
   // std::auto_ptr<mrdb::ResultSet> rs(statement->executeQuery("SELECT
@@ -453,7 +453,7 @@ void OptimizerCatalogue::getMRQueryNames(
     std::vector<std::string> &nameVec) throw(mrdb::SQLException,
                                              MineruleException) {
   mrdb::Connection *connection =
-      MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
+      MineruleOptions::getSharedOptions().getMRDB().getMRDBConnection();
 
   std::auto_ptr<mrdb::Statement> statement(connection->createStatement());
   std::auto_ptr<mrdb::ResultSet> rs(
@@ -486,7 +486,7 @@ void OptimizerCatalogue::getMRQueryInfos(
     std::vector<CatalogueInfo> &catInfoVec,
     bool includeResultSize) throw(mrdb::SQLException, MineruleException) {
   mrdb::Connection *connection =
-      MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
+      MineruleOptions::getSharedOptions().getMRDB().getMRDBConnection();
 
   std::auto_ptr<mrdb::Statement> statement(connection->createStatement());
   std::auto_ptr<mrdb::ResultSet> rs(statement->executeQuery(
@@ -505,7 +505,7 @@ void OptimizerCatalogue::getMRQueryInfo(
     const std::string &qryName, CatalogueInfo &info,
     bool includeResultSize) throw(mrdb::SQLException, MineruleException) {
   mrdb::Connection *mrdb_connection =
-      MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
+      MineruleOptions::getSharedOptions().getMRDB().getMRDBConnection();
 
   std::auto_ptr<mrdb::Statement> statement(mrdb_connection->createStatement());
   std::auto_ptr<mrdb::ResultSet> rs(
@@ -559,7 +559,7 @@ void CatalogueInfo::updateQrySize() throw(mrdb::SQLException,
                     Converter(p.conf).toString();
 
   mrdb::Connection *connection =
-      MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
+      MineruleOptions::getSharedOptions().getMRDB().getMRDBConnection();
   std::auto_ptr<mrdb::Statement> statement(connection->createStatement());
   std::auto_ptr<mrdb::ResultSet> rs(statement->executeQuery(qry));
 

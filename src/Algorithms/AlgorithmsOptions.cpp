@@ -56,7 +56,7 @@ AlgorithmsOptions::getRowsPerPartition() const {
   return rowsPerPartition;
   }*/
 
-mrdb::Connection* AlgorithmsOptions::getODBCConnection() const {
+mrdb::Connection* AlgorithmsOptions::getMRDBConnection() const {
   return connection;
 }
 

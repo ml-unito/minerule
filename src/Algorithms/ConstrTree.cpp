@@ -128,9 +128,9 @@ namespace minerule {
 
     Connection connection;
     connection.setOutTableName(minerule->getParsedMinerule().tab_result);
-    connection.useODBCConnection(
-       MineruleOptions::getSharedOptions().getODBC().getODBCConnection());
-    connection.createResultTables(SourceRowMetaInfo(connection.getODBCConnection(), minerule->getParsedMinerule()));
+    connection.useMRDBConnection(
+       MineruleOptions::getSharedOptions().getMRDB().getMRDBConnection());
+    connection.createResultTables(SourceRowMetaInfo(connection.getMRDBConnection(), minerule->getParsedMinerule()));
 
     // if (mb2!=NULL  &&  mh2!=NULL) {
     //    adjustSuppMIndex();
@@ -222,7 +222,7 @@ namespace minerule {
 	  MRLog() << "Body query" << bodyQry << std::endl;
 	  MRLog() << "Head query" << headQry << std::endl;
 	  MRLog() << "Executing queries" << std::endl;
-	  mrdb::Connection* con = MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
+	  mrdb::Connection* con = MineruleOptions::getSharedOptions().getMRDB().getMRDBConnection();
 
 	  stateb2 = con->createStatement();
 	  rb2 = stateb2->executeQuery(bodyQry);

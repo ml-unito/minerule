@@ -36,7 +36,7 @@ namespace minerule {
     CCSMiner(const OptimizedMinerule& mr, const AlgorithmsOptions& opts) : 
       MiningAlgorithm(mr),  statement(NULL) {
 	options = opts;
-        connection.useODBCConnection(opts.getODBCConnection());
+        connection.useMRDBConnection(opts.getMRDBConnection());
 }
 
     virtual ~CCSMiner() {}

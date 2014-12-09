@@ -266,7 +266,7 @@ namespace minerule {
 		std::string createQuery 	 = "CREATE TABLE  "+clusteredTable+ " AS "+queryText + "; ";
 		std::string createIndexQuery = "CREATE INDEX "+clusteredTable+"_index " + " ON " + clusteredTable + " ("+buildAttrListAlias(mr.ga,aliasA,true)+");";
 
-		mrdb::Connection* conn = MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
+		mrdb::Connection* conn = MineruleOptions::getSharedOptions().getMRDB().getMRDBConnection();
 
 		dropTableIfExists(conn, clusteredTable);
 
@@ -319,7 +319,7 @@ namespace minerule {
 				"FROM " + pmr.tab_source;
 
 		mrdb::Connection* conn =
-			MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
+			MineruleOptions::getSharedOptions().getMRDB().getMRDBConnection();
 
 		std::auto_ptr<mrdb::Statement> state(conn->createStatement());
 		std::auto_ptr<mrdb::ResultSet> rs(state->executeQuery(qry));

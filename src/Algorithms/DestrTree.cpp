@@ -196,8 +196,8 @@ namespace minerule {
 		
 		Connection connection;
 		connection.setOutTableName(minerule->getParsedMinerule().tab_result);
-		connection.useODBCConnection( MineruleOptions::getSharedOptions().getODBC().getODBCConnection());
-		connection.createResultTables(SourceRowMetaInfo(connection.getODBCConnection(), minerule->getParsedMinerule()));
+		connection.useMRDBConnection( MineruleOptions::getSharedOptions().getMRDB().getMRDBConnection());
+		connection.createResultTables(SourceRowMetaInfo(connection.getMRDBConnection(), minerule->getParsedMinerule()));
 
 		if (rb1!=NULL  &&  rh1!=NULL) {
 				MRLog() << "Adjusting support..." << std::endl;
@@ -282,7 +282,7 @@ namespace minerule {
 		std::string headQry1NotQry2 = buildQry1NotQry2( groupAttr, headAttr, q1HeadConstraints, q2HeadConstraints);
 
 		MRLog() << "Executing queries" << std::endl;
-		mrdb::Connection* con = MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
+		mrdb::Connection* con = MineruleOptions::getSharedOptions().getMRDB().getMRDBConnection();
 
 
 		stateb1 = con->createStatement();

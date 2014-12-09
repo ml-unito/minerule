@@ -24,7 +24,7 @@
 namespace minerule {
 
 	void
-	Connection::useODBCConnection(mrdb::Connection* newConnection) {
+	Connection::useMRDBConnection(mrdb::Connection* newConnection) {
 	  connection = newConnection;
 	}
 
@@ -218,7 +218,7 @@ if(srd.getHead().getColumnsCount() > 0) {
 			  " reason is:" + strerror(errno));
 	  }
 
-	  const std::string& dbms = MineruleOptions::getSharedOptions().getODBC().getDBMS();
+	  const std::string& dbms = MineruleOptions::getSharedOptions().getMRDB().getDBMS();
 	  if(  dbms == "mysql" ) {
 		  loadstr1 = "LOAD DATA INFILE '" + filename + ".r' INTO TABLE " + connection.getTableName(RulesTable);
 		  loadstr2 = "LOAD DATA INFILE '" + filename + ".h' INTO TABLE " + connection.getTableName(HeadsTable);
@@ -233,7 +233,7 @@ if(srd.getHead().getColumnsCount() > 0) {
 			  ", but only 'mysql' or 'postgres' are supported." );
 	  }
 
-	  mrdb::Statement* state = connection.getODBCConnection()->createStatement();
+	  mrdb::Statement* state = connection.getMRDBConnection()->createStatement();
 	  state->execute(loadstr1.c_str());
 	  state->execute(loadstr2.c_str());
 	  state->execute(loadstr3.c_str());

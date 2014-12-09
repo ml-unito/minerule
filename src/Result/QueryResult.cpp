@@ -45,7 +45,7 @@ namespace minerule {
   QueryResult::Iterator::init( const std::string& rulesTable,
   double support,
   double confidence ) throw( MineruleException, mrdb::SQLException ) {
-    mrdb::Connection* mrdb_conn = MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
+    mrdb::Connection* mrdb_conn = MineruleOptions::getSharedOptions().getMRDB().getMRDBConnection();
     Connection connection;
     connection.setOutTableName(rulesTable);
 

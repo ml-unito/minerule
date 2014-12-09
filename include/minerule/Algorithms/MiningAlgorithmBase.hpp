@@ -78,11 +78,11 @@ namespace minerule {
 			headCards.applyConstraints(mrOptions.getParsers().getHeadCardinalities());
 			options.setHeadCardinalities(headCards);
 
-			connection.useODBCConnection(MineruleOptions::getSharedOptions().getODBC().getODBCConnection());
+			connection.useMRDBConnection(MineruleOptions::getSharedOptions().getMRDB().getMRDBConnection());
 			connection.setOutTableName(minerule.getParsedMinerule().tab_result);
 			connection.setBodyCardinalities(minerule.getParsedMinerule().bodyCardinalities);
 			connection.setHeadCardinalities(minerule.getParsedMinerule().headCardinalities);
-			connection.createResultTables(SourceRowMetaInfo(connection.getODBCConnection(), minerule.getParsedMinerule()));
+			connection.createResultTables(SourceRowMetaInfo(connection.getMRDBConnection(), minerule.getParsedMinerule()));
 			connection.init();
 		}
 

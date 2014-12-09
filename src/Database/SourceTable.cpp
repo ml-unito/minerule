@@ -79,7 +79,7 @@ namespace minerule {
 	}
 
 	void SourceTable::initBodyHeadResultSets() {
-		mrdb::Connection* connection = MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
+		mrdb::Connection* connection = MineruleOptions::getSharedOptions().getMRDB().getMRDBConnection();
 
 		std::string bodyCondition, headCondition;
 
@@ -98,7 +98,7 @@ namespace minerule {
 
 	void SourceTable::initFullResultSet() {
 		_usesCrossProduct = true;
-		mrdb::Connection* connection = MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
+		mrdb::Connection* connection = MineruleOptions::getSharedOptions().getMRDB().getMRDBConnection();
 
 		std::string query = _pdu.buildExtendedSourceTableQuery(_columnIds);
 

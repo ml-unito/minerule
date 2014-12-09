@@ -140,7 +140,7 @@ class AlgorithmsOptions {
   }
 
   /// @return the mrdb connection to be used by the mining algorithm
-  mrdb::Connection* getODBCConnection() const;
+  mrdb::Connection* getMRDBConnection() const;
 
   /// @return the mrdb prepared statement that the algorithm should
   ///    use to access the mining table.

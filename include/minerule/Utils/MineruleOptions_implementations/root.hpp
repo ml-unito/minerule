@@ -25,7 +25,7 @@ public:
    * Inner classes
    * ============================== */
 
-	/* ========== ODBC_DB ========== */
+	/* ========== MRDB_DB ========== */
 
 	#include "minerule/Utils/MineruleOptions_implementations/mrdb.hpp"
   /* ========== SAFETY ========== */
@@ -192,12 +192,12 @@ public:
   }
 
   Mrdb&
-    getODBC() {
+    getMRDB() {
     return mrdb_db;
   }
 
   const Mrdb&
-    getODBC() const {
+    getMRDB() const {
     return mrdb_db;
   }
 

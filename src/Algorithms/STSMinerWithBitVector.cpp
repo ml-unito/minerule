@@ -100,7 +100,7 @@ void STSMinerWithBitVector::createBitVectors(){
         std::string subarea_id=rs->getString(2);
         int id=rs->getInt(3);
         q = "SELECT "+groupAttrList+" FROM Source WHERE "+ordAttrList+"="+Converter(d_time).toString()+" AND "+AttrList.at(2)+"='"+Converter(subarea_id).toString()+"';";
-        mrdb::ResultSet* ris = options.getODBCConnection()->prepareStatement(q.c_str())->executeQuery();
+        mrdb::ResultSet* ris = options.getMRDBConnection()->prepareStatement(q.c_str())->executeQuery();
         while(ris->next()){
             int track_id= ris->getInt(1);
             BitString* v=bvptr.at(0).at(id-1);

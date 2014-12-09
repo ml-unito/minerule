@@ -254,7 +254,7 @@ int main (int argc, char *argv[])
 	try {		
 		execQuery(argc, argv);
 	} catch (mrdb::SQLException& e) {
-		MRErr() << "ODBC Exception:" << e.what() << std::endl;
+		MRErr() << "MRDB Exception:" << e.what() << std::endl;
 		exit(MR_ERROR_DATABASE_ERROR);
 	} catch (MineruleException& e) {
 		MRErr() << "Minerule Exception:" << e.what() << std::endl;

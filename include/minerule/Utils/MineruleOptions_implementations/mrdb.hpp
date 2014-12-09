@@ -55,7 +55,7 @@ public:
 
   // at least for the sharedOptions, this
   // object is set by init()
-  mrdb::Connection* getODBCConnection() const throw(MineruleException) {
+  mrdb::Connection* getMRDBConnection() const throw(MineruleException) {
 	if( connection==NULL ) {
 	  throw MineruleException(MR_ERROR_DATABASE_ERROR,
 				  (std::string)

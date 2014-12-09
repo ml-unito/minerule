@@ -20,7 +20,7 @@
 
 namespace minerule {
 	
-	CatalogueInstaller::CatalogueInstaller() : _connection( MineruleOptions::getSharedOptions().getODBC().getODBCConnection() ), _statement( _connection->createStatement() ) {}
+	CatalogueInstaller::CatalogueInstaller() : _connection( MineruleOptions::getSharedOptions().getMRDB().getMRDBConnection() ), _statement( _connection->createStatement() ) {}
 	
 	CatalogueInstaller* CatalogueInstaller::newInstaller(SupportedDbms dbms) {
 		switch(dbms) {
@@ -32,7 +32,7 @@ namespace minerule {
 	}
 	
 	CatalogueInstaller* CatalogueInstaller::newInstaller() {
-		std::string dbmsStr = MineruleOptions::getSharedOptions().getODBC().getDBMS();
+		std::string dbmsStr = MineruleOptions::getSharedOptions().getMRDB().getDBMS();
 
 		if(dbmsStr == "mysql") return newInstaller(MySql);
 		if(dbmsStr == "postgres") return newInstaller(Postgres);

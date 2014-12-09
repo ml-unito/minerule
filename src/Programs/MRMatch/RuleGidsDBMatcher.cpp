@@ -22,7 +22,7 @@
 
 namespace mrmatch {
 	void RuleGidsDBMatcher::createOutputTable(const minerule::ItemType& item) const {
-		mrdb::Connection*  con = minerule::MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
+		mrdb::Connection*  con = minerule::MineruleOptions::getSharedOptions().getMRDB().getMRDBConnection();
 		std::auto_ptr<mrdb::Statement> state(con->createStatement());
 		minerule::SourceRowMetaInfo metaInfo(con, _minerule);
 		
@@ -42,7 +42,7 @@ namespace mrmatch {
 	}
 	
 	void RuleGidsDBMatcher::createOutputTableIndex(const std::string& indexName, const std::string& indexCols) const {
-		mrdb::Connection*  con = minerule::MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
+		mrdb::Connection*  con = minerule::MineruleOptions::getSharedOptions().getMRDB().getMRDBConnection();
 		std::auto_ptr<mrdb::Statement> state(con->createStatement());
 
 		minerule::MRLog() << "Building index on body/head..." << std::endl;
@@ -56,7 +56,7 @@ namespace mrmatch {
 		bool outTableCreated = false;
 		
 		minerule::MRLogPusher _("Saving matches onto the database...");
-		mrdb::Connection*  con = minerule::MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
+		mrdb::Connection*  con = minerule::MineruleOptions::getSharedOptions().getMRDB().getMRDBConnection();
 		
 		minerule::MRLog() << "Inserting rules..." << std::endl;
 		std::auto_ptr<mrdb::PreparedStatement> ps(con->prepareStatement("\

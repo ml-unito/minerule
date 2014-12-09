@@ -31,7 +31,7 @@ Install g++ and curl:
 		make lib
 
 4. unfortunately the current version of the library has a small compilation problem.
-   to fix it you will have to edit the files:
+   To fix it you will have to edit the files:
 
 		galib/ga/GA1DArrayGenome.C
 		galib/ga/GA2DArrayGenome.C

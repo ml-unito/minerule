@@ -46,7 +46,7 @@ namespace minerule {
 
   OptionBase& MineruleOptions::subclassForName(const std::string& oclass)
   throw(MineruleException) {
-      if(oclass=="odbc")
+      if(oclass=="mrdb")
 	return getODBC();
       else if(oclass=="safety")
 	return getSafety();
@@ -107,7 +107,7 @@ namespace minerule {
 				"Cannot open file:"+filename);
       }
       initializeOptionsFromFile(*this,file);
-      odbc_db.resetConnection();
+      mrdb_db.resetConnection();
     } catch(MineruleException& e) {
       if(file!=NULL)
 	fclose(file);
@@ -129,7 +129,7 @@ namespace minerule {
   MineruleOptions::readFromString(const std::string& str) throw(MineruleException, mrdb::SQLException){
     initializeOptionsFromString(*this,str);
 
-    odbc_db.resetConnection();
+    mrdb_db.resetConnection();
   }
 
   std::ostream& MineruleOptions::saveOptions(std::ostream& os) const {
@@ -349,7 +349,7 @@ namespace minerule {
 
 
   void
-  MineruleOptions::Odbc_db::setOption(const std::string& name,
+  MineruleOptions::Mrdb::setOption(const std::string& name,
 				      const std::string& value)
                       throw(MineruleException) {
     if(name=="name")
@@ -363,7 +363,7 @@ namespace minerule {
 	else if(name=="dbms")
 	  setDBMS(value);
     else {
-      std::cerr << "Error while parsing options, expecting an odbc option in:" <<std::endl
+      std::cerr << "Error while parsing options, expecting an mrdb option in:" <<std::endl
 	   << "{name, userName, password, cacheWrites,dbms} and: " << std::endl
 	   << "\"" << name << "\" found." << std::endl;
       throw MineruleException(MR_ERROR_OPTION_PARSING, MINERULE_OPTIONS_PARSING_ERROR);

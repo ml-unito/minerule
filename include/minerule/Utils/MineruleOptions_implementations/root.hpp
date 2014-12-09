@@ -27,7 +27,7 @@ public:
 
 	/* ========== ODBC_DB ========== */
 
-	#include "minerule/Utils/MineruleOptions_implementations/odbc.hpp"
+	#include "minerule/Utils/MineruleOptions_implementations/mrdb.hpp"
   /* ========== SAFETY ========== */
 
 	#include "minerule/Utils/MineruleOptions_implementations/safety.hpp"
@@ -55,7 +55,7 @@ public:
 
 private:
   static MineruleOptions sharedOptions;
-  Odbc_db odbc_db;
+  Mrdb mrdb_db;
   Safety safety;
   Optimizations optimizations;
   MiningAlgorithms miningAlgorithms;
@@ -121,7 +121,7 @@ protected:
     debugStream(this,"debugstream") {  }
 
   MineruleOptions(const MineruleOptions& rhs) :
-    odbc_db(rhs.odbc_db),
+    mrdb_db(rhs.mrdb_db),
     miningAlgorithms(rhs.miningAlgorithms),
     logStream(this,"logstream"),
     errStream(this,"errstream"),
@@ -191,14 +191,14 @@ public:
     return mineruleName;
   }
 
-  Odbc_db&
+  Mrdb&
     getODBC() {
-    return odbc_db;
+    return mrdb_db;
   }
 
-  const Odbc_db&
+  const Mrdb&
     getODBC() const {
-    return odbc_db;
+    return mrdb_db;
   }
 
   const Safety&

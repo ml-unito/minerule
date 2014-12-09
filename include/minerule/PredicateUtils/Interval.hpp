@@ -97,7 +97,7 @@ namespace minerule {
     bool uppOpen;
 
     /**
-     * The odbc type of the attribute corresponding to this
+     * The mrdb type of the attribute corresponding to this
      * interval. It is used in order to compare values in all the
      * the operations.
      */

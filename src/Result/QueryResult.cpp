@@ -45,22 +45,22 @@ namespace minerule {
   QueryResult::Iterator::init( const std::string& rulesTable,
   double support,
   double confidence ) throw( MineruleException, mrdb::SQLException ) {
-    mrdb::Connection* odbc_conn = MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
+    mrdb::Connection* mrdb_conn = MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
     Connection connection;
     connection.setOutTableName(rulesTable);
 
-    state=odbc_conn->createStatement();
+    state=mrdb_conn->createStatement();
     std::string query =
     "SELECT bodyId, headId, supp, con "
     "FROM " + connection.getTableName(Connection::RulesTable) + " "
     "WHERE supp>=" + Converter(support).toString() + " AND "
     "con>="+Converter(confidence).toString();
 
-    body_elems = odbc_conn->prepareStatement(
+    body_elems = mrdb_conn->prepareStatement(
     "SELECT * FROM "+ connection.getTableName(Connection::BodiesTable) +
     " WHERE id=?");
 
-    head_elems = odbc_conn->prepareStatement(
+    head_elems = mrdb_conn->prepareStatement(
     "SELECT * FROM "+ connection.getTableName(Connection::HeadsTable) +
     " WHERE id=?");
 

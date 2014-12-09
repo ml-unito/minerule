@@ -2,7 +2,7 @@
 #define MRDB_TYPES_HPP_JACKJHCLKAEJCE__
 
 // The following list of type definition is the same as the one defined by
-// libodbc++. The actual values are taken from unixodbc header files.
+// libmrdb++. The actual values are taken from unixmrdb header files.
 
 namespace mrdb {
 struct Types {

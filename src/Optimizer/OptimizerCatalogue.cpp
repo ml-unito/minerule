@@ -94,7 +94,7 @@ void OptimizerCatalogue::deleteMinerule(const std::string &mrname) throw(
     try {
       stat->execute(delQry);
     } catch (mrdb::SQLException& e) {
-      throw MineruleException(MR_ERROR_INTERNAL, "Cannot delete query " + *it + " reason:" + e.what());      
+      throw MineruleException(MR_ERROR_INTERNAL, "Cannot delete query " + *it + " reason:" + e.what());
     }
   }
 
@@ -288,7 +288,7 @@ bool OptimizerCatalogue::checkInstallation() {
 
   rs->next();
   while (!rs->isAfterLast()) {
-    std::string currentTable = rs->getString(0);
+    std::string currentTable = rs->getString(1);
     std::vector<TableInfo>::iterator it =
         find(tables.begin(), tables.end(),
              std::pair<std::string, bool>(currentTable, false));
@@ -504,10 +504,10 @@ void OptimizerCatalogue::getMRQueryInfos(
 void OptimizerCatalogue::getMRQueryInfo(
     const std::string &qryName, CatalogueInfo &info,
     bool includeResultSize) throw(mrdb::SQLException, MineruleException) {
-  mrdb::Connection *odbc_connection =
+  mrdb::Connection *mrdb_connection =
       MineruleOptions::getSharedOptions().getODBC().getODBCConnection();
 
-  std::auto_ptr<mrdb::Statement> statement(odbc_connection->createStatement());
+  std::auto_ptr<mrdb::Statement> statement(mrdb_connection->createStatement());
   std::auto_ptr<mrdb::ResultSet> rs(
       statement->executeQuery("SELECT query_name,query_text, "
                               "  tab_results_name, source_tab_name "

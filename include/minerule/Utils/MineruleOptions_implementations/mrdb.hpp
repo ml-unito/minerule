@@ -14,7 +14,7 @@
 //   You should have received a copy of the GNU General Public License
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-class Odbc_db : public OptionBase {
+class Mrdb : public OptionBase {
   std::string name;
   std::string username;
   std::string password;
@@ -22,12 +22,12 @@ class Odbc_db : public OptionBase {
   bool cacheWrites;
   std::string dbms;
 public:
-  Odbc_db() : connection(NULL), cacheWrites(false), dbms("mysql") {};
+  Mrdb() : connection(NULL), cacheWrites(false), dbms("postgres") {};
 
-  virtual ~Odbc_db()  { }
+  virtual ~Mrdb()  { }
 
   virtual std::string className() const {
-	return "odbc";
+	return "mrdb";
   }
 
   virtual void setOption(const std::string& name,const std::string& value)
@@ -60,7 +60,7 @@ public:
 	  throw MineruleException(MR_ERROR_DATABASE_ERROR,
 				  (std::string)
 				  "Check out the parameters, it looks like that"
-				  " you did not specified any odbc data source");
+				  " you did not specified any mrdb data source");
 	}
 
 	return connection;

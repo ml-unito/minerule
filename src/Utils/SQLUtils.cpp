@@ -129,7 +129,7 @@ SQLUtils::Type SQLUtils::getType(mrdb::Connection *connection,
 //     if (it != typeCatalogue.end())
 //       return it->second;
 //
-//     MRDebug("Checking odbc type for column:" + colName + " of table " +
+//     MRDebug("Checking mrdb type for column:" + colName + " of table " +
 //             tabName);
 //     // we are now going to load the catalogue
 //     mrdb::DatabaseMetaData *dbmd = connection->getMetaData();

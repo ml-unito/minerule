@@ -159,7 +159,7 @@ SourceRowMetaInfo::SourceRowMetaInfo(mrdb::ResultSet* rs, const SourceRowColumnI
 	 }
  };
 
- SourceRowMetaInfo::SourceRowMetaInfo(mrdb::Connection* odbc_connection, const ParsedMinerule& minerule) {
+ SourceRowMetaInfo::SourceRowMetaInfo(mrdb::Connection* mrdb_connection, const ParsedMinerule& minerule) {
 	 ParsedMinerule::AttrVector attr_list;
 	 attr_list.insert(attr_list.end(), minerule.ga.begin(), minerule.ga.end());
 	 attr_list.insert(attr_list.end(), minerule.ca.begin(), minerule.ca.end());
@@ -171,7 +171,7 @@ SourceRowMetaInfo::SourceRowMetaInfo(mrdb::ResultSet* rs, const SourceRowColumnI
 		 "SELECT " + AttributesUtil::names_to_string(attr_list) +
 		 " FROM " + minerule.tab_source + " LIMIT 1";
 
-	 mrdb::Statement* state = odbc_connection->createStatement();
+	 mrdb::Statement* state = mrdb_connection->createStatement();
 	 mrdb::ResultSet* rs = state->executeQuery(query);
 
 	 AttributesUtil attrUtils;

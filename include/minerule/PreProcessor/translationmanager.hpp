@@ -134,7 +134,7 @@ class TranslationManager {
    *
    * @return <bool,string> see above description
    *
-   * @throw SQLException whenever something weird occurs with the odbc
+   * @throw SQLException whenever something weird occurs with the mrdb
    * connection
    */
   virtual pair<bool,string>

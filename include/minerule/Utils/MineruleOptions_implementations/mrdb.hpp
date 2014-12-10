@@ -18,105 +18,89 @@ class Mrdb : public OptionBase {
   std::string name;
   std::string username;
   std::string password;
-  mrdb::Connection* connection;
+  mrdb::Connection *connection;
   bool cacheWrites;
   std::string dbms;
+
 public:
-  Mrdb() : connection(NULL), cacheWrites(false), dbms("postgres") {};
+  Mrdb() : connection(NULL), cacheWrites(false), dbms("postgres"){};
 
-  virtual ~Mrdb()  { }
+  virtual ~Mrdb() {}
 
-  virtual std::string className() const {
-	return "mrdb";
-  }
+  virtual std::string className() const { return "mrdb"; }
 
-  virtual void setOption(const std::string& name,const std::string& value)
-	throw(MineruleException);
+  virtual void setOption(const std::string &name,
+                         const std::string &value) throw(MineruleException);
 
-  std::string getName() const {
-	return name;
-  }
+  std::string getName() const { return name; }
 
-  std::string getUsername() const {
-	return username;
-  }
-  std::string getPassword() const {
-	return password;
-  }
+  std::string getUsername() const { return username; }
+  std::string getPassword() const { return password; }
 
-  std::string getDBMS() const {
-	  return dbms;
-  }
+  std::string getDBMS() const { return dbms; }
 
-
-  bool getCacheWrites() const {
-	return cacheWrites;
-  }
+  bool getCacheWrites() const { return cacheWrites; }
 
   // at least for the sharedOptions, this
   // object is set by init()
-  mrdb::Connection* getMRDBConnection() const throw(MineruleException) {
-	if( connection==NULL ) {
-	  throw MineruleException(MR_ERROR_DATABASE_ERROR,
-				  (std::string)
-				  "Check out the parameters, it looks like that"
-				  " you did not specified any mrdb data source");
-	}
+  mrdb::Connection *getMRDBConnection() const throw(MineruleException) {
+    if (connection == NULL) {
+      throw MineruleException(
+          MR_ERROR_DATABASE_ERROR,
+          (std::string) "Check out the parameters, it looks like that"
+                        " you did not specified any mrdb data source");
+    }
 
-	return connection;
+    return connection;
   }
 
-  void setName(const std::string& str) {
-	name = str;
-  }
+  void setName(const std::string &str) { name = str; }
 
-  void setUsername(const std::string& str) {
-	username = str;
-  }
+  void setUsername(const std::string &str) { username = str; }
 
-  void setPassword(const std::string& str) {
-	password = str;
-  }
+  void setPassword(const std::string &str) { password = str; }
 
-  void setCacheWrites(bool v) {
-	cacheWrites = v;
-  }
+  void setCacheWrites(bool v) { cacheWrites = v; }
 
-  void setDBMS(std::string v) {
-	  dbms = v;
-  }
+  void setDBMS(std::string v) { dbms = v; }
 
-  void setConnection(mrdb::Connection* con) {
-	connection = con;
-  }
+  void setConnection(mrdb::Connection *con) { connection = con; }
 
   void clearConnection() {
-	if( connection!=NULL ) {
-	  delete connection;
-	  connection=NULL;
-	}
+    if (connection != NULL) {
+      delete connection;
+      connection = NULL;
+    }
+  }
+
+  std::string getLibName(const std::string& dbms)  throw(MineruleException&) {
+    if(dbms=="postgres") {
+      return "libmrdb_pg.so";
+    } else {
+      throw MineruleException(MR_ERROR_DATABASE_ERROR,
+      "Database " + dbms + " not supported yet.");
+    }
   }
 
   // if necessary, free the current connection (using delete) and
   // create a new one using the currente parameters
-  void resetConnection() throw(mrdb::SQLException) {
-	clearConnection();
+  void resetConnection() throw(MineruleException&) {
+    clearConnection();
 
-  // FIXME HARD CODING POSTGRES DEPENDENCY, THIS SHOULD BE HANDLED BY AN OPTION
+    std::string libName(getLibName(getDBMS()));
+    static void *handle = dlopen( libName.c_str(), RTLD_LAZY);
 
-  static void *handle = dlopen("libmrdb_pg.so", RTLD_LAZY);
+    if (handle == NULL) {
+      throw MineruleException(MR_ERROR_DATABASE_ERROR, dlerror());
+    }
 
-  if (handle==NULL) {
-    throw new mrdb::SQLException(dlerror());
-  }
+    MRDBConnectFun connect = (MRDBConnectFun)dlsym(handle, "connect");
 
-  MRDBConnectFun connect = (MRDBConnectFun) dlsym(handle, "connect");
+    if (connect == NULL) {
+      throw MineruleException(MR_ERROR_DATABASE_ERROR, dlerror());
+    }
 
-  if (connect==NULL) {
-    throw new mrdb::SQLException(dlerror());
-  }
-
-  setConnection( connect(getName().c_str(), getUsername().c_str(), getPassword().c_str()) );
-
+    setConnection(connect(getName().c_str(), getUsername().c_str(),
+                          getPassword().c_str()));
   }
 };

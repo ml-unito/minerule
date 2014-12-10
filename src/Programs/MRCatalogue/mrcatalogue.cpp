@@ -30,7 +30,7 @@ main(int argc, char** argv) {
 
 	int resultVal;
 	try {
-	  
+
 		MineruleOptions& mr = MineruleOptions::getSharedOptions();
 		mrc::Options options;
 		mrc::parseOptions(argc, argv, mr, options);

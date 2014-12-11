@@ -26,9 +26,11 @@ public:
 
   // Returns the postgres type name associated with the given oid
   // it works only with standard SQL types, it does not support
-  // composite or user types.  
+  // composite or user types.
   static std::string typeName(int oid);
 
+
+  virtual ResultSet* getColumns();
 
 };
 

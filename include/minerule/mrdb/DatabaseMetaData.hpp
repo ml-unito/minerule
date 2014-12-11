@@ -22,6 +22,13 @@ namespace mrdb {
     /// @param columnName the column name whose type is sought
     /// @return the SQLType of the given column for the given table
     virtual Types::SQLType getColumnType(const std::string& tableName, const std::string& columnName) = 0;
+
+    /// @return a ResultSet containing a table with three fields:
+    ///   field1: TABLE_NAME is a table name
+    ///   field2: COLUMN_NAME is a column name in <TABLE_NAME>
+    ///   field3: TYPE_NAME is the type name of column <COLUMN_NAME>//
+    ///  results are sorted by TABLE_NAME
+    virtual ResultSet* getColumns() = 0;
   };
 }
 

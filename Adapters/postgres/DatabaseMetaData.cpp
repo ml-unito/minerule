@@ -94,5 +94,19 @@ Types::SQLType DatabaseMetaData::getColumnType(const std::string &tableName, con
   return sqlType(oid);
 }
 
+mrdb::ResultSet* DatabaseMetaData::getColumns() {
+  std::string sql =
+  "SELECT  c.relname TABLE_NAME, "
+  "        f.attname COLUMN_NAME, "
+  "        pg_catalog.format_type(f.atttypid,f.atttypmod) AS COLUMN_TYPE "
+  "FROM pg_attribute f "
+  "JOIN pg_class c ON c.oid = f.attrelid  "
+  "WHERE c.relkind = 'r'::char  "
+  "AND f.attnum > 0 "
+  "ORDER BY c.relname, f.attnum";
+
+  return new mrdb::postgres::ResultSet(connection_, PQexec(connection_, sql.c_str()));
+}
+
 } // namespace mrdb
 } // namespace postgres

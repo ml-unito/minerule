@@ -38,6 +38,8 @@ namespace minerule {
 
   class OptionBase {
   public:
+    virtual ~OptionBase() {}
+
     virtual void setOption(const std::string& name,const std::string& value)
       =0;
 

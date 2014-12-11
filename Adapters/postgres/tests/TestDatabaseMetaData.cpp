@@ -110,6 +110,21 @@ TEST_CASE("Database metadata") {
     mrdb::Types::SQLType colType = md->getColumnType("mrdb_qry_test", "id");
 
     REQUIRE(colType==mrdb::Types::INTEGER);
+  }
+
+  SECTION("Can retrieve all columns") {
+    mrdb::DatabaseMetaData* md = conn->getMetaData();
+    std::unique_ptr<mrdb::ResultSet> rs(md->getColumns());
+
+    REQUIRE(rs->next());
+    REQUIRE(rs->getString(1) == "mrdb_qry_test");
+    REQUIRE(rs->getString(2) == "id");
+    REQUIRE(rs->getString(3) == "integer");
+
+    REQUIRE(rs->next());
+    REQUIRE(rs->getString(1) == "mrdb_qry_test");
+    REQUIRE(rs->getString(2) == "str");
+    REQUIRE(rs->getString(3) == "character varying");
 
   }
 

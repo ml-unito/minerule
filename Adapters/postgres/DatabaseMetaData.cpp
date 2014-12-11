@@ -4,8 +4,6 @@
 
 #include <postgres.h>
 #include <catalog/pg_type.h>
-#include <catalog/pg_type.h>
-
 #include <string>
 
 
@@ -24,7 +22,7 @@ DatabaseMetaData::getTables(const std::string &tableNamePattern) {
     throw mrdb::SQLException(errorMessage);
   }
 
-  return new mrdb::postgres::ResultSet(result);
+  return new mrdb::postgres::ResultSet(connection_, result);
 }
 
 Types::SQLType DatabaseMetaData::sqlType(int oid) {
@@ -41,10 +39,12 @@ Types::SQLType DatabaseMetaData::sqlType(int oid) {
     case INT2OID:         return mrdb::Types::SMALLINT;
     case TIMEOID:         return mrdb::Types::TIME;
     case TIMESTAMPOID:    return mrdb::Types::TIMESTAMP;
+    case BPCHAROID:       return mrdb::Types::CHAR;
     case TEXTOID:
     case VARCHAROID:      return mrdb::Types::VARCHAR;
     default:
-    throw mrdb::SQLException("Posgres OID type:" + std::to_string(oid) + " does not map to any know SQL type.");
+      std::cerr << "BPCHAR:" << BPCHAROID << std::endl;
+      throw mrdb::SQLException("Posgres OID type:" + std::to_string(oid) + " does not map to any know SQL type.");
   }
 }
 
@@ -62,6 +62,7 @@ std::string DatabaseMetaData::typeName(int oid) {
     case INT2OID:         return "int2";
     case TIMEOID:         return "time";
     case TIMESTAMPOID:    return "timestamp";
+    case BPCHAROID:       return "char";
     case TEXTOID:
     case VARCHAROID:      return "varchar";
     default:

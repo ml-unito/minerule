@@ -110,7 +110,7 @@ TEST_CASE("Result Set metadata") {
   }
 
   SECTION("Column type name") {
-    REQUIRE(md->getColumnTypeName(1) == "numeric");
+    REQUIRE(md->getColumnTypeName(1) == "numeric(10,2)");
   }
 
   SECTION("Get precision") {

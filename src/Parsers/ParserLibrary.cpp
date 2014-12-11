@@ -27,14 +27,14 @@ extern void mr_delete_buffer(YY_BUFFER_STATE);
 
 
 namespace minerule {
-  
+
     extern void init_mrparser();
     ParsedMinerule * outputObj;
-  
+
 void parseMinerule(std::string minerule_text, ParsedMinerule& output) {
     outputObj = &output;
 
-    const FILE* logfile = 
+    const FILE* logfile =
       minerule::MineruleOptions::getSharedOptions().getParsers().getLogFILE();
 
     mrout=logfile;
@@ -42,16 +42,10 @@ void parseMinerule(std::string minerule_text, ParsedMinerule& output) {
 
     init_mrparser();
 
-    try {
-       mrparse();
-    } catch (MineruleException& m) {
-     std::string error;
-      error = std::string(m.unformattedMessage())+ " Original minerule was:"+minerule_text;
-      throw MineruleException(MR_ERROR_MINERULETEXT_PARSING, error);
-    }
+    mrparse();
 
     mr_delete_buffer(buf);
-    
+
     outputObj = NULL;
   }
 

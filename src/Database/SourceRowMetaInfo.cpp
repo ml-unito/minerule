@@ -54,23 +54,28 @@ SourceRowAttrCollectionDescriptor::dataDefinitionForElem(mrdb::ResultSet* rs, in
   int precision = rsmd->getPrecision(elem);
   int scale = rsmd->getScale(elem);
 
+
   char buf[255];
   if( precision == 0 ) {
 	  strcpy(buf,"");
   } else {
-    if(scale==0)
+    if(scale==0) {
       sprintf(buf,"(%d)",precision);
-    else
+    } else {
       sprintf(buf,"(%d,%d)", precision,scale);
+    }
   }
 
   if( rsmd->getColumnType(elem) == mrdb::Types::DATE )
     strcpy(buf,"");
 
-  return
-    rsmd->getColumnName(elem) + " " +
+  std::string result = rsmd->getColumnName(elem) + " " +
     std::string(rsmd->getColumnTypeName(elem)) + " " +
     std::string(buf);
+  MRDebug() << result << std::endl;
+
+
+  return result;
 }
 
 std::string SourceRowAttrCollectionDescriptor::questionMarks() const {

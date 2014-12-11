@@ -34,8 +34,8 @@ printHelp(char* progName) {
 	std::cout << StringUtils::toBold("Usage:") << std::endl
 		<< "  " << StringUtils::toBold(progName) << " [-c] [-i <mineruletextfile>] [-m '<mineruletext>'] " << std::endl
 		<< "     -f <mineruleoptionfile> -O <optionlist> -v -h " << std::endl << std::endl;
-	
-	std::cout 
+
+	std::cout
 		<< StringUtils::toBold("   -c") << " -- disable colors in messages" << std::endl
 		<< StringUtils::toBold("   -i") << " -- specify a file name containing the text of the minerule" << std::endl
 		<< StringUtils::toBold("   -m") << " -- the argument is the text of the minerule" << std::endl
@@ -49,10 +49,10 @@ printHelp(char* progName) {
 		<< StringUtils::toBold("   -h") << " -- this message" << std::endl
 		<< StringUtils::toBold(" exit codes:") << std::endl;
 	for(int i=me_error_begin(); i<me_error_end(); i++) {
-		std::cout 
+		std::cout
 		<<  "\t" << i << "\t- " << me_error_name((MineruleErrors) i) << std::endl;
 	}
-  
+
 	exit(0);
 }
 
@@ -63,13 +63,13 @@ void printVersion() {
 
 /*
 * Tries to parse mrtext in order to find the name of
-	* the current minerule. 
+	* the current minerule.
  */
-std::string 
+std::string
 parseMineruleName(const std::string& mrtext) {
 	std::string mrtextcopy = mrtext;
 	std::string spacechars = " \t\n";
-  
+
 	std::string mstringrule="mine rule ";
 	std::string mstringsequence="mine sequence";
 	std::string mstringitemset="mine itemset";
@@ -92,28 +92,28 @@ parseMineruleName(const std::string& mrtext) {
 		mstring=mstringitemset;
 	else
 		mstring=mstringsequence;
-  
+
 	minerulepos = mrtextcopy.find(mstring,0);
-  
-	if(minerulepos!=std::string::npos) 
+
+	if(minerulepos!=std::string::npos)
 		startnamepos = mrtextcopy.find_first_not_of(spacechars ,
 			minerulepos+mstring.size());
 
 	if(startnamepos!=std::string::npos)
 		endnamepos = mrtextcopy.find_first_of(spacechars,startnamepos);
 
-  
+
 	if(endnamepos==std::string::npos ) {
     // notice we will be here, if any of the searches above fails
-		MRErr() << "Error in retrieving the minerule name from the " 
+		MRErr() << "Error in retrieving the minerule name from the "
 			<< "text which define the minerule. I could not "
-			<< "initialize, then, the text for %m parameter. " 
+			<< "initialize, then, the text for %m parameter. "
 			<< "I'm now switching to the default 'mrnameerror' mine rule name" << std::endl
 			<< "NOTE: If the minerule main parser succeed in parsing the" << std::endl
 			<< " minerule text, then, this message is a BUG and should be"<<std::endl
 			<< " reported!" << std::endl;
 		return "mrnameerror";
-	} 
+	}
 
 	return mrtext.substr(startnamepos, endnamepos-startnamepos);
 }
@@ -125,7 +125,7 @@ parseOptions(int argc, char** argv, MineruleOptions& mrOpts, std::string& mrtext
 	bool okMRText=false;
 	bool okMROptions=false;
 	std::vector<std::string> cmd_line_mr_options;
-	
+
 	while((opt=getopt(argc,argv,"chi:f:m:O:ev"))!=-1) {
 		switch(opt) {
 			case 'c':
@@ -202,23 +202,23 @@ parseOptions(int argc, char** argv, MineruleOptions& mrOpts, std::string& mrtext
 		MRErr() << "No minerule has been specified (use -i or -m options)" << std::endl;
 		exit(MR_ERROR_NO_MINERULE_SPECIFIED);
 	}
-	
+
 	if(!okMROptions) {
 		if( FileUtils::fileExists(MineruleOptions::DEFAULT_FILE_NAME) ) {
 			mrOpts.readFromFile(MineruleOptions::DEFAULT_FILE_NAME);
 			MRLog() << "Options read from:" << MineruleOptions::DEFAULT_FILE_NAME << std::endl;
 			okMROptions = true;
-		} 
-		
+		}
+
 		if( !cmd_line_mr_options.empty() ) {
 			for(std::vector<std::string>::const_iterator it=cmd_line_mr_options.begin(); it!=cmd_line_mr_options.end(); ++it) {
 				mrOpts.readFromString(*it);
 				MRLog() << "Options set accordingly to command line paramenter:-O " << *it << std::endl;
 			}
-			okMROptions = true;			
+			okMROptions = true;
 		}
-		
-		
+
+
 		if(!okMROptions) {
 			MRErr() << "No option file specified or found.";
 			exit(MR_ERROR_NO_OPTIONFILE_SPECIFIED);
@@ -230,34 +230,34 @@ parseOptions(int argc, char** argv, MineruleOptions& mrOpts, std::string& mrtext
 void execQuery(int argc, char** argv) {
 	MineruleOptions& mrOpts =  MineruleOptions::getSharedOptions();
 	std::string mrtext;
-	
+
 	parseOptions(argc, argv, mrOpts, mrtext);
 
 	MRLogPush("Initialization...");
 	MRLog() << "Minerule source text:" << std::endl;
 	MRLog(mrtext);
 	MRLogPop();
-				
+
 	MRLogPush("Minerule system starting");
-		
+
 	OptimizedMinerule optMR(mrtext);
 	Algorithms::executeMinerule(optMR);
-		
+
 	MRLogPop();
-		
+
 	MRLogShowMeasurements();
-	
+
 }
 
 int main (int argc, char *argv[])
-{	
-	try {		
+{
+	try {
 		execQuery(argc, argv);
 	} catch (mrdb::SQLException& e) {
 		MRErr() << "MRDB Exception:" << e.what() << std::endl;
 		exit(MR_ERROR_DATABASE_ERROR);
 	} catch (MineruleException& e) {
-		MRErr() << "Minerule Exception:" << e.what() << std::endl;
+		MRErr() << e.what() << std::endl;
 		exit( e.getErrorCode() );
 	} catch (std::exception& e) {
 		MRErr() << "Exception:" << e.what() << std::endl;

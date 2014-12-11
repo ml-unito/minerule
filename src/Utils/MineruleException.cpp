@@ -16,11 +16,13 @@
 #include "minerule/Utils/MineruleException.hpp"
 #include "minerule/Utils/StringUtils.hpp"
 
+#include <iostream>
+
 namespace minerule {
 
 	#undef MineruleException
 
-	MineruleException::MineruleException(std::string sourceFile, int sourceLine,  size_t errCode, std::string msg)  {
+	MineruleException::MineruleException(std::string sourceFile, int sourceLine,  size_t errCode, std::string msg) : message(msg), file(sourceFile), line(sourceLine), errorCode(errCode) {
 				formatMessage();
 	}
 

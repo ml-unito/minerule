@@ -52,7 +52,7 @@ PreparedStatement::executeQuery() {
     throw mrdb::SQLException(errorMessage);
   }
 
-  return new mrdb::postgres::ResultSet(result);
+  return new mrdb::postgres::ResultSet(connection_, result);
 }
 
 

@@ -31,7 +31,7 @@ namespace mrdb {
     }
 
     mrdb::ResultSetMetaData* ResultSet::getMetaData() {
-      return new mrdb::postgres::ResultSetMetaData(result_);
+      return new mrdb::postgres::ResultSetMetaData(connection_, result_);
     }
 
     long ResultSet::getLong(int columnIndex) {

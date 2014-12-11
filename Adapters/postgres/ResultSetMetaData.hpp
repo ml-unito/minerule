@@ -7,9 +7,12 @@
 namespace mrdb {
   namespace postgres {
     class ResultSetMetaData : public mrdb::ResultSetMetaData {
+      PGconn* connection_; // weak ref
       PGresult* result_;
+
+      std::string getTableName(int column);
     public:
-      ResultSetMetaData(PGresult* result) : result_(result) {}
+      ResultSetMetaData(PGconn* connection, PGresult* result) : connection_(connection), result_(result) {}
       virtual ~ResultSetMetaData() {}
 
       // @return the number of columns of a result set

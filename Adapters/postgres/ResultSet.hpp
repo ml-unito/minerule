@@ -10,14 +10,15 @@ namespace postgres {
 
 class ResultSet : public mrdb::ResultSet {
 private:
+  PGconn* connection_; // weak reference
   PGresult *result_;
   ResultSetMetaData* metadata_;
   int numRows_;
   int currentRow_;
 
 public:
-  ResultSet(PGresult *result)
-      : result_(result), metadata_(NULL), numRows_(PQntuples(result)), currentRow_(-1) {  };
+  ResultSet(PGconn* connection, PGresult *result)
+      : connection_(connection), result_(result), metadata_(NULL), numRows_(PQntuples(result)), currentRow_(-1) {  };
 
   virtual ~ResultSet();
 

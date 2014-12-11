@@ -2,6 +2,8 @@
 #include "DatabaseMetaData.hpp"
 #include "minerule/mrdb/SQLException.hpp"
 
+#include <iostream>
+
 namespace mrdb {
 namespace postgres {
 // @return the number of columns of a result set
@@ -47,11 +49,45 @@ int ResultSetMetaData::getScale(int column) const {
   return (typeMod - 4) & 0xffff;
 }
 
+std::string ResultSetMetaData::getTableName(int column) {
+  Oid tableOid = PQftable(result_, column-1);
+  if(tableOid == InvalidOid) {
+    throw SQLException("ResultSetMetaData::tableName - Cannot retrieve table id");
+  }
+
+  std::string query = "SELECT relname FROM pg_class WHERE oid = " + std::to_string(tableOid);
+  PGresult* rs = PQexec(connection_, query.c_str());
+  if(PQresultStatus(rs)!=PGRES_TUPLES_OK) {
+    throw SQLException("Cannot retrieve table name for oid:"+std::to_string(tableOid));
+  }
+
+  std::string result( PQgetvalue(rs, 0, 0));
+  PQclear(rs);
+
+  return result;
+}
+
 
 // @param column the desired column index (starting from 1)
 // @return the name of the column SQL type
 std::string ResultSetMetaData::getColumnTypeName(int column) {
-  return DatabaseMetaData::typeName(PQftype(result_, column-1));
+  std::string query = "SELECT  pg_catalog.format_type(f.atttypid,f.atttypmod) AS type "
+        "FROM pg_attribute f "
+        "JOIN pg_class c ON c.oid = f.attrelid  "
+        "WHERE c.relkind = 'r'::char  "
+        "AND c.relname = '"  + getTableName(column) + "' "
+        "AND f.attname = '" + getColumnName(column) + "' ";
+
+  PGresult* rs = PQexec(connection_, query.c_str());
+  if(PQresultStatus(rs) != PGRES_TUPLES_OK) {
+    throw SQLException("Cannot retrieve column type for table " + getTableName(column) +
+        " and column "+getColumnName(column));
+  }
+
+  std::string result( PQgetvalue(rs, 0, 0) );
+  PQclear(rs);
+
+  return result;
 }
 
 }

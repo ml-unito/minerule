@@ -1,3 +1,5 @@
+#define CATCH_CONFIG_MAIN
+
 #include <iostream>
 #include <memory>
 #include <assert.h>
@@ -12,6 +14,8 @@
 #include "../ResultSet.hpp"
 #include "../Statement.hpp"
 #include "../PreparedStatement.hpp"
+
+#include "../catch.hpp"
 
 // GLOBAL CONNECTION FUNCTION
 namespace mrdb_test {
@@ -65,17 +69,6 @@ void cleanupFixtures() {
   PQfinish(connection);
 }
 
-void OK(const std::string& msg) {
-  std::cout << "[" << minerule::StringUtils::toGreen("OK") <<  "] " << msg << std::endl;
-}
-
-void FAIL(const std::string& msg) {
-  std::cout << "[" << minerule::StringUtils::toRed("ERROR") <<  "] " << msg << std::endl;
-  exit(1);
-}
-
-
-
 MRDBConnectFun load_mrdb_pg_dylib() {
   void *handle = dlopen("libmrdb_pg.so", RTLD_LAZY);
 
@@ -94,126 +87,43 @@ MRDBConnectFun load_mrdb_pg_dylib() {
   return connect;
 }
 
-#define BUILD_META_DATA_OBJ \
-  std::unique_ptr<mrdb::Connection> conn(mrdb_test::connect("pgtest", "pgtest", "")); \
-  std::unique_ptr<mrdb::Statement> state(conn->createStatement()); \
-  std::unique_ptr<mrdb::ResultSet> rs(state->executeQuery("SELECT * FROM mrdb_qry_test")); \
-  mrdb::ResultSetMetaData* md = rs->getMetaData()
 
-
-
-void testCanGetColumnCount() {
-  buildFixtures();
-
-  BUILD_META_DATA_OBJ;
-
-  if(md->getColumnCount() != 3) {
-    FAIL("testCanGetColumnCount: expected 3, but got "+minerule::Converter(md->getColumnCount()).toString());
-  }
-
-  OK("testCanGetColumnCount");
-
-  cleanupFixtures();
-}
-
-void testCanGetColumnName() {
-  buildFixtures();
-  BUILD_META_DATA_OBJ;
-
-  if(md->getColumnName(1) != "id") {
-    FAIL("testCanGetColumnName: expected 'id' but got "+md->getColumnName(1));
-  }
-
-  OK("testCanGetColumnName");
-
-  cleanupFixtures();
-}
-
-void testCanGetColumnType() {
-  buildFixtures();
-
-  BUILD_META_DATA_OBJ;
-
-  if(md->getColumnType(1) != mrdb::Types::NUMERIC) {
-    FAIL("testCanGetColumnType: expected numeric type, but got " +
-      minerule::Converter(md->getColumnType(1)).toString());
-  }
-
-  OK("testCanGetColumnType");
-
-  cleanupFixtures();
-}
-
-void testCanGetColumnTypeName() {
-  buildFixtures();
-
-  BUILD_META_DATA_OBJ;
-
-  if(md->getColumnTypeName(1) != "numeric") {
-    FAIL("testCanGetColumnTypeName: expected numeric type, but got " +
-    md->getColumnTypeName(1));
-  }
-
-  OK("testCanGetColumnTypeName");
-
-  cleanupFixtures();
-}
-
-void testCanGetPrecision() {
-  buildFixtures();
-
-  BUILD_META_DATA_OBJ;
-
-  if(md->getPrecision(1) != 10) {
-    FAIL("testCanGetPrecision: expected 10, but got " +
-      minerule::Converter(md->getPrecision(1)).toString());
-  }
-
-  OK("testCanGetPrecision");
-
-  cleanupFixtures();
-}
-
-void testPrecisionReportedAsZeroWhenNotRelevant() {
-  buildFixtures();
-
-  BUILD_META_DATA_OBJ;
-
-  if(md->getPrecision(2) != 0) {
-    FAIL("testPrecisionReportedAsZeroWhenNotRelevant: expected 0, but got " +
-    minerule::Converter(md->getPrecision(2)).toString());
-  }
-
-  OK("testPrecisionReportedAsZeroWhenNotRelevant");
-
-  cleanupFixtures();
-}
-
-
-void testCanGetScale() {
-  buildFixtures();
-
-  BUILD_META_DATA_OBJ;
-
-  if(md->getScale(1) != 2) {
-    FAIL("testCanGetScale: expected 2, but got " +
-    minerule::Converter(md->getScale(1)).toString());
-  }
-
-  OK("testCanGetScale");
-
-  cleanupFixtures();
-}
-
-
-int main(int argc, char **argv) {
+TEST_CASE("Result Set metadata") {
   mrdb_test::connect = load_mrdb_pg_dylib();
+  buildFixtures();
 
-  testCanGetColumnCount();
-  testCanGetColumnName();
-  testCanGetColumnType();
-  testCanGetPrecision();
-  testPrecisionReportedAsZeroWhenNotRelevant();
-  testCanGetScale();
-  testCanGetColumnTypeName();
+  std::unique_ptr<mrdb::Connection> conn(mrdb_test::connect("pgtest", "pgtest", ""));
+  std::unique_ptr<mrdb::Statement> state(conn->createStatement());
+  std::unique_ptr<mrdb::ResultSet> rs(state->executeQuery("SELECT * FROM mrdb_qry_test"));
+  mrdb::ResultSetMetaData* md = rs->getMetaData();
+
+  SECTION("Column count") {
+    REQUIRE(md->getColumnCount() == 3);
+  }
+
+  SECTION("Column name") {
+    REQUIRE(md->getColumnName(1) == "id");
+  }
+
+  SECTION("Column type") {
+    REQUIRE(md->getColumnType(1) == mrdb::Types::NUMERIC);
+  }
+
+  SECTION("Column type name") {
+    REQUIRE(md->getColumnTypeName(1) == "numeric");
+  }
+
+  SECTION("Get precision") {
+    REQUIRE(md->getPrecision(1) == 10);
+  }
+
+  SECTION("Get precision reports zero when not relevant") {
+    REQUIRE(md->getPrecision(2) == 0);
+  }
+
+  SECTION("Get scale") {
+    REQUIRE(md->getScale(1) == 2);
+  }
+
+  cleanupFixtures();
 }

@@ -1,3 +1,5 @@
+#define CATCH_CONFIG_MAIN
+
 #include <iostream>
 #include <memory>
 #include <assert.h>
@@ -12,8 +14,10 @@
 #include "../ResultSet.hpp"
 #include "../Statement.hpp"
 #include "../PreparedStatement.hpp"
+#include "../catch.hpp"
 
 #include <memory>
+
 
 // GLOBAL CONNECTION FUNCTION
 namespace mrdb_test {
@@ -67,16 +71,6 @@ void cleanupFixtures() {
   PQfinish(connection);
 }
 
-void OK(const std::string& msg) {
-  std::cout << "[" << minerule::StringUtils::toGreen("OK") <<  "] " << msg << std::endl;
-}
-
-void FAIL(const std::string& msg) {
-  std::cout << "[" << minerule::StringUtils::toRed("ERROR") <<  "] " << msg << std::endl;
-  exit(1);
-}
-
-
 
 MRDBConnectFun load_mrdb_pg_dylib() {
   void *handle = dlopen("libmrdb_pg.so", RTLD_LAZY);
@@ -96,83 +90,28 @@ MRDBConnectFun load_mrdb_pg_dylib() {
   return connect;
 }
 
-
-void testCanRetrieveTableNames() {
-  buildFixtures();
-  std::unique_ptr<mrdb::Connection> conn(mrdb_test::connect("pgtest", "pgtest", ""));
-  mrdb::DatabaseMetaData* md = conn->getMetaData();
-  std::unique_ptr<mrdb::ResultSet> result(md->getTables("mrdb_%"));
-
-  if(!result->next()) {
-    FAIL("testCanRetrieveTableNames: no result returned, 1 row expected");
-  }
-
-  if(result->getString(1) != "mrdb_qry_test") {
-    FAIL("testCanRetrieveTableNames: expected table named mrdb_qry_test but " + result->getString(2));
-  }
-
-  OK("testCanRetrieveTableNames");
-
-  cleanupFixtures();
-}
-
-
-void testCanRetrieveColumnTypes() {
-  buildFixtures();
-  std::unique_ptr<mrdb::Connection> conn(mrdb_test::connect("pgtest", "pgtest", ""));
-  mrdb::DatabaseMetaData* md = conn->getMetaData();
-
-  mrdb::Types::SQLType colType = md->getColumnType("mrdb_qry_test", "id");
-
-  if(colType!=mrdb::Types::INTEGER) {
-    FAIL("testCanRetrieveColumnTypes: expected integer type but got "+minerule::Converter(colType).toString());
-  }
-
-  OK("testCanRetrieveColumnTypes");
-
-  cleanupFixtures();
-}
-
-void testCanGetColumnCount() {
-
-}
-
-void testCanGetColumnName() {
-
-}
-
-void testCanGetColumnType() {
-
-}
-
-void testCanGetColumnTypeName() {
-
-}
-
-void testCanGetPrecision() {
-
-}
-
-void testPrecisionReportedAsZeroWhenNotRelevant() {
-
-}
-
-
-void testCanGetScale() {
-
-}
-
-
-int main(int argc, char **argv) {
+TEST_CASE("Database metadata") {
   mrdb_test::connect = load_mrdb_pg_dylib();
+  buildFixtures();
+  std::unique_ptr<mrdb::Connection> conn(mrdb_test::connect("pgtest", "pgtest", ""));
 
-  testCanRetrieveTableNames();
-  testCanRetrieveColumnTypes();
+  SECTION("Can retrieve table names") {
+    mrdb::DatabaseMetaData* md = conn->getMetaData();
+    std::unique_ptr<mrdb::ResultSet> result(md->getTables("mrdb_%"));
 
-  testCanGetColumnCount();
-  testCanGetColumnName();
-  testCanGetColumnType();
-  testCanGetPrecision();
-  testCanGetScale();
-  testCanGetColumnTypeName();
+    REQUIRE_NOTHROW(
+      result->next();
+      REQUIRE( result->getString(1) == "mrdb_qry_test")
+    );
+  }
+
+  SECTION("Can retrieve column types") {
+    mrdb::DatabaseMetaData* md = conn->getMetaData();
+    mrdb::Types::SQLType colType = md->getColumnType("mrdb_qry_test", "id");
+
+    REQUIRE(colType==mrdb::Types::INTEGER);
+
+  }
+
+  cleanupFixtures();
 }

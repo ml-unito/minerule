@@ -22,7 +22,7 @@
 namespace minerule {
 
 MiningAlgorithmBase*
-MiningAlgorithmBase::algorithmForType(AlgorithmTypes t, const OptimizedMinerule& mr) throw(MineruleException) {
+MiningAlgorithmBase::algorithmForType(AlgorithmTypes t, const OptimizedMinerule& mr) {
   switch(t) {
   case ATNone:
     return new MiningAlgorithm(mr);

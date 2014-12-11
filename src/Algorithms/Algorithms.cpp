@@ -138,7 +138,7 @@ namespace minerule {
 		}
 	}
 
-	bool Algorithms::executeIncrementalAlgorithm(OptimizedMinerule& mr) throw(MineruleException,mrdb::SQLException, std::exception){
+	bool Algorithms::executeIncrementalAlgorithm(OptimizedMinerule& mr) {
 
 		IncrementalAlgorithm* incrAlgo = IncrementalAlgorithm::newIncrementalAlgorithm(mr);
 
@@ -156,13 +156,13 @@ namespace minerule {
 
 
 
-	void Algorithms::executeExtractionAlgorithm(OptimizedMinerule& mr) throw(MineruleException,mrdb::SQLException, std::exception) {
+	void Algorithms::executeExtractionAlgorithm(OptimizedMinerule& mr) {
 		MiningAlgorithmBase* algo =  Algorithms::newAlgorithm(mr);
 		algo->execute();
 		delete algo;
 	}
 
-	void Algorithms::checkAndHandleHomonymMinerules(OptimizedMinerule& mr) throw(MineruleException, mrdb::SQLException, std::exception) {
+	void Algorithms::checkAndHandleHomonymMinerules(OptimizedMinerule& mr) {
 		if( OptimizerCatalogue::existsMinerule(mr.getParsedMinerule().tab_result) ) {
 			if( MineruleOptions::getSharedOptions().getSafety().getOverwriteHomonymMinerules() ) {
 				MRLog() << "The optimizer Catalogue reports that a minerule " << std::endl;
@@ -193,7 +193,7 @@ namespace minerule {
 		MRDebugPop();
 	}
 
-	void Algorithms::executeMinerule(OptimizedMinerule& mr) throw(MineruleException,mrdb::SQLException, std::exception) {
+	void Algorithms::executeMinerule(OptimizedMinerule& mr) {
 		checkAndHandleHomonymMinerules(mr);
 
 		showDebugInfo("Unoptimized Minerule info", mr);

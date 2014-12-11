@@ -139,7 +139,7 @@ namespace minerule {
 
 
 
-	void GAQueryCombinator::evolve() throw(TimeOutException) {
+	void GAQueryCombinator::evolve() {
     // create a genome
 		GA1DBinaryStringGenome genome(mr_candidates.size()*maxDisjuncts, GAQueryCombinator::evaluator, this); 
     // create the genetic algorithm

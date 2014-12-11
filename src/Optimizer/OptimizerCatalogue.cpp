@@ -42,8 +42,7 @@ bool OptimizerCatalogue::existsMinerule(const std::string &mrname) {
   return rs->next();
 }
 
-void OptimizerCatalogue::deleteMinerule(const std::string &mrname) throw(
-    MineruleException, mrdb::SQLException) {
+void OptimizerCatalogue::deleteMinerule(const std::string &mrname) {
   std::vector<std::string> qryNames;
 
   MRLogPusher _("Deleting past minerules...");
@@ -104,7 +103,7 @@ void OptimizerCatalogue::deleteMinerule(const std::string &mrname) throw(
 
 void OptimizerCatalogue::Catalogue::insertMapping(
     const std::string &table, const KeyCols &cols, int refKey,
-    OrderType orderType) throw(MineruleException) {
+    OrderType orderType) {
   mrdb::Connection *connection =
       MineruleOptions::getSharedOptions().getMRDB().getMRDBConnection();
 
@@ -151,7 +150,7 @@ OptimizerCatalogue::Catalogue::stringToOrder(const std::string &str) {
   return None;
 }
 
-void OptimizerCatalogue::Catalogue::initialize() throw(MineruleException) {
+void OptimizerCatalogue::Catalogue::initialize() {
   mrdb::Connection *connection =
       MineruleOptions::getSharedOptions().getMRDB().getMRDBConnection();
 
@@ -215,7 +214,7 @@ void OptimizerCatalogue::Catalogue::initialize() throw(MineruleException) {
 }
 
 std::string OptimizerCatalogue::getNewAutoincrementValue(
-    const std::string &tableName) throw(mrdb::SQLException, MineruleException) {
+    const std::string &tableName) {
   mrdb::Connection *connection =
       MineruleOptions::getSharedOptions().getMRDB().getMRDBConnection();
 
@@ -244,8 +243,7 @@ std::string OptimizerCatalogue::getNewAutoincrementValue(
 }
 
 std::string OptimizerCatalogue::addMineruleAttributeList(
-    const ParsedMinerule::AttrVector &l) throw(mrdb::SQLException,
-                                               MineruleException) {
+    const ParsedMinerule::AttrVector &l) {
   if (l.empty())
     return "NULL";
 
@@ -316,15 +314,13 @@ bool OptimizerCatalogue::checkInstallation() {
   return allTablePresents;
 }
 
-void OptimizerCatalogue::install() throw(MineruleException,
-                                         mrdb::SQLException) {
+void OptimizerCatalogue::install() {
   CatalogueInstaller *installer = CatalogueInstaller::newInstaller();
   installer->install();
   delete installer;
 }
 
-void OptimizerCatalogue::uninstall() throw(MineruleException,
-                                           mrdb::SQLException) {
+void OptimizerCatalogue::uninstall() {
   CatalogueInstaller *installer = CatalogueInstaller::newInstaller();
   installer->uninstall();
   delete installer;
@@ -332,7 +328,7 @@ void OptimizerCatalogue::uninstall() throw(MineruleException,
 
 void OptimizerCatalogue::addMineruleResult(
     const OptimizerCatalogue::MineruleResultInfo &
-        mri) throw(mrdb::SQLException, MineruleException) {
+        mri) {
 
   mrdb::Connection *connection =
       MineruleOptions::getSharedOptions().getMRDB().getMRDBConnection();
@@ -355,7 +351,7 @@ void OptimizerCatalogue::addMineruleResult(
 
 void OptimizerCatalogue::addDerivedResult(
     const std::string &original,
-    const std::string derived) throw(mrdb::SQLException, MineruleException) {
+    const std::string derived) {
   minerule::CatalogueInfo originalInfo;
   bool derivedQueryAlreadyPresent = false;
 
@@ -393,7 +389,7 @@ void OptimizerCatalogue::addDerivedResult(
 }
 
 std::string OptimizerCatalogue::getResultsetName(
-    const std::string &queryname) throw(mrdb::SQLException, MineruleException) {
+    const std::string &queryname) {
   mrdb::Connection *connection =
       MineruleOptions::getSharedOptions().getMRDB().getMRDBConnection();
 
@@ -416,8 +412,7 @@ std::string OptimizerCatalogue::getResultsetName(
 }
 
 std::string
-OptimizerCatalogue::getMRQueryName(size_t i) throw(mrdb::SQLException,
-                                                   MineruleException) {
+OptimizerCatalogue::getMRQueryName(size_t i) {
   //  -- This implementation is much more efficient but does not ensure that the
   //  result retrieved
   //		 are in the same order of the ones returned by getMRQueryInfos
@@ -450,8 +445,7 @@ OptimizerCatalogue::getMRQueryName(size_t i) throw(mrdb::SQLException,
 }
 
 void OptimizerCatalogue::getMRQueryNames(
-    std::vector<std::string> &nameVec) throw(mrdb::SQLException,
-                                             MineruleException) {
+    std::vector<std::string> &nameVec) {
   mrdb::Connection *connection =
       MineruleOptions::getSharedOptions().getMRDB().getMRDBConnection();
 
@@ -484,7 +478,7 @@ void OptimizerCatalogue::setMRQueryInfoFromResultSet(mrdb::ResultSet *rs,
 
 void OptimizerCatalogue::getMRQueryInfos(
     std::vector<CatalogueInfo> &catInfoVec,
-    bool includeResultSize) throw(mrdb::SQLException, MineruleException) {
+    bool includeResultSize) {
   mrdb::Connection *connection =
       MineruleOptions::getSharedOptions().getMRDB().getMRDBConnection();
 
@@ -503,7 +497,7 @@ void OptimizerCatalogue::getMRQueryInfos(
 
 void OptimizerCatalogue::getMRQueryInfo(
     const std::string &qryName, CatalogueInfo &info,
-    bool includeResultSize) throw(mrdb::SQLException, MineruleException) {
+    bool includeResultSize) {
   mrdb::Connection *mrdb_connection =
       MineruleOptions::getSharedOptions().getMRDB().getMRDBConnection();
 
@@ -529,7 +523,7 @@ void OptimizerCatalogue::getMRQueryInfo(
 
 void OptimizerCatalogue::getMRQueryResultIterator(
     const std::string &qryName, QueryResult::Iterator &it, double supp,
-    double conf) throw(mrdb::SQLException, MineruleException) {
+    double conf) {
   CatalogueInfo catInfo;
   getMRQueryInfo(qryName, catInfo);
 
@@ -545,8 +539,7 @@ void OptimizerCatalogue::getMRQueryResultIterator(
   it.init(catInfo.resName, supp, conf);
 }
 
-void CatalogueInfo::updateQrySize() throw(mrdb::SQLException,
-                                          MineruleException) {
+void CatalogueInfo::updateQrySize() {
   ParsedMinerule p;
   MineruleOptions::getSharedOptions().getLogStreamObj().disable();
   p.init(qryText);
@@ -576,7 +569,7 @@ void CatalogueInfo::updateQrySize() throw(mrdb::SQLException,
 
 bool OptimizerCatalogue::isIDAttribute(
     const std::string &table, const ParsedMinerule::AttrVector &itemCols,
-    const std::string &attribute) const throw(MineruleException) {
+    const std::string &attribute) const {
   std::set<std::string> itemColsSet;
   copy(itemCols.begin(), itemCols.end(),
        std::insert_iterator< std::set<std::string> >(itemColsSet,
@@ -614,8 +607,7 @@ bool OptimizerCatalogue::isIDAttribute(
  * on the item.
  */
 
-bool OptimizerCatalogue::hasIDConstraints(const ParsedMinerule &minerule) throw(
-    MineruleException) {
+bool OptimizerCatalogue::hasIDConstraints(const ParsedMinerule &minerule)  {
   OptimizerCatalogue &optcat =
       MineruleOptions::getSharedOptions().getOptimizations().getCatalogue();
 

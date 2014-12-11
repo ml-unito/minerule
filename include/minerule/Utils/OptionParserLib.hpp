@@ -24,7 +24,7 @@ namespace minerule {
   void initializeOptionsFromString(MineruleOptions& mr, std::string);
 
   /* the following functions are used by the option parser */
-  void pushOptionClassIntoContext(const std::string& oclass) throw(MineruleException);
+  void pushOptionClassIntoContext(const std::string& oclass) ;
   void popOptionClassFromContext();
   void setOption(const std::string& name, const std::string& value);
 } // namespace

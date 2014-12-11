@@ -87,13 +87,13 @@ class TranslationManagerStandardSQL : public TranslationManager {
    * Checks if table TABLEDICTIONARY_NAME exists and, in case, create
    * it.
    */
-  void ensureTableDictionaryExist() const throw(mrdb::SQLException);
+  void ensureTableDictionaryExist() const ;
 
   /**
    * Checks if the DB contain the table named TABLEDICTIONARY_NAME.
    * Returning true if it does, false otherwise.
    */
-  bool tableDictionaryExists() const  throw(mrdb::SQLException);
+  bool tableDictionaryExists() const  ;
 
   /**
    * Perform all the actions necessary to translate tableName. If
@@ -105,7 +105,7 @@ class TranslationManagerStandardSQL : public TranslationManager {
    * of the latter failure.
    */
   void doTranslateTable(const std::string& tableName)
-    const throw(mrdb::SQLException);
+    const ;
 
 
   /**
@@ -142,7 +142,7 @@ class TranslationManagerStandardSQL : public TranslationManager {
     return std::string("INTEGER");
   }
 
-  void updateTManagerDictionary(const std::string& table) const throw(mrdb::SQLException);
+  void updateTManagerDictionary(const std::string& table) const ;
 
   /**
    * Builds the translation table for column named rsmd->getColumnName(colPos).
@@ -153,7 +153,7 @@ class TranslationManagerStandardSQL : public TranslationManager {
   virtual void createTranslationTableForColumn(
 		 const std::string& table,
 		 int colPos,
-		 mrdb::ResultSetMetaData& ) const throw (mrdb::SQLException);
+		 mrdb::ResultSetMetaData& ) const  ;
 
   /**
    * Performs all the operations needed to translate the given
@@ -164,7 +164,7 @@ class TranslationManagerStandardSQL : public TranslationManager {
 		     const std::string& tableName,
 		     int colPos,
 		     mrdb::ResultSetMetaData&
-		     ) const throw(mrdb::SQLException);
+		     ) const ;
 
   /**
    * Drop the table containing the translations for the given column.
@@ -173,7 +173,7 @@ class TranslationManagerStandardSQL : public TranslationManager {
 		      const std::string& tableName,
 		     int colPos,
 		     mrdb::ResultSetMetaData&
-		     ) const throw(mrdb::SQLException);
+		     ) const ;
 
   /**
    * The method is called by doTranslateColumn when it populates the
@@ -199,17 +199,17 @@ virtual void buildLists(
 	    std::string& newTable,
 	    std::string& selectList,
 	    std::string& tableList,
-	    std::string& conditionList ) const throw (mrdb::SQLException);
+	    std::string& conditionList ) const  ;
 
 
 void finalizeTranslationOfTable(
 				const std::string& table,
 				mrdb::ResultSetMetaData* rsmd
-				) const throw (mrdb::SQLException);
+				) const  ;
 
 
 TranslatedTable*
-  newAccessPointForTable(const std::string& tableName) const throw (mrdb::SQLException);
+  newAccessPointForTable(const std::string& tableName) const  ;
   // public methods ==========================================================
  public:
   /**
@@ -229,14 +229,14 @@ TranslatedTable*
    * SQL primitives.
    */
   TranslatedTable*
-    translateTable(const std::string& tableName) const throw(mrdb::SQLException);
+    translateTable(const std::string& tableName) const ;
 
   /**
    * Implements TranslationTable::alreadyTranslated using only
    * standard SQL primitives.
    */
   pair<bool,string>
-    alreadyTranslated(const std::string& tableName) const throw(mrdb::SQLException);
+    alreadyTranslated(const std::string& tableName) const ;
 };
 
 } // namespace minerule

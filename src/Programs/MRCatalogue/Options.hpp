@@ -15,12 +15,12 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef OPTIONS_H_C27RB72E
 #define OPTIONS_H_C27RB72E
-	
+
 #include "Exception.hpp"
 #include "minerule/Optimizer/CatalogueInstaller.hpp"
 
 namespace mrc {
-	
+
 	class Options {
 	public:
 		typedef enum {NoCommand,ShowList,SearchQry,DeleteQry, CheckCatalogue, InstallCatalogue, UninstallCatalogue, AddDerivedQuery} Command;
@@ -42,13 +42,13 @@ namespace mrc {
 		std::string searchParam[LastParam];
 		std::string originalQuery;
 		std::string derivedQuery;
-		
+
 		ListFormat listFormat;
 	public:
 
 		Options():	command(NoCommand)  {  }
 
-		void setListFormat(const char* format) throw (Exception);
+		void setListFormat(const char* format);
 
 		void setShowList() {
 			if(command!=NoCommand && command!=ShowList) {
@@ -73,31 +73,31 @@ namespace mrc {
 
 			command = DeleteQry;
 		}
-		
+
 		void setCheckCatalogue() {
 			if(command!=NoCommand && command != CheckCatalogue) {
 				throw Exception( mrc::ERROR_OPTION_PARSING, "Too many different options have been given, check out the parameters");
 			}
-			
+
 			command = CheckCatalogue;
 		}
-		
+
 		void setInstallCatalogue() {
 			if(command!=NoCommand && command != InstallCatalogue) {
-				throw Exception( mrc::ERROR_OPTION_PARSING, "Too many different options have been given, check out the parameters");				
+				throw Exception( mrc::ERROR_OPTION_PARSING, "Too many different options have been given, check out the parameters");
 			}
-			
-			command = InstallCatalogue;	
+
+			command = InstallCatalogue;
 		}
-		
+
 		void setUninstallCatalogue() {
 			if(command!=NoCommand && command != UninstallCatalogue) {
-				throw Exception( mrc::ERROR_OPTION_PARSING, "Too many different options have been given, check out the parameters");				
+				throw Exception( mrc::ERROR_OPTION_PARSING, "Too many different options have been given, check out the parameters");
 			}
-			
-			command = UninstallCatalogue;			
+
+			command = UninstallCatalogue;
 		}
-		
+
 		void setSearchParam(QryParams qryParam, const std::string& param) {
 			searchParam[qryParam]=param;
 		}
@@ -105,17 +105,17 @@ namespace mrc {
 		const std::string& getSearchParam(QryParams qryParam) const {
 			return searchParam[qryParam];
 		}
-		
+
 		void setAddDerivedQuery(const std::string& original, const std::string& derived) {
 			command = AddDerivedQuery;
 			originalQuery = original;
 			derivedQuery = derived;
 		}
-		
-		const std::string& getOriginalQuery() const { 
+
+		const std::string& getOriginalQuery() const {
 			return originalQuery;
 		}
-		
+
 		const std::string& getDerivedQuery() const {
 			return derivedQuery;
 		}

@@ -1,1 +1,0 @@
-select tid,item,item as attr1 from connect4 as BODY order by tid, item

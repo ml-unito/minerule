@@ -35,11 +35,11 @@ public:
 	return "MiningAlgorithm"; 
   }
 
-  virtual void setOption(const std::string& name,const std::string& value) throw(MineruleException) {
+  virtual void setOption(const std::string& name,const std::string& value) {
 	throw MineruleException( MR_ERROR_OPTION_PARSING, "MiningAlgorithms option class does not support option:"+value );
   }
 
-  virtual OptionBase& subclassForName(const std::string& subclassName) throw(MineruleException) {
+  virtual OptionBase& subclassForName(const std::string& subclassName) {
 	if( subclassName=="rulesmining" ) {
 	  return rulesMiningAlgorithms;
 	}  else if(subclassName=="itemsetsmining") {

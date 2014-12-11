@@ -16,9 +16,9 @@
 #include "Options.hpp"
 
 namespace mrc {
-	
 
-	void Options::setListFormat(const char* format) throw (Exception) {
+
+	void Options::setListFormat(const char* format) {
 		if(format==NULL)
 			return;
 

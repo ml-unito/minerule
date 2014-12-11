@@ -43,8 +43,7 @@ namespace minerule {
 			mrdb::PreparedStatement* body_elems;
 			mrdb::PreparedStatement* head_elems;
 
-			void readElems(int id, ItemSet& elems, mrdb::PreparedStatement* elems_rs)
-				throw ( MineruleException, mrdb::SQLException, std::exception);
+			void readElems(int id, ItemSet& elems, mrdb::PreparedStatement* elems_rs);
 		public:
 			Iterator() : state(NULL), rs_rules(NULL), body_elems(NULL), head_elems(NULL) {}
 
@@ -66,7 +65,7 @@ namespace minerule {
 	      //
 		  // initialize the result set
 	      //
-			void init( const std::string& rulesTable, double support, double confidence ) throw( MineruleException, mrdb::SQLException );
+			void init( const std::string& rulesTable, double support, double confidence ) ;
 
 		  // it moves the iterator on the following rule. The first time it is called
 		  // it position on the first element. It return false when it cannot
@@ -78,7 +77,7 @@ namespace minerule {
 		  // values.
 	      //
 
-			void getRule( Rule& r ) throw( MineruleException, mrdb::SQLException, std::exception );
+			void getRule( Rule& r ) ;
 		};
 
 		// --------------------------------------------------------------------------------
@@ -328,7 +327,7 @@ namespace minerule {
 	  	// @param conf Confidence threshold used to filter out uninteresting rules.
 	  	// The default is -1 and it means that no filter should occur.
 
-			void load(const std::string& qryName, double sup=-1, double con=-1) throw(MineruleException);
+			void load(const std::string& qryName, double sup=-1, double con=-1) ;
 
 		//
 		// Save the current result set. The tables being created are associated

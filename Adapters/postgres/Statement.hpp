@@ -14,8 +14,8 @@ public:
   Statement(PGconn* connection) : connection_(connection) {}
   virtual ~Statement() {}
 
-  virtual mrdb::ResultSet *executeQuery(const std::string &sql) throw(mrdb::SQLException&);
-  virtual bool execute(const std::string &sql) throw(mrdb::SQLException&);
+  virtual mrdb::ResultSet *executeQuery(const std::string &sql)  ;
+  virtual bool execute(const std::string &sql)  ;
 };
 
 } // namespace postgres

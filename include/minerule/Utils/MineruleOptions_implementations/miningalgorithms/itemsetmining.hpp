@@ -37,12 +37,12 @@ public:
 
 
 	virtual OptionBase& subclassForName(const std::string& subclassName) 
-	  throw(MineruleException) {
+	  {
 	    return OptionBase::subclassForName(subclassName);
 	}
 
 	virtual void setOption(const std::string& name,const std::string& value) 
-	  throw(MineruleException);
+	  ;
 
 
 private:

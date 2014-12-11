@@ -75,11 +75,10 @@ public:
    */
 
   static size_t
-  evaluateTotGroups(const ParsedMinerule &pmr) throw(MineruleException,
-                                                     mrdb::SQLException);
+  evaluateTotGroups(const ParsedMinerule &pmr);
 
   size_t evaluateTotGroups() const
-      throw(MineruleException, mrdb::SQLException) {
+      {
     return evaluateTotGroups(mr);
   }
 };

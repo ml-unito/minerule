@@ -33,7 +33,7 @@
 
 
 /**
- * TODO: 
+ * TODO:
  *
  * 1) Memorizzare da qualche parte (ParsedMinerule?) le sostituzioni
  * effettuate sulla rule attribute delle minerule processate.
@@ -55,7 +55,7 @@ namespace minerule {
     std::vector<std::string> resTables; // name of the tables used by the result
     size_t resSize;
 
-    void updateQrySize() throw( mrdb::SQLException, MineruleException );
+    void updateQrySize() ;
   };
 
 
@@ -78,13 +78,13 @@ namespace minerule {
 	class Catalogue : public std::map<std::string, CatalogueEntry> {
 	public:
 		Catalogue() : std::map<std::string, CatalogueEntry>() {}
-		Catalogue(const Catalogue& catalogue) : 
+		Catalogue(const Catalogue& catalogue) :
 		map<std::string, CatalogueEntry>(catalogue) {}
 		virtual ~Catalogue() {}
 
-		void insertMapping(const std::string& table,const KeyCols& origKeyCols,int refKeyId,OrderType orderType) throw(MineruleException);
+		void insertMapping(const std::string& table,const KeyCols& origKeyCols,int refKeyId,OrderType orderType) ;
 		static OrderType stringToOrder(const std::string&);
-		void initialize() throw (MineruleException);
+		void initialize();
 		virtual const std::string& getSchemaInfo(const std::string& schemaKey) const=0;
 	};
 
@@ -131,7 +131,7 @@ namespace minerule {
 		  initialize();
       }
 
-      DepFunCatalogue(const DepFunCatalogue& catalogue) : 
+      DepFunCatalogue(const DepFunCatalogue& catalogue) :
 	Catalogue(catalogue), schema(catalogue.schema) { }
 
       virtual ~DepFunCatalogue() {}
@@ -147,13 +147,13 @@ namespace minerule {
 
     // Input of addMineruleResult. We use a class since it is likely
     // that the input of this function will vary as more optimization
-    // politics are implemented. In this way the interface of the 
+    // politics are implemented. In this way the interface of the
     // function will stay the same while we add functionality
     // to the system.
     class MineruleResultInfo : public ParsedMinerule {
     public:
 		std::string resultset;
-      
+
 		MineruleResultInfo(const ParsedMinerule& mr) : ParsedMinerule(mr), resultset(mr.tab_result) {};
 		MineruleResultInfo(const MineruleResultInfo& mri) : ParsedMinerule(mri), resultset(mri.resultset) {};
 	};
@@ -165,14 +165,14 @@ namespace minerule {
 	static void setMRQueryInfoFromResultSet( mrdb::ResultSet* rs, CatalogueInfo& info, bool includeResultSize );
   public:
     /* ---------- Public Methods ---------- */
- 
+
     //void addEquivalentKey( const KeyCols&, const KeyCols& );
     OptimizerCatalogue() {
       /*     eqKeysCatalogue.initialize();
 	     depFunCatalogue.initialize();*/
     }
 
-    const Catalogue& getCatalogue(CatalogueType ct=EQKEYS) const { 
+    const Catalogue& getCatalogue(CatalogueType ct=EQKEYS) const {
 		switch( ct ) {
 			case EQKEYS:
 				return eqKeysCatalogue;
@@ -182,20 +182,20 @@ namespace minerule {
 				throw MineruleException(MR_ERROR_CATALOGUE_ERROR, "Requests for an unknown catalogue type!");
 		}
     }
-    
+
     bool isIDAttribute(const std::string& tableName,
 		       const std::vector<std::string>& itemCols,
-		       const std::string& attribute) const throw(MineruleException);
-		
-		
+		       const std::string& attribute) const ;
+
+
    /**
     * The method returns true if the constraints in the query
     * are item dependent. Notice that, cross predicates are
     * implicitly context dependent, even if the attributes depends
     * on the item.
-    */		
-		static bool hasIDConstraints(const ParsedMinerule& mineruel) throw(MineruleException);
-    
+    */
+		static bool hasIDConstraints(const ParsedMinerule& mineruel) ;
+
 
     // ==================== STATIC METHODS ====================
 
@@ -203,22 +203,22 @@ namespace minerule {
 	 * @return true if the catalogue tables appear to be present.
 	 */
 	static bool checkInstallation();
-    static void install() throw(MineruleException, mrdb::SQLException);
-    static void uninstall() throw(MineruleException, mrdb::SQLException);
-	
+    static void install() ;
+    static void uninstall() ;
 
-    static void addMineruleResult( const MineruleResultInfo& mri ) throw(mrdb::SQLException, MineruleException);
-	static void addDerivedResult(const std::string& original, const std::string derived) throw(mrdb::SQLException, MineruleException);
-    static std::string addMineruleAttributeList(const ParsedMinerule::AttrVector& l) throw(mrdb::SQLException, MineruleException);
-    static std::string getNewAutoincrementValue(const std::string& tableName) throw(mrdb::SQLException, MineruleException);
+
+    static void addMineruleResult( const MineruleResultInfo& mri ) ;
+	static void addDerivedResult(const std::string& original, const std::string derived) ;
+    static std::string addMineruleAttributeList(const ParsedMinerule::AttrVector& l) ;
+    static std::string getNewAutoincrementValue(const std::string& tableName) ;
 
     /**
      * @param queryname
-     * @return astd::string containing the name of the result set of the 
+     * @return astd::string containing the name of the result set of the
      *  given query. It throws a MineruleException(MR_ERROR_CATALOGUE_ERROR,"...")
      *  in case queryname is not in the catalogue.
      */
-    static std::string getResultsetName(const std::string& queryname) throw(mrdb::SQLException, MineruleException);
+    static std::string getResultsetName(const std::string& queryname) ;
 
     /**
      * @param mrname
@@ -227,35 +227,35 @@ namespace minerule {
      */
     static bool existsMinerule(const std::string& mrname);
 
-    static void deleteMinerule(const std::string& mrname) 
-      throw(MineruleException, mrdb::SQLException);
-	
+    static void deleteMinerule(const std::string& mrname)
+      ;
+
 	/**
 	 * Returns the name of the i-th query in the catalogue.
 	 */
-	static std::string getMRQueryName(size_t i) throw(mrdb::SQLException, MineruleException);
+	static std::string getMRQueryName(size_t i) ;
 
     /**
      * The procedure fills the vector nameVec with the names of all
      * queries that have been executed.
      */
-    static void getMRQueryNames(std::vector<std::string>& nameVec) 
-      throw(mrdb::SQLException, MineruleException);
+    static void getMRQueryNames(std::vector<std::string>& nameVec)
+      ;
 
     /**
      * It behaves as getMRQueryNames, but provide more information to the
      * caller.
      */
     static void getMRQueryInfos(std::vector<CatalogueInfo>& catInfoVec, bool includeResultSize=true)
-      throw(mrdb::SQLException, MineruleException);
+      ;
 
     /**
      * As getMRQueryInfos, but the user specify a single qryName to be searched.
      */
-    static void getMRQueryInfo(const std::string& qryName, CatalogueInfo& catInfo, bool includeResultSize=true) throw(mrdb::SQLException, MineruleException);
+    static void getMRQueryInfo(const std::string& qryName, CatalogueInfo& catInfo, bool includeResultSize=true) ;
 
     /**
-     * It updates the QueryResultIterator so that it iterates through the 
+     * It updates the QueryResultIterator so that it iterates through the
      * results of query qryName
      * @param qryName the name of the query whose results the user want to
      *  iterate through
@@ -269,8 +269,8 @@ namespace minerule {
     static void getMRQueryResultIterator(const std::string& qryName,
 					 QueryResult::Iterator& it,
 					 double sup=-1,
-					 double con=-1) 
-      throw(mrdb::SQLException, MineruleException);
+					 double con=-1)
+      ;
   };
 
 

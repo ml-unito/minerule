@@ -1,5 +1,0 @@
-select item,count(distinct gid) as freq from SalesOri where price > 800 group by item order by item
-select count(distinct gid) from SalesOri
-select gid,item from SalesOri as BODY where BODY.price > 800 order by gid, item
-select gid,item from SalesOri as HEAD where HEAD.price > 800 order by gid, item
-

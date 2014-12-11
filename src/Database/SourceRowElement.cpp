@@ -35,7 +35,7 @@ namespace minerule {
 	}
 
 	SourceRowElement* 
-	SourceRowElement::createElementFromType(const ElementType el) throw(MineruleException) {
+	SourceRowElement::createElementFromType(const ElementType el) {
 		if( SourceRowEmptyElement().getElementType()==el )
 			return new SourceRowEmptyElement();
 
@@ -56,7 +56,7 @@ namespace minerule {
 				"Cannot recognize the specified element type!"); 
 	}
 
-	void SourceRowElement::serializeElementToString(const SourceRowElement& elem, std::string& strRepr) throw(MineruleException) {
+	void SourceRowElement::serializeElementToString(const SourceRowElement& elem, std::string& strRepr) {
 		std::ostringstream sstream;
 		sstream << elem.getElementType();
 		elem.serialize(sstream);
@@ -64,7 +64,7 @@ namespace minerule {
 	}
 
 	SourceRowElement*
-	SourceRowElement::deserializeElementFromResultSet(mrdb::ResultSet* rs, size_t start_index) throw(MineruleException){
+	SourceRowElement::deserializeElementFromResultSet(mrdb::ResultSet* rs, size_t start_index)  {
 		mrdb::ResultSetMetaData* rsmd = rs->getMetaData();
 		size_t numColumns = rsmd->getColumnCount();
 		std::vector<int> descr;
@@ -78,7 +78,7 @@ namespace minerule {
 
 
 	SourceRowElement*
-	SourceRowElement::deserializeElementFromString(const std::string& strRepr) throw(MineruleException){
+	SourceRowElement::deserializeElementFromString(const std::string& strRepr)  {
 		std::istringstream sstream(strRepr);
 		assert(sstream);
 		ElementType elType;

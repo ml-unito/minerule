@@ -238,7 +238,7 @@ namespace minerule {
 
 
   void 
-  SourceRowAttributeCollection::serialize(std::ostream& os) const throw(MineruleException)  {
+  SourceRowAttributeCollection::serialize(std::ostream& os) const  {
     SourceRowAttributeCollection::CollectionType::const_iterator it;
     for(it=attributes.begin(); it!=attributes.end(); it++) {
       os << " " << (*it)->getElementType() << " ";  // more elements to come, specifying type
@@ -249,7 +249,7 @@ namespace minerule {
   }
   
   void 
-  SourceRowAttributeCollection::deserialize(std::istream& is) throw(MineruleException) {
+  SourceRowAttributeCollection::deserialize(std::istream& is) {
    std::string buf;
     is >> buf;
     while(buf!="S" && is) {

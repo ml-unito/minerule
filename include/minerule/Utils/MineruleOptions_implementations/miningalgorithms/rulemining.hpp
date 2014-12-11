@@ -25,7 +25,7 @@ public:
 	  }
 
 	  virtual void setOption(const std::string& name,const std::string& value) 
-	    throw(MineruleException);
+	    ;
 	  unsigned int getRowsPerPartition() const {
 	    return rowsPerPartition;
 	  }
@@ -44,7 +44,7 @@ public:
 	  }
 
 	  virtual void setOption(const std::string& name,const std::string& value) 
-	    throw(MineruleException);
+	    ;
 	  unsigned int getRowsPerPartition() const {
 	    return rowsPerPartition;
 	  }
@@ -70,7 +70,7 @@ public:
 	  }
 
 	  virtual void setOption(const std::string& name,const std::string& value) 
-	    throw(MineruleException);
+	    ;
 
 	  FPAlgoType getAlgoType() const {
 	    return algoType;
@@ -119,14 +119,14 @@ public:
 	}
 
 	virtual void setOption(const std::string& name,const std::string& value) 
-	  throw(MineruleException);
+	  ;
 
 	virtual std::string className() const {
 	  return "rulesmining";
 	}
 
 	virtual OptionBase& subclassForName(const std::string& subclassName) 
-	  throw(MineruleException) {
+	  {
 	  if( subclassName=="partitionbase" ) {
 	    return partitionbase;
 	  } else if(subclassName=="partitionwithclusters") {

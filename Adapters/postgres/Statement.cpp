@@ -4,7 +4,7 @@
 namespace mrdb {
 namespace postgres {
 
-mrdb::ResultSet *Statement::executeQuery(const std::string &sql) throw(mrdb::SQLException &) {
+mrdb::ResultSet *Statement::executeQuery(const std::string &sql)  {
   PGresult *result = PQexec(connection_, sql.c_str());
 
   if (PQresultStatus(result) != PGRES_TUPLES_OK) {
@@ -17,7 +17,7 @@ mrdb::ResultSet *Statement::executeQuery(const std::string &sql) throw(mrdb::SQL
   return new mrdb::postgres::ResultSet(result);
 }
 
-bool Statement::execute(const std::string &sql) throw(mrdb::SQLException &) {
+bool Statement::execute(const std::string &sql)  {
   PGresult *result = PQexec(connection_, sql.c_str());
   ExecStatusType status = PQresultStatus(result);
   std::string errorMessage;

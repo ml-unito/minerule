@@ -38,9 +38,9 @@ class Parsers : public OptionBase {
    }
 
    virtual void setOption(const std::string& name, const std::string& value)
-	throw(MineruleException);
+	;
 
-   void setLogFILE(const std::string& fname) throw(MineruleException);
+   void setLogFILE(const std::string& fname) ;
    void setLogOnStdout();
    void setLogOnStderr();
 

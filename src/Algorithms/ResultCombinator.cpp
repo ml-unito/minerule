@@ -19,7 +19,7 @@
 namespace minerule {
 
 	void 
-	ResultCombinator::execute() throw(MineruleException,mrdb::SQLException) {
+	ResultCombinator::execute() {
 		MRLogPusher log1("ResultCombinator incremental algorithm starting...");
 
 		if( minerule==NULL )

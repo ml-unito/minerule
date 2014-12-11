@@ -56,7 +56,7 @@ namespace minerule {
 
   const std::string& algorithmTypeToString(AlgorithmTypes t);
 
-  AlgorithmTypes stringToAlgorithmType(const std::string& s) throw(MineruleException);
+  AlgorithmTypes stringToAlgorithmType(const std::string& s) ;
 
   std::string stringWithListOfAlgorithmTypes();
 }

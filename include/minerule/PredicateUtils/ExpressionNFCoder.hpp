@@ -121,7 +121,7 @@ namespace minerule {
     // form. The returned pointer will be deleted as soon a new encoding
     // is requested or upon object deallocation.
     EncodedNF
-      encode(Predicate&) throw(MineruleException);
+      encode(Predicate&) ;
   };
 
 } // namespace minerule

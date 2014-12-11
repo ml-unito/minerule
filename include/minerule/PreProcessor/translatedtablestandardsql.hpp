@@ -95,12 +95,12 @@ class TranslatedTableStandardSQL : public TranslatedTable {
    * @return the name of the translated table. The returned value 
    * can be used to form queries involving the translated values. 
    */
-  virtualstd::string getTranslatedName() const throw (mrdb::SQLException);
+  virtualstd::string getTranslatedName() const  ;
 
   /**
    * @return the name of the original table. 
    */
-  virtualstd::string getOriginalName() const throw (mrdb::SQLException);
+  virtualstd::string getOriginalName() const  ;
 
   /**
    * Takes a column name of the current table and returns its translated name.
@@ -109,7 +109,7 @@ class TranslatedTableStandardSQL : public TranslatedTable {
    * @param columnName the name of a table column
    * @return the name of the translated column
    */
-  virtualstd::string getTranslatedColumnName( const std::string& columnName) const throw (mrdb::SQLException); 
+  virtualstd::string getTranslatedColumnName( const std::string& columnName) const  ; 
   
   /* I sincerely cannot see any applicatio for this method... if needed
    * I will add it to the interface.
@@ -126,7 +126,7 @@ class TranslatedTableStandardSQL : public TranslatedTable {
    * @return the translatedValue
    */
   virtualstd::string getTranslatedValue( const std::string& columnName,
-			     const std::string& value) const throw (mrdb::SQLException);
+			     const std::string& value) const  ;
   
   /**
    * @param columnName a column name of the original table
@@ -134,7 +134,7 @@ class TranslatedTableStandardSQL : public TranslatedTable {
    * @return the value of translatedValue in the original table
    */
 virtual std::string getOriginalValue( const std::string& columnName,
-			   const std::string& translatedValue) const throw (mrdb::SQLException);
+			   const std::string& translatedValue) const  ;
 
 
  virtual ~TranslatedTableStandardSQL(); 

@@ -1,1 +1,0 @@
-select tid,item,price,size from Marco order by tid, price desc

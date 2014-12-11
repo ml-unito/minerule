@@ -43,8 +43,7 @@ MineruleOptions::~MineruleOptions() {
   }
 }
 
-OptionBase &MineruleOptions::subclassForName(const std::string &oclass) throw(
-    MineruleException) {
+OptionBase &MineruleOptions::subclassForName(const std::string &oclass) {
   if (oclass == "mrdb")
     return getMRDB();
   else if (oclass == "safety")
@@ -99,8 +98,7 @@ void MineruleOptions::init() {
   ready = true;
 }
 
-void MineruleOptions::readFromFile(std::string filename) throw(
-    MineruleException) {
+void MineruleOptions::readFromFile(std::string filename) {
   FILE *file = fopen(filename.c_str(), "r");
 
   try {
@@ -125,8 +123,7 @@ void MineruleOptions::readFromFile(std::string filename) throw(
   fclose(file);
 }
 
-void MineruleOptions::readFromString(const std::string &str) throw(
-    MineruleException, mrdb::SQLException) {
+void MineruleOptions::readFromString(const std::string &str) {
   initializeOptionsFromString(*this, str);
 
   mrdb_db.resetConnection();
@@ -351,8 +348,7 @@ std::ostream &MineruleOptions::saveOptions(std::ostream &os) const {
   return os;
 }
 
-void MineruleOptions::Parsers::setLogFILE(const std::string &fname) throw(
-    MineruleException) {
+void MineruleOptions::Parsers::setLogFILE(const std::string &fname) {
   clearStream();
   logfile = fopen(fname.c_str(), "w");
   if (logfile == NULL)
@@ -369,7 +365,7 @@ void MineruleOptions::Parsers::setLogOnStderr() { logfile = stderr; }
 
 void MineruleOptions::Mrdb::setOption(
     const std::string &name,
-    const std::string &value) throw(MineruleException) {
+    const std::string &value) {
   if (name == "name")
     setName(value);
   else if (name == "username")
@@ -392,7 +388,7 @@ void MineruleOptions::Mrdb::setOption(
 
 void MineruleOptions::Safety::setOption(
     const std::string &name,
-    const std::string &value) throw(MineruleException) {
+    const std::string &value) {
   try {
     if (name == "overwriteHomonymMinerules") {
       setOverwriteHomonymMinerules(Converter(value).toBool());
@@ -417,7 +413,7 @@ void MineruleOptions::Safety::setOption(
 
 void MineruleOptions::MiningAlgorithms::RulesMiningAlgorithms::PartitionBase::
     setOption(const std::string &name,
-              const std::string &value) throw(MineruleException) {
+              const std::string &value) {
   if (name == "rowsPerPartition") {
     unsigned int rpp = stringToLong(value, name);
     setRowsPerPartition(rpp);
@@ -433,7 +429,7 @@ void MineruleOptions::MiningAlgorithms::RulesMiningAlgorithms::PartitionBase::
 void MineruleOptions::MiningAlgorithms::RulesMiningAlgorithms::
     PartitionWithClusters::setOption(
         const std::string &name,
-        const std::string &value) throw(MineruleException) {
+        const std::string &value) {
   if (name == "rowsPerPartition") {
     unsigned int rpp = stringToLong(value, name);
     setRowsPerPartition(rpp);
@@ -448,7 +444,7 @@ void MineruleOptions::MiningAlgorithms::RulesMiningAlgorithms::
 
 void MineruleOptions::MiningAlgorithms::RulesMiningAlgorithms::FPGrowth::
     setOption(const std::string &name,
-              const std::string &value) throw(MineruleException) {
+              const std::string &value) {
   if (name == "algoType") {
     if (value == "Original") {
       setAlgoType(Original);
@@ -474,7 +470,7 @@ void MineruleOptions::MiningAlgorithms::RulesMiningAlgorithms::FPGrowth::
 
 void MineruleOptions::MiningAlgorithms::RulesMiningAlgorithms::setOption(
     const std::string &name,
-    const std::string &value) throw(MineruleException) {
+    const std::string &value) {
   if (name == "preferredAlgorithm") {
     try {
       setPreferredAlgorithm(stringToAlgorithmType(value));
@@ -498,7 +494,7 @@ void MineruleOptions::MiningAlgorithms::RulesMiningAlgorithms::setOption(
 
 void MineruleOptions::MiningAlgorithms::ItemsetsMiningAlgorithms::setOption(
     const std::string &name,
-    const std::string &value) throw(MineruleException) {
+    const std::string &value) {
   if (name == "preferredAlgorithm") {
     try {
       setPreferredAlgorithm(stringToAlgorithmType(value));
@@ -522,7 +518,7 @@ void MineruleOptions::MiningAlgorithms::ItemsetsMiningAlgorithms::setOption(
 
 void MineruleOptions::MiningAlgorithms::SequencesMiningAlgorithms::setOption(
     const std::string &name,
-    const std::string &value) throw(MineruleException) {
+    const std::string &value) {
   if (name == "preferredAlgorithm") {
     try {
       setPreferredAlgorithm(stringToAlgorithmType(value));
@@ -546,7 +542,7 @@ void MineruleOptions::MiningAlgorithms::SequencesMiningAlgorithms::setOption(
 
 void MineruleOptions::Optimizations::setOption(
     const std::string &name,
-    const std::string &value) throw(MineruleException) {
+    const std::string &value) {
   if (name == "enableOptimizations") {
     if (value == "True") {
       setTryOptimizations(true);
@@ -619,7 +615,7 @@ void MineruleOptions::Optimizations::setOption(
 
 void MineruleOptions::Optimizations::Combinator::setOption(
     const std::string &name,
-    const std::string &value) throw(MineruleException) {
+    const std::string &value) {
 
   if (name == "timeOut")
     setTimeOutThreshold(Converter(value).toDouble());
@@ -642,7 +638,7 @@ void MineruleOptions::Optimizations::Combinator::setOption(
 
 void MineruleOptions::OutStream::setOption(
     const std::string &name,
-    const std::string &value) throw(MineruleException) {
+    const std::string &value) {
   // we need to modify value, hence we made a copy of it
   // and use it in the rest of the procedure
   std::string valueCopy = value;
@@ -710,7 +706,7 @@ void MineruleOptions::OutStream::setOption(
 
 void MineruleOptions::Parsers::setOption(
     const std::string &name,
-    const std::string &value) throw(MineruleException) {
+    const std::string &value) {
   if (name == "logfile") {
     if (value == "<stdout>")
       setLogOnStdout();

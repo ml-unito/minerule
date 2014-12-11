@@ -47,7 +47,7 @@ namespace minerule {
 
   // operators are ordered as follows: "< <= = >= > <>"
   size_t SimplePredAnalyzer::getOperatorIndex(const char* op) 
-    throw( MineruleException ) {
+    {
 
     if(op[0]=='<') {
       if(op[1]=='\0')
@@ -76,7 +76,7 @@ namespace minerule {
   size_t SimplePredAnalyzer::getValuesRelationshipIndex(const char* value1, 
 							const char* value2, 
 							SQLUtils::Type type) 
-    throw(MineruleException){
+     {
 
     double order;
     if( type==SQLUtils::String) {
@@ -127,7 +127,7 @@ namespace minerule {
 				  const char* Yop,
 				  const char* Yvalue,
 				  SQLUtils::Type type) 
-    throw(MineruleException) {
+    {
 
     size_t XopIndex = getOperatorIndex(Xop);
     size_t YopIndex = getOperatorIndex(Yop);

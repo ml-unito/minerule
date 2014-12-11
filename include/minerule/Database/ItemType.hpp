@@ -201,7 +201,7 @@ namespace minerule {
 			return el->asString();
 		}
 
-		minerule::SourceRowElement& getElement() const throw(MineruleException) {
+		minerule::SourceRowElement& getElement() const {
 			if(el==NULL)
 				throw MineruleException(MR_ERROR_INTERNAL, "Accessing a NULL element!");
 			return *el;

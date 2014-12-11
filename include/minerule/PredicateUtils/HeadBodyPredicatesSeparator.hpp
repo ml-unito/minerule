@@ -39,11 +39,11 @@ namespace minerule {
     typedef enum { NO_INFO, BODY_CONSTR, HEAD_CONSTR, ERROR} ConstraintClass;
     static void
       setState( ConstraintClass& current, ConstraintClass newone )  
-      throw(MineruleException);
+      ;
 
     static ConstraintClass
       setStateAccordinglyToString(std::string& str, ConstraintClass state)  
-      throw(MineruleException);
+      ;
 
     static void
       updateConstraint( std::string& str, 
@@ -54,7 +54,7 @@ namespace minerule {
     static void
       separate(list_AND_node* l_and, 
 	       std::string& bodyConstraints,
-	       std::string& headConstraints) throw(MineruleException);
+	       std::string& headConstraints) ;
   };
 
 }

@@ -42,19 +42,19 @@ class IDIncrementalAlgorithm : public IncrementalAlgorithm {
  protected:
   const ParsedMinerule::AttrVector* attrList;
 
-  std::set<ItemType>* fillValidItems(const std::string& constraints) const throw(mrdb::SQLException);
+  std::set<ItemType>* fillValidItems(const std::string& constraints) const ;
 
   void getItemInfos( std::string& itemDescr, SourceRowColumnIds& hbsr ) const;
   bool checkInclusion(const std::set<ItemType>& validOnes, const ItemSet& foundOnes) const;
   bool checkInValidRules(const ValidRules& validRules, Rule& r) const;
-  void filterQueries(const ValidRules& validRules) throw(MineruleException,mrdb::SQLException);
+  void filterQueries(const ValidRules& validRules) ;
 
  public:
 
   IDIncrementalAlgorithm(const OptimizedMinerule& mr) : IncrementalAlgorithm(mr), attrList(NULL) { }
   virtual ~IDIncrementalAlgorithm() {}
 
-  virtual void execute() throw(MineruleException,mrdb::SQLException);
+  virtual void execute() ;
 };
 
 } // namespace

@@ -30,7 +30,7 @@ public:
   virtual std::string className() const { return "mrdb"; }
 
   virtual void setOption(const std::string &name,
-                         const std::string &value) throw(MineruleException);
+                         const std::string &value) ;
 
   std::string getName() const { return name; }
 
@@ -43,7 +43,7 @@ public:
 
   // at least for the sharedOptions, this
   // object is set by init()
-  mrdb::Connection *getMRDBConnection() const throw(MineruleException) {
+  mrdb::Connection *getMRDBConnection() const {
     if (connection == NULL) {
       throw MineruleException(
           MR_ERROR_DATABASE_ERROR,
@@ -73,7 +73,7 @@ public:
     }
   }
 
-  std::string getLibName(const std::string& dbms)  throw(MineruleException&) {
+  std::string getLibName(const std::string& dbms)  {
     if(dbms=="postgres") {
       return "libmrdb_pg.so";
     } else {
@@ -84,7 +84,7 @@ public:
 
   // if necessary, free the current connection (using delete) and
   // create a new one using the currente parameters
-  void resetConnection() throw(MineruleException&) {
+  void resetConnection() {
     clearConnection();
 
     std::string libName(getLibName(getDBMS()));

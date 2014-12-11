@@ -109,7 +109,7 @@ namespace minerule {
 		void deleteTable(const char * tableName);
 		void deleteDestTables();
 
-		void createResultTables(const SourceRowMetaInfo&) throw(mrdb::SQLException, MineruleException);
+		void createResultTables(const SourceRowMetaInfo&) ;
 		void insert(const char * what);
 
 		// this function should be systematically used in order to

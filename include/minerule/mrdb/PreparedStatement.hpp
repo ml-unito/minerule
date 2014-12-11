@@ -16,14 +16,14 @@ namespace mrdb {
     /// @return true if a result set was available, false otherwise
     /// @throws a MineruleException (with error code MR_ERROR_DATABASE_ERROR) if
     ///   anything goes wrong.
-    virtual bool execute() throw(mrdb::SQLException&) = 0;
+    virtual bool execute() = 0;
 
     /// Execute this statement
     /// @return a ResultSet
     /// @throws a MineruleException (with error code MR_ERROR_DATABASE_ERROR) if
     ///   anything goes wrong.
     /// @memory the caller should dealloc the result set once it is no longer needed
-    virtual ResultSet* executeQuery() throw(mrdb::SQLException&) = 0;
+    virtual ResultSet* executeQuery() = 0;
 
     /// Sets a parameter value to a Double
     /// @param idx the index of the parameter to be set

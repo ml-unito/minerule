@@ -234,7 +234,7 @@ namespace minerule {
   }
 
   void ConstrTree::execute() 
-    throw(MineruleException,mrdb::SQLException) {
+    {
     assert( minerule->getOptimizationInfo().relationship == OptimizedMinerule::Dominance );
     assert( minerule->getParsedMinerule().mc!=NULL &&
 	    minerule->getParsedMinerule().mc->next==NULL);

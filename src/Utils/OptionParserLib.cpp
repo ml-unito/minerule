@@ -45,7 +45,7 @@ namespace minerule {
     OP_delete_buffer(buf);
   }
 
-  void pushOptionClassIntoContext(const std::string& oclass) throw(MineruleException){
+  void pushOptionClassIntoContext(const std::string& oclass)  {
     /* Here we have to push_back OptionBase pointers */
     assert(context.size()>0);
     context.push_back( &context.back()->subclassForName(oclass) );

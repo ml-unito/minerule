@@ -69,7 +69,7 @@ namespace minerule {
     }
   }
 
-  Interval::Operator Interval::getOperator( const char* op, bool negateIt ) const throw(MineruleException) {
+  Interval::Operator Interval::getOperator( const char* op, bool negateIt ) const {
     static const char* errMsg = "Do not know how to handle operator: ";
     bool twoCharOp = op[1]!='\0';
     if(op[0]=='<') {
@@ -99,7 +99,7 @@ namespace minerule {
 				    errMsg+ std::string(op) );
   }
 
-  int Interval::compareValues( const char* val1, const char* val2) const throw(MineruleException) {
+  int Interval::compareValues( const char* val1, const char* val2) const {
     assert(typeOk);
 
     if(val1==NEGINFTY) {
@@ -130,7 +130,7 @@ namespace minerule {
     }
   }
 
-  const char* Interval::getMaxLwr( Interval& lhs, Interval& rhs, bool& maxIsOpen ) const throw(MineruleException) {
+  const char* Interval::getMaxLwr( Interval& lhs, Interval& rhs, bool& maxIsOpen ) const {
     int order = compareValues(lhs.lwr, rhs.lwr);
       
     if( order<0 ) {
@@ -145,7 +145,7 @@ namespace minerule {
     }
   }
 
-  const char* Interval::getMinUpp( Interval& lhs, Interval& rhs, bool& minIsOpen ) const throw(MineruleException) {
+  const char* Interval::getMinUpp( Interval& lhs, Interval& rhs, bool& minIsOpen ) const {
     int order = compareValues(lhs.upp, rhs.upp);
 
     if( order<0 ) {
@@ -183,7 +183,7 @@ namespace minerule {
 
   
 
-  void Interval::update(const list_AND_node* l, bool negateIt) throw(MineruleException) {
+  void Interval::update(const list_AND_node* l, bool negateIt) {
     assert(l!=NULL && l->sp!=NULL && 
 	   l->sp->val1!=NULL && l->sp->op!=NULL && l->sp->val2!=NULL);
 
@@ -200,7 +200,7 @@ namespace minerule {
    * ======================================================================
    */
   
-  SQLUtils::Type IntervalChecker::typeForAttribute(const char* attr) throw(MineruleException, mrdb::SQLException) {
+  SQLUtils::Type IntervalChecker::typeForAttribute(const char* attr) {
     std::map<const char*, SQLUtils::Type>::const_iterator it = 
       typesMap.find(attr);
     

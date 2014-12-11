@@ -41,7 +41,7 @@ namespace minerule {
 
 
 	std::set<ItemType>*
-	IDIncrementalAlgorithm::fillValidItems(const std::string& constraints) const throw(mrdb::SQLException) {
+	IDIncrementalAlgorithm::fillValidItems(const std::string& constraints) const {
 		if(constraints=="")
 			return NULL;
 
@@ -120,7 +120,7 @@ bool IDIncrementalAlgorithm::checkInclusion(const std::set<ItemType>& validOnes,
 	}
 	
 	
-	void IDIncrementalAlgorithm::filterQueries(const ValidRules& validRules) throw(MineruleException,mrdb::SQLException) {
+	void IDIncrementalAlgorithm::filterQueries(const ValidRules& validRules) {
 		OptimizerCatalogue& cat = MineruleOptions::getSharedOptions().getOptimizations().getCatalogue();
 		
 		std::string resName = cat.getResultsetName(minerule->getOptimizationInfo().minerule.tab_result );
@@ -154,7 +154,7 @@ bool IDIncrementalAlgorithm::checkInclusion(const std::set<ItemType>& validOnes,
 
 
 	void 
-	IDIncrementalAlgorithm::execute() throw(MineruleException,mrdb::SQLException) {
+	IDIncrementalAlgorithm::execute() {
 		assert(minerule->getParsedMinerule().mc!=NULL);
 
 		MRLogPush("This is IDIncrementalAlgorithm. Starting...");

@@ -25,7 +25,7 @@
 namespace minerule {
 
 SQLUtils::Type
-SQLUtils::getType(mrdb::Types::SQLType type) throw(MineruleException) {
+SQLUtils::getType(mrdb::Types::SQLType type) {
   switch (type) {
   case mrdb::Types::BIGINT:
   case mrdb::Types::DECIMAL:
@@ -94,7 +94,7 @@ void SQLUtils::removeHeadBodyFromAttrName(std::string &str) {
 // not as clean and efficient as the one below.
 SQLUtils::Type SQLUtils::getType(mrdb::Connection *connection,
                                  const std::string &tabName,
-                                 std::string colName) throw(MineruleException) {
+                                 std::string colName) {
   removeHeadBodyFromAttrName(colName);
 
   try {
@@ -114,7 +114,7 @@ SQLUtils::Type SQLUtils::getType(mrdb::Connection *connection,
 // SQLUtils::Type SQLUtils::getType(mrdb::Connection *connection,
 //                                  const std::string &tabName,
 //                                  std::string colName)
-//                                  throw(MineruleException) {
+//                                  {
 //   removeHeadBodyFromAttrName(colName);
 //
 //   try {

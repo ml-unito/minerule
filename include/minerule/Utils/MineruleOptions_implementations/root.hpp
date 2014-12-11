@@ -94,7 +94,7 @@ private:
   void init();
 
   static long stringToLong(const std::string& value, const std::string& name)
-    throw(MineruleException) {
+    {
     Converter c(value);
     long result;
     try {
@@ -139,13 +139,13 @@ public:
   }
 
   virtual void setOption(const std::string& name, const std::string& value)
-    throw(MineruleException) {
+    {
     throw MineruleException(MR_ERROR_OPTION_PARSING,
 			      "Attempting to set an option in the root class");
   }
 
   virtual OptionBase& subclassForName(const std::string& oclass)
-    throw(MineruleException);
+    ;
 
   static
     MineruleOptions& getSharedOptions() {
@@ -156,10 +156,10 @@ public:
   }
 
   void
-    readFromFile(std::string filename) throw(MineruleException);
+    readFromFile(std::string filename) ;
 
   void
-    readFromString(const std::string&) throw(MineruleException, mrdb::SQLException);
+    readFromString(const std::string&) ;
 
 
   // set the name of the file from which the current

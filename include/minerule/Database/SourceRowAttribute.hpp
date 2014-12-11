@@ -197,8 +197,8 @@ public:
    * Serialization methods
    */
   virtual ElementType getElementType() const { return 'g'; }
-  virtual void serialize(std::ostream &os) const throw(MineruleException);
-  virtual void deserialize(std::istream &is) throw(MineruleException);
+  virtual void serialize(std::ostream &os) const ;
+  virtual void deserialize(std::istream &is) ;
 };
 
 /**
@@ -306,8 +306,8 @@ public:
    * Serialization methods
    */
   virtual ElementType getElementType() const { return 'n'; }
-  virtual void serialize(std::ostream &os) const throw(MineruleException);
-  virtual void deserialize(std::istream &is) throw(MineruleException);
+  virtual void serialize(std::ostream &os) const ;
+  virtual void deserialize(std::istream &is) ;
 };
 
 inline std::ostream &operator<<(std::ostream &os,

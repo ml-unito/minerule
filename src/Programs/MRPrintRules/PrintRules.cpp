@@ -36,33 +36,33 @@ using namespace minerule;
 namespace mrprint {
 
 	void
-	printRules(std::string queryname,	RuleFormatter& formatter, double conf) throw (MineruleException, mrdb::SQLException, std::exception) {
+	printRules(std::string queryname,	RuleFormatter& formatter, double conf) {
 		QueryResult::Iterator qit;
 		OptimizerCatalogue::getMRQueryResultIterator( queryname, qit, -1, conf );
-    
+
 		while( qit.next() ) {
 			Rule r;
 			qit.getRule(r);
-        
+
 			formatter.printRule(r);
 		}
-    
+
 		formatter.postExec();
 	}
-	
-	
+
+
 	std::string getQueryName(const Options& options) {
 		if( !options.queryName().empty() )
 			return options.queryName();
-		
+
 		return minerule::OptimizerCatalogue::getMRQueryName(options.queryNumber());
 	}
-	
-	
+
+
 	RuleFormatter* newFormatter(const Options& options) {
 		RuleFormatter* rf = NULL;
 		std::string sortOrder = options.sortOrder();
-		
+
 		if(sortOrder=="no") {
 				rf=new SimpleRuleFormatter();
 		} else if(sortOrder=="scbh") {
@@ -81,27 +81,27 @@ namespace mrprint {
 				printError("Unsupported sort order:" + sortOrder);
 				exit(MRPRINT_OPTION_PARSING_ERROR);
 		}
-    
+
 		if(rf==NULL) {
 			rf = new SimpleRuleFormatter();
 		}
-        
+
 		if( options.noLogArtifacts() )
 			rf->setSuppressLog(true);
-		
+
 		return rf;
 	}
 
 }
 
-int main(int argc, char** argv) {    
+int main(int argc, char** argv) {
 	try {
 		MineruleOptions& mr = MineruleOptions::getSharedOptions();
-		
+
 		RuleFormatter* rf=NULL;
 		double conf = -1;
 
-		mrprint::Options options(argc, argv);		
+		mrprint::Options options(argc, argv);
 		options.parse();
 
 		mr.readFromFile(options.mroptFileName());
@@ -110,17 +110,17 @@ int main(int argc, char** argv) {
 		if( options.noLowConfidenceFilter() ) {
 			conf = 0.0;
 		}
-		
-		
+
+
 		std::string queryName = getQueryName(options);
 
 		if(!rf->suppressLog()) MRLogPush("Printing result set...");
-		
+
 		mrprint::printRules( queryName, *rf, conf);
-		
+
 		if(!rf->suppressLog()) MRLogPop();
-		
-		
+
+
 		delete rf;
 	} catch ( minerule::MineruleException& e ) {
 		MRErr() << "MineruleError:" << e.what() << std::endl;
@@ -129,13 +129,13 @@ int main(int argc, char** argv) {
 		MRErr() << "SQLError:" << e.what() << std::endl;
 		throw;
 	}  catch (std::exception& e) {
-		MRErr() << "Couldn't execute your request, the reason is:" 
+		MRErr() << "Couldn't execute your request, the reason is:"
 			<< e.what() << std::endl;
 		throw;
 	}  catch (...) {
 		MRErr() << "Uncought exception!" << std::endl;
 		throw;
 	}
-    
+
 	return 0;
 }

@@ -199,7 +199,7 @@ namespace minerule {
      * The main algorithm. It starts the genetic algorithm and fills
      * the result object.
      */
-    void evolve() throw(TimeOutException);
+    void evolve() ;
 
     /**
      * Returns the result of the GA algorithm.

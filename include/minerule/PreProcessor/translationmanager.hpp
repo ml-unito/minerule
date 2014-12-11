@@ -139,7 +139,7 @@ class TranslationManager {
    */
   virtual pair<bool,string>
     alreadyTranslated(const std::string& tableName) const
-    throw(mrdb::SQLException) = 0;
+    = 0;
 };
 
 }

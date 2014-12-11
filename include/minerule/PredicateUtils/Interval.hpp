@@ -127,13 +127,13 @@ namespace minerule {
      * negation of the operator, e.g., getOperator("<=",false) returns
      * LessEq; getOperator("<=",true) returns Grt;
      */
-    Operator getOperator( const char* op, bool negateIt ) const throw(MineruleException);
+    Operator getOperator( const char* op, bool negateIt ) const ;
 
     /**
      * Returns -1 if val1<val2 0 if val1=val2 and 1 if val1>val2. The comparison is taken w.r.t. the
      * type reported by the "type" member variable.
      */
-    int compareValues( const char* val1, const char* val2) const throw(MineruleException);
+    int compareValues( const char* val1, const char* val2) const ;
     
     /**
      * @param lhs an Interval
@@ -145,7 +145,7 @@ namespace minerule {
      * with the usual mathematical notation. getMinUpp( (10,20], [11,15) ) returns 11 since 11 is the highest
      * lwr value, and sets maxIsOpen=false since [11,15) is closed on the left side.
      */
-    const char* getMaxLwr( Interval& lhs, Interval& rhs, bool& maxIsOpen ) const throw(MineruleException);
+    const char* getMaxLwr( Interval& lhs, Interval& rhs, bool& maxIsOpen ) const ;
 
     /**
      * @param lhs an Interval
@@ -157,7 +157,7 @@ namespace minerule {
      * with the usual mathematical notation. getMinUpp( (10,20], [11,15) ) returns 15 since 15 is the lowest
      * upp value, and sets minIsOpen=true since [11,15) is open on the right side.
      */
-    const char* getMinUpp( Interval& lhs, Interval& rhs, bool& minIsOpen ) const  throw(MineruleException);
+    const char* getMinUpp( Interval& lhs, Interval& rhs, bool& minIsOpen ) const  ;
 
 
   public:
@@ -186,7 +186,7 @@ namespace minerule {
     /**
      * Intersects the current interval with the one built from l->sp
      */
-    void update(const list_AND_node* l, bool negateIt) throw(MineruleException);
+    void update(const list_AND_node* l, bool negateIt) ;
 
 
     /**
@@ -257,7 +257,7 @@ namespace minerule {
      * accordingly. If it cannot determine the type, it throw an
      * exception.
      */
-    SQLUtils::Type typeForAttribute(const char* attr) throw(MineruleException, mrdb::SQLException);
+    SQLUtils::Type typeForAttribute(const char* attr) ;
 
     /**
      * @param l a list of predicates 

@@ -29,7 +29,7 @@ class IncrementalAlgorithm {
 
   virtual ~IncrementalAlgorithm() {}
 
-  virtual void execute() throw(MineruleException,mrdb::SQLException)=0;
+  virtual void execute() =0;
 
   static IncrementalAlgorithm* 
   newIncrementalAlgorithm(const OptimizedMinerule& mr);

@@ -23,11 +23,11 @@ private:
   void setParam(int, const std::string&);
   void freeParams();
 public:
-  PreparedStatement(PGconn* connection_, std::string sql) throw(mrdb::SQLException&);
+  PreparedStatement(PGconn* connection_, std::string sql);
   virtual ~PreparedStatement() { freeParams(); }
 
-  virtual bool execute() throw(mrdb::SQLException&);
-  virtual mrdb::ResultSet* executeQuery() throw(mrdb::SQLException&);
+  virtual bool execute();
+  virtual mrdb::ResultSet* executeQuery()  ;
 
   virtual void setDouble (int idx, double val);
   virtual void setInt (int idx, int val);

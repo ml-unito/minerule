@@ -26,7 +26,7 @@ public:
   }
   
   virtual void setOption(const std::string& name, const std::string& value)
-	throw(MineruleException);
+	;
 
   bool getOverwriteHomonymMinerules() const { return overwriteHomonymMinerules; };
   void setOverwriteHomonymMinerules(bool rhs) { overwriteHomonymMinerules = rhs; };

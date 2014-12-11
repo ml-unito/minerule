@@ -39,10 +39,10 @@ namespace minerule {
   class OptionBase {
   public:
     virtual void setOption(const std::string& name,const std::string& value)
-      throw(MineruleException)=0;
+      =0;
 
     virtual OptionBase& subclassForName(const std::string& subclassName)
-      throw(MineruleException) {
+      {
       throw MineruleException(MR_ERROR_OPTION_PARSING,
 			      className()+" does not support sub class named:"+
 			      subclassName);

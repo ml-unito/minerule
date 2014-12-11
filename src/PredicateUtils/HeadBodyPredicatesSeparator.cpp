@@ -18,7 +18,7 @@
 
 namespace minerule {
 
-	void HeadBodyPredicatesSeparator::setState( ConstraintClass& current, ConstraintClass newone )  throw(MineruleException) {
+	void HeadBodyPredicatesSeparator::setState( ConstraintClass& current, ConstraintClass newone )  {
 		if( current==NO_INFO || current==newone ) {
 			current=newone;
 			return;
@@ -31,7 +31,7 @@ namespace minerule {
 	} 
 
 	HeadBodyPredicatesSeparator::ConstraintClass
-	HeadBodyPredicatesSeparator::setStateAccordinglyToString(std::string& str, ConstraintClass state) throw(MineruleException)  {
+	HeadBodyPredicatesSeparator::setStateAccordinglyToString(std::string& str, ConstraintClass state)  {
 		std::string substr = str.substr(0,5);
 		if(substr=="BODY.")
 			setState(state, BODY_CONSTR);
@@ -58,7 +58,7 @@ namespace minerule {
 	void
 		HeadBodyPredicatesSeparator::separate(list_AND_node* l_and, 
 			std::string& bodyConstraints,
-	std::string& headConstraints) throw(MineruleException) {
+	std::string& headConstraints) {
 		if( l_and == NULL ) {
 			bodyConstraints = "1=1";
 			headConstraints = "1=1";

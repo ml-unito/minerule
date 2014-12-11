@@ -397,7 +397,7 @@ namespace minerule {
 	}
 
 
-	bool OptimizedMinerule::hasIDConstraints() const throw(MineruleException) {
+	bool OptimizedMinerule::hasIDConstraints() const {
 		return OptimizerCatalogue::hasIDConstraints(minerule);
 	}
 

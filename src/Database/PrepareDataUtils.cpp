@@ -312,7 +312,7 @@ namespace minerule {
 	}
 
 
-	size_t PrepareDataUtils::evaluateTotGroups(const ParsedMinerule& pmr) throw(MineruleException, mrdb::SQLException) {
+	size_t PrepareDataUtils::evaluateTotGroups(const ParsedMinerule& pmr) {
 		MRLogPush("Evaluating Number of groups...");
 		std::string qry=
 			"SELECT count(distinct " + buildAttrListDescription(pmr.ga) +") "

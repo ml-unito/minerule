@@ -19,7 +19,7 @@ public:
   /// the creation fails.
   /// @memory the returned object needs to be dealloced by the user once no
   /// longer needed.
-  virtual Statement *createStatement() throw(mrdb::SQLException &) = 0;
+  virtual Statement *createStatement() = 0;
 
   /// @param sql the sql command to be prepared. Parameters need to be specified
   /// using question marks, e.g., SELECT * FROM table WHERE id=?
@@ -29,8 +29,7 @@ public:
   /// the creation fails.
   /// @memory the returned object needs to be dealloced by the user once no
   /// longer needed.
-  virtual PreparedStatement *prepareStatement(const std::string &sql) throw(
-      mrdb::SQLException &) = 0;
+  virtual PreparedStatement *prepareStatement(const std::string &sql) = 0;
 
   /// @return the database meta data for this connection
   /// The returned object is owned by this class. The user

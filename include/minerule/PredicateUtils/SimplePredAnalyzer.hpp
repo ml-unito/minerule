@@ -28,12 +28,12 @@ namespace minerule {
   class SimplePredAnalyzer {
   protected:
     // operators are ordered as follows: "< <= = >= > <>"
-    static size_t getOperatorIndex(const char* op) throw( MineruleException );
+    static size_t getOperatorIndex(const char* op) ;
     // relations are ordered as follows "v1<v2 v1=v2 v1>v2"
     static size_t getValuesRelationshipIndex(
 		      const char* value1, 
 		      const char* value2, 
-		      SQLUtils::Type type) throw( MineruleException);
+		      SQLUtils::Type type) ;
 
      /* 
      * Given two predicates X=(x opx a) and Y=(y opy b) 
@@ -55,7 +55,7 @@ namespace minerule {
     static char 
       getRelation(const char* Xop, const char* Xvalue, 
 		  const char* Yop, const char* Yvalue, 
-		  SQLUtils::Type)  throw(MineruleException);
+		  SQLUtils::Type)  ;
 
     static bool 
       isAttrOpValuePredicate(simple_pred* X,

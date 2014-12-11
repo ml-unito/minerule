@@ -89,12 +89,12 @@ namespace minerule {
 	}
 
 	void
-	GenericSourceRowAttribute::serialize(std::ostream& os) const throw(MineruleException) {
+	GenericSourceRowAttribute::serialize(std::ostream& os) const {
 		os << " @[ " << value << "@] ";
 	}
 
 	void
-	GenericSourceRowAttribute::deserialize(std::istream& is) throw(MineruleException) {
+	GenericSourceRowAttribute::deserialize(std::istream& is) {
     // In order to avoid missing spaces etc. we resort to use istream::get method
     // instead of >> operator. This means that we need to read one char at a time
     // and implement a simple automata in order to parse the regular expression / @[ .* @] /
@@ -200,11 +200,11 @@ namespace minerule {
    */
 
 			void
-		NumericSourceRowAttribute::serialize(std::ostream& os) const throw(MineruleException)  {
+		NumericSourceRowAttribute::serialize(std::ostream& os) const {
 			os << " " << value << " ";
 		}
 
-		void NumericSourceRowAttribute::deserialize(std::istream& is) throw(MineruleException) {
+		void NumericSourceRowAttribute::deserialize(std::istream& is) {
 			std::string val;
 			is >> val;
 			try {

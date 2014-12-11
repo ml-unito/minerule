@@ -20,8 +20,7 @@
 namespace minerule {
 
   void
-  QueryResult::Iterator::readElems(int id, ItemSet& elems, mrdb::PreparedStatement* ps_elems)
-  throw (MineruleException, mrdb::SQLException, std::exception) {
+  QueryResult::Iterator::readElems(int id, ItemSet& elems, mrdb::PreparedStatement* ps_elems) {
     ps_elems->setInt(1,id);
     mrdb::ResultSet* rs = ps_elems->executeQuery();
 
@@ -44,7 +43,7 @@ namespace minerule {
   void
   QueryResult::Iterator::init( const std::string& rulesTable,
   double support,
-  double confidence ) throw( MineruleException, mrdb::SQLException ) {
+  double confidence ) {
     mrdb::Connection* mrdb_conn = MineruleOptions::getSharedOptions().getMRDB().getMRDBConnection();
     Connection connection;
     connection.setOutTableName(rulesTable);
@@ -74,7 +73,7 @@ namespace minerule {
     return rs_rules->next();
   }
 
-  void QueryResult::Iterator::getRule( Rule& r ) throw(MineruleException, mrdb::SQLException, std::exception) {
+  void QueryResult::Iterator::getRule( Rule& r ) {
     ItemSet* body = new ItemSet();
     ItemSet* head = new ItemSet();
     size_t bid, hid;

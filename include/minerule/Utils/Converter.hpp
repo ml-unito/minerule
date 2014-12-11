@@ -69,10 +69,10 @@ public:
       value = "False";
   }
 
-  std::string toString() const throw(MineruleException) { return value; }
+  std::string toString() const { return value; }
 
   double toDouble(unsigned int flags = ALLOW_QUOTES_IN_NUMBERS) const
-      throw(MineruleException) {
+      {
     char *endPtr = NULL;
     double result;
     const char *startChar;
@@ -127,7 +127,7 @@ public:
     return result;
   }
 
-  bool toBool() const throw(MineruleException) {
+  bool toBool() const {
     if (value == "True")
       return true;
     else if (value == "False")

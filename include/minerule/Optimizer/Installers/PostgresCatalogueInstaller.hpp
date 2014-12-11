@@ -24,22 +24,22 @@ namespace minerule {
 		PostgresCatalogueInstaller() : CatalogueInstaller() {}
 		virtual ~PostgresCatalogueInstaller () {};
 	
-		virtual void installMRQuery() throw(MineruleException, mrdb::SQLException);
-		virtual void installMRAttList() throw(MineruleException, mrdb::SQLException);
-		virtual void installMREqKeys() throw(MineruleException, mrdb::SQLException);
-		virtual void installMREqKeysCol() throw(MineruleException, mrdb::SQLException);
-		virtual void installMRDepFun() throw(MineruleException, mrdb::SQLException);
-		virtual void installMRDepFunCol() throw(MineruleException, mrdb::SQLException);
-		virtual void installMRAutoincrement() throw(MineruleException, mrdb::SQLException);
-		virtual void initializeAutoincrement() throw(MineruleException, mrdb::SQLException);	
+		virtual void installMRQuery() ;
+		virtual void installMRAttList() ;
+		virtual void installMREqKeys() ;
+		virtual void installMREqKeysCol() ;
+		virtual void installMRDepFun() ;
+		virtual void installMRDepFunCol() ;
+		virtual void installMRAutoincrement() ;
+		virtual void initializeAutoincrement() ;	
 
-		virtual void dropMRQuery() throw(MineruleException, mrdb::SQLException);
-		virtual void dropMRAttList() throw(MineruleException, mrdb::SQLException);
-		virtual void dropMREqKeys() throw(MineruleException, mrdb::SQLException);
-		virtual void dropMREqKeysCol() throw(MineruleException, mrdb::SQLException);
-		virtual void dropMRDepFun() throw(MineruleException, mrdb::SQLException);
-		virtual void dropMRDepFunCol() throw(MineruleException, mrdb::SQLException);
-		virtual void dropMRAutoincrement() throw(MineruleException, mrdb::SQLException);
+		virtual void dropMRQuery() ;
+		virtual void dropMRAttList() ;
+		virtual void dropMREqKeys() ;
+		virtual void dropMREqKeysCol() ;
+		virtual void dropMRDepFun() ;
+		virtual void dropMRDepFunCol() ;
+		virtual void dropMRAutoincrement() ;
 
 	};
 	

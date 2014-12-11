@@ -42,7 +42,7 @@ namespace minerule {
     removeHeadBodyFromAttrName( std::string& str );
 
     static Type
-      getType( mrdb::Types::SQLType ) throw(MineruleException);
+      getType( mrdb::Types::SQLType ) ;
 
     static Type
       getType( mrdb::ResultSet* rs, int colNum ) {
@@ -53,7 +53,7 @@ namespace minerule {
     static Type
       getType( mrdb::Connection* connection,
 	       const std::string& tabName,
-	       std::string colName ) throw (MineruleException);
+	       std::string colName );
 
     static bool
       isNumericType(mrdb::Types::SQLType type) {

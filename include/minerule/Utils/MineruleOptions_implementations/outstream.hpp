@@ -30,7 +30,7 @@ public:
   }
 
   virtual void setOption(const std::string& name,const std::string& value) 
-	throw(MineruleException);
+	;
 
   void setLogger(MRLogger& log) {
 	logger=&log;

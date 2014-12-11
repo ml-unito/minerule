@@ -157,19 +157,19 @@ std::string op;             // the operator involved
     void compactPredicates( list_AND_node*& l ) const;
     
     void relaxOperatorsInAndList(list_AND_node* andlist) 
-      throw(MineruleException,mrdb::SQLException);
+      ;
 
     void relaxOperatorInPred(simple_pred* pred) 
-      throw(MineruleException,mrdb::SQLException);
+      ;
 
    std::string getRelaxedValue(const std::string& tabSource,
 			   const std::string& attr,
 			   const std::string& op,
 			   const std::string& value) 
-      throw(MineruleException,mrdb::SQLException);
+      ;
 
     void relaxOperators(list_OR_node* cond) 
-      throw(MineruleException,mrdb::SQLException);
+      ;
 
     void cleanPredicate(list_OR_node*& cur) const;
   public:
@@ -188,7 +188,7 @@ std::string op;             // the operator involved
     }
 
     // As a side effect it normalizes the minerule mr
-    void normalize() throw(MineruleException,mrdb::SQLException);
+    void normalize() ;
   };
 
 } // namespace

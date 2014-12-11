@@ -77,7 +77,7 @@ public:
   virtual std::string getSQLData() const = 0;
 
   static SourceRowElement *
-  createElementFromType(ElementType el) throw(MineruleException);
+  createElementFromType(ElementType el) ;
 
   virtual ElementType getElementType() const {
     throw MineruleException(MR_ERROR_INTERNAL,
@@ -94,19 +94,19 @@ public:
     return std::string(chstr);
   }
 
-  virtual void serialize(std::ostream &os) const throw(MineruleException) = 0;
-  virtual void deserialize(std::istream &is) throw(MineruleException) = 0;
+  virtual void serialize(std::ostream &os) const = 0;
+  virtual void deserialize(std::istream &is) = 0;
 
   static SourceRowElement *deserializeElementFromString(
-      const std::string &strRepr) throw(MineruleException);
+      const std::string &strRepr) ;
 
   static SourceRowElement *
   deserializeElementFromResultSet(mrdb::ResultSet *rs,
-                                  size_t start_index) throw(MineruleException);
+                                  size_t start_index) ;
 
   static void
   serializeElementToString(const SourceRowElement &elem,
-                           std::string &strRepr) throw(MineruleException);
+                           std::string &strRepr) ;
 
   virtual std::ostream &operator<<(std::ostream &) const = 0;
 };
@@ -183,10 +183,10 @@ public:
   }
 
   virtual ElementType getElementType() const { return '0'; }
-  virtual void serialize(std::ostream &os) const throw(MineruleException) {
+  virtual void serialize(std::ostream &os) const {
     os << " NULL";
   }
-  virtual void deserialize(std::istream &is) throw(MineruleException) {
+  virtual void deserialize(std::istream &is) {
     std::string null;
     is >> null;
     if (null != " NULL")

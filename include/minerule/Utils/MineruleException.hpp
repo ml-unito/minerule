@@ -26,22 +26,22 @@ namespace minerule {
 class MineruleException : public std::exception {
   std::string message;
 	std::string formattedMessage;
-	
+
 	std::string file;
 	int line;
   size_t errorCode;
-	
-	void formatMessage();
- public:
-  MineruleException(std::string sourceFile, int sourceLine,  size_t errCode, std::string msg) throw(); 
 
-  virtual ~MineruleException() throw() {    
+	void formatMessage() _NOEXCEPT;
+ public:
+  MineruleException(std::string sourceFile, int sourceLine,  size_t errCode, std::string msg);
+
+  virtual ~MineruleException() _NOEXCEPT {
   }
 
-  virtual const char* what() const throw();
-	virtual const char* unformattedMessage() const throw();
+  virtual const char* what() const _NOEXCEPT ;
+	virtual const char* unformattedMessage() const _NOEXCEPT ;
 
-  virtual size_t getErrorCode() const {
+  virtual size_t getErrorCode() const _NOEXCEPT {
     return errorCode;
   }
 };

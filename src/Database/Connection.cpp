@@ -75,7 +75,7 @@ namespace minerule {
 
 	// Bisogna controllare che non esista già la tabella
 	// altrimenti va in errore !!
-	void Connection::createResultTables(const SourceRowMetaInfo& srd) throw(mrdb::SQLException, MineruleException) {
+	void Connection::createResultTables(const SourceRowMetaInfo& srd) {
 		if(MineruleOptions::getSharedOptions().getSafety().getOverwriteHomonymMinerules())
 			deleteDestTables();
 

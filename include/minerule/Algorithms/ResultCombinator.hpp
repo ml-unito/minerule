@@ -25,7 +25,7 @@ namespace minerule {
     ResultCombinator(const OptimizedMinerule& mr) : IncrementalAlgorithm(mr) {}
     virtual ~ResultCombinator() {}
 
-    virtual void execute() throw(MineruleException,mrdb::SQLException);
+    virtual void execute() ;
   };
 
 }

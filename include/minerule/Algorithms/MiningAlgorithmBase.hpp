@@ -52,7 +52,7 @@ namespace minerule {
 
   // Instantiate the algorithm specified by t
 		static MiningAlgorithmBase* algorithmForType(AlgorithmTypes t, const OptimizedMinerule&)
-			throw(MineruleException);
+			;
 	};
 
 	class MiningAlgorithm : public MiningAlgorithmBase {

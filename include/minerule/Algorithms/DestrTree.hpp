@@ -80,7 +80,7 @@ class DestrTree : public IncrementalAlgorithm {
     delete root;
   }
 
-  virtual void execute() throw(MineruleException,mrdb::SQLException);
+  virtual void execute() ;
 };
 
 } // namespace

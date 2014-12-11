@@ -7,8 +7,7 @@
 namespace mrdb {
 namespace postgres {
 
-PreparedStatement::PreparedStatement(PGconn *conn, std::string sql) throw(mrdb::SQLException &)
-    : connection_(conn) {
+PreparedStatement::PreparedStatement(PGconn *conn, std::string sql) : connection_(conn) {
   static int stmtCount = 0;
 
   std::pair<int, std::string> formattedSql = formatParams(sql);
@@ -29,7 +28,7 @@ PreparedStatement::PreparedStatement(PGconn *conn, std::string sql) throw(mrdb::
 }
 
 
-bool PreparedStatement::execute() throw(mrdb::SQLException &) {
+bool PreparedStatement::execute() {
   PGresult *result = PQexecPrepared(connection_, statementName_.c_str(), numParams_, params_, NULL, NULL, 0);
 
   int status = PQresultStatus(result);
@@ -44,7 +43,7 @@ bool PreparedStatement::execute() throw(mrdb::SQLException &) {
 }
 
 mrdb::ResultSet *
-PreparedStatement::executeQuery() throw(mrdb::SQLException &) {
+PreparedStatement::executeQuery() {
   PGresult *result = PQexecPrepared(connection_, statementName_.c_str(), numParams_, params_, NULL, NULL, 0);
 
   if (PQresultStatus(result) != PGRES_TUPLES_OK) {

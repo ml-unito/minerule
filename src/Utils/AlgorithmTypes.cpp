@@ -74,7 +74,7 @@ namespace minerule {
     return algoNames[t];
   }
 
-  AlgorithmTypes stringToAlgorithmType(const std::string& s) throw(MineruleException) {
+  AlgorithmTypes stringToAlgorithmType(const std::string& s) {
     AlgorithmTypes algoType;
     for( algoType=ATNone; algoType<ATEnd; algoType=static_cast<AlgorithmTypes>(algoType+1) ) {
       if(algoNames[algoType]==s) 

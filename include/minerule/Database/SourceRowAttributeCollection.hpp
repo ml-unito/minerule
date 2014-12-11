@@ -92,10 +92,10 @@ namespace minerule {
 	virtual std::string getFullElementType() const;
 
     virtual void
-    serialize(std::ostream& os) const throw(MineruleException);
+    serialize(std::ostream& os) const ;
 
     virtual void
-    deserialize(std::istream& is) throw(MineruleException);
+    deserialize(std::istream& is) ;
 
   };
 }

@@ -679,7 +679,7 @@ namespace minerule {
 
     // Substitutes < with <= and > with >=
     void QueryNormalizer::relaxOperators(list_OR_node* cond)
-    throw(MineruleException,mrdb::SQLException) {
+    {
         while( cond!=NULL ) {
             relaxOperatorsInAndList(cond->l_and);
             cond=cond->next;
@@ -690,7 +690,7 @@ namespace minerule {
                                                  const std::string& attr,
                                                  const std::string& op,
                                                  const std::string& value)
-    throw(MineruleException,mrdb::SQLException) {
+    {
         assert(op=="<" || op==">");
 
         mrdb::Connection* conn =
@@ -718,7 +718,7 @@ namespace minerule {
     }
 
     void QueryNormalizer::relaxOperatorInPred(simple_pred* pred)
-    throw(MineruleException,mrdb::SQLException) {
+    {
         std::string attribute;
         std::string op;
         std::string value;
@@ -780,7 +780,7 @@ namespace minerule {
     }
 
     void QueryNormalizer::relaxOperatorsInAndList(list_AND_node* andlist)
-    throw(MineruleException,mrdb::SQLException) {
+    {
         while(andlist!=NULL) {
             char* op=andlist->sp->op;
             if(!strcmp(op,"<") || !strcmp(op,">"))
@@ -809,7 +809,7 @@ namespace minerule {
      substitutions. At the present time it only handles A = B mappings
      (with A and B being single attributes).
      */
-    void QueryNormalizer::normalize() throw(MineruleException,mrdb::SQLException) {
+    void QueryNormalizer::normalize() {
         OptimizerCatalogue::Catalogue::const_iterator it = catalogue.find( mr->tab_source );
         if( it==catalogue.end() )
             return;  // no mapping info for this table

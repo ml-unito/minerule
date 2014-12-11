@@ -36,22 +36,22 @@ namespace minerule {
 		static CatalogueInstaller* newInstaller(SupportedDbms dbms);
 		static CatalogueInstaller* newInstaller();
 
-		virtual void installMRQuery() 			throw(MineruleException, mrdb::SQLException) = 0;
-		virtual void installMRAttList() 		throw(MineruleException, mrdb::SQLException) = 0;
-		virtual void installMREqKeys() 			throw(MineruleException, mrdb::SQLException) = 0;
-		virtual void installMREqKeysCol() 		throw(MineruleException, mrdb::SQLException) = 0;
-		virtual void installMRDepFun() 			throw(MineruleException, mrdb::SQLException) = 0;
-		virtual void installMRDepFunCol() 		throw(MineruleException, mrdb::SQLException) = 0;
-		virtual void installMRAutoincrement() 	throw(MineruleException, mrdb::SQLException) = 0;
-		virtual void initializeAutoincrement() 	throw(MineruleException, mrdb::SQLException) = 0;
+		virtual void installMRQuery() 			= 0;
+		virtual void installMRAttList() 		= 0;
+		virtual void installMREqKeys() 			= 0;
+		virtual void installMREqKeysCol() 		= 0;
+		virtual void installMRDepFun() 			= 0;
+		virtual void installMRDepFunCol() 		= 0;
+		virtual void installMRAutoincrement() 	= 0;
+		virtual void initializeAutoincrement() 	= 0;
 
-		virtual void dropMRQuery() 			throw(MineruleException, mrdb::SQLException) = 0;
-		virtual void dropMRAttList() 		throw(MineruleException, mrdb::SQLException) = 0;
-		virtual void dropMREqKeys() 		throw(MineruleException, mrdb::SQLException) = 0;
-		virtual void dropMREqKeysCol() 		throw(MineruleException, mrdb::SQLException) = 0;
-		virtual void dropMRDepFun() 		throw(MineruleException, mrdb::SQLException) = 0;
-		virtual void dropMRDepFunCol() 		throw(MineruleException, mrdb::SQLException) = 0;
-		virtual void dropMRAutoincrement() 	throw(MineruleException, mrdb::SQLException) = 0;
+		virtual void dropMRQuery() 			= 0;
+		virtual void dropMRAttList() 		= 0;
+		virtual void dropMREqKeys() 		= 0;
+		virtual void dropMREqKeysCol() 		= 0;
+		virtual void dropMRDepFun() 		= 0;
+		virtual void dropMRDepFunCol() 		= 0;
+		virtual void dropMRAutoincrement() 	= 0;
 
 
 		virtual void install() {
@@ -67,7 +67,7 @@ namespace minerule {
 			initializeAutoincrement();
 		}
 
-		virtual void uninstall() throw( MineruleException, mrdb::SQLException ) {
+		virtual void uninstall() {
 			dropMRQuery();
 			dropMRAttList();
 			dropMREqKeys();

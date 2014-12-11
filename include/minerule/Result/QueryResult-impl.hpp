@@ -25,7 +25,7 @@ namespace minerule {
 
   template <class Sorter>
 	void 
-	QueryResult::ResultSet<Sorter>::load(const std::string& qryName, double sup, double con) throw(MineruleException) {
+	QueryResult::ResultSet<Sorter>::load(const std::string& qryName, double sup, double con) {
 		QueryResult::Iterator qit;
 		OptimizerCatalogue::getMRQueryResultIterator(qryName,qit,sup,con);
 

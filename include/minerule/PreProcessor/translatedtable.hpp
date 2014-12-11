@@ -31,15 +31,15 @@ class TranslationManager;
 class TranslatedTable {
 public:
   /**
-   * @return the name of the translated table. The returned value 
-   * can be used to form queries involving the translated values. 
+   * @return the name of the translated table. The returned value
+   * can be used to form queries involving the translated values.
    */
-  virtualstd::string getTranslatedName() const throw (mrdb::SQLException) = 0;
+  virtualstd::string getTranslatedName() const = 0;
 
   /**
-   * @return the name of the original table. 
+   * @return the name of the original table.
    */
-virtual std::string getOriginalName() const  throw (mrdb::SQLException) = 0;
+virtual std::string getOriginalName() const = 0;
 
   /**
    * Takes a column name of the current table and returns its translated name.
@@ -48,8 +48,8 @@ virtual std::string getOriginalName() const  throw (mrdb::SQLException) = 0;
    * @param columnName the name of a table column
    * @return the name of the translated column
    */
-virtual std::string getTranslatedColumnName( const std::string& columnName) const  throw (mrdb::SQLException) = 0; 
-  
+virtual std::string getTranslatedColumnName( const std::string& columnName) const = 0;
+
   /* Cannot see any use for this method... if needed I will add it in future
    * @param translatedColumnName a column name of the translated table
    * @return the name, in the original table, of the column named
@@ -63,15 +63,15 @@ virtual std::string getTranslatedColumnName( const std::string& columnName) cons
    * @return the translatedValue
    */
 virtual std::string getTranslatedValue( const std::string& columnName,
-			     const std::string& value) const  throw (mrdb::SQLException) = 0;
-  
+			     const std::string& value) const = 0;
+
   /**
    * @param columnName a column name of the original table
    * @param translatedValue a translated value
    * @return the value of translatedValue in the original table
    */
 virtual std::string getOriginalValue( const std::string& columnName,
-			   const std::string& translatedValue) const  throw (mrdb::SQLException) = 0;
+			   const std::string& translatedValue) const = 0;
 };
 
 }

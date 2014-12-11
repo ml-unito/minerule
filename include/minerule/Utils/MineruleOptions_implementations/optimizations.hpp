@@ -41,7 +41,7 @@ public:
 	}
 	
 	virtual void setOption(const std::string& name, const std::string& value)
-	  throw(MineruleException);
+	  ;
 
 	float getTimeOutThreshold() const { return timeOut; }
 	size_t getMaxDisjuncts() const {return maxDisjuncts;}
@@ -80,10 +80,10 @@ public:
   }
 
   virtual void setOption(const std::string& name,const std::string& value) 
-	throw(MineruleException);
+	;
 
   virtual OptionBase& subclassForName(const std::string& subclassName) 
-  throw(MineruleException) {
+  {
 	if( subclassName=="combinator" ) {
 	  return combinator;
 	} else {

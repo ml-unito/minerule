@@ -1,7 +1,0 @@
-select gid,item,price from Sales as BODY where BODY.price > 100 order by gid, item
-select gid,item from Sales as HEAD where HEAD.price > 100 order by gid, item
-
-select gid,item from fimiretail order by gid, item
-select gid,item from fimiretail order by gid, item
-
-select * from mrSales_Price_gt_100_tmpSource;

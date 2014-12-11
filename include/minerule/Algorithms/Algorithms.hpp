@@ -36,14 +36,14 @@ class Algorithms {
 
   /// It executes the provided minerule and stores the results in the database. It exploits the optimization
   /// info to select the best option.
-  static void executeMinerule(OptimizedMinerule& mr) throw(MineruleException,mrdb::SQLException,std::exception);
+  static void executeMinerule(OptimizedMinerule& mr) ;
 
   /// It executes a rule extraction algorithm.
-  static void executeExtractionAlgorithm(OptimizedMinerule& mr) throw(MineruleException,mrdb::SQLException,std::exception);
+  static void executeExtractionAlgorithm(OptimizedMinerule& mr) ;
 
   /// It execute an incremental algorithm. It returns false if an algorithm with the required properties has not yet
   /// been implemented.
-  static bool executeIncrementalAlgorithm(OptimizedMinerule& mr) throw(MineruleException,mrdb::SQLException,std::exception);
+  static bool executeIncrementalAlgorithm(OptimizedMinerule& mr) ;
 
   /// @return an instance of the best rule mining algorithm available for the given mine rule.
   static MiningAlgorithmBase* getBestRulesMiningAlgorithm(const OptimizedMinerule& mr);
@@ -55,7 +55,7 @@ class Algorithms {
   static MiningAlgorithmBase* getBestSequencesMiningAlgorithm( const OptimizedMinerule& mr );
 
 private:
-	static void checkAndHandleHomonymMinerules(OptimizedMinerule& mr) throw(MineruleException, mrdb::SQLException, std::exception);
+	static void checkAndHandleHomonymMinerules(OptimizedMinerule& mr) ;
 	static void showDebugInfo(const std::string& msg, OptimizedMinerule& mr);
 };
 

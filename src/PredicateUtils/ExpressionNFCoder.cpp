@@ -26,7 +26,7 @@ namespace minerule {
 
   EncodedNF
   ExpressionNFCoder::encode(Predicate& ee) 
-    throw(MineruleException) {
+    {
 
     cleanBuf();
 

@@ -17,8 +17,8 @@ public:
   Connection(const std::string &db, const std::string &user, const std::string &pwd);
   virtual ~Connection();
 
-  virtual mrdb::Statement *createStatement() throw(mrdb::SQLException&);
-  virtual mrdb::PreparedStatement *prepareStatement(const std::string &sql) throw(mrdb::SQLException&);
+  virtual mrdb::Statement *createStatement();
+  virtual mrdb::PreparedStatement *prepareStatement(const std::string &sql);
 
   virtual DatabaseMetaData* getMetaData();
 };

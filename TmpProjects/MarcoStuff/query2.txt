@@ -1,2 +1,0 @@
-select gid,item from T20I6D100K as BODY order by gid, item
-select gid,item from T20I6D100K as HEAD order by gid, item

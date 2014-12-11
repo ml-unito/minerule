@@ -29,9 +29,9 @@ namespace mrc {
 		  Exception(mrc::Results res,
 			  const std::string& msg) :  result(res),errmsg(msg) { }
 
-		  virtual ~Exception() throw() {};
+		  virtual ~Exception() _NOEXCEPT {};
 
-		  virtual const char* what() const throw () {
+		  virtual const char* what() const _NOEXCEPT {
 			  return errmsg.c_str();
 		  }
 

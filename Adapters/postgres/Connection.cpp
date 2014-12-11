@@ -36,11 +36,11 @@ Connection::~Connection() {
   }
 }
 
-mrdb::Statement *Connection::createStatement() throw(mrdb::SQLException&) {
+mrdb::Statement *Connection::createStatement() {
   return new mrdb::postgres::Statement(connection_);
 }
 
-mrdb::PreparedStatement *Connection::prepareStatement(const std::string& sql) throw(mrdb::SQLException&) {
+mrdb::PreparedStatement *Connection::prepareStatement(const std::string& sql) {
   return new mrdb::postgres::PreparedStatement(connection_, sql);
 }
 

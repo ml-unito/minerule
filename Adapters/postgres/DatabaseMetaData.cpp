@@ -96,16 +96,30 @@ Types::SQLType DatabaseMetaData::getColumnType(const std::string &tableName, con
 
 mrdb::ResultSet* DatabaseMetaData::getColumns() {
   std::string sql =
-  "SELECT  c.relname TABLE_NAME, "
-  "        f.attname COLUMN_NAME, "
-  "        pg_catalog.format_type(f.atttypid,f.atttypmod) AS COLUMN_TYPE "
-  "FROM pg_attribute f "
-  "JOIN pg_class c ON c.oid = f.attrelid  "
-  "WHERE c.relkind = 'r'::char  "
-  "AND f.attnum > 0 "
-  "ORDER BY c.relname, f.attnum";
+    "SELECT c.relname as TABLE_NAME, "
+    "f.attname as COLUMN_NAME, "
+    "pg_catalog.format_type(f.atttypid,f.atttypmod) AS COLUMN_TYPE "
+    "FROM pg_catalog.pg_class c "
+    "LEFT JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace "
+    "JOIN pg_attribute f ON c.oid = f.attrelid "
+    "WHERE c.relkind = 'r' "
+    "AND n.nspname <> 'pg_catalog' "
+    "AND n.nspname <> 'information_schema' "
+    "AND n.nspname !~ '^pg_toast' "
+    "AND pg_catalog.pg_table_is_visible(c.oid) "
+    "AND f.attnum > 0 "
+    "ORDER BY c.relname, f.attnum";
 
-  return new mrdb::postgres::ResultSet(connection_, PQexec(connection_, sql.c_str()));
+  PGresult *result = PQexec(connection_, sql.c_str());
+  if(PQresultStatus(result)!=PGRES_TUPLES_OK) {
+    std::string errorMessage = PQresultErrorMessage(result);
+    PQclear(result);
+
+    throw mrdb::SQLException(errorMessage);
+  }
+
+
+  return new mrdb::postgres::ResultSet(connection_, result);
 }
 
 } // namespace mrdb

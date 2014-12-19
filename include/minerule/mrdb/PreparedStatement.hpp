@@ -18,7 +18,9 @@ namespace mrdb {
     ///   anything goes wrong.
     virtual bool execute() = 0;
 
-    /// Execute this statement
+    /// Execute this statement.
+    /// THREAD SAFETY: It returns a ResultSet that should be consumed by the same
+    ///                thread that owns this object.
     /// @return a ResultSet
     /// @throws a MineruleException (with error code MR_ERROR_DATABASE_ERROR) if
     ///   anything goes wrong.

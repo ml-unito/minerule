@@ -9,10 +9,10 @@ namespace mrdb {
 namespace postgres {
 class Statement : public mrdb::Statement {
 private:
-  PGconn* connection_; // weak reference to the connection
+  PGconn* connection_; // strong reference to the connection
 public:
   Statement(PGconn* connection) : connection_(connection) {}
-  virtual ~Statement() {}
+  virtual ~Statement() { PQfinish(connection_); }
 
   virtual mrdb::ResultSet *executeQuery(const std::string &sql)  ;
   virtual bool execute(const std::string &sql)  ;

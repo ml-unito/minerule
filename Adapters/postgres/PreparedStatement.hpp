@@ -13,7 +13,7 @@ namespace postgres {
 
 class PreparedStatement : public mrdb::PreparedStatement {
 private:
-  PGconn *connection_;
+  PGconn *connection_;    // strong reference
   std::string statementName_;
   int numParams_;
   char **params_;
@@ -24,9 +24,10 @@ private:
   void freeParams();
 public:
   PreparedStatement(PGconn* connection_, std::string sql);
-  virtual ~PreparedStatement() { freeParams(); }
+  virtual ~PreparedStatement() { freeParams(); PQfinish(connection_); }
 
   virtual bool execute();
+
   virtual mrdb::ResultSet* executeQuery()  ;
 
   virtual void setDouble (int idx, double val);

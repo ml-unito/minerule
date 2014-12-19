@@ -74,7 +74,7 @@ std::string ResultSetMetaData::getColumnTypeName(int column) {
   std::string query = "SELECT  pg_catalog.format_type(f.atttypid,f.atttypmod) AS type "
         "FROM pg_attribute f "
         "JOIN pg_class c ON c.oid = f.attrelid  "
-        "WHERE c.relkind = 'r'::char  "
+        "WHERE c.relkind in ('r', 'v') "
         "AND c.relname = '"  + getTableName(column) + "' "
         "AND f.attname = '" + getColumnName(column) + "' ";
 

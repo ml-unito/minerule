@@ -11,10 +11,10 @@
 namespace mrdb {
 namespace postgres {
 class DatabaseMetaData : public mrdb::DatabaseMetaData {
-  PGconn *connection_; // weak ref
+  PGconn *connection_; // strong ref
 public:
   DatabaseMetaData(PGconn* connection) : connection_(connection) {};
-  virtual ~DatabaseMetaData() {}
+  virtual ~DatabaseMetaData() { PQfinish(connection_); }
 
   virtual mrdb::ResultSet* getTables(const std::string& tableNamePattern);
   virtual mrdb::Types::SQLType getColumnType(const std::string& tableName, const std::string& columnName);

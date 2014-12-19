@@ -37,6 +37,8 @@ public:
   /// given column index.
   virtual std::string getString(int columnIndex) = 0;
 
+  /// THREAD SAFETY: It returns a ResultSetMetaData that should be used by the same 
+  ///                thread that owns this object.
   /// @return the meta data about this result set
   virtual mrdb::ResultSetMetaData* getMetaData() = 0;
 };

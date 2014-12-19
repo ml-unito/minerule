@@ -13,6 +13,8 @@ public:
   virtual ~Statement() {}
 
   /// Executes the given query and build the correspondig result set.
+  /// THREAD SAFETY: It returns a ResultSet that should be consumed by the same
+  ///                thread that owns this object.
   /// @return the ResultSet
   /// @memory the caller is responsible of deallocing the result set once it is no longer
   ///   needed.

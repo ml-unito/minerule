@@ -9,13 +9,15 @@ namespace mrdb {
 namespace postgres {
 class Connection : public mrdb::Connection {
 private:
-  PGconn *connection_;
-  DatabaseMetaData* metadata_;
+  std::string db_;
+  std::string user_;
+  std::string pwd_;
 
-  // std::string formatParams(std::string sql) const;
+  PGconn* connect() const;
 public:
-  Connection(const std::string &db, const std::string &user, const std::string &pwd);
-  virtual ~Connection();
+  Connection(const std::string &db, const std::string &user, const std::string &pwd) :
+    db_(db), user_(user), pwd_(pwd) {};
+  virtual ~Connection() {};
 
   virtual mrdb::Statement *createStatement();
   virtual mrdb::PreparedStatement *prepareStatement(const std::string &sql);

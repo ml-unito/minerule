@@ -10,46 +10,33 @@
 namespace mrdb {
 namespace postgres {
 
-Connection::Connection( const std::string &db,
-                        const std::string &user,
-                        const std::string &pwd) : metadata_(NULL) {
+PGconn* Connection::connect() const {
   std::string connectionString =
-      "host=localhost dbname=" + db + " user=" + user + " password=" + pwd;
+      "host=localhost dbname=" + db_ + " user=" + user_ + " password=" + pwd_;
 
-  connection_ = PQconnectdb(connectionString.c_str());
+  PGconn* connection = PQconnectdb(connectionString.c_str());
 
-  if (PQstatus(connection_) != CONNECTION_OK) {
-    std::string msg(PQerrorMessage(connection_));
-    PQfinish(connection_);
-    connection_ = NULL;
+  if (PQstatus(connection) != CONNECTION_OK) {
+    std::string msg(PQerrorMessage(connection));
+    PQfinish(connection);
+    connection = NULL;
 
     throw mrdb::SQLException(msg);
   }
-}
 
-Connection::~Connection() {
-  if (connection_ != NULL)
-    PQfinish(connection_);
-
-  if(metadata_ != NULL) {
-    delete metadata_;
-  }
+  return connection;
 }
 
 mrdb::Statement *Connection::createStatement() {
-  return new mrdb::postgres::Statement(connection_);
+  return new mrdb::postgres::Statement(connect());
 }
 
 mrdb::PreparedStatement *Connection::prepareStatement(const std::string& sql) {
-  return new mrdb::postgres::PreparedStatement(connection_, sql);
+  return new mrdb::postgres::PreparedStatement(connect(), sql);
 }
 
 mrdb::DatabaseMetaData* Connection::getMetaData() {
-  if(metadata_==NULL) {
-    metadata_ = new mrdb::postgres::DatabaseMetaData(connection_);
-  }
-
-  return metadata_;
+  return new mrdb::postgres::DatabaseMetaData(connect());
 }
 
 

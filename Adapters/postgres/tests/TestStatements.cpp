@@ -94,6 +94,10 @@ void cleanupFixtures() {
   PQfinish(connection);
 }
 
+TEST_CASE("Thread safety") {
+  REQUIRE(PQisthreadsafe() == 1);
+}
+
 TEST_CASE("Connection") {
   mrdb_test::connect = load_mrdb_pg_dylib();
 
@@ -107,6 +111,8 @@ TEST_CASE("Connection") {
     REQUIRE_THROWS(
       std::unique_ptr<mrdb::Connection> conn(
         mrdb_test::connect("bad-db-name", "no-user", "nopwd"));
+
+      conn->createStatement();
     );
   }
 

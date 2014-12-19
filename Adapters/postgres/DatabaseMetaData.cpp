@@ -102,7 +102,7 @@ mrdb::ResultSet* DatabaseMetaData::getColumns() {
     "FROM pg_catalog.pg_class c "
     "  LEFT JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace "
     "  JOIN pg_attribute f ON c.oid = f.attrelid "
-    "WHERE c.relkind = 'r' "
+    "WHERE c.relkind in ('r','v') "
     "  AND n.nspname <> 'pg_catalog' "
     "  AND n.nspname <> 'information_schema' "
     "  AND n.nspname !~ '^pg_toast' "

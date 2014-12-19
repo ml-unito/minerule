@@ -28,6 +28,11 @@ namespace minerule {
 
 	std::vector<std::string>* StringUtils::splitToLength(const std::string& str, size_t out_len) {
 		std::vector<std::string>* result = new std::vector<std::string>;
+		if(str.size() <= out_len) {
+			result->push_back(str);
+			return result;
+		}
+
 		size_t len = str.size();
 		size_t cur_pos = 0;
 		while( cur_pos < len ) {

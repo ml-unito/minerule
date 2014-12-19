@@ -3,6 +3,10 @@
 
 #include <stdexcept>
 
+#ifndef _NOEXCEPT
+#define _NOEXCEPT throw()
+#endif
+
 namespace mrdb {
 
 class SQLException : public std::runtime_error {

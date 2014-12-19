@@ -21,6 +21,10 @@
 #include <string>
 #include "minerule/Utils/MineruleErrors.hpp"
 
+#ifndef _NOEXCEPT
+#define _NOEXCEPT throw()
+#endif
+
 namespace minerule {
 
 class MineruleException : public std::exception {

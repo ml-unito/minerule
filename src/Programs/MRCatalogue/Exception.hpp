@@ -20,6 +20,10 @@
 #include <exception>
 #include <string>
 
+#ifndef _NOEXCEPT
+#define _NOEXCEPT throw()
+#endif
+
 namespace mrc {
 
 	class Exception : public std::exception {

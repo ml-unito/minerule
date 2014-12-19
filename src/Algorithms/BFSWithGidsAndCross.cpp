@@ -115,7 +115,7 @@ namespace minerule {
 	}
   */
 	void BFSWithGidsAndCross::BodyMap::pruneMap (float threshold) {
-		BodyMap newMap(*connection);
+		BodyMap newMap(*connection, *progress);
 		for (iterator i = begin(); i != end(); i++)
 			if (i->second.pruneMap(threshold)) newMap[i->first] = i->second;
 		(*this) = newMap;
@@ -202,6 +202,8 @@ namespace minerule {
 		int howManyRules = 0;
 		float threshold = support*totGroups;
 		for (iterator i = begin(); i != end(); i++) {
+			progress->tick();
+
 			NewRule r(i,i->second);
 			rs1.insert(rs1.end(),r);
 		}
@@ -214,6 +216,8 @@ namespace minerule {
 			if (rc.body.size() < (size_t)maxBody) {
 				BodyMap::iterator lb = rc.lastBody;
 				for (BodyMap::iterator j = ++lb; j != end(); j++) {
+					progress->tick();
+
 					NewRule& rc2 = *(rs1.begin()+n);
 					GidList newGidList;
 					set_intersection(rc2.gids.begin(),rc2.gids.end(),
@@ -295,14 +299,14 @@ namespace minerule {
 
 		MRLog() << "Preparing data sources..." << std::endl;
 		prepareData();
-
+		Progress progress(200);
 
 		float support = options.getSupport();
 		int maxBody = options.getBodyCardinalities().getMax();
 		int maxHead = options.getHeadCardinalities().getMax();
 
 		ItemType gid1;
-		BodyMap bodyMap(connection);
+		BodyMap bodyMap(connection, progress);
 
 		int totalGroups = sourceTable->getTotGroups();
 		int howManyRows = 0;
@@ -332,7 +336,9 @@ namespace minerule {
 		MRLog() << "Total bodies after pruning: " << bodyMap.size() << std::endl;
 		NewRuleSet rs;
 
+		progress.start();
 		int nrules = bodyMap.generateRules(support,totalGroups,maxBody,maxHead);
+		progress.end();
 		MRLog() << "After extracting rules, rules: " << nrules << std::endl;
 
 		MRLogPop();

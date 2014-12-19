@@ -74,7 +74,8 @@ set(utils_src
 	Utils/MineruleLogs.cpp
 	Utils/SQLUtils.cpp
 	Utils/StringUtils.cpp
-	Utils/MineruleException.cpp)
+	Utils/MineruleException.cpp
+	Utils/Progress.cpp)
 
 set(parsers_src
 	${BISON_MRPARSER_OUTPUTS}
@@ -94,13 +95,13 @@ file(GLOB installers_src Optimizer/Installers/*.cpp)
 file(GLOB predicateutils_src PredicateUtils/*.cpp)
 file(GLOB result_src Result/*.cpp)
 
-add_library(minerule 
+add_library(minerule
+	${utils_src}
 	${algorithms_src}
 	${mrdatabase_src}
 	${optimizer_src}
 	${installers_src}
 	${predicateutils_src}
-	${utils_src}
 	${parsers_src}
 	${result_src} )
 

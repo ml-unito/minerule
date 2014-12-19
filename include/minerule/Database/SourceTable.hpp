@@ -33,13 +33,11 @@ public:
     SourceRowColumnIds _columnIds;
     SourceRow *_sourceRow;
     size_t _rowCounter;
-    bool _silent;
 
-    Iterator(mrdb::ResultSet *resultSet, const SourceRowColumnIds &columnIds,
-             bool silent)
+    Iterator(mrdb::ResultSet *resultSet, const SourceRowColumnIds &columnIds)
         : _resultSet(resultSet), _columnIds(columnIds),
-          _sourceRow(new SourceRow()), _rowCounter(0), _silent(silent) {
-
+          _sourceRow(new SourceRow()), _rowCounter(0) {
+						
       assert(_resultSet != NULL);
       if (_resultSet->isBeforeFirst()) {
         next();
@@ -47,12 +45,13 @@ public:
     }
 
   public:
-    Iterator() : _resultSet(NULL), _columnIds(), _sourceRow(NULL) {}
+    Iterator() : _resultSet(NULL), _columnIds(), _sourceRow(NULL) { }
     Iterator(const Iterator &it)
         : _resultSet(it._resultSet), _columnIds(it._columnIds),
-          _sourceRow(it._sourceRow) {}
+          _sourceRow(it._sourceRow) {  }
 
-    virtual ~Iterator() {}
+    virtual ~Iterator() {
+    }
 
     bool next();
     bool isAfterLast() const;

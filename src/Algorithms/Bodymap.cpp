@@ -89,7 +89,7 @@ void BodyMapElement::setMinMax (int which, int v) {
 	MinMax mm;
 	for (int i=attribute.size(); i<=which; i++) {
 		attribute.insert(attribute.end(),mm);
-	} 
+	}
 	if (attribute[which].minValue() > v) attribute[which].min = v;
 	if (attribute[which].maxValue() < v) attribute[which].max = v;
 }
@@ -378,7 +378,7 @@ int BodyMap::buildRules (NewRuleSet& rs2, NewRule rc, BodyMap::iterator p, float
 	bool intersect = rc.gids.size() > 0;
 	while (p != end()) {
 		GidList newGidList(p->second);
-		if (intersect) 
+		if (intersect)
 			newGidList &= rc.gids;
 		//else newGidList = p->second;
 		if (newGidList.moreThan(threshold)) {
@@ -422,7 +422,7 @@ void BodyMap::howManyItemsets () {
 
 void BodyMap::saveItemset( const NewRule& r,
                            double bodySupp ) {
-    int c = r.gids.count();	
+    int c = r.gids.count();
     connection->insert( r.body,
                          r.head,
                          c/totGroups,
@@ -435,7 +435,7 @@ void BodyMap::saveRules( const NewRuleSet& rs,
     bool bodyID = true;
     int c;
     for(it=rs.begin(); it!=rs.end(); it++) {
-      c = it->gids.count();	
+      c = it->gids.count();
       connection->insert( it->body,
                           it->head,
                           c/totGroups,
@@ -451,7 +451,7 @@ void BodyMap::saveItemsets( const NewRuleSet& rs,
     NewRuleSet::const_iterator it = rs.begin();
     int c;
     for(it=rs.begin(); it!=rs.end(); it++) {
-	c = it->gids.count();	
+	c = it->gids.count();
         connection->insert( it->body,
                             it->head,
                             c/totGroups,

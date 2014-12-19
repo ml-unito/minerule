@@ -55,35 +55,35 @@ namespace minerule {
 
 	  GidList gids;
 	  int bodySupp;
-	 
+
 	  NewRule( const NewRule& r ) : lastBody(r.lastBody), body(r.body), head(r.head), headTable(r.headTable), conf(r.conf), gids(r.gids), bodySupp(r.bodySupp) {
 		  if( r.lastHead == r.headTable.end() )
 			  lastHead = headTable.end();
-		  else 
-			  lastHead = headTable.find( r.lastHead->first );		  
+		  else
+			  lastHead = headTable.find( r.lastHead->first );
 	  }
 
 	  NewRule (std::map<ItemType, BodyMapElement>::iterator b, GidList& g) : lastBody(b), gids(g) {
 		  body.push_back(b->first);
 		  headTable = b->second.heads;
-		  lastHead = headTable.begin();		  
-	  }
-	  
-	  NewRule (NewRule& r, std::map<ItemType, BodyMapElement>::iterator b, GidList& g) : body(r.body), lastBody(b), gids(g) {
-		  body.push_back(b->first);
-		  headTable = hash_intersection( r.headTable, b->second.heads );		  
 		  lastHead = headTable.begin();
 	  }
-	  
+
+	  NewRule (NewRule& r, std::map<ItemType, BodyMapElement>::iterator b, GidList& g) : body(r.body), lastBody(b), gids(g) {
+		  body.push_back(b->first);
+		  headTable = hash_intersection( r.headTable, b->second.heads );
+		  lastHead = headTable.begin();
+	  }
+
 	  NewRule (NewRule& r, std::map<ItemType, BodyMapElement>::iterator b, GidList& g, int bs) : body(r.body), head(r.head), headTable(r.headTable), lastBody(b), lastHead(r.lastHead), gids(g), bodySupp(bs) {
 		  body.push_back(b->first);
 	  }
-	  
+
 	  NewRule (NewRule& r, std::map<ItemType, MapElement>::iterator h, GidList& g) : body(r.body), head(r.head), headTable(r.headTable), lastBody(r.lastBody), gids(g), bodySupp(r.bodySupp) {
-		  head.push_back(h->first);		  
+		  head.push_back(h->first);
 		  lastHead = headTable.find( h->first );
 	  }
-	  
+
 	  friend std::ostream& operator<<(std::ostream& out, NewRule r) {
 		  std::vector<ItemType>::iterator i;
 		  for (i=r.body.begin(); i!=r.body.end(); i++) {
@@ -98,7 +98,7 @@ namespace minerule {
 		  out << std::endl;
 		  return out;
 	  }
-	  
+
   private:
 	  static std::map<ItemType, MapElement> hash_intersection( std::map<ItemType, MapElement>& lhs, const std::map<ItemType, MapElement>& rhs );
   };
@@ -108,8 +108,9 @@ namespace minerule {
   class BodyMap : public std::map<ItemType, BodyMapElement> {
     Connection* connection;
     void insertRules( const NewRuleSet& rs, double totGroups );
+    Progress* progress;
   public:
-    BodyMap(Connection& cc) : connection(&cc) {};
+    BodyMap(Connection& cc, Progress& progr) : connection(&cc), progress(&progr) {};
 
     int add(int gid, Transaction& t1, bool secondPass = false);
     int add(int gid, mrdb::ResultSet* rs, SourceRow& hbsr, bool secondPass = false);
@@ -127,7 +128,7 @@ namespace minerule {
   private:
     SourceRowColumnIds rowDes;
 	static bool mineruleHasSameBodyHead;
-	
+
 	SourceTable* sourceTable;
 	SourceTable::Iterator ruleIterator;
 
@@ -135,20 +136,20 @@ namespace minerule {
     void insertRules( const NewRuleSet& rs, double totGroups );
 
     void prepareData();
-    
+
   public:
-    BFSWithGidsAndCross(const OptimizedMinerule& mr) : 
+    BFSWithGidsAndCross(const OptimizedMinerule& mr) :
       MiningAlgorithm(mr), sourceTable(NULL) {}
 
     virtual ~BFSWithGidsAndCross() {
     	if(sourceTable!=NULL) delete sourceTable;
     }
-		
+
 		virtual SourceTableRequirements sourceTableRequirements() const {
 			return SourceTableRequirements(SourceTableRequirements::CrossProduct | SourceTableRequirements::SortedGids);
 		};
-			
-	static bool getMineruleHasSameBodyHead() { 
+
+	static bool getMineruleHasSameBodyHead() {
 		return mineruleHasSameBodyHead;
 	}
 

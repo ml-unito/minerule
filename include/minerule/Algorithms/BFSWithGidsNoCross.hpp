@@ -24,15 +24,15 @@
 namespace minerule {
 
 	class BFSWithGidsNoCross : public MiningAlgorithm {
-		
+
 		typedef ItemTransaction< std::set<ItemType> > Transaction;
-		
+
 		class MapElement : public std::set<int> {
 		public:
 			int count;
 			MapElement() : count(0) {}
 		};
-			
+
 		typedef MapElement GidList;
 
 		class BodyMapElement : public MapElement {
@@ -93,9 +93,11 @@ namespace minerule {
 
 		class BodyMap : public std::map<ItemType, BodyMapElement> {
 			Connection* connection;
+			Progress* progress;
 			void insertRules( const NewRuleSet& rs, double totGroups );
 		public:
-			BodyMap(Connection& cc) : connection(&cc) {};
+			BodyMap(Connection& cc, Progress& prog) : connection(&cc), progress(&prog) {};
+
     //int add(ItemType& gid, Transaction& t1, Transaction& t2, bool secondPass = false);
 			int add(int gid, Transaction& t1, Transaction& t2, bool secondPass = false);
     //	void saveMap(std::ostream& out, bool withGids = true);
@@ -112,35 +114,35 @@ namespace minerule {
 	private:
 		static bool mineruleHasSameBodyHead;
 		SourceTable* sourceTable;
-			
+
 		SourceTable::Iterator bodyIterator;
 		SourceTable::Iterator headIterator;
-			
+
 		void insertRules( const NewRuleSet& rs, double totGroups );
 
-		void prepareData();    
+		void prepareData();
 	public:
 		BFSWithGidsNoCross(const OptimizedMinerule& mr) : MiningAlgorithm(mr), sourceTable(NULL) {
-			mineruleHasSameBodyHead = mr.getParsedMinerule().hasSameBodyHead();				
+			mineruleHasSameBodyHead = mr.getParsedMinerule().hasSameBodyHead();
 		}
 
 		virtual ~BFSWithGidsNoCross() {
-			if(sourceTable!=NULL) delete sourceTable;			
+			if(sourceTable!=NULL) delete sourceTable;
 		}
-		
+
 		virtual SourceTableRequirements sourceTableRequirements() const {
 			return SourceTableRequirements(SourceTableRequirements::SortedGids);
 		};
-		
+
 
 		virtual void mineRules();
-			
-		static bool getMineruleHasSameBodyHead() { 
+
+		static bool getMineruleHasSameBodyHead() {
 			return mineruleHasSameBodyHead;
 		}
 
 		virtual bool canHandleMinerule() const {
-			return 
+			return
 				!minerule.getParsedMinerule().hasCrossConditions() &&
 				!minerule.getParsedMinerule().requiresClusters() &&
 				!minerule.getParsedMinerule().hasDisjuctionsInMC();

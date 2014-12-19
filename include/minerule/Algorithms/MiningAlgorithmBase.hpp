@@ -21,6 +21,7 @@
 #include "minerule/Utils/AlgorithmTypes.hpp"
 #include "minerule/Database/Connection.hpp"
 #include "minerule/Database/SourceTableRequirements.hpp"
+#include "minerule/Utils/Progress.hpp"
 
 namespace minerule {
 

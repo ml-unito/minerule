@@ -87,7 +87,7 @@ namespace minerule {
   }
 
   void BFSWithGidsNoCross::BodyMap::pruneMap (float threshold) {
-	  BodyMap newMap(*connection);
+	  BodyMap newMap(*connection, *progress);
 	  for (iterator i = begin(); i != end(); i++) {
 		  if (i->second.pruneMap(threshold))
 			  newMap[i->first] = i->second;
@@ -165,6 +165,8 @@ namespace minerule {
 	  int howManyRules = 0;
 	  float threshold = support*totGroups;
 	  for (iterator i = begin(); i != end(); i++) {
+      progress->tick();
+
 		  NewRule r(i,i->second);
 		  rs1.insert(rs1.end(),r);
 	  }
@@ -177,6 +179,8 @@ namespace minerule {
 		  if (rc.body.size() < (size_t)maxBody) {
 			  BodyMap::iterator lb = rc.lastBody;
 			  for (BodyMap::iterator j = ++lb; j != end(); j++) {
+          progress->tick();
+
 				  NewRule& rc2 = *(rs1.begin()+n);
 				  GidList newGidList;
 				  set_intersection(rc2.gids.begin(),rc2.gids.end(),
@@ -241,6 +245,7 @@ namespace minerule {
 
     MRLog() << "Preparing data sources..." << std::endl;
     prepareData();
+		Progress progress(200);		
 
     float support = options.getSupport();
     int maxBody = options.getBodyCardinalities().getMax();
@@ -254,12 +259,14 @@ namespace minerule {
 		throw new MineruleException(MR_ERROR_INTERNAL,"Cannot find initial GID for head elements");
 
 	MRLogPush("Reading data");
-    BodyMap bodyMap(connection);
+    BodyMap bodyMap(connection, progress);
 
     int totalGroups = sourceTable->getTotGroups();
     int howManyRows = 0;
     int howManyGroups = 0;
 
+		Progress readProgress(10000);
+		readProgress.start();
     while (!bodyIterator.isAfterLast()) {
       ItemType gid = bodyIterator->getGroup();
 
@@ -273,7 +280,10 @@ namespace minerule {
 
       howManyRows += bodyMap.add(howManyGroups,t1,t2);
       howManyGroups++;
+			
+			readProgress.tick();
     }
+		readProgress.end();
 
     MRLog() << "Total groups: " << totalGroups << std::endl;
 	MRLogPop();
@@ -287,7 +297,10 @@ namespace minerule {
     MRLog() << "Total bodies after pruning: " << bodyMap.size() << std::endl;
     NewRuleSet rs;
 
+		progress.start();
     int nrules = bodyMap.generateRules(support,totalGroups,maxBody,maxHead);
+		progress.end();
+
     MRLog() << "After extracting rules, rules: " << nrules << std::endl;
 
     MRLogPop();

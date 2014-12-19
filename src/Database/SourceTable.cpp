@@ -29,10 +29,6 @@ namespace minerule {
 		++_rowCounter;
 		assert( _sourceRow != NULL && _resultSet != NULL );
 
-		if( !_silent && _rowCounter % 10000 == 0 ) {
-			MRLog() << "Read " << _rowCounter << " rows so far..." << std::endl;
-		}
-
 		if( _resultSet->next() ) {
 			_sourceRow->init(_resultSet, _columnIds);
 			return true;
@@ -54,7 +50,7 @@ namespace minerule {
 					SourceRowColumnIds bodyCols = _columnIds;
 					bodyCols.headElems.clear();
 
-					return Iterator(_managedResults.back(), bodyCols, false);
+					return Iterator(_managedResults.back(), bodyCols);
 				}
 			case HeadIterator:
 				{
@@ -62,12 +58,12 @@ namespace minerule {
 					SourceRowColumnIds headCols = _columnIds;
 					headCols.bodyElems.clear();
 
-					return Iterator(_managedResults.back(), headCols, true);
+					return Iterator(_managedResults.back(), headCols);
 				}
 			case FullIterator:
 				{
 					_managedResults.push_back(_fullStatement->executeQuery());
-					return Iterator(_managedResults.back(), _columnIds, false);
+					return Iterator(_managedResults.back(), _columnIds);
 				}
 		}
 

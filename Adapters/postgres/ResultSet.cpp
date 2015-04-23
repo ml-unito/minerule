@@ -16,6 +16,10 @@ namespace mrdb {
       return ++currentRow_ < numRows_;
     }
 
+    bool ResultSet::getBoolean(int columnIndex) {
+      return PQgetvalue(result_, currentRow_, columnIndex-1)[0] == 't';
+    }
+
     double ResultSet::getDouble(int columnIndex) {
       return std::stod(PQgetvalue(result_, currentRow_, columnIndex-1));
     }

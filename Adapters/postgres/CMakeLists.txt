@@ -20,6 +20,9 @@ INCLUDE_DIRECTORIES("$(PROJECT_SOURCE_DIR)")
 FILE(GLOB TestStatements_Src tests/TestStatements.cpp)
 ADD_EXECUTABLE(TestStatements ${TestStatements_Src})
 
+FILE(GLOB TestResultSet_Src tests/TestResultSet.cpp)
+ADD_EXECUTABLE(TestResultSet ${TestResultSet_Src})
+
 FILE(GLOB TestDatabaseMetaData_Src tests/TestDatabaseMetaData.cpp)
 ADD_EXECUTABLE(TestDatabaseMetaData ${TestDatabaseMetaData_Src})
 
@@ -28,6 +31,7 @@ ADD_EXECUTABLE(TestResultSetMetaData ${TestResultSetMetaData_Src})
 
 TARGET_LINK_LIBRARIES (mrdb_pg ${PostgreSQL_LIBRARIES})
 TARGET_LINK_LIBRARIES (TestStatements ${PostgreSQL_LIBRARIES} ${Minerule_LIBRARIES} ${CMAKE_DL_LIBS})
+TARGET_LINK_LIBRARIES (TestResultSet ${PostgreSQL_LIBRARIES} ${Minerule_LIBRARIES} ${CMAKE_DL_LIBS})
 TARGET_LINK_LIBRARIES (TestDatabaseMetaData ${PostgreSQL_LIBRARIES} ${Minerule_LIBRARIES} ${CMAKE_DL_LIBS})
 TARGET_LINK_LIBRARIES (TestResultSetMetaData ${PostgreSQL_LIBRARIES} ${Minerule_LIBRARIES} ${CMAKE_DL_LIBS})
 
@@ -36,6 +40,7 @@ ENABLE_TESTING()
 ADD_TEST(NAME TestStatements COMMAND TestStatements )
 ADD_TEST(NAME TestDatabaseMetaData COMMAND TestDatabaseMetaData )
 ADD_TEST(NAME TestResultSetMetaData COMMAND TestResultSetMetaData )
+ADD_TEST(NAME TestResultSet COMMAND TestResultSet )
 
 INSTALL(TARGETS mrdb_pg
         LIBRARY DESTINATION lib)

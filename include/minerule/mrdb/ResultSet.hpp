@@ -21,6 +21,10 @@ public:
   /// @return true if the new position is inside the result set
   virtual bool next() = 0;
 
+  /// @return the value (assuming it is of type bool) at the current row and
+  /// given column index.
+  virtual bool getBoolean(int columnIndex) = 0;
+
   /// @return the value (assuming it is of type double) at the current row and
   /// given column index.
   virtual double getDouble(int columnIndex) = 0;
@@ -37,7 +41,7 @@ public:
   /// given column index.
   virtual std::string getString(int columnIndex) = 0;
 
-  /// THREAD SAFETY: It returns a ResultSetMetaData that should be used by the same 
+  /// THREAD SAFETY: It returns a ResultSetMetaData that should be used by the same
   ///                thread that owns this object.
   /// @return the meta data about this result set
   virtual mrdb::ResultSetMetaData* getMetaData() = 0;

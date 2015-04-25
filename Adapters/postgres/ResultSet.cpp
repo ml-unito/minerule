@@ -20,6 +20,10 @@ namespace mrdb {
       return PQgetvalue(result_, currentRow_, columnIndex-1)[0] == 't';
     }
 
+    float ResultSet::getFloat(int columnIndex) {
+      return std::stof(PQgetvalue(result_, currentRow_, columnIndex-1));
+    }
+
     double ResultSet::getDouble(int columnIndex) {
       return std::stod(PQgetvalue(result_, currentRow_, columnIndex-1));
     }

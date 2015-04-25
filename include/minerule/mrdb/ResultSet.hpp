@@ -25,6 +25,10 @@ public:
   /// given column index.
   virtual bool getBoolean(int columnIndex) = 0;
 
+  /// @return the value (assuming it is of type float) at the current row and
+  /// given column index.
+  virtual float getFloat(int columnIndex) = 0;
+
   /// @return the value (assuming it is of type double) at the current row and
   /// given column index.
   virtual double getDouble(int columnIndex) = 0;

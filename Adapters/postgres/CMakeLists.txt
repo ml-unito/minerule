@@ -2,6 +2,7 @@ PROJECT (postgres_adapter)
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 
 SET(CMAKE_CXX_FLAGS "-std=c++0x")
+SET(PostgreSQL_ADDITIONAL_SEARCH_PATHS "/usr/include/postgresql/*/server")
 
 LIST(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/Modules)
 

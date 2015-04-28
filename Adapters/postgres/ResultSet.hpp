@@ -25,6 +25,7 @@ public:
   virtual bool next();
 
   virtual bool getBoolean(int columnIndex);
+  virtual float getFloat(int columnIndex);
   virtual double getDouble(int columnIndex);
   virtual int getInt(int columnIndex);
   virtual long getLong(int columnIndex);

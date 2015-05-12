@@ -1,18 +1,3 @@
-//   Minerule - a sql-like language for datamining
-//   Copyright (C) 2013 Roberto Esposito (esposito@di.unito.it)
-//
-//   This program is free software: you can redistribute it and/or modify
-//   it under the terms of the GNU General Public License as published by
-//   the Free Software Foundation, either version 3 of the License, or
-//   (at your option) any later version.
-//
-//   This program is distributed in the hope that it will be useful,
-//   but WITHOUT ANY WARRANTY; without even the implied warranty of
-//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//   GNU General Public License for more details.
-//
-//   You should have received a copy of the GNU General Public License
-//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "minerule/Parsers/PredicateBase.hpp"
 
 #include <algorithm>
@@ -48,7 +33,7 @@ namespace minerule {
 
 
 
-  PredicateBase& 
+  PredicateBase&
   SimplePredicateBase::operator!() const {
    std::string nop;
     if (op==">") { nop="<="; }
@@ -83,13 +68,13 @@ namespace minerule {
 
   /**
     * The distructor of this class
-    */ 
+    */
 
   PredConjunctionBase::~PredConjunctionBase() {
 	for (iterator it=begin();it!=end();++it){
 		   delete *it;
 	}
-	
+
    }
 
   /**
@@ -98,12 +83,12 @@ namespace minerule {
 
   bool PredConjunctionBase::find(SimplePredicateBase* sp) const {
     PredConjunctionBase::const_iterator it;
-    
+
     // Checking if sp is present in this PredConjunctionBase
     for (it=this->begin();
 	 it!=this->end() && **it != *sp ;
 	 it++); // note the body of the for is empty
-    
+
     return it!=this->end();
   }
 
@@ -127,10 +112,10 @@ namespace minerule {
     for(it=this->begin(); it!=this->end(); ++it) {
       (*result) |= !(**it);
     }
-    
+
     return *result;
   }
-  
+
   // ----------------------------------------------------------------------
   // PredicateBase
   // ----------------------------------------------------------------------
@@ -186,7 +171,7 @@ namespace minerule {
     return *this;
   }
 
-  PredicateBase& 
+  PredicateBase&
   PredicateBase::operator|=(const PredicateBase& p) {
     for(PredicateBase::const_iterator it=p.begin(); it!=p.end(); it++) {
       push_back( (*it)->cloneInstance() );
@@ -214,9 +199,9 @@ namespace minerule {
   }
 
 #if 0
-  PredicateBase* 
+  PredicateBase*
   PredicateBase::negate_or() const {
-    PredicateBase* p1; /* Temporary predicate (it will contain the predicate which will be returned) */ 
+    PredicateBase* p1; /* Temporary predicate (it will contain the predicate which will be returned) */
     PredConjunctionBase* pc1;
     SimplePredicateBase* tmp;
     PredConjunctionBase::iterator it_pc;
@@ -242,13 +227,13 @@ namespace minerule {
       /* Temporary predicate (used at each iteration to hold*/
       PredicateBase* p2 = this->newInstance();
 
-      for (it_pc=(*it_p)->begin();it_pc!=(*it_p)->end(); it_pc++){//ciclo per ogni elemento di *it_p	
+      for (it_pc=(*it_p)->begin();it_pc!=(*it_p)->end(); it_pc++){//ciclo per ogni elemento di *it_p
 	tmp=(*it_pc)->negate_predicate();
-	for (it_p2=p1->begin();it_p2!=p1->end();it_p2++){//ciclo per ogni sottolista di p1	
+	for (it_p2=p1->begin();it_p2!=p1->end();it_p2++){//ciclo per ogni sottolista di p1
 	  //se l'elemento e' gia presente non lo inserisco
-	  if (!(*it_p2)->find(tmp))	
-	    p2->push_back((*it_p2)->copy_and_append(tmp));	
-	  else 
+	  if (!(*it_p2)->find(tmp))
+	    p2->push_back((*it_p2)->copy_and_append(tmp));
+	  else
 	    p2->push_back(*it_p2);
 	}
 	delete tmp;

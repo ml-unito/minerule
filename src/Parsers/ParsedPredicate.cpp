@@ -1,19 +1,3 @@
-//   Minerule - a sql-like language for datamining
-//   Copyright (C) 2013 Roberto Esposito (esposito@di.unito.it)
-//
-//   This program is free software: you can redistribute it and/or modify
-//   it under the terms of the GNU General Public License as published by
-//   the Free Software Foundation, either version 3 of the License, or
-//   (at your option) any later version.
-//
-//   This program is distributed in the hope that it will be useful,
-//   but WITHOUT ANY WARRANTY; without even the implied warranty of
-//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//   GNU General Public License for more details.
-//
-//   You should have received a copy of the GNU General Public License
-//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
 #include "minerule/Parsers/ParsedPredicate.hpp"
 
 
@@ -42,7 +26,7 @@ namespace minerule {
   PredConjunctionBase* ParsedPredicate::newPredConjunction() const {
     return new ParsedPredConjunction();
   }
-  
+
 
 
 
@@ -63,7 +47,7 @@ namespace minerule {
 	list_and = list_and->next;
 	list_and->next = NULL;
       }
-      
+
       list_and->sp = (simple_pred*) malloc(sizeof(simple_pred));
       list_and->sp->val1=strdup((*it_and)->getVal1().c_str());
       list_and->sp->op=strdup((*it_and)->getOp().c_str());
@@ -74,7 +58,7 @@ namespace minerule {
   }
 
 
-  list_OR_node* ParsedPredicate::convert() const { 
+  list_OR_node* ParsedPredicate::convert() const {
     PredicateBase::const_iterator it_or;
     list_OR_node* list_or = NULL;
     list_OR_node* or_head = NULL;
@@ -95,7 +79,7 @@ namespace minerule {
 
     return or_head;
   }
-  
+
 
 
 } // namespace

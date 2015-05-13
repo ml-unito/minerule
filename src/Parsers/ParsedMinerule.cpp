@@ -1,19 +1,3 @@
-//   Minerule - a sql-like language for datamining
-//   Copyright (C) 2013 Roberto Esposito (esposito@di.unito.it)
-//
-//   This program is free software: you can redistribute it and/or modify
-//   it under the terms of the GNU General Public License as published by
-//   the Free Software Foundation, either version 3 of the License, or
-//   (at your option) any later version.
-//
-//   This program is distributed in the hope that it will be useful,
-//   but WITHOUT ANY WARRANTY; without even the implied warranty of
-//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//   GNU General Public License for more details.
-//
-//   You should have received a copy of the GNU General Public License
-//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
 #include<stdio.h>
 #include<stdlib.h>
 #include<string>
@@ -147,6 +131,10 @@ namespace minerule {
 		copy( mr.ba.begin(), mr.ba.end(), std::ostream_iterator<std::string>(os, " "));
 		os << std::endl;
 
+        os << " - oa:";
+        copy( mr.oa.begin(), mr.oa.end(), std::ostream_iterator<std::string>(os, " "));
+        os << std::endl;
+
 		os << " - ha:";
 		copy( mr.ha.begin(), mr.ha.end(), std::ostream_iterator<std::string>(os, " "));
 		os << std::endl;
@@ -252,7 +240,6 @@ namespace minerule {
 			parseMinerule( minerule_text, *this );
 		}
 
-
 		std::string ParsedMinerule::getAttrText(const AttrVector& l) const {
 			std::string result;
 			AttrVector::const_iterator it = l.begin();
@@ -320,11 +307,15 @@ namespace minerule {
 		}
 		std::string ParsedMinerule::getMinesequenceText() const {
 			std::string result;
+            std::string distinct= this->distinct? " DISTINCT " : " " ;
+            std::string Bem_text= getBEMText();
+            if(Bem_text.size()>0)
+                Bem_text= " HAVING " + Bem_text;
 			result =
 				"MINE SEQUENCE " + tab_result + " AS " +
-				"SELECT DISTINCT " +
+                "SELECT " + distinct +
 				getCardsText(bodyCardinalities) + " " + getAttrText(ba) +
-				", SUPPORT FROM "+tab_source+" GROUP BY "+getAttrText(ga)+
+                    ", SUPPORT FROM "+tab_source+" "+Bem_text+" GROUP BY "+getAttrText(ga)+
 				" ORDER BY "+getAttrText(oa)+ " EXTRACTING SEQUENCES WITH SUPPORT:" +
 				Converter(sup).toString();
 
@@ -400,7 +391,14 @@ namespace minerule {
 			return result;
 		}
 
+       std::string ParsedMinerule::getBEMText() const{
+           std::string ris = "";
 
+           for(int i = 0 ; i < seq_bem_vect.size(); ++i)
+               ris += seq_bem_vect[i]->type +"."+seq_bem_vect[i]->attr+" "+seq_bem_vect[i]->op+" "+seq_bem_vect[i]->val+" ";
+
+           return ris;
+       }
 
 		bool ParsedMinerule::hasCrossConditions(const list_OR_node* cond) const {
 			MRLog()<<"Checking whether the minerule contains cross predicates" << std::endl;

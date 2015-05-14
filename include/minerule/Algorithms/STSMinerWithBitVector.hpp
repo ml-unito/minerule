@@ -172,9 +172,11 @@ public:
   int readSeqVal(int id_seq) {
 
     std::string id_s = Converter(id_seq).toString();
-    if (emptyTable("Seq" + id_s))
+    if (emptyTable("Seq" + id_s)){
       return 1;
-    std::string seqIDQuery = " SELECT currval('id" + id_s + "_sq');";
+    }
+
+    std::string seqIDQuery = " SELECT last_value FROM id"+id_s+"_sq;;";
     mrdb::ResultSet *rs = execQr(seqIDQuery);
     rs->next();
     int val = rs->getInt(1);
@@ -216,9 +218,7 @@ public:
 
   int getTrackidMinValue() {
     std::string query = "SELECT MIN(trackid) FROM Source;";
-    mrdb::ResultSet *rs = connection.getMRDBConnection()
-                              ->prepareStatement(query.c_str())
-                              ->executeQuery();
+    mrdb::ResultSet *rs = execQr(query);
     rs->next();
     int val = rs->getInt(1);
     return val;

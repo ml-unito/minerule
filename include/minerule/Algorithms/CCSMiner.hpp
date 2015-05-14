@@ -31,12 +31,12 @@ namespace minerule {
     mrdb::PreparedStatement* statement;
 
     void prepareData();
-    
+
   public:
-    CCSMiner(const OptimizedMinerule& mr, const AlgorithmsOptions& opts) : 
+    CCSMiner(const OptimizedMinerule& mr, const AlgorithmsOptions& opts) :
       MiningAlgorithm(mr),  statement(NULL) {
 	options = opts;
-        connection.useMRDBConnection(opts.getMRDBConnection());
+        connection.useMRDBConnection(connection.getMRDBConnection());
 }
 
     virtual ~CCSMiner() {}
@@ -51,7 +51,7 @@ namespace minerule {
 			return SourceTableRequirements(SourceTableRequirements::SortedGids);
 		};
 
-    bool find(std::vector<CCSMSequence*>*vec, CCSMSequence* elem); 
+    bool find(std::vector<CCSMSequence*>*vec, CCSMSequence* elem);
 
     void combina(std::vector<CCSMSequence::ResultItems>&, std::vector<CCSMSequence*>* k2, size_t k, int min_g, int max_g, double threshold, int check);
 

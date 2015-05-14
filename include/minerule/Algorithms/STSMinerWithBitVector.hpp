@@ -208,9 +208,7 @@ public:
 
   int getTrackidMaxValue() {
     std::string query = "SELECT MAX(trackid) FROM Source;";
-    mrdb::ResultSet *rs = connection.getMRDBConnection()
-                              ->prepareStatement(query.c_str())
-                              ->executeQuery();
+    mrdb::ResultSet *rs = execQr(query);
     rs->next();
     int val = rs->getInt(1);
     return val;
@@ -226,9 +224,7 @@ public:
 
   int getTrackidCount() {
     std::string query = "SELECT COUNT(DISTINCT trackid) FROM Source;";
-    mrdb::ResultSet *rs = connection.getMRDBConnection()
-                              ->prepareStatement(query.c_str())
-                              ->executeQuery();
+    mrdb::ResultSet *rs = execQr(query);
     rs->next();
     int val = rs->getInt(1);
     return val;
@@ -236,9 +232,7 @@ public:
 
   bool emptyTable(std::string tableName) { // equivale a return readSeqVal==1
     std::string query = "SELECT * FROM " + tableName + " LIMIT 1";
-    mrdb::ResultSet *rs = connection.getMRDBConnection()
-                              ->prepareStatement(query.c_str())
-                              ->executeQuery();
+    mrdb::ResultSet *rs = execQr(query);
     return !(rs->next());
   }
 

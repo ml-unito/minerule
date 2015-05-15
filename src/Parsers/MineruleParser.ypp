@@ -1,18 +1,3 @@
-//   Minerule - a sql-like language for datamining
-//
-//   This program is free software: you can redistribute it and/or modify
-//   it under the terms of the GNU General Public License as published by
-//   the Free Software Foundation, either version 3 of the License, or
-//   (at your option) any later version.
-//
-//   This program is distributed in the hope that it will be useful,
-//   but WITHOUT ANY WARRANTY; without even the implied warranty of
-//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//   GNU General Public License for more details.
-//
-//   You should have received a copy of the GNU General Public License
-//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
 %{
 #include <list>
 #include <set>
@@ -32,12 +17,19 @@
 extern int mrlex();
 extern void mrerror(char const* s);
 bool check_body_coincident_head(minerule::ParsedMinerule::AttrVector& , minerule::ParsedMinerule::AttrVector&);
+int find(std::vector<minerule::Bem_cond*> vect,std::string type_cond);
 
 using namespace minerule;
 
 extern std::map<std::string,int> keywords_to_token;
 /* extern std::vector<ParsedSimplePredicate*>* CrossCond; */
 extern minerule::ParsedPredicate* hc_mining;
+
+/******************************************/
+bool first_start=true;
+bool first_end=true;
+/******************************************/
+
 %}
 
 %union {
@@ -48,21 +40,26 @@ extern minerule::ParsedPredicate* hc_mining;
 	char* TString;
 	minerule::MinMaxPair* TMinMaxPair;
 	minerule::SupportMeasure* ev_m;
+    minerule::ParsedMinerule::bem_c bem_condition;
 	}
 
-%token MINE RULE AS SEQUENCES SELECT DISTINCT BODY HEAD CLUSTER FROM ITEM ORDER GROUP BY HAVING OR AND NOT WHERE EXTRACTING RULES WITH DOTS ITEMSET SUPPORT CONFIDENCE SEQUENCE ITEMSETS GAP
+%token MINE RULE AS SEQUENCES SELECT BODY HEAD CLUSTER FROM ITEM ORDER GROUP BY HAVING OR AND NOT WHERE EXTRACTING RULES WITH DOTS ITEMSET SUPPORT CONFIDENCE
+%token SEQUENCE ITEMSETS GAP SINGLE_DOT BETWEEN BEGIN_C START END MID SQUARE LIKE IN
 
-%token <TString> ATTR CARD PARTBODY QUOTED_VALUE PARTHEAD COMPARISON ID AGGREGATE
+%token <TString> ATTR CARD PARTBODY QUOTED_VALUE PARTHEAD COMPARISON ID AGGREGATE DATE_MR TIME_ DISTINCT
 %token <TString> INT_NUMBER DBL_NUMBER
 %type <TString>  value
+%type <TString> conj_cond seq_clause distinct_clause range constant cond bool_literal between_exp in_exp like_exp bool_cond base_predicate
+%type <TString> filter_cond filter_and_cond filter_or_cond constant_commalist filter_predicate
+%type <bem_condition> mid_conj_cond mid_cond bem_range be_cond
 %type <TListType> attr_list
 %type <TString> qualified_attribute
 %type <TParsedSimplePredicate> predicate
 %type <TParsedPredConjunction> and_cond
 %type <TParsedPredicate> or_cond
-%type <TMinMaxPair> card gaps_clause
+%type <TMinMaxPair> card gaps_clause mid_card length_clause
 %type <TString> from_clause aggr_member
-%type <TParsedPredicate> mining_cond cluster_cond seq_clause
+%type <TParsedPredicate> mining_cond cluster_cond
 %type <TParsedPredicate> having_clause having_m_cond
 %type <TListType> group_clause cluster_clause order_clause
 //%type <ev_m> ev_measures
@@ -199,7 +196,7 @@ query: MINE RULE ATTR AS SELECT
 		    mr.tab_source=$15;
 		    mr.tab_result=$3;
 		       mr.body_coincident_head=0;
-		    mr.mc = $13==NULL?NULL:$13->convert();
+            mr.mc = $13==NULL?NULL:$13->convert();
 		    mr.ga = *$16;
 		    mr.gc = $17==NULL?NULL:$17->convert();
 		    mr.sup = Converter($23).toDouble();
@@ -216,29 +213,43 @@ query: MINE RULE ATTR AS SELECT
 		    */
 		   }
 		  |
-		   MINE SEQUENCE ATTR AS SELECT attr_list ',' SUPPORT
-			seq_clause
+           MINE SEQUENCE length_clause ATTR AS SELECT distinct_clause attr_list ',' SUPPORT
 			gaps_clause
 			from_clause
+            seq_clause
+            filter_cond
 			group_clause
 			order_clause
 			 EXTRACTING SEQUENCES WITH SUPPORT ':' value
-		 {
+         {
 		    ParsedMinerule& mr = getParserOutputObj();
 		    mr.miningTask = MTMineSequences;
-		    mr.tab_source=$11;
-                    mr.tab_result=$3;
-		    mr.oa=*$13;
-		    mr.ba=*$6;
-		    if ($10 != NULL){
-			   mr.sequenceAllowedGaps = *$10;
+            if ($3 != NULL)
+                mr.length = *$3;
+            mr.tab_result=$4;
+            if ($7 != NULL)
+                mr.distinct= true;
+            else mr.distinct= false;
+            mr.ba=*$8;
+            if ($11 != NULL){
+               mr.sequenceAllowedGaps = *$11;
 		    }
 		    //mr.bodyCardinalities = $9 == NULL?NULL:*$9;
-		    mr.ga=*$12;
-		    mr.sup = Converter($19).toDouble();
-		    delete $13;
-		    delete $6;
-		    delete $12;
+            mr.tab_source=$12;
+            if($14 != NULL)
+                mr.filter_condition=$14;
+            mr.ga=*$15;
+            mr.oa=*$16;
+            mr.sup = Converter($22).toDouble();
+
+            first_start=true;
+            first_end=true;
+           /* delete $16;
+            delete $8;
+            delete $15;
+
+            delete $11;
+            delete $3;*/
 		 };
 
 
@@ -260,6 +271,8 @@ query: MINE RULE ATTR AS SELECT
 // 		else mrerror("AN INTERNAL ERROR OCCURS");
 // 		};
 
+distinct_clause: {$$=NULL;}
+                | DISTINCT {$$="DISTINCT";} ;
 
 from_clause: FROM ATTR{
 			$$=$2;
@@ -369,23 +382,40 @@ card: INT_NUMBER DOTS ATTR {
 			$$->setDefaultMax();
 		    };
 
-gaps_clause: WITH GAP INT_NUMBER DOTS INT_NUMBER
-                        {
-                         int n_min =Converter($3).toLong();
-                         int n_max = Converter($5).toLong();
-                         if (n_min>n_max) // se la cardinalita massima e maggiore di quella minima
-                             mrerror("\nTHE MIN CARDINALITY IS GREATER THAN MAX CARDINALITY\n");
-                         else
-                             $$=new MinMaxPair(n_min,n_max);
-                        }
-			|{$$= NULL;}
-			;
+length_clause: mid_card
+        {
+            $$=$1;
+            if($$->getMin()==0) {
+                $$->setMin(1);
+                std::cout<<"Min length must be greater than zero! Resetting parameter with value: 1\n"<<std::endl;
+             }
+        }
+        |
+        {$$= NULL;}
+        ;
 
-seq_clause: WHERE
+gaps_clause: WITH GAP mid_card
+            { $$=$3; }
+        |
+            {$$=NULL;}
+        ;
+
+        /*WITH GAP INT_NUMBER DOTS INT_NUMBER
+            {
+                int n_min =Converter($3).toLong();
+                int n_max = Converter($5).toLong();
+                if (n_min>n_max) // se la cardinalita massima e maggiore di quella minima
+                    mrerror("\nTHE MIN CARDINALITY IS GREATER THAN MAX CARDINALITY\n");
+                else
+                    $$=new MinMaxPair(n_min,n_max);
+            }
+        |{$$= NULL;}
+        ;*/
+
+/*seq_clause: WHERE
 		{$$= NULL;}
 	    |{$$= NULL;}
-	    ;
-
+        ;*/
 
 value: INT_NUMBER {$$=$1;}
 	|
@@ -432,13 +462,13 @@ or_cond: and_cond
 
 
 and_cond:
-	predicate
+    predicate
 		{
 		$$ = new ParsedPredConjunction();
 		$$->push_back($1);
 		}
 	|
-	and_cond AND predicate
+    and_cond AND predicate
 		{
 
 			  $1->push_back($3);
@@ -446,62 +476,61 @@ and_cond:
 
 		}
 	;
+predicate:
+    ATTR COMPARISON value
+            {
+            /*ParsedSimplePredicate:
+                firt param: first term
+                second param: relational operator
+                third param: secondo term
+                fourth param: true if at least one of the two term was evaluated on body or head false otherwise
+                fifth param: true if at least one of the two term was an aggregation function false otherwise
+            */
 
-    predicate:
-	ATTR COMPARISON value
-			{
-			/*ParsedSimplePredicate:
-				firt param: first term
-				second param: relational operator
-				third param: secondo term
-				fourth param: true if at least one of the two term was evaluated on body or head false otherwise
-				fifth param: true if at least one of the two term was an aggregation function false otherwise
-			*/
-
-			  	$$=new ParsedSimplePredicate($1,$2,$3,false,false);
-			  	free($1);
-			  	free($2);
-			  	free($3);
+                $$=new ParsedSimplePredicate($1,$2,$3,false,false);
+                free($1);
+                free($2);
+                free($3);
                         }
-			|
-	ATTR COMPARISON QUOTED_VALUE
-			{
-				$$=new ParsedSimplePredicate($1,$2,$3,false,false);
-				free($1);
-			  	free($2);
-			  	free($3);
+            |
+    ATTR COMPARISON QUOTED_VALUE
+            {
+                $$=new ParsedSimplePredicate($1,$2,$3,false,false);
+                free($1);
+                free($2);
+                free($3);
 
-			}
-			|
-	ATTR COMPARISON ATTR
-			{
-				$$=new ParsedSimplePredicate($1,$2,$3,false,false);
-			  	free($1);
-			  	free($2);
-			  	free($3);
-			 }
-			 |
-	value COMPARISON value {
-			  	$$=new ParsedSimplePredicate($1,$2,$3,false,false);
-			  	free($1);
-			  	free($2);
-			  	free($3);
-			 }
-			|
-	value COMPARISON ATTR
-			{
-			std::string op=$2,nop;
-				if (op.compare("")==0) { nop="<";}
-				else if (op==">=") { nop="<=";}
-				else if (op=="<") { nop=">";}
-				else if (op=="<=") { nop=">=";}
-				$$=new ParsedSimplePredicate($3,nop,$1,false,false);
-			  	free($1);
-			  	free($2);
-			  	free($3);
-			 }
-			 |
-	qualified_attribute COMPARISON  QUOTED_VALUE
+            }
+            |
+    ATTR COMPARISON ATTR
+            {
+                $$=new ParsedSimplePredicate($1,$2,$3,false,false);
+                free($1);
+                free($2);
+                free($3);
+             }
+             |
+    value COMPARISON value {
+                $$=new ParsedSimplePredicate($1,$2,$3,false,false);
+                free($1);
+                free($2);
+                free($3);
+             }
+            |
+    value COMPARISON ATTR
+            {
+            std::string op=$2,nop;
+                if (op.compare("")==0) { nop="<";}
+                else if (op==">=") { nop="<=";}
+                else if (op=="<") { nop=">";}
+                else if (op=="<=") { nop=">=";}
+                $$=new ParsedSimplePredicate($3,nop,$1,false,false);
+                free($1);
+                free($2);
+                free($3);
+             }
+            |
+    qualified_attribute COMPARISON  QUOTED_VALUE
 			 {
 				$$=new ParsedSimplePredicate($1,$2,$3,true,false);
 			  	free($1);
@@ -565,6 +594,361 @@ and_cond:
 			 }
 			 ;
 
+    /**********************************************/
+
+    filter_cond: WHERE filter_or_cond {
+                        $$=$2;
+                 }
+                |
+                {$$=NULL;}
+                ;
+
+    filter_or_cond: filter_and_cond
+            {
+            $$= $1;
+            }
+        |
+        filter_or_cond OR filter_or_cond
+            {
+            std::string tmp=$1;
+            tmp=tmp+ " OR " + $3;
+            $$= strndup(tmp.c_str(),PARSER_BUF_SIZE); ;
+            }
+        |
+        filter_or_cond AND filter_or_cond
+            {
+            std::string tmp=$1;
+            tmp=tmp+ " AND " + $3;
+            $$= strndup(tmp.c_str(),PARSER_BUF_SIZE);
+            }
+        |
+        NOT '(' filter_or_cond ')'
+            {
+            std::string tmp="NOT (";
+            tmp=tmp+ $3 + ")";
+            $$= strndup(tmp.c_str(),PARSER_BUF_SIZE); ;
+
+            }
+        | '(' filter_or_cond ')'
+            {
+            std::string tmp="NOT (";
+            tmp=tmp+ $2 + ")";
+            $$= strndup(tmp.c_str(),PARSER_BUF_SIZE);
+            }
+        ;
+
+
+    filter_and_cond:
+        filter_predicate
+            {
+            $$ = $1;
+            }
+        |
+        filter_and_cond AND filter_predicate
+            {
+            std::string tmp=$1;
+            tmp=tmp+ " AND " + $3;
+            $$= strndup(tmp.c_str(),PARSER_BUF_SIZE);
+            }
+        ;
+
+    filter_predicate:
+        base_predicate
+        |
+        bool_literal
+        |
+        bool_cond
+        ;
+
+    base_predicate:
+        constant range
+        {
+            std::string tmp= $1;
+            tmp += " ";
+            tmp += $2;
+            $$= strndup(tmp.c_str(),PARSER_BUF_SIZE);
+        }
+        ;
+
+    bool_cond:
+        between_exp
+        |
+        like_exp
+        |
+        in_exp
+        ;
+
+    between_exp:
+        constant BETWEEN constant AND constant
+        {
+            std::string tmp=$1;
+            tmp=tmp+ " BETWEEN " + $3 + " AND " + $5;
+            $$= strndup(tmp.c_str(),PARSER_BUF_SIZE);
+        }
+        |
+        constant NOT BETWEEN constant AND constant
+        {
+            std::string tmp=$1;
+            tmp=tmp+ " NOT BETWEEN " + $4 + " AND " + $6;
+            $$= strndup(tmp.c_str(),PARSER_BUF_SIZE);
+        }
+        ;
+
+    like_exp:
+        constant LIKE constant
+        {
+            std::string tmp=$1;
+            tmp=tmp+ " LIKE " + $3;
+            $$= strndup(tmp.c_str(),PARSER_BUF_SIZE);
+        }
+        |
+        constant NOT LIKE constant
+        {
+            std::string tmp=$1;
+            tmp=tmp+ " NOT LIKE " + $4;
+            $$= strndup(tmp.c_str(),PARSER_BUF_SIZE);
+        }
+        ;
+
+    in_exp:
+        constant IN '(' constant_commalist ')'
+        {
+            std::string tmp=$1;
+            tmp=tmp+ " IN (" + $4 + ")";
+            $$= strndup(tmp.c_str(),PARSER_BUF_SIZE);
+        }
+        |
+        constant NOT IN '(' constant_commalist ')'
+        {
+            std::string tmp=$1;
+            tmp=tmp+ " NOT IN (" + $5 + ") ";
+            $$= strndup(tmp.c_str(),PARSER_BUF_SIZE);
+        }
+        ;
+
+    seq_clause:      HAVING conj_cond {$$ = $2;}
+                    |
+                     {$$ = NULL;}
+                    ;
+
+
+    conj_cond:      cond AND conj_cond
+                    |
+                    cond
+                    ;
+
+    cond:           ATTR '(' attr_list ')' range
+                    {
+                        ParsedMinerule& mr= getParserOutputObj();
+                        Dist_cond* dc = new Dist_cond();
+                        dc->function= $1;
+                        dc->attr= *$3;
+                        dc->range= $5;
+                        mr.seq_dist_vect.push_back(dc);
+                    }
+                    |
+                    be_cond
+                    {
+                        ParsedMinerule& mr= getParserOutputObj();
+                        if($1->type.compare("BEGIN")==0){
+                           if(first_start)
+                                mr.seq_bem_vect.push_back($1);
+                            else{
+                               int start_index= find(mr.seq_bem_vect,"BEGIN");
+                               mr.seq_bem_vect[start_index]->and_c= $1;
+                            }
+                           first_start=false;
+                        }
+                        else if($1->type.compare("END")==0){
+                            if(first_end)
+                                mr.seq_bem_vect.push_back($1);
+                            else{
+                                int end_index= find(mr.seq_bem_vect,"END");
+                                mr.seq_bem_vect[end_index]->and_c= $1;
+                            }
+                            first_end=false;
+                        }
+                    }
+                    |
+                    SQUARE mid_card mid_conj_cond SQUARE
+                    {
+                        ParsedMinerule& mr= getParserOutputObj();
+                        if($2) {
+                            $3->count_min= $2->getMin();
+                            $3->count_max= $2->getMax();
+                        }
+                        mr.seq_bem_vect.push_back($3);
+                    }
+                    |
+                    mid_card mid_cond
+                    {
+                        ParsedMinerule& mr= getParserOutputObj();
+                        if($1) {
+                            $2->count_min= $1->getMin();
+                            $2->count_max= $1->getMax();
+                        }
+                        mr.seq_bem_vect.push_back($2);
+                    }
+                    ;
+
+    be_cond:  BEGIN_C SINGLE_DOT ATTR bem_range
+                {
+                   $4->type+="BEGIN";
+                   $4->attr+=$3;
+                   $$=$4;
+                 }
+              |
+               END SINGLE_DOT ATTR bem_range
+                 {
+                   $4->type+="END";
+                   $4->attr+=$3;
+                   $$=$4;
+                 }
+              ;
+
+    mid_conj_cond : mid_cond AND mid_conj_cond
+                  {
+                    $1->and_c=$3;
+                    $$=$1;
+                  }
+                  |
+                  mid_cond
+                  {$$=$1;}
+                  ;
+
+    mid_cond: MID SINGLE_DOT ATTR bem_range
+                   {
+                     $4->type+="MID";
+                     $4->attr+=$3;
+                     $$=$4;
+                    }
+                    ;
+
+    mid_card: INT_NUMBER DOTS INT_NUMBER
+                  {
+                     int n_min =Converter($1).toLong();
+                     int n_max = Converter($3).toLong();
+                     if (n_min>n_max) // se la cardinalita massima e maggiore di quella minima
+                           mrerror("\nTHE MIN CARDINALITY IS GREATER THAN MAX CARDINALITY\n");
+                     else
+                         $$=new MinMaxPair(n_min,n_max);
+                   }
+                  |
+                  INT_NUMBER DOTS ATTR
+                    {
+                       int n_min =Converter($1).toLong();
+                       if( strlen($3)!=1 || toupper($3[0])!='N')
+                           mrerror("Max cardinality must be either a number or a character in [n|N]\n");
+                       else
+                            $$=new MinMaxPair(n_min,std::numeric_limits<int>::max()-1);
+
+                    }
+                  |
+                   { $$=NULL; }
+                  ;
+
+
+    bem_range:  BETWEEN constant AND constant
+               {
+                 std::string tmp1 = $2;
+                 tmp1 += " AND ";
+                 tmp1 += $4;
+                 Bem_cond* bc= new Bem_cond();
+                 bc->op+="BETWEEN";
+                 bc->val+=tmp1;
+                 $$=bc;
+                }
+            |
+             COMPARISON constant
+                {
+                 Bem_cond* bc= new Bem_cond();
+                 bc->op+=$1;
+                 bc->val+=$2;
+                 $$=bc;
+
+                 }
+             ;
+
+    range:  BETWEEN constant AND constant
+             {
+               std::string tmp = "BETWEEN ";
+               tmp += $2;
+               tmp += " AND ";
+               tmp += $4;
+               char * cstr = new char [tmp.length()+1];
+               strcpy (cstr, tmp.c_str());
+               $$ = cstr;
+              }
+            |
+              COMPARISON constant
+              {
+               std::string tmp = $1;
+               tmp =tmp+ " ";
+               tmp += $2;
+               char * cstr = new char [tmp.length()+1];
+               strcpy (cstr, tmp.c_str());
+               $$ = cstr;
+              }
+           ;
+
+    constant_commalist:
+              constant_commalist ',' constant
+              {
+                  std::string tmp = $1;
+                  tmp =tmp+ ", ";
+                  tmp += $3;
+                  char * cstr = new char [tmp.length()+1];
+                  strcpy (cstr, tmp.c_str());
+                  $$ = cstr;
+              }
+              |
+              constant
+              {
+                  $$ = $1;
+              }
+              ;
+
+    constant:
+             ATTR
+             |
+             value
+             |
+             DATE_MR
+             |
+             TIME_
+             |
+             bool_literal
+             |
+             QUOTED_VALUE
+             ;
+
+    bool_literal:
+             "true"
+                 {
+                 std::string tmp="TRUE";
+                 $$= strndup(tmp.c_str(),PARSER_BUF_SIZE);
+                 }
+             |
+             "TRUE"
+                 {
+                 std::string tmp="TRUE";
+                 $$= strndup(tmp.c_str(),PARSER_BUF_SIZE);
+                 }
+             |
+             "FALSE"
+                 {
+                 std::string tmp="FALSE";
+                 $$= strndup(tmp.c_str(),PARSER_BUF_SIZE);
+                 }
+             |
+             "false"
+                 {
+                 std::string tmp="FALSE";
+                 $$= strndup(tmp.c_str(),PARSER_BUF_SIZE);
+                 }
+                 ;
+
+    /************************************************/
 
 %%
 
@@ -602,6 +986,12 @@ void init_mrparser() {
 	keywords_to_token["SEQUENCES"]=SEQUENCES;
 	keywords_to_token["ORDER"]=ORDER;
 	keywords_to_token["GAP"]=GAP;
+    keywords_to_token["BEGIN"]=BEGIN_C;
+    keywords_to_token["END"]=END;
+    keywords_to_token["MID"]=MID;
+    keywords_to_token["BETWEEN"]=BETWEEN;
+    keywords_to_token["LIKE"]=LIKE;
+    keywords_to_token["IN"]=IN;
 
 }
 }
@@ -610,14 +1000,26 @@ void init_mrparser() {
 bool check_body_coincident_head(minerule::ParsedMinerule::AttrVector& a, minerule::ParsedMinerule::AttrVector& b){
 	minerule::ParsedMinerule::AttrVector* a1 = new minerule::ParsedMinerule::AttrVector(a);
 	minerule::ParsedMinerule::AttrVector* b1	= new minerule::ParsedMinerule::AttrVector(b);
-  sort(a1->begin(), a1->end());
-  sort(b1->begin(), b1->end());
-  if (a1->size()!=b1->size())
-	   return false;
+sort(a1->begin(), a1->end());
+sort(b1->begin(), b1->end());
+if (a1->size()!=b1->size())
+	return false;
+minerule::ParsedMinerule::AttrVector::iterator it1,it2;
+for (it1=a1->begin(),it2=b1->begin(); (it1!=a1->end())&&(*it1==*it2);++it1, ++it2);//notare il punto e virgola
 
-  minerule::ParsedMinerule::AttrVector::iterator it1,it2;
-  for (it1=a1->begin(),it2=b1->begin(); (it1!=a1->end())&&(*it1==*it2);++it1, ++it2)
-    ;//notare il punto e virgola
+      return (it1==a1->end());
 
-  return (it1==a1->end());
+}
+
+bool containing(std::vector<std::string> vect, std::string el){
+    for(int i=0; i<vect.size(); ++i)
+        if(vect[i].compare(el)==0) return true;
+    return false;
+}
+
+int find(std::vector<minerule::Bem_cond*> vect,std::string type_cond){
+    for(int i=0;i<vect.size();++i)
+        if(vect[i]->type.compare(type_cond)==0)
+            return i;
+    return -1;
 }

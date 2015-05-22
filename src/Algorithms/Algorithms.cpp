@@ -25,7 +25,7 @@
 #include "minerule/Algorithms/ConstrItemSetsExtraction.hpp"
 #include "minerule/Algorithms/FSMiner.hpp"
 #include "minerule/Algorithms/CCSMiner.hpp"
-#include "minerule/Algorithms/STSMinerWithBitVector.hpp"
+#include "minerule/Algorithms/STSMiner.hpp"
 #include "minerule/mrdb/SQLException.hpp"
 
 namespace minerule {
@@ -110,7 +110,7 @@ namespace minerule {
 		opts.setBodyCardinalities( mr.getParsedMinerule().bodyCardinalities );
 
 		//CCSMiner* miner = new CCSMiner(mr,opts);
-		STSMinerWithBitVector* miner= new STSMinerWithBitVector(mr,opts);
+		STSMiner* miner= new STSMiner(mr,opts);
 		if(miner->canHandleMinerule())
 			return miner;
 		else {

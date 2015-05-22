@@ -13,7 +13,6 @@ mrdb::ResultSet *Statement::executeQuery(const std::string &sql)  {
 
     throw mrdb::SQLException(errorMessage);
   }
-
   return new mrdb::postgres::ResultSet(connection_, result);
 }
 

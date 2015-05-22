@@ -38,7 +38,7 @@ namespace minerule {
 
 	class Connection  {
 	public:
-		typedef enum { RulesTable, HeadsTable, BodiesTable } TableKind;
+		typedef enum { RulesTable, HeadsTable, BodiesTable, SeqTable, SeqElTable, ElemTable } TableKind;
 
 	private:
 		class DBInserter; // forward declaration
@@ -54,24 +54,33 @@ namespace minerule {
 			Connection& connection;
 			mrdb::PreparedStatement* headInserter;
 			mrdb::PreparedStatement* bodyInserter;
+			mrdb::PreparedStatement* seqInserter;
+      mrdb::PreparedStatement* seqElInserter;
 		public:
 			DBInserter(Connection& cc) : connection(cc), headInserter(NULL), bodyInserter(NULL) {};
 			virtual ~DBInserter() {
 				if(headInserter) delete headInserter;
 				if(bodyInserter) delete bodyInserter;
+				if(seqInserter) delete seqInserter;
+        if(seqElInserter) delete seqElInserter;
 			}
 			virtual void setHeadInserter(mrdb::PreparedStatement* inserter) { headInserter = inserter; }
 			virtual void setBodyInserter(mrdb::PreparedStatement* inserter) { bodyInserter = inserter; }
+			virtual void setSeqInserter(mrdb::PreparedStatement* inserter) { seqInserter = inserter; }
+      virtual void setSeqElInserter(mrdb::PreparedStatement* inserter) { seqElInserter = inserter; }
 			virtual void insert(const ItemSet&, const ItemSet&, double support,  double confidence, bool saveBody = true) =0;
+			virtual void insert(int seqId, int seqEl, double support, int pos, bool saveBody = true) =0;
 			virtual void insertHeadBodyElems(TableKind,const ItemSet& elems, size_t counter) =0;
 			virtual void init() {};
 			virtual void finalize() {};
+			virtual void finalize(bool b) {};
 		};
 
 		class DirectDBInserter : public DBInserter {
 		public:
 			DirectDBInserter(Connection& cc) : DBInserter(cc) {};
 			virtual void insert(const ItemSet&, const ItemSet&, double support, double confidence,	bool saveBody = true);
+			virtual void insert(int seqId, int seqEl, double support, int pos, bool saveSeqId = true);
 			virtual void insertHeadBodyElems(TableKind, const ItemSet& elems, size_t counter);
 			virtual ~DirectDBInserter() {};
 		};
@@ -83,10 +92,12 @@ namespace minerule {
 		public:
 			CachedDBInserter(Connection& cc) : DBInserter(cc) {};
 			virtual void insert(const ItemSet&, const ItemSet&, double support, double confidence,	bool saveBody = true);
+			virtual void insert( int seqId, int seqEl,double support, int pos, bool saveSeqId = true);
 			virtual void insertHeadBodyElems(TableKind, const ItemSet& elems, size_t counter);
 			virtual ~CachedDBInserter() {};
 			virtual void init();
 			virtual void finalize();
+			virtual void finalize(bool seq);
 		};
 
 	public:
@@ -105,11 +116,12 @@ namespace minerule {
 
 		mrdb::Connection* getMRDBConnection() { return connection; }
 
-		// bool tableExists(const char * tableName);
+		bool tableExists(const char * tableName);
 		void deleteTable(const char * tableName);
 		void deleteDestTables();
 
 		void createResultTables(const SourceRowMetaInfo&) ;
+		void createResultTables();
 		void insert(const char * what);
 
 		// this function should be systematically used in order to
@@ -119,6 +131,10 @@ namespace minerule {
 		void insert(const ItemSet& body,  const ItemSet& head, double support, double confidence, bool saveBody = true) {
 			dbInserter->insert(body, head, support, confidence, saveBody);
 		}
+		//overload for sequences
+      void insert( int seqId, int seqEl,double support, int pos, bool saveSeqId) {
+          dbInserter->insert(seqId, seqEl, support, pos, saveSeqId);
+      }
 
 		void delete_tmp_db();
 		void create_tmp_db(int sintax, const SourceRowAttrCollectionDescriptor& body, const SourceRowAttrCollectionDescriptor& head);
@@ -132,6 +148,7 @@ namespace minerule {
 		}
 
 		void finalize() { dbInserter->finalize(); }
+		void finalize(bool b) { dbInserter->finalize(b); }
 
 		std::string getTableName(TableKind kind) const;
 	};

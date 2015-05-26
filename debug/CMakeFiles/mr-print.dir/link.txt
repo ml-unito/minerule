@@ -1,0 +1,1 @@
+/usr/bin/c++   -g    CMakeFiles/mr-print.dir/Programs/MRPrintRules/PrintRules.cpp.o CMakeFiles/mr-print.dir/Programs/MRPrintRules/Options.cpp.o  -o mr-print -rdynamic libminerule.a /usr/local/lib/libga.a -ldl 

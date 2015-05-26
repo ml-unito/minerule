@@ -1,0 +1,1 @@
+/usr/bin/c++   -std=c++0x -g    CMakeFiles/TestResultSetMetaData.dir/tests/TestResultSetMetaData.cpp.o  -o TestResultSetMetaData -rdynamic -lpq /usr/local/lib/libminerule.a -ldl 

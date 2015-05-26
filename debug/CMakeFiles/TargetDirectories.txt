@@ -1,0 +1,7 @@
+/home/borti/Tesi/minerule/debug/CMakeFiles/minerule.dir
+/home/borti/Tesi/minerule/debug/CMakeFiles/mr.dir
+/home/borti/Tesi/minerule/debug/CMakeFiles/mr-catalogue.dir
+/home/borti/Tesi/minerule/debug/CMakeFiles/mr-defaults.dir
+/home/borti/Tesi/minerule/debug/CMakeFiles/mr-match.dir
+/home/borti/Tesi/minerule/debug/CMakeFiles/mr-print.dir
+/home/borti/Tesi/minerule/debug/CMakeFiles/mr-query.dir

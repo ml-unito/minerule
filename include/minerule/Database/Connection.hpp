@@ -57,7 +57,7 @@ namespace minerule {
 			mrdb::PreparedStatement* seqInserter;
       mrdb::PreparedStatement* seqElInserter;
 		public:
-			DBInserter(Connection& cc) : connection(cc), headInserter(NULL), bodyInserter(NULL) {};
+			DBInserter(Connection& cc) : connection(cc), headInserter(NULL), bodyInserter(NULL), seqInserter(NULL), seqElInserter(NULL) {};
 			virtual ~DBInserter() {
 				if(headInserter) delete headInserter;
 				if(bodyInserter) delete bodyInserter;

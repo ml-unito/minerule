@@ -1,0 +1,1 @@
+/usr/bin/c++   -g    CMakeFiles/mr.dir/Programs/Minerule/minerule.cpp.o  -o mr -rdynamic libminerule.a /usr/local/lib/libga.a -ldl 

@@ -341,8 +341,7 @@ void STSMinerWithBitVector::mineRules() {
       EmptyResult = pruning1Seq();
       MRLog() << "Pruning completed" << std::endl;
       // creazione bitvector per ogni entry della source table
-      bvptr_length = readSeqVal(
-          1); // ci serve un bitvector per ogni elemento delle sequenze
+      bvptr_length = readSeqVal(1); // ci serve un bitvector per ogni elemento delle sequenze
       min_trackid = getTrackidMinValue();
       bv_length =
           getTrackidMaxValue() - min_trackid +
@@ -370,9 +369,9 @@ void STSMinerWithBitVector::mineRules() {
       }
     }
   } while (!EmptyResult && k < 600);
+  showResults(k);
   // cancelliamo la tabella vuota
   execStatement("DROP TABLE IF EXISTS Seq" + Converter(k).toString());
-  showResults(k);
   /*********************************/
   // SALVATAGGIO SEQUENZE & BITVECTORS IN DEST_TABLE
   // vorrei aggiungere i bitvectors come un campo stringa in ogni tabella

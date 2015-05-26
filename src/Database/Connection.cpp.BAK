@@ -39,15 +39,6 @@ namespace minerule {
 			case BodiesTable:
 				return outTableName + "_body_elems";
 				break;
-			case SeqTable:
-          return outTableName + "_Seq_support";
-          break;
-      case SeqElTable:
-          return outTableName + "_Seq";
-          break;
-      case ElemTable:
-          return outTableName + "_Seq1";
-          break;
 			default:
 				throw MineruleException(MR_ERROR_INTERNAL, "Unknown TableKind -- this is a bug, please report it!");
 		}
@@ -55,16 +46,18 @@ namespace minerule {
 
 
 
-	bool Connection::tableExists(const char * tableName){
-			std::string table(tableName, strlen(tableName));
-			std::string query = "SELECT relname FROM pg_class WHERE upper(relname) = upper('"+table+"');";
-			mrdb::Statement* stmt=connection->createStatement();
-			mrdb::ResultSet* rs = stmt->executeQuery(query);
-			bool result = rs->next();
-			delete rs;
-			delete stmt;
-			return result;
-	}
+	// bool Connection::tableExists(const char * tableName) {
+	// 	try {
+	// 		mrdb::DatabaseMetaData* md;
+	// 		md=connection->getMetaData();
+	// 		mrdb::ResultSet* rs;
+	// 		rs=md->getColumns("","",tableName,"");
+	// 	} catch (mrdb::SQLException& e) {
+	// 		return false;
+	// 	}
+	//
+	// 	return true;
+	// }
 
 	void Connection::deleteDestTables() {
 	  deleteTable(getTableName(RulesTable).c_str());
@@ -90,73 +83,32 @@ namespace minerule {
 		std::string create, create_index;
 
 		// Creating the rules table
-		if(!tableExists(getTableName(RulesTable).c_str())){
-			create=std::string("CREATE TABLE ")+getTableName(RulesTable)+" (bodyId int, headId int, supp float, con float, cardBody int, cardHead int );";
-			statement->execute(create);
-		}
+		create=std::string("CREATE TABLE ")+getTableName(RulesTable)+" (bodyId int, headId int, supp float, con float, cardBody int, cardHead int );";
+		statement->execute(create);
 
 		// Creating the body elements table
-		if(!tableExists(getTableName(BodiesTable).c_str())){
-			create=std::string("CREATE TABLE ")+ getTableName(BodiesTable) + " (id int, " + srd.getBody().getSQLDataDefinition() +")";
-			create_index = " CREATE INDEX "+getTableName(BodiesTable)+"_index ON " + getTableName(BodiesTable) + " (id);";
+		create=std::string("CREATE TABLE ")+ getTableName(BodiesTable) + " (id int, " + srd.getBody().getSQLDataDefinition() +")";
+		create_index = " CREATE INDEX "+getTableName(BodiesTable)+"_index ON " + getTableName(BodiesTable) + " (id);";
 
-			statement->execute(create);
-			statement->execute(create_index);
-		}
-		if(srd.getHead().getColumnsCount() > 0) {
-				// Creating the head elements table
-				if(!tableExists(getTableName(HeadsTable).c_str())){
-					create=std::string("CREATE TABLE ")+ getTableName(HeadsTable) +  " (id int, " + srd.getHead().getSQLDataDefinition() +")";
+		statement->execute(create);
+		statement->execute(create_index);
+if(srd.getHead().getColumnsCount() > 0) {
+		// Creating the head elements table
+		create=std::string("CREATE TABLE ")+ getTableName(HeadsTable) +  " (id int, " + srd.getHead().getSQLDataDefinition() +")";
 
-					create_index = " CREATE INDEX "+getTableName(HeadsTable)+"_index ON " + getTableName(HeadsTable) + " (id);";
+		create_index = " CREATE INDEX "+getTableName(HeadsTable)+"_index ON " + getTableName(HeadsTable) + " (id);";
 
-					statement->execute(create);
-					statement->execute(create_index);
-				}
+		statement->execute(create);
+		statement->execute(create_index);
 
-				std::string headInserterQuery = "INSERT INTO " + getTableName(HeadsTable) + " VALUES (?,"+ srd.getHead().questionMarks() +")";
-				dbInserter->setHeadInserter(connection->prepareStatement(headInserterQuery));
-		}
+		std::string headInserterQuery = "INSERT INTO " + getTableName(HeadsTable) + " VALUES (?,"+ srd.getHead().questionMarks() +")";
+		dbInserter->setHeadInserter(connection->prepareStatement(headInserterQuery));
+}
 		std::string bodyInserterQuery = "INSERT INTO " + getTableName(BodiesTable) + " VALUES (?," + srd.getBody().questionMarks() + ")";
 		dbInserter->setBodyInserter(connection->prepareStatement(bodyInserterQuery));
 
 		delete statement;
 	 }
-
-	//overload for sequences
-	void Connection::createResultTables(){
-
-		std::cout<<"Calling mine sequence dest table function creation"<<std::endl;
-
-		if(tableExists(getTableName(SeqTable).c_str()) && MineruleOptions::getSharedOptions().getSafety().getOverwriteHomonymMinerules())
-				deleteDestTables();
-
-		mrdb::Statement* statement=connection->createStatement();
-		std::string create, create_index;
-
-		// Creating the seq table
-		if(!tableExists(getTableName(SeqTable).c_str())){
-			create=std::string("CREATE TABLE ")+getTableName(SeqTable)+" (ID int, supp float );";
-			create_index = " CREATE INDEX "+getTableName(SeqTable)+"_index ON " + getTableName(SeqTable) + " (id);";
-			statement->execute(create);
-			statement->execute(create_index);
-		}
-
-		// Creating the sequences' elements table
-		if(!tableExists(getTableName(SeqElTable).c_str())){
-			create=std::string("CREATE TABLE ")+ getTableName(SeqElTable) + " (id int,idEl int,pos int )";
-			create_index = " CREATE INDEX "+getTableName(SeqElTable)+"_index ON " + getTableName(SeqElTable) + " (id);";
-
-			statement->execute(create);
-			statement->execute(create_index);
-		}
-
-		std::string seqInserterQuery = "INSERT INTO " + getTableName(SeqTable) + " VALUES (?, ?)";
-		dbInserter->setSeqInserter(connection->prepareStatement(seqInserterQuery));
-
-		std::string seqElInserterQuery = "INSERT INTO " + getTableName(SeqElTable) + " VALUES (?, ?, ?)";
-		dbInserter->setSeqElInserter(connection->prepareStatement(seqElInserterQuery));
-	}
 
 
 	void Connection::DirectDBInserter::insertHeadBodyElems(TableKind kind, const ItemSet& elems, size_t counter) {
@@ -300,55 +252,6 @@ namespace minerule {
 	  MRLogStopMeasuring("CachedDBInserter finalize");
 	}
 
-	//overload for sequences
-  void Connection::CachedDBInserter::finalize(bool seq) {
-    MRLogStartMeasuring("CachedDBInserter finalize");
-    if(seq) std::cout<<"Saving sequences on db..."<<std::endl;
-    outH.close();
-    outB.close();
-
-    std::string loadstr2 = filename + ".h";
-    if(chmod(loadstr2.c_str(),S_IRUSR|S_IRGRP|S_IROTH)==-1) {
-        throw MineruleException( MR_ERROR_INTERNAL,
-            std::string("Cannot change permissions on file ")+loadstr2 +
-            " reason is:" + strerror(errno));
-    }
-
-    std::string loadstr3 = filename + ".b";
-    if(chmod(loadstr3.c_str(),S_IRUSR|S_IRGRP|S_IROTH)==-1) {
-        throw MineruleException( MR_ERROR_INTERNAL,
-            std::string("Cannot change permissions on file ")+loadstr3 +
-            " reason is:" + strerror(errno));
-    }
-
-    const std::string& dbms = MineruleOptions::getSharedOptions().getMRDB().getDBMS();
-    if(  dbms == "mysql" ) {
-        loadstr2 = "LOAD DATA INFILE '" + filename + ".h' INTO TABLE " + connection.getTableName(SeqTable);
-        loadstr3 = "LOAD DATA INFILE '" + filename + ".b' INTO TABLE " + connection.getTableName(SeqElTable);
-    } else if( dbms == "postgres" ) {
-        loadstr2 = "COPY " + connection.getTableName(SeqTable)  +" FROM '" + filename + ".h'";
-        loadstr3 = "COPY " + connection.getTableName(SeqElTable) +" FROM '" + filename + ".b'";
-    } else  {
-        throw MineruleException( MR_ERROR_OPTION_CONFIGURATION,
-            "Option for key mrdb::dbms is not set properly, it is set to "+dbms+
-            ", but only 'mysql' or 'postgres' are supported." );
-    }
-
-    mrdb::Statement* state = connection.getMRDBConnection()->createStatement();
-    state->execute(loadstr2.c_str());
-    state->execute(loadstr3.c_str());
-
-    delete state;
-
-    loadstr2 = filename + ".h";
-    unlink(loadstr2.c_str());
-
-    loadstr3 = filename + ".b";
-    unlink(loadstr3.c_str());
-
-    MRLogStopMeasuring("CachedDBInserter finalize");
-  }
-
 	void Connection::CachedDBInserter::insert(const ItemSet& body,
 				    const ItemSet& head,
 				    double support,
@@ -414,44 +317,10 @@ namespace minerule {
 	  MRLogStopMeasuring("Rule Insertion");
 	}
 
-	void Connection::DirectDBInserter::insert(int seqId, int seqEl, double support, int pos, bool saveSeqId) {
-
-    MRLogStartMeasuring("Sequences Insertion time:");
-
-    mrdb::PreparedStatement* state;
-    if(saveSeqId) {
-      state = seqInserter;
-      state->setInt(1,seqId);
-      state->setDouble(2,support);
-      state->execute();
-    }
-    state = seqElInserter;
-    state->setInt(1,seqId);
-    state->setInt(2,seqEl);
-    state->setInt(3,pos);
-    state->execute();
-
-    MRLogStopMeasuring("Sequences Insertion time:");
-
-  }
-
-  void Connection::CachedDBInserter::insert(int seqId, int seqEl, double support, int pos, bool saveSeqId) {
-    MRLogStartMeasuring("Sequences Insertion time:");
-
-    std::ofstream* outStream = NULL;
-    if(saveSeqId) {
-      outStream = &outH;
-      (*outStream) << seqId << "\t"<< support << std::endl;
-    }
-    outStream = &outB;
-
-    (*outStream) << seqId << "\t" << seqEl << "\t" << pos << std::endl;
-
-    MRLogStopMeasuring("Sequences Insertion time:");
-  }
-
-	void Connection::insert(const char * what){
+	void Connection::insert(const char * what)
+	 {
 	    static mrdb::Statement* statement=connection->createStatement();
+
 	    statement->execute(what);
 	    delete statement;
 	 }

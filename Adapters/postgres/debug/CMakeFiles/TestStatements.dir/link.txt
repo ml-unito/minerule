@@ -1,1 +1,0 @@
-/usr/bin/c++   -std=c++0x -g    CMakeFiles/TestStatements.dir/tests/TestStatements.cpp.o  -o TestStatements -rdynamic -lpq /usr/local/lib/libminerule.a -ldl 

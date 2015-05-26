@@ -1,1 +1,0 @@
-/usr/local/lib/libmrdb_pg.so

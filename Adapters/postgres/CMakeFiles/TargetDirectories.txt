@@ -1,5 +1,0 @@
-/home/borti/Tesi/minerule/Adapters/postgres/CMakeFiles/TestDatabaseMetaData.dir
-/home/borti/Tesi/minerule/Adapters/postgres/CMakeFiles/TestResultSet.dir
-/home/borti/Tesi/minerule/Adapters/postgres/CMakeFiles/TestResultSetMetaData.dir
-/home/borti/Tesi/minerule/Adapters/postgres/CMakeFiles/TestStatements.dir
-/home/borti/Tesi/minerule/Adapters/postgres/CMakeFiles/mrdb_pg.dir

@@ -40,13 +40,13 @@ namespace minerule {
 				return outTableName + "_body_elems";
 				break;
 			case SeqTable:
-          return outTableName + "_seq_support";
+          return outTableName + "_Seq_support";
           break;
       case SeqElTable:
-          return outTableName + "_seq";
+          return outTableName + "_Seq";
           break;
       case ElemTable:
-          return outTableName + "_seq1";
+          return outTableName + "_Seq1";
           break;
 			default:
 				throw MineruleException(MR_ERROR_INTERNAL, "Unknown TableKind -- this is a bug, please report it!");
@@ -57,7 +57,7 @@ namespace minerule {
 
 	bool Connection::tableExists(const char * tableName){
 			std::string table(tableName, strlen(tableName));
-			std::string query = "SELECT relname FROM pg_class WHERE relname = '"+table+"';";
+			std::string query = "SELECT relname FROM pg_class WHERE upper(relname) = upper('"+table+"');";
 			mrdb::Statement* stmt=connection->createStatement();
 			mrdb::ResultSet* rs = stmt->executeQuery(query);
 			bool result = rs->next();
@@ -156,8 +156,6 @@ namespace minerule {
 
 		std::string seqElInserterQuery = "INSERT INTO " + getTableName(SeqElTable) + " VALUES (?, ?, ?)";
 		dbInserter->setSeqElInserter(connection->prepareStatement(seqElInserterQuery));
-
-		delete statement;
 	}
 
 

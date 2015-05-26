@@ -306,6 +306,9 @@ bool STSMiner::extract1Sequences() {
         at_least_one = !sourceFilter();
 
     if(at_least_one) {
+        dropTable(pm.tab_result + "_Seq1");
+        dropTable(pm.tab_result + "_matcher");
+
         sqlQuery= "CREATE TABLE " + pm.tab_result + "_Seq1(ID SERIAL PRIMARY KEY ";
         for(int i = 0; i < pm.ba.size(); ++i)
             sqlQuery += ", " + pm.ba[i] + " " + get_type(pm.ba[i]);

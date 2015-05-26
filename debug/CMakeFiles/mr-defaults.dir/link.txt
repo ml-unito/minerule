@@ -1,1 +1,0 @@
-/usr/bin/c++   -g    CMakeFiles/mr-defaults.dir/Programs/MRDefaultOptions/MRDefaultOptions.cpp.o  -o mr-defaults -rdynamic libminerule.a /usr/local/lib/libga.a -ldl 

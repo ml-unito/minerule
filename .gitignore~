@@ -4,3 +4,4 @@ ExtLibs/galib245
 ExtLibs/libgist
 Docs/autodocs
 Adapters/postgres/debug
+debug

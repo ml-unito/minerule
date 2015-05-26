@@ -157,7 +157,8 @@ public:
         process_mem_usage(vm, rss);
         std::cout << "VM: " << vm << "; RSS: " << rss << std::endl;*/
 
-        connection.useMRDBConnection(MineruleOptions::getSharedOptions().getMRDB().getMRDBConnection());
+        this->initialize();
+        connection.createResultTables();
 
         std::string temp = "/tmp/" + pm.tab_result + ".s";
         seqicache.open(temp.c_str(), std::ofstream::trunc);
@@ -367,7 +368,6 @@ private:
       mrdb::Statement *statement = connection.getMRDBConnection()->createStatement();
       mrdb::ResultSet *result = statement->executeQuery(sqlQuery.c_str());
 
-      delete statement;
       return result;
     }
 
@@ -460,16 +460,14 @@ private:
         return x;
     }
 
-    bool tableExists(const char * tableName)
-    {
-        try {
-            execQuery("SELECT * FROM "+(std::string)tableName+" LIMIT 1;");
-        } catch (const mrdb::SQLException& e) {
-            return false;
-        }
-
-        return true;
-    }
+    bool tableExists(const char * tableName){
+  			std::string table(tableName, strlen(tableName));
+  			std::string query = "SELECT relname FROM pg_class WHERE upper(relname) = upper('"+table+"');";
+  			mrdb::ResultSet* rs = execQr(query);
+  			bool result = rs->next();
+  			delete rs;
+  			return result;
+  	}
 
     void dropTable(std::string table) {
             execQuery("DROP TABLE IF EXISTS "+table+";");
@@ -629,7 +627,7 @@ private:
         int id_el, id,id_old;
         std::vector<float> sup;
 
-        q = "SELECT * FROM " + pm.tab_result + "_seq_support ORDER BY ID";
+        q = "SELECT * FROM " + pm.tab_result + "_Seq_support ORDER BY ID";
         rs= execQr(q);
         while(rs->next())
             sup.push_back(rs->getFloat(2));

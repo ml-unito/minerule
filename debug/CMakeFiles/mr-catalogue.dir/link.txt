@@ -1,1 +1,0 @@
-/usr/bin/c++   -g    CMakeFiles/mr-catalogue.dir/Programs/MRCatalogue/mrcatalogue.cpp.o CMakeFiles/mr-catalogue.dir/Programs/MRCatalogue/MRCUtils.cpp.o CMakeFiles/mr-catalogue.dir/Programs/MRCatalogue/Printer.cpp.o CMakeFiles/mr-catalogue.dir/Programs/MRCatalogue/Options.cpp.o  -o mr-catalogue -rdynamic libminerule.a /usr/local/lib/libga.a -ldl 

@@ -58,8 +58,7 @@ std::string ResultSetMetaData::getTableName(int column) {
   std::string query = "SELECT relname FROM pg_class WHERE oid = " + std::to_string(tableOid);
   PGresult* rs = PQexec(connection_, query.c_str());
   if(PQresultStatus(rs)!=PGRES_TUPLES_OK) {
-    std::string errorMessage = PQresultErrorMessage(rs);
-    throw SQLException("Cannot retrieve table name for oid:"+std::to_string(tableOid)+" - ERROR: "+errorMessage);
+    throw SQLException("Cannot retrieve table name for oid:"+std::to_string(tableOid));
   }
 
   std::string result( PQgetvalue(rs, 0, 0));

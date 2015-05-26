@@ -1,0 +1,1 @@
+/usr/bin/c++   -std=c++0x    CMakeFiles/TestDatabaseMetaData.dir/tests/TestDatabaseMetaData.cpp.o  -o TestDatabaseMetaData -rdynamic -lpq /usr/local/lib/libminerule.a -ldl 

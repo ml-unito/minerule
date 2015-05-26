@@ -1,1 +1,0 @@
-/usr/bin/c++   -g    CMakeFiles/mr-query.dir/Programs/MRQuery/mrquery.cpp.o  -o mr-query -rdynamic libminerule.a /usr/local/lib/libga.a -ldl 

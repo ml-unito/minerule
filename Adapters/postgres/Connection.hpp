@@ -9,15 +9,24 @@ namespace mrdb {
 namespace postgres {
 class Connection : public mrdb::Connection {
 private:
-  std::string db_;
-  std::string user_;
-  std::string pwd_;
+  PGconn* connection_;
 
-  PGconn* connect() const;
 public:
-  Connection(const std::string &db, const std::string &user, const std::string &pwd) :
-    db_(db), user_(user), pwd_(pwd) {};
-  virtual ~Connection() {};
+  Connection(const std::string &db, const std::string &user, const std::string &pwd){
+    std::string connectionString =
+        "host=localhost dbname=" + db + " user=" + user + " password=" + pwd;
+
+    connection_ = PQconnectdb(connectionString.c_str());
+
+    if (PQstatus(connection_) != CONNECTION_OK) {
+      std::string msg(PQerrorMessage(connection_));
+      PQfinish(connection_);
+      connection_ = NULL;
+
+      throw mrdb::SQLException(msg);
+    }
+  };
+  virtual ~Connection() { PQfinish(connection_); };
 
   virtual mrdb::Statement *createStatement();
   virtual mrdb::PreparedStatement *prepareStatement(const std::string &sql);

@@ -12,7 +12,6 @@
 #include <locale>
 #include <map>
 #include <math.h>
-#include <syscall.h>
 #include <unistd.h>
 
 namespace minerule {

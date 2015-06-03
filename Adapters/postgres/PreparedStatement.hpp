@@ -24,7 +24,7 @@ private:
   void freeParams();
 public:
   PreparedStatement(PGconn* connection_, std::string sql);
-  virtual ~PreparedStatement() { freeParams(); PQfinish(connection_); }
+  virtual ~PreparedStatement() { freeParams(); }
 
   virtual bool execute();
 

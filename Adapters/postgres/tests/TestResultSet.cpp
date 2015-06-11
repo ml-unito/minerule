@@ -119,13 +119,26 @@ TEST_CASE("Empty Result Set") {
   mrdb_test::connect = load_mrdb_pg_dylib();
   buildFixtures();
 
-  std::unique_ptr<mrdb::Connection> conn(mrdb_test::connect("pgtest", "pgtest", ""));
-  std::unique_ptr<mrdb::Statement> state(conn->createStatement());
-  std::unique_ptr<mrdb::ResultSet> rs(state->executeQuery("SELECT * FROM mrdb_qry_test WHERE 1=0"));
+  SECTION("Iterating over an empty result of a query") {
+    std::unique_ptr<mrdb::Connection> conn(mrdb_test::connect("pgtest", "pgtest", ""));
+    std::unique_ptr<mrdb::Statement> state(conn->createStatement());
+    std::unique_ptr<mrdb::ResultSet> rs(state->executeQuery("SELECT * FROM mrdb_qry_test WHERE 1=0"));
 
-  while(rs->next()) {
-    // should never enter the loop
-    REQUIRE(false);
+    while(rs->next()) {
+      // should never enter the loop
+      REQUIRE(false);
+    }
   }
 
+  SECTION("Iterating over an empty table") {
+    std::unique_ptr<mrdb::Connection> conn(mrdb_test::connect("pgtest", "pgtest", ""));
+    std::unique_ptr<mrdb::Statement> state(conn->createStatement());
+    state->execute("DELETE FROM mrdb_qry_test");
+    std::unique_ptr<mrdb::ResultSet> rs(state->executeQuery("SELECT * FROM mrdb_qry_test WHERE 1=0"));
+
+    while(rs->next()) {
+      // should never enter the loop
+      REQUIRE(false);
+    }
+  }
 }

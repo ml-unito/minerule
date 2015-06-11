@@ -134,7 +134,7 @@ TEST_CASE("Empty Result Set") {
     std::unique_ptr<mrdb::Connection> conn(mrdb_test::connect("pgtest", "pgtest", ""));
     std::unique_ptr<mrdb::Statement> state(conn->createStatement());
     state->execute("DELETE FROM mrdb_qry_test");
-    std::unique_ptr<mrdb::ResultSet> rs(state->executeQuery("SELECT * FROM mrdb_qry_test WHERE 1=0"));
+    std::unique_ptr<mrdb::ResultSet> rs(state->executeQuery("SELECT * FROM mrdb_qry_test"));
 
     while(rs->next()) {
       // should never enter the loop

@@ -12,7 +12,7 @@ private:
   PGconn* connection_; // strong reference to the connection
 public:
   Statement(PGconn* connection) : connection_(connection) {}
-  virtual ~Statement() { PQfinish(connection_); }
+  virtual ~Statement() { }
 
   virtual mrdb::ResultSet *executeQuery(const std::string &sql)  ;
   virtual bool execute(const std::string &sql)  ;

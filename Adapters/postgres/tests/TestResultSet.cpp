@@ -90,7 +90,7 @@ MRDBConnectFun load_mrdb_pg_dylib() {
 }
 
 
-TEST_CASE("Result Set") {  
+TEST_CASE("Result Set") {
   mrdb_test::connect = load_mrdb_pg_dylib();
   buildFixtures();
 
@@ -113,4 +113,19 @@ TEST_CASE("Result Set") {
   }
 
   cleanupFixtures();
+}
+
+TEST_CASE("Empty Result Set") {
+  mrdb_test::connect = load_mrdb_pg_dylib();
+  buildFixtures();
+
+  std::unique_ptr<mrdb::Connection> conn(mrdb_test::connect("pgtest", "pgtest", ""));
+  std::unique_ptr<mrdb::Statement> state(conn->createStatement());
+  std::unique_ptr<mrdb::ResultSet> rs(state->executeQuery("SELECT * FROM mrdb_qry_test WHERE 1=0"));
+
+  while(rs->next()) {
+    // should never enter the loop
+    REQUIRE(false);
+  }
+
 }

@@ -1,30 +1,15 @@
-//   Minerule - a sql-like language for datamining
-//   Copyright (C) 2013 Roberto Esposito (esposito@di.unito.it)
-//
-//   This program is free software: you can redistribute it and/or modify
-//   it under the terms of the GNU General Public License as published by
-//   the Free Software Foundation, either version 3 of the License, or
-//   (at your option) any later version.
-//
-//   This program is distributed in the hope that it will be useful,
-//   but WITHOUT ANY WARRANTY; without even the implied warranty of
-//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//   GNU General Public License for more details.
-//
-//   You should have received a copy of the GNU General Public License
-//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /* Database/Connection.h*/
 
 #ifndef CONNECTION_H_3H6SFDND
 #define CONNECTION_H_3H6SFDND
 
 #include <string.h>
-
-#include"minerule/mrdb/Connection.hpp"
-#include"minerule/mrdb/ResultSet.hpp"
-#include"minerule/mrdb/Statement.hpp"
-
-#include"minerule/mrdb/PreparedStatement.hpp"
+#include <minerule/mrdb/Connection.hpp>
+#include <minerule/mrdb/ResultSet.hpp>
+#include <minerule/mrdb/Statement.hpp>
+#include <minerule/mrdb/ResultSetMetaData.hpp>
+#include <minerule/mrdb/DatabaseMetaData.hpp>
+#include <minerule/mrdb/PreparedStatement.hpp>
 
 #include "minerule/Utils/MineruleOptions.hpp"
 #include "minerule/Database/SourceRow.hpp"
@@ -33,12 +18,13 @@
 #include <iostream>
 #include <stdio.h>
 
+// #include "minerule/Algorithms/Algorithms.h"
 
 namespace minerule {
 
 	class Connection  {
 	public:
-		typedef enum { RulesTable, HeadsTable, BodiesTable, SeqTable, SeqElTable, ElemTable } TableKind;
+        typedef enum { RulesTable, HeadsTable, BodiesTable, SeqTable, SeqElTable, ElemTable } TableKind;
 
 	private:
 		class DBInserter; // forward declaration
@@ -119,7 +105,6 @@ namespace minerule {
 		bool tableExists(const char * tableName);
 		void deleteTable(const char * tableName);
 		void deleteDestTables();
-
 		void createResultTables(const SourceRowMetaInfo&) ;
 		void createResultTables();
 		void insert(const char * what);

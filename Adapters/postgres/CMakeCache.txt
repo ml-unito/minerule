@@ -331,7 +331,7 @@ CMAKE_USE_RELATIVE_PATHS-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_VERBOSE_MAKEFILE
 CMAKE_VERBOSE_MAKEFILE-ADVANCED:INTERNAL=1
 //Details about finding PostgreSQL
-FIND_PACKAGE_MESSAGE_DETAILS_PostgreSQL:INTERNAL=[/usr/lib/x86_64-linux-gnu/libpq.so][/usr/include/postgresql][/usr/include/postgresql/9.4/server][v9.4.1()]
+FIND_PACKAGE_MESSAGE_DETAILS_PostgreSQL:INTERNAL=[/usr/lib/x86_64-linux-gnu/libpq.so][/usr/include/postgresql][/usr/include/postgresql/9.4/server][v9.4.3()]
 //ADVANCED property for variable: Minerule_INCLUDE_DIR
 Minerule_INCLUDE_DIR-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: Minerule_LIBRARY

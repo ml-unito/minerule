@@ -71,7 +71,7 @@ namespace minerule {
     }
 
 
-	void Connection::createResultTables(const SourceRowMetaInfo& srd) throw(mrdb::SQLException, MineruleException) {
+	void Connection::createResultTables(const SourceRowMetaInfo& srd){
 
         std::cout<<"Calling mine rule dest table function creation"<<std::endl;
 

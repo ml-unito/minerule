@@ -14,7 +14,7 @@ class DatabaseMetaData : public mrdb::DatabaseMetaData {
   PGconn *connection_; // strong ref
 public:
   DatabaseMetaData(PGconn* connection) : connection_(connection) {};
-  virtual ~DatabaseMetaData() { PQfinish(connection_); }
+  virtual ~DatabaseMetaData() {};
 
   virtual mrdb::ResultSet* getTables(const std::string& tableNamePattern);
   virtual mrdb::Types::SQLType getColumnType(const std::string& tableName, const std::string& columnName);

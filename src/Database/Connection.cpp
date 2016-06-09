@@ -1,18 +1,3 @@
-//   Minerule - a sql-like language for datamining
-//   Copyright (C) 2013 Roberto Esposito (esposito@di.unito.it)
-//
-//   This program is free software: you can redistribute it and/or modify
-//   it under the terms of the GNU General Public License as published by
-//   the Free Software Foundation, either version 3 of the License, or
-//   (at your option) any later version.
-//
-//   This program is distributed in the hope that it will be useful,
-//   but WITHOUT ANY WARRANTY; without even the implied warranty of
-//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//   GNU General Public License for more details.
-//
-//   You should have received a copy of the GNU General Public License
-//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "minerule/Database/Connection.hpp"
 
 #include <sstream>
@@ -70,20 +55,27 @@ namespace minerule {
 	  deleteTable(getTableName(RulesTable).c_str());
 	  deleteTable(getTableName(HeadsTable).c_str());
 	  deleteTable(getTableName(BodiesTable).c_str());
-	}
 
-	void Connection::deleteTable(const char * tableName)
-	{
-	   mrdb::Statement* stmt=connection->createStatement();
-	   MRLog() << "Dropping table " << tableName << std::endl;
-	   stmt->execute(std::string("DROP TABLE IF EXISTS ")+tableName);
-	   delete stmt;
-	}
+      deleteTable(getTableName(SeqTable).c_str());
+      deleteTable(getTableName(SeqElTable).c_str());
+      deleteTable(getTableName(ElemTable).c_str());
+   }
 
-	// Bisogna controllare che non esista già la tabella
-	// altrimenti va in errore !!
-	void Connection::createResultTables(const SourceRowMetaInfo& srd) {
-		if(MineruleOptions::getSharedOptions().getSafety().getOverwriteHomonymMinerules())
+    void Connection::deleteTable(const char * tableName)
+    {
+            mrdb::Statement* stmt=connection->createStatement();
+            MRLog() << "Dropping table " << tableName << std::endl;
+            stmt->execute(std::string("DROP TABLE IF EXISTS ")+tableName);
+            delete stmt;
+
+    }
+
+
+	void Connection::createResultTables(const SourceRowMetaInfo& srd){
+
+        std::cout<<"Calling mine rule dest table function creation"<<std::endl;
+
+        if(MineruleOptions::getSharedOptions().getSafety().getOverwriteHomonymMinerules())
 			deleteDestTables();
 
 		mrdb::Statement* statement=connection->createStatement();
@@ -121,6 +113,8 @@ namespace minerule {
 		dbInserter->setBodyInserter(connection->prepareStatement(bodyInserterQuery));
 
 		delete statement;
+
+
 	 }
 
 	//overload for sequences
@@ -238,7 +232,7 @@ namespace minerule {
 	  MRLogStopMeasuring("CachedDBInserter init");
 	}
 
-	void Connection::CachedDBInserter::finalize() {
+    void Connection::CachedDBInserter::finalize() {
 	  MRLogStartMeasuring("CachedDBInserter finalize");
 
 	  outR.close();
@@ -295,7 +289,7 @@ namespace minerule {
 	  unlink(loadstr2.c_str());
 
 	  loadstr2 = filename + ".b";
-	  unlink(loadstr2.c_str());
+      unlink(loadstr2.c_str());
 
 	  MRLogStopMeasuring("CachedDBInserter finalize");
 	}
@@ -420,7 +414,7 @@ namespace minerule {
 
     mrdb::PreparedStatement* state;
     if(saveSeqId) {
-      state = seqInserter;
+			state = seqInserter;
       state->setInt(1,seqId);
       state->setDouble(2,support);
       state->execute();
@@ -431,7 +425,7 @@ namespace minerule {
     state->setInt(3,pos);
     state->execute();
 
-    MRLogStopMeasuring("Sequences Insertion time:");
+		MRLogStopMeasuring("Sequences Insertion time:");
 
   }
 

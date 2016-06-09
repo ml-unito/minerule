@@ -83,7 +83,10 @@ namespace minerule {
 			connection.setOutTableName(minerule.getParsedMinerule().tab_result);
 			connection.setBodyCardinalities(minerule.getParsedMinerule().bodyCardinalities);
 			connection.setHeadCardinalities(minerule.getParsedMinerule().headCardinalities);
-			connection.createResultTables(SourceRowMetaInfo(connection.getMRDBConnection(), minerule.getParsedMinerule()));
+			if(minerule.getParsedMinerule().ha.size()>0)
+				connection.createResultTables(SourceRowMetaInfo(connection.getMRDBConnection(), minerule.getParsedMinerule()));
+			else
+				connection.createResultTables();
 			connection.init();
 		}
 

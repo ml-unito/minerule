@@ -198,6 +198,16 @@ TO-DO plan for version 1.4
 		 using this integer value instead of doing time-consuming
 		 comparison among string or structures.
 
+		[new 13/2/2017] may be a possible approach can be to
+                  use an hash table to hold a single representative for
+                  each value load from the db. To do so, each value will
+                  need to be wrapped into an hashable structure specifying
+                  how to hash it. The idea is that the value used by the
+                  algorithms would be the pointer to these structures, which
+                  can then be compared directly for equality (which is the
+       		  only operation needed by most/all algorithms).
+                  
+
 	PREPROCESSING:
 		Merge the preprocessor (i.e., classes in PreProcessor)
 		in the project (???) (note that if support for on-the-fly 
